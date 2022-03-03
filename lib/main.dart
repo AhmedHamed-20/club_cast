@@ -1,3 +1,4 @@
+import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cybit.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/login_cubit.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/login_states.dart';
 import 'package:club_cast/presentation_layer/screens/room_user_view_admin.dart';
@@ -26,6 +27,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => LoginCubit(),
+        ),
+        BlocProvider(
+          create: (context) => GeneralAppcubit(),
         ),
       ],
       child: BlocConsumer<LoginCubit, LoginState>(
