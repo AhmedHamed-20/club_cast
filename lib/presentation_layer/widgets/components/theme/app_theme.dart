@@ -59,10 +59,11 @@ ThemeData lightMode = ThemeData(
     selectedItemColor: Color(0xff5ADAAC),
     unselectedItemColor: Colors.grey,
     showUnselectedLabels: false,
+    showSelectedLabels: false,
     elevation: 20,
     backgroundColor: Colors.white,
     selectedIconTheme: IconThemeData(
-      size: 30,
+      size: 35,
     ),
     unselectedIconTheme: IconThemeData(
       size: 25,
@@ -70,3 +71,27 @@ ThemeData lightMode = ThemeData(
   ),
   //  backgroundColor: Color(0xffF6F9F4),
 );
+// ThemeData(
+// appBarTheme:
+// AppBarTheme(color: Theme.of(context).scaffoldBackgroundColor),
+// backgroundColor: Colors.white,
+// textTheme: TextTheme(
+// bodyText1: GoogleFonts.rubik(
+// fontSize: 18,
+// color: Color(0xff59675B),
+// ),
+// bodyText2: GoogleFonts.rubik(
+// color: Color(0xff59675B),
+// fontSize: 18,
+// fontWeight: FontWeight.bold,
+// ),
+// ),
+//
+// iconTheme: IconThemeData(
+// color: Color(0xff59675B),
+// ),
+// scaffoldBackgroundColor: Color(0xffF6F9F4),
+// primaryColor: Color(0xff5ADAAC),
+// primarySwatch: Colors.green,
+// //  backgroundColor: Color(0xffF6F9F4),
+// ),

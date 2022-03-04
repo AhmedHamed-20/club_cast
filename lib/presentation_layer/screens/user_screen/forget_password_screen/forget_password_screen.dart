@@ -22,6 +22,7 @@ class ForgetPasswordScreen extends StatelessWidget {
 
         return Scaffold(
           appBar: AppBar(
+            elevation: 0,
             leading: IconButton(
               onPressed: () {
                 navigatePushANDRemoveRout(

@@ -1,9 +1,11 @@
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
+import 'package:club_cast/presentation_layer/widgets/components/component/component.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 import '../../data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
+import '../screens/setup_avater_screen.dart';
 
 class LayoutScreen extends StatelessWidget {
   @override
@@ -31,13 +33,19 @@ class LayoutScreen extends StatelessWidget {
                     color: Theme.of(context).iconTheme.color,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 15,
                 ),
-                CircleAvatar(
-                  radius: 23,
+                InkWell(
+                  onTap: () {
+                    navigatePushANDRemoveRout(
+                        context: context, navigateTo: SetUpAvatarScreen());
+                  },
+                  child: const CircleAvatar(
+                    radius: 23,
+                  ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
               ],

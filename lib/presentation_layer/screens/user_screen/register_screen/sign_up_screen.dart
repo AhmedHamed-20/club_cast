@@ -34,7 +34,7 @@ class RegisterScreen extends StatelessWidget {
                         width: double.infinity,
                         height: MediaQuery.of(context).size.height * 0.3,
                         child: const Image(
-                          image: AssetImage('assets/images/handy-browser.png'),
+                          image: AssetImage('assets/images/signPhoto.png'),
                           fit: BoxFit.contain,
                         ),
                       ),
