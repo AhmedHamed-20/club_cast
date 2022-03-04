@@ -11,7 +11,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'data_layer/bloc/room_cubit/room_cubit.dart';
+import 'presentation_layer/screens/edit_user_profile.dart';
 import 'presentation_layer/screens/login_screen.dart';
+import 'presentation_layer/screens/profile_detailes_screen.dart';
+import 'presentation_layer/screens/user_profile_screen.dart';
 
 //// hunter is here//
 void main() {
@@ -39,8 +42,10 @@ class MyApp extends StatelessWidget {
       child: BlocConsumer<LoginCubit, LoginState>(
         builder: (context, state) {
           return MaterialApp(
-            title: 'Flutter Demo',
+            debugShowCheckedModeBanner: false,
+            title: 'Podland',
             theme: ThemeData(
+              appBarTheme: AppBarTheme(color:Theme.of(context).scaffoldBackgroundColor),
               backgroundColor: Colors.white,
               textTheme: TextTheme(
                 bodyText1: GoogleFonts.rubik(
@@ -59,6 +64,7 @@ class MyApp extends StatelessWidget {
               ),
               scaffoldBackgroundColor: Color(0xffF6F9F4),
               primaryColor: Color(0xff5ADAAC),
+              primarySwatch: Colors.green,
               //  backgroundColor: Color(0xffF6F9F4),
             ),
             darkTheme: ThemeData(
@@ -83,7 +89,7 @@ class MyApp extends StatelessWidget {
               ),
             ),
             themeMode: ThemeMode.light,
-            home: const LoginScreen(),
+            home: const UserProfileScreen(),
           );
         },
         listener: (context, state) {},
