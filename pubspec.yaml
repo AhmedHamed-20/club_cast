@@ -41,6 +41,9 @@ dependencies:
   agora_rtm: ^1.0.1
   google_fonts: ^2.3.1
   shared_preferences: ^2.0.13
+  material_design_icons_flutter: ^5.0.6595
+  audio_wave: ^0.1.2
+  
 
 dev_dependencies:
   flutter_test:
