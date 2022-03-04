@@ -19,7 +19,10 @@ class FollowingScreen extends StatelessWidget {
               ),
               backgroundColor: Colors.transparent,
               leading: MaterialButton(
-                onPressed: () {},
+                onPressed: ()
+                {
+                  Navigator.pop(context);
+                },
                 child: Icon(
                   Icons.arrow_back_ios,
                   color: Theme.of(context).iconTheme.color,
