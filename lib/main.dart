@@ -1,19 +1,15 @@
-import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cybit.dart';
-import 'package:club_cast/data_layer/bloc/intial_cubit/login_cubit.dart';
-import 'package:club_cast/data_layer/bloc/intial_cubit/login_states.dart';
-import 'package:club_cast/presentation_layer/screens/active_podcast_screen.dart';
-import 'package:club_cast/presentation_layer/screens/followers_screen.dart';
-import 'package:club_cast/presentation_layer/screens/following_screen.dart';
-import 'package:club_cast/presentation_layer/screens/room_user_view_admin.dart';
+import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
+import 'package:club_cast/data_layer/bloc/login_cubit/login_cubit.dart';
+import 'package:club_cast/presentation_layer/layout/layout_screen.dart';
+import 'package:club_cast/presentation_layer/screens/public_rooms_screen.dart';
 import 'package:club_cast/presentation_layer/screens/room_user_view_screen.dart';
+import 'package:club_cast/presentation_layer/screens/user_screen/login_screen/login_screen.dart';
+import 'package:club_cast/presentation_layer/widgets/components/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
-
+import 'data_layer/bloc/login_cubit/login_states.dart';
 import 'data_layer/bloc/room_cubit/room_cubit.dart';
-import 'presentation_layer/screens/login_screen.dart';
 
-//// hunter is here//
 void main() {
   runApp(const MyApp());
 }
@@ -33,60 +29,20 @@ class MyApp extends StatelessWidget {
           create: (context) => LoginCubit(),
         ),
         BlocProvider(
-          create: (context) => GeneralAppcubit(),
+          create: (context) => GeneralAppCubit(),
         ),
       ],
-      child: BlocConsumer<LoginCubit, LoginState>(
+      child: BlocConsumer<LoginCubit, LoginStates>(
+        listener: (context, state) {},
         builder: (context, state) {
           return MaterialApp(
-            title: 'Flutter Demo',
-            theme: ThemeData(
-              backgroundColor: Colors.white,
-              textTheme: TextTheme(
-                bodyText1: GoogleFonts.rubik(
-                  fontSize: 18,
-                  color: Color(0xff59675B),
-                ),
-                bodyText2: GoogleFonts.rubik(
-                  color: Color(0xff59675B),
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-
-              iconTheme: IconThemeData(
-                color: Color(0xff59675B),
-              ),
-              scaffoldBackgroundColor: Color(0xffF6F9F4),
-              primaryColor: Color(0xff5ADAAC),
-              //  backgroundColor: Color(0xffF6F9F4),
-            ),
-            darkTheme: ThemeData(
-              backgroundColor: Colors.grey[800],
-              textTheme: TextTheme(
-                bodyText1: GoogleFonts.rubik(
-                  color: Colors.white,
-                  fontSize: 18,
-                ),
-                bodyText2: GoogleFonts.rubik(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              iconTheme: IconThemeData(
-                color: Colors.white,
-              ),
-              scaffoldBackgroundColor: Color(0x2BE5E5E5),
-              primaryColor: Color(
-                0xff6A4CFF,
-              ),
-            ),
-            themeMode: ThemeMode.light,
-            home: const LoginScreen(),
+            debugShowCheckedModeBanner: false,
+            title: 'Club Cast',
+            theme: lightMode,
+            darkTheme: darkMode,
+            home: LoginScreen(),
           );
         },
-        listener: (context, state) {},
       ),
     );
   }

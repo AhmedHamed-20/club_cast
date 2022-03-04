@@ -3,7 +3,6 @@ import 'package:club_cast/data_layer/bloc/room_cubit/room_states.dart';
 import 'package:club_cast/presentation_layer/widgets/model_sheet_room_contant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class RoomAdminViewScreen extends StatelessWidget {
   const RoomAdminViewScreen({Key? key}) : super(key: key);
