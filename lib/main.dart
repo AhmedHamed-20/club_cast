@@ -1,22 +1,13 @@
-import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cybit.dart';
-import 'package:club_cast/data_layer/bloc/intial_cubit/login_cubit.dart';
-import 'package:club_cast/data_layer/bloc/intial_cubit/login_states.dart';
-import 'package:club_cast/presentation_layer/screens/active_podcast_screen.dart';
-import 'package:club_cast/presentation_layer/screens/followers_screen.dart';
-import 'package:club_cast/presentation_layer/screens/following_screen.dart';
-import 'package:club_cast/presentation_layer/screens/room_user_view_admin.dart';
-import 'package:club_cast/presentation_layer/screens/room_user_view_screen.dart';
+import 'package:club_cast/presentation_layer/screens/user_screen/login_screen/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'data_layer/bloc/intial_cubit/general_app_cubit.dart';
+import 'data_layer/bloc/login_cubit/login_cubit.dart';
+import 'data_layer/bloc/login_cubit/login_states.dart';
 import 'data_layer/bloc/room_cubit/room_cubit.dart';
-import 'presentation_layer/screens/edit_user_profile.dart';
-import 'presentation_layer/screens/login_screen.dart';
-import 'presentation_layer/screens/profile_detailes_screen.dart';
-import 'presentation_layer/screens/user_profile_screen.dart';
 
-//// hunter is here//
 void main() {
   runApp(const MyApp());
 }
@@ -36,16 +27,17 @@ class MyApp extends StatelessWidget {
           create: (context) => LoginCubit(),
         ),
         BlocProvider(
-          create: (context) => GeneralAppcubit(),
+          create: (context) => GeneralAppCubit(),
         ),
       ],
-      child: BlocConsumer<LoginCubit, LoginState>(
+      child: BlocConsumer<LoginCubit, LoginStates>(
         builder: (context, state) {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             title: 'Podland',
             theme: ThemeData(
-              appBarTheme: AppBarTheme(color:Theme.of(context).scaffoldBackgroundColor),
+              appBarTheme:
+                  AppBarTheme(color: Theme.of(context).scaffoldBackgroundColor),
               backgroundColor: Colors.white,
               textTheme: TextTheme(
                 bodyText1: GoogleFonts.rubik(
@@ -89,7 +81,7 @@ class MyApp extends StatelessWidget {
               ),
             ),
             themeMode: ThemeMode.light,
-            home: const UserProfileScreen(),
+            home: LoginScreen(),
           );
         },
         listener: (context, state) {},
