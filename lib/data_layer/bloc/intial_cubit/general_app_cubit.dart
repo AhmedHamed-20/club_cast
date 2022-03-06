@@ -24,8 +24,8 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       label: 'add',
     ),
     BottomNavigationBarItem(
-      icon: Icon(MdiIcons.music),
-      label: 'home',
+      icon: Icon(Icons.headphones),
+      label: 'podCast',
     ),
   ];
 
