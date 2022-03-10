@@ -1,10 +1,10 @@
 import 'package:club_cast/data_layer/bloc/login_cubit/login_cubit.dart';
 import 'package:club_cast/data_layer/bloc/login_cubit/login_states.dart';
 import 'package:club_cast/presentation_layer/layout/layout_screen.dart';
-import 'package:club_cast/presentation_layer/screens/public_rooms_screen.dart';
-import 'package:club_cast/presentation_layer/widgets/components/component/component.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../components/component/component.dart';
 
 class SetUpAvatarScreen extends StatelessWidget {
   SetUpAvatarScreen({Key? key}) : super(key: key);

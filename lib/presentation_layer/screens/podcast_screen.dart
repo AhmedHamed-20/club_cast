@@ -32,19 +32,70 @@ class PodCastScreen extends StatelessWidget {
     String? roomTime,
   }) {
     return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.23,
+      height: MediaQuery.of(context).size.height * 0.25,
       width: double.infinity,
       child: Card(
         color: Theme.of(context).backgroundColor,
         elevation: 4,
         child: Padding(
-          padding: const EdgeInsets.all(15.0),
+          padding: const EdgeInsets.all(12.0),
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const CircleAvatar(
-                radius: 30,
-                backgroundImage: AssetImage('assets/images/signPhoto.png'),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.03,
+                  ),
+                  const CircleAvatar(
+                    radius: 30,
+                    backgroundImage: AssetImage('assets/images/signPhoto.png'),
+                  ),
+                  Spacer(),
+                  Stack(
+                    alignment: AlignmentDirectional.bottomStart,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsetsDirectional.only(end: 15),
+                        child: CircleAvatar(
+                          radius: 15,
+                          backgroundColor: Colors.white,
+                          child: Text(
+                            '15k',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyText1!
+                                .copyWith(fontSize: 15),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsetsDirectional.only(
+                            start: 15.0, bottom: 15),
+                        child: CircleAvatar(
+                          radius: 20,
+                          backgroundColor: Colors.white,
+                          child: IconButton(
+                            splashRadius: 25,
+                            padding: EdgeInsets.zero,
+                            onPressed: () {},
+                            icon: true
+                                ? const Icon(
+                                    Icons.thumb_up_alt_outlined,
+                                    color: Colors.grey,
+                                  )
+                                : const Icon(
+                                    Icons.thumb_up_alt,
+                                    color: Colors.grey,
+                                  ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.04,
@@ -96,7 +147,7 @@ class PodCastScreen extends StatelessWidget {
                         ),
                       )
                     ],
-                  )
+                  ),
                 ],
               ),
             ],

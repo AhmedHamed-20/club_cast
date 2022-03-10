@@ -34,8 +34,8 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  bloc: ^8.0.2
-  flutter_bloc: ^8.0.1
+  bloc: ^7.2.1
+  flutter_bloc: ^7.3.0
   dio: ^4.0.4
   agora_rtc_engine: ^4.2.1
   agora_rtm: ^1.0.1
@@ -43,7 +43,10 @@ dependencies:
   shared_preferences: ^2.0.13
   material_design_icons_flutter: ^5.0.6595
   audio_wave: ^0.1.2
-  
+  conditional_builder_null_safety: ^0.0.6
+  fluttertoast: ^8.0.9
+
+
 
 dev_dependencies:
   flutter_test:

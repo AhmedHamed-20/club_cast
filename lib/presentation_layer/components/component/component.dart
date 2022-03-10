@@ -1,4 +1,8 @@
+import 'package:club_cast/data_layer/cash/cash.dart';
+import 'package:club_cast/presentation_layer/components/constant/constant.dart';
+import 'package:club_cast/presentation_layer/screens/user_screen/login_screen/login_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 Widget defaultTextFormField({
   TextEditingController? controller,
@@ -103,4 +107,48 @@ void navigatePushANDRemoveRout({
         builder: (context) => navigateTo,
       ),
       (route) => false);
+}
+
+void showToast({
+  required String message,
+  required ToastState toastState,
+}) {
+  Fluttertoast.showToast(
+    msg: message,
+    fontSize: 16,
+    toastLength: Toast.LENGTH_LONG,
+    timeInSecForIosWeb: 5,
+    gravity: ToastGravity.BOTTOM,
+    backgroundColor: toastColor(toastState),
+    textColor: Colors.white,
+  );
+}
+
+enum ToastState { SUCCESS, WARNING, ERROR }
+
+Color toastColor(ToastState state) {
+  Color? color;
+
+  switch (state) {
+    case ToastState.SUCCESS:
+      color = Colors.green;
+      break;
+    case ToastState.WARNING:
+      color = Colors.amber;
+      break;
+    case ToastState.ERROR:
+      color = Colors.deepOrange;
+  }
+  return color;
+}
+
+void logOut({
+  required BuildContext context,
+}) {
+  CachHelper.deleteData(token).then((value) {
+    token = null;
+    if (value) {
+      navigatePushANDRemoveRout(context: context, navigateTo: LoginScreen());
+    }
+  });
 }
