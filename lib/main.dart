@@ -22,20 +22,21 @@ void main() async {
   await CachHelper.init();
   Bloc.observer = MyBlocObserver();
   token = CachHelper.getData(key: 'token');
-  Widget StartApp;
+  Widget startApp;
+  print(token);
 
   if (token != null) {
-    StartApp = LayoutScreen();
+    startApp = LayoutScreen();
   } else {
-    StartApp = LoginScreen();
+    startApp = LoginScreen();
   }
-  runApp(MyApp(StartApp));
+  runApp(MyApp(startApp));
 }
 
 class MyApp extends StatelessWidget {
-  final Widget StartApp;
+  final Widget startApp;
 
-  MyApp(this.StartApp);
+  MyApp(this.startApp);
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -57,7 +58,7 @@ class MyApp extends StatelessWidget {
         theme: lightMode,
         darkTheme: darkMode,
         themeMode: ThemeMode.light,
-        home: StartApp,
+        home: startApp,
       ),
     );
   }
