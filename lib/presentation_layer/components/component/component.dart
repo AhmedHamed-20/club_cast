@@ -16,7 +16,7 @@ Widget defaultTextFormField({
   FormFieldValidator<String>? validator,
   ValueChanged<String>? onSubmit,
   bool obscureText = false,
-  BuildContext? context,
+  required BuildContext context,
 }) {
   return TextFormField(
     controller: controller,
@@ -42,7 +42,7 @@ Widget defaultTextFormField({
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(radius),
         borderSide: BorderSide(
-          color: Theme.of(context!).primaryColor,
+          color: Theme.of(context).primaryColor,
         ),
       ),
     ),
@@ -145,9 +145,10 @@ Color toastColor(ToastState state) {
 void logOut({
   required BuildContext context,
 }) {
-  CachHelper.deleteData(token).then((value) {
+  CachHelper.deleteData("token").then((value) {
+    print(value);
     token = null;
-    if (value) {
+    if (token == null) {
       navigatePushANDRemoveRout(context: context, navigateTo: LoginScreen());
     }
   });

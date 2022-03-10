@@ -63,7 +63,7 @@ ThemeData lightMode = ThemeData(
     elevation: 20,
     backgroundColor: Colors.white,
     selectedIconTheme: IconThemeData(
-      size: 30,
+      size: 28,
     ),
     unselectedIconTheme: IconThemeData(
       size: 25,

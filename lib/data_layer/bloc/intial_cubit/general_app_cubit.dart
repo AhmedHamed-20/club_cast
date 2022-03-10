@@ -30,8 +30,16 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
 
   List<Widget> screen = [
     PublicRoomScreen(),
-    PodCastScreen(),
+    const PodCastScreen(),
   ];
+
+  static List<String> category = [
+    'sport',
+    'economy',
+    'reading',
+    'hunter',
+  ];
+  String selectedCategoryItem = category.first;
   //////////// Methods ///////////////////
 
   void changeBottomNAvIndex(int index) {
