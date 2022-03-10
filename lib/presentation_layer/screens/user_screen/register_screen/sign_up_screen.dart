@@ -1,7 +1,10 @@
 import 'package:club_cast/data_layer/bloc/login_cubit/login_cubit.dart';
 import 'package:club_cast/data_layer/bloc/login_cubit/login_states.dart';
+import 'package:club_cast/data_layer/cash/cash.dart';
+import 'package:club_cast/presentation_layer/components/component/component.dart';
+import 'package:club_cast/presentation_layer/layout/layout_screen.dart';
 import 'package:club_cast/presentation_layer/screens/user_screen/login_screen/login_screen.dart';
-import 'package:club_cast/presentation_layer/widgets/components/component/component.dart';
+import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -17,7 +20,21 @@ class RegisterScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocConsumer<LoginCubit, LoginStates>(
-        listener: (context, state) {},
+        listener: (context, state) {
+          if (state is UserSignUpSuccessState) {
+            print(state.userSignUpModel.data!.user!.name);
+            print(state.userSignUpModel.data!.user!.email);
+            print(state.userSignUpModel.token);
+
+            CachHelper.setData(key: 'token', value: state.userSignUpModel.token)
+                .then((value) {
+              navigatePushANDRemoveRout(
+                  context: context, navigateTo: LayoutScreen());
+            }).catchError((error) {
+              print('error when save token:${error.toString()}');
+            });
+          }
+        },
         builder: (context, state) {
           var cubit = LoginCubit.get(context);
           return SafeArea(
@@ -111,12 +128,27 @@ class RegisterScreen extends StatelessWidget {
                       SizedBox(
                         height: MediaQuery.of(context).size.height * 0.04,
                       ),
-                      defaultButton(
-                        context: context,
-                        onPressed: () {
-                          if (formKey.currentState!.validate()) {}
-                        },
-                        text: 'SignUp',
+                      ConditionalBuilder(
+                        condition: state is! UserSignUpLoadingState,
+                        builder: (context) => defaultButton(
+                          context: context,
+                          onPressed: () {
+                            if (formKey.currentState!.validate()) {
+                              cubit.userSignUp(
+                                name: nameController.text,
+                                email: emailController.text,
+                                password: passwordController.text,
+                                passwordConfirm: confirmPasswordController.text,
+                              );
+                            }
+                          },
+                          text: 'SignUp',
+                        ),
+                        fallback: (context) => Center(
+                          child: CircularProgressIndicator(
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        ),
                       ),
                       SizedBox(
                         height: MediaQuery.of(context).size.height * 0.01,

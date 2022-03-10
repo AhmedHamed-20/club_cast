@@ -1,6 +1,7 @@
 import 'package:club_cast/data_layer/bloc/login_cubit/login_cubit.dart';
 import 'package:club_cast/data_layer/bloc/login_cubit/login_states.dart';
-import 'package:club_cast/presentation_layer/widgets/components/component/component.dart';
+import 'package:club_cast/presentation_layer/components/component/component.dart';
+import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -71,12 +72,22 @@ class ForgetPasswordScreen extends StatelessWidget {
                     SizedBox(
                       height: MediaQuery.of(context).size.height * 0.06,
                     ),
-                    defaultButton(
-                      context: context,
-                      onPressed: () {
-                        if (formKey.currentState!.validate()) {}
-                      },
-                      text: 'Forget',
+                    ConditionalBuilder(
+                      condition: state is! UserForgetPasswordLoadingState,
+                      builder: (context) => defaultButton(
+                        context: context,
+                        onPressed: () {
+                          if (formKey.currentState!.validate()) {
+                            cubit.forgetPassword(email: emailController.text);
+                          }
+                        },
+                        text: 'Forget',
+                      ),
+                      fallback: (context) => Center(
+                        child: CircularProgressIndicator(
+                          color: Theme.of(context).primaryColor,
+                        ),
+                      ),
                     ),
                   ],
                 ),

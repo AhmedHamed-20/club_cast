@@ -2,7 +2,6 @@ import 'package:club_cast/presentation_layer/screens/podcast_screen.dart';
 import 'package:club_cast/presentation_layer/screens/public_rooms_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 import 'general_app_cubit_states.dart';
 
@@ -10,18 +9,18 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   GeneralAppCubit() : super(InitialAppState());
   static GeneralAppCubit get(context) => BlocProvider.of(context);
 
+  //////////// variable ///////////////////
+
   int bottomNavIndex = 0;
+
+  var roomNameController = TextEditingController();
+  bool isPublicRoom = true;
+  bool isRecordRoom = false;
 
   List<BottomNavigationBarItem> bottomNavBarItem = const [
     BottomNavigationBarItem(
       icon: Icon(Icons.home),
       label: 'home',
-    ),
-    BottomNavigationBarItem(
-      icon: Icon(
-        Icons.add,
-      ),
-      label: 'add',
     ),
     BottomNavigationBarItem(
       icon: Icon(Icons.headphones),
@@ -32,8 +31,8 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   List<Widget> screen = [
     PublicRoomScreen(),
     PodCastScreen(),
-    PodCastScreen(),
   ];
+  //////////// Methods ///////////////////
 
   void changeBottomNAvIndex(int index) {
     bottomNavIndex = index;
