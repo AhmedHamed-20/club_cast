@@ -12,6 +12,7 @@ Widget defaultTextFormField({
   FormFieldValidator<String>? validator,
   ValueChanged<String>? onSubmit,
   bool obscureText = false,
+  BuildContext? context,
 }) {
   return TextFormField(
     controller: controller,
@@ -36,8 +37,8 @@ Widget defaultTextFormField({
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(radius),
-        borderSide: const BorderSide(
-          color: Colors.blue,
+        borderSide: BorderSide(
+          color: Theme.of(context!).primaryColor,
         ),
       ),
     ),
@@ -72,7 +73,7 @@ Widget defaultButton({
     width: width,
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(radius),
-      color: const Color(0xff5ADAAC),
+      color: Theme.of(context).primaryColor,
     ),
     child: MaterialButton(
       onPressed: onPressed,

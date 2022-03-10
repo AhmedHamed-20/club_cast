@@ -55,6 +55,7 @@ class ForgetPasswordScreen extends StatelessWidget {
                       height: MediaQuery.of(context).size.height * 0.08,
                     ),
                     defaultTextFormField(
+                      context: context,
                       controller: emailController,
                       keyboardType: TextInputType.emailAddress,
                       labelText: "Email",

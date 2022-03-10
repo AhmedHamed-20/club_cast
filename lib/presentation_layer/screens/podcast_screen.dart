@@ -35,6 +35,7 @@ class PodCastScreen extends StatelessWidget {
       height: MediaQuery.of(context).size.height * 0.23,
       width: double.infinity,
       child: Card(
+        color: Theme.of(context).backgroundColor,
         elevation: 4,
         child: Padding(
           padding: const EdgeInsets.all(15.0),
@@ -52,27 +53,17 @@ class PodCastScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    'Graduation Project!',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText1
-                        ?.copyWith(fontWeight: FontWeight.w700),
-                  ),
+                  Text('Graduation Project!',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.bodyText2),
                   SizedBox(
                     height: MediaQuery.of(context).size.width * 0.02,
                   ),
-                  Text(
-                    'AhmedElSayyad',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.bodyText1?.copyWith(
-                          fontSize: 16,
-                          color: Colors.grey[700],
-                        ),
-                  ),
+                  Text('AhmedElSayyad',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.bodyText1),
                   Row(
                     children: [
                       Text(

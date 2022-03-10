@@ -52,6 +52,7 @@ class LoginScreen extends StatelessWidget {
                         height: MediaQuery.of(context).size.height * 0.035,
                       ),
                       defaultTextFormField(
+                        context: context,
                         controller: emailController,
                         keyboardType: TextInputType.emailAddress,
                         labelText: "Email",
@@ -68,6 +69,7 @@ class LoginScreen extends StatelessWidget {
                         height: MediaQuery.of(context).size.height * 0.025,
                       ),
                       defaultTextFormField(
+                          context: context,
                           controller: passwordController,
                           keyboardType: TextInputType.visiblePassword,
                           labelText: "password",
@@ -77,6 +79,7 @@ class LoginScreen extends StatelessWidget {
                               cubit.visibleEyeOrNot();
                             },
                             icon: cubit.suffix,
+                            color: Theme.of(context).iconTheme.color,
                           ),
                           obscureText: cubit.obSecure,
                           labelStyle: Theme.of(context).textTheme.bodyText1,
@@ -101,7 +104,7 @@ class LoginScreen extends StatelessWidget {
                             'Forget Password?',
                             style:
                                 Theme.of(context).textTheme.bodyText1!.copyWith(
-                                      color: const Color(0xff5ADAAC),
+                                      color: Theme.of(context).primaryColor,
                                     ),
                           ),
                         ),
@@ -141,7 +144,7 @@ class LoginScreen extends StatelessWidget {
                                   .textTheme
                                   .bodyText1
                                   ?.copyWith(
-                                    color: const Color(0xff5ADAAC),
+                                    color: Theme.of(context).primaryColor,
                                     fontWeight: FontWeight.w500,
                                   ),
                             ),

@@ -45,6 +45,7 @@ Widget publicRoomItem(
       height: MediaQuery.of(context).size.height * 0.23,
       width: double.infinity,
       child: Card(
+        color: Theme.of(context).backgroundColor,
         elevation: 4,
         child: Padding(
           padding: const EdgeInsets.all(15.0),
@@ -57,21 +58,16 @@ Widget publicRoomItem(
                 overflow: TextOverflow.ellipsis,
                 style: Theme.of(context)
                     .textTheme
-                    .bodyText1
+                    .bodyText2
                     ?.copyWith(fontWeight: FontWeight.w500),
               ),
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.03,
               ),
-              Text(
-                category,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyText1
-                    ?.copyWith(fontSize: 16, color: Colors.grey[600]),
-              ),
+              Text(category,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.bodyText1),
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.01,
               ),
@@ -108,13 +104,8 @@ Widget publicRoomItem(
                         style: Theme.of(context).textTheme.bodyText1?.copyWith(
                             fontSize: 16, fontWeight: FontWeight.w600),
                       ),
-                      Text(
-                        'Speaker',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyText1
-                            ?.copyWith(fontSize: 16, color: Colors.grey[600]),
-                      ),
+                      Text('Speaker',
+                          style: Theme.of(context).textTheme.bodyText1),
                     ],
                   ),
                   SizedBox(
@@ -122,20 +113,10 @@ Widget publicRoomItem(
                   ),
                   Column(
                     children: [
-                      Text(
-                        '+${audience.length}',
-                        style: Theme.of(context).textTheme.bodyText1?.copyWith(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
-                      ),
-                      Text(
-                        'Listeners',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyText1
-                            ?.copyWith(fontSize: 16, color: Colors.grey[600]),
-                      ),
+                      Text('+${audience.length}',
+                          style: Theme.of(context).textTheme.bodyText1),
+                      Text('Listeners',
+                          style: Theme.of(context).textTheme.bodyText1),
                     ],
                   ),
                 ],

@@ -16,6 +16,8 @@ class LayoutScreen extends StatelessWidget {
           var cubit = GeneralAppCubit.get(context);
           return Scaffold(
             appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
               title: Text(
                 'Rooms',
                 style: Theme.of(context)
@@ -52,6 +54,9 @@ class LayoutScreen extends StatelessWidget {
             ),
             bottomNavigationBar: BottomNavigationBar(
               items: cubit.bottomNavBarItem,
+              backgroundColor: Theme.of(context).backgroundColor,
+              selectedItemColor: Theme.of(context).primaryColor,
+              unselectedItemColor: Theme.of(context).iconTheme.color,
               currentIndex: cubit.bottomNavIndex,
               onTap: (index) {
                 cubit.changeBottomNAvIndex(index);

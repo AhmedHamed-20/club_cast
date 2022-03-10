@@ -42,6 +42,7 @@ class RegisterScreen extends StatelessWidget {
                         height: MediaQuery.of(context).size.height * 0.03,
                       ),
                       defaultTextFormField(
+                        context: context,
                         controller: nameController,
                         labelText: 'Your Name',
                         labelStyle: Theme.of(context).textTheme.bodyText1,
@@ -56,6 +57,7 @@ class RegisterScreen extends StatelessWidget {
                         height: MediaQuery.of(context).size.height * 0.02,
                       ),
                       defaultTextFormField(
+                        context: context,
                         controller: emailController,
                         keyboardType: TextInputType.emailAddress,
                         labelText: 'Email',
@@ -70,6 +72,7 @@ class RegisterScreen extends StatelessWidget {
                         height: MediaQuery.of(context).size.height * 0.02,
                       ),
                       defaultTextFormField(
+                          context: context,
                           controller: passwordController,
                           keyboardType: TextInputType.visiblePassword,
                           labelText: "password",
@@ -92,6 +95,7 @@ class RegisterScreen extends StatelessWidget {
                         height: MediaQuery.of(context).size.height * 0.02,
                       ),
                       defaultTextFormField(
+                          context: context,
                           controller: confirmPasswordController,
                           keyboardType: TextInputType.visiblePassword,
                           labelText: "Confirm Password",
