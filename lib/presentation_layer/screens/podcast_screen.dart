@@ -1,4 +1,5 @@
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
+import 'package:club_cast/presentation_layer/models/get_all_podcst.dart';
 import 'package:club_cast/presentation_layer/widgets/pos_cast_card_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,6 +11,7 @@ class PodCastScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var cubit = GeneralAppCubit?.get(context);
     return BlocConsumer<GeneralAppCubit, GeneralAppStates>(
       listener: (BuildContext context, state) {},
       builder: (BuildContext context, Object? state) {
@@ -18,8 +20,9 @@ class PodCastScreen extends StatelessWidget {
               const EdgeInsetsDirectional.only(start: 10, end: 10, top: 20),
           child: ListView.builder(
             physics: const BouncingScrollPhysics(),
-            itemBuilder: (context, index) => podACastItem(context),
-            itemCount: 10,
+            itemBuilder: (context, index) =>
+                podACastItem(context, index: index),
+            itemCount: GetAllPodCastModel.getAllPodCast?['data'].length,
           ),
         );
       },

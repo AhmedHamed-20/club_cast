@@ -1,3 +1,8 @@
+import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
+import 'package:club_cast/data_layer/cash/cash.dart';
+import 'package:club_cast/presentation_layer/components/constant/constant.dart';
+import 'package:club_cast/presentation_layer/models/get_all_podcst.dart';
+import 'package:club_cast/presentation_layer/models/login_model.dart';
 import 'package:flutter/material.dart';
 
 Widget podACastItem(
@@ -5,7 +10,22 @@ Widget podACastItem(
   String? roomName,
   String? speaker,
   String? roomTime,
+  int? index,
 }) {
+  ////////////////////////////////////////////////////
+  String token = CachHelper.getData(key: 'token');
+  String photoUrl =
+      GetAllPodCastModel.getPodcastUserPublishInform(index!)[0]['photo'];
+  ;
+  String Username =
+      GetAllPodCastModel.getPodcastUserPublishInform(index)[0]['name'];
+  String podCastName = GetAllPodCastModel.getPodcastName(index);
+  int likes = GetAllPodCastModel.getPodcastLikes(index);
+  bool likeState = GetAllPodCastModel.getPodcastlikeState(index);
+  String podCastId = GetAllPodCastModel.getPodcastID(index);
+  double time = GetAllPodCastModel.getPodCastAudio(index)[0]['duration'];
+  var cubit = GeneralAppCubit?.get(context);
+  ////////////////////////////////////////////////////////
   return SizedBox(
     height: MediaQuery.of(context).size.height * 0.25,
     width: double.infinity,
@@ -18,15 +38,15 @@ Widget podACastItem(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.end,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.03,
                 ),
-                const CircleAvatar(
+                CircleAvatar(
                   radius: 30,
-                  backgroundImage: AssetImage('assets/images/signPhoto.png'),
+                  backgroundImage: NetworkImage(photoUrl),
                 ),
                 Spacer(),
                 Stack(
@@ -38,7 +58,7 @@ Widget podACastItem(
                         radius: 15,
                         backgroundColor: Colors.white,
                         child: Text(
-                          '15k',
+                          likes.toString(),
                           style: Theme.of(context)
                               .textTheme
                               .bodyText1!
@@ -53,19 +73,17 @@ Widget podACastItem(
                         radius: 20,
                         backgroundColor: Colors.white,
                         child: IconButton(
-                          splashRadius: 25,
-                          padding: EdgeInsets.zero,
-                          onPressed: () {},
-                          icon: true
-                              ? const Icon(
-                                  Icons.thumb_up_alt_outlined,
-                                  color: Colors.grey,
-                                )
-                              : const Icon(
-                                  Icons.thumb_up_alt,
-                                  color: Colors.grey,
-                                ),
-                        ),
+                            splashRadius: 25,
+                            padding: EdgeInsets.zero,
+                            onPressed: () {
+                              cubit.addLike(podCastId: podCastId, token: token);
+                            },
+                            icon: Icon(
+                              likeState
+                                  ? Icons.favorite
+                                  : Icons.favorite_border,
+                              color: Colors.red,
+                            )),
                       ),
                     ),
                   ],
@@ -79,21 +97,21 @@ Widget podACastItem(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('Graduation Project!',
+                Text(podCastName,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.bodyText2),
                 SizedBox(
                   height: MediaQuery.of(context).size.width * 0.02,
                 ),
-                Text('AhmedElSayyad',
+                Text(Username,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.bodyText1),
                 Row(
                   children: [
                     Text(
-                      '2:53:23',
+                      time.toString(),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context)

@@ -36,7 +36,7 @@ class DioHelper {
 
   static Future<dynamic> postData(
       {required String url,
-      required Map<String, dynamic> data,
+      Map<String, dynamic>? data,
       Map<String, dynamic>? token}) async {
     return await dio!.post(url, data: data, options: Options(headers: token));
   }

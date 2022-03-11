@@ -1,3 +1,6 @@
+import 'package:club_cast/data_layer/dio/dio_setup.dart';
+import 'package:club_cast/presentation_layer/components/constant/constant.dart';
+import 'package:club_cast/presentation_layer/models/get_all_podcst.dart';
 import 'package:club_cast/presentation_layer/screens/podcast_screen.dart';
 import 'package:club_cast/presentation_layer/screens/public_rooms_screen.dart';
 import 'package:flutter/material.dart';
@@ -45,5 +48,41 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   void changeBottomNAvIndex(int index) {
     bottomNavIndex = index;
     emit(ChangeBottomNavIndex());
+  }
+
+  GetAllPodCastModel? podcastModel;
+  void getAllPodcast({required String token}) {
+    print(token);
+    DioHelper.getDate(
+      url: GetAllPodcasts,
+      token: {
+        'Authorization': 'Bearer ${token}',
+      },
+    ).then(
+      (value) {
+        //  print(value.data);
+        GetAllPodCastModel.getAllPodCast =
+            Map<String, dynamic>.from(value.data);
+        emit(PodCastDataGetSuccess());
+        //  print(GetAllPodCastModel.getPodcastName(2));
+      },
+    ).catchError(
+      (onError) {
+        print(onError);
+        emit(PodCastDataGetError());
+      },
+    );
+  }
+
+  void addLike({required String podCastId, required String token}) {
+    DioHelper.postData(
+        url: sendLike + '/${podCastId}',
+        token: {'Authorization': 'Bearer ${token}'}).then((value) {
+      getAllPodcast(token: token);
+      emit(PodCastLikeAddedSuccess());
+    }).catchError((onError) {
+      print(onError);
+      emit(PodCastLikeAddedError());
+    });
   }
 }
