@@ -11,6 +11,8 @@ Widget podACastItem(
   String? speaker,
   String? roomTime,
   int? index,
+  Widget? playingWidget,
+  String? text,
 }) {
   ////////////////////////////////////////////////////
   String token = CachHelper.getData(key: 'token');
@@ -27,6 +29,7 @@ Widget podACastItem(
   String convertedTime =
       '${((time % (24 * 3600)) / 3600).round().toString()}:${((time % (24 * 3600 * 3600)) / 60).round().toString()}:${(time % 60).round().toString()}';
   var cubit = GeneralAppCubit?.get(context);
+  String currentId = GetAllPodCastModel.getPodcastID(index);
   ////////////////////////////////////////////////////////
   return SizedBox(
     height: MediaQuery.of(context).size.height * 0.25,
@@ -58,7 +61,7 @@ Widget podACastItem(
                       padding: const EdgeInsetsDirectional.only(end: 15),
                       child: CircleAvatar(
                         radius: 15,
-                        backgroundColor: Colors.white,
+                        backgroundColor: Theme.of(context).backgroundColor,
                         child: Text(
                           likes.toString(),
                           style: Theme.of(context)
@@ -73,7 +76,7 @@ Widget podACastItem(
                           start: 15.0, bottom: 15),
                       child: CircleAvatar(
                         radius: 20,
-                        backgroundColor: Colors.white,
+                        backgroundColor: Theme.of(context).backgroundColor,
                         child: IconButton(
                             splashRadius: 25,
                             padding: EdgeInsets.zero,
@@ -117,7 +120,7 @@ Widget podACastItem(
                 Row(
                   children: [
                     Text(
-                      convertedTime,
+                      text == null ? convertedTime : text,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context)
@@ -138,13 +141,7 @@ Widget podACastItem(
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.02,
                     ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        Icons.play_circle_outline_outlined,
-                        size: 35,
-                      ),
-                    )
+                    playingWidget!,
                   ],
                 ),
               ],

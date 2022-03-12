@@ -15,3 +15,9 @@ class PodCastLikeAddedError extends GeneralAppStates {}
 class PodCastLikeDeleatedSuccess extends GeneralAppStates {}
 
 class PodCastLikeDeleatedError extends GeneralAppStates {}
+
+class ChangeTheme extends GeneralAppStates {}
+
+class ChangePlayingState extends GeneralAppStates {}
+
+class PlayingStateError extends GeneralAppStates {}

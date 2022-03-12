@@ -56,6 +56,17 @@ class LayoutScreen extends StatelessWidget {
                 const SizedBox(
                   width: 10,
                 ),
+                IconButton(
+                  splashRadius: 30,
+                  onPressed: () {
+                    cubit.toggleDark();
+                  },
+                  icon: Icon(
+                    Icons.dark_mode,
+                    size: 30,
+                    color: Theme.of(context).iconTheme.color,
+                  ),
+                ),
               ],
             ),
             bottomNavigationBar: BottomNavigationBar(

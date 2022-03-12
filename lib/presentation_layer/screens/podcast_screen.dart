@@ -11,6 +11,7 @@ class PodCastScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    late String currentId;
     var cubit = GeneralAppCubit?.get(context);
     return BlocConsumer<GeneralAppCubit, GeneralAppStates>(
       listener: (BuildContext context, state) {},
@@ -20,8 +21,44 @@ class PodCastScreen extends StatelessWidget {
               const EdgeInsetsDirectional.only(start: 10, end: 10, top: 20),
           child: ListView.builder(
             physics: const BouncingScrollPhysics(),
-            itemBuilder: (context, index) =>
-                podACastItem(context, index: index),
+            itemBuilder: (context, index) => podACastItem(
+              context,
+              index: index,
+              playingWidget: IconButton(
+                onPressed: () {
+                  String podCastUrl =
+                      GetAllPodCastModel.getPodCastAudio(index)[0]['url'];
+                  currentId = GetAllPodCastModel.getPodcastID(index);
+
+                  cubit.isPlaying
+                      ? cubit.assetsAudioPlayer.pause().then((value) {
+                          cubit.isPlaying = false;
+                          cubit.pressedPause = true;
+                          cubit.changeState();
+                        })
+                      : cubit.playingPodcast(
+                          podCastUrl,
+                          GetAllPodCastModel.getPodcastName(index),
+                          GetAllPodCastModel.getPodcastUserPublishInform(
+                              index)[0]['photo']);
+                  print(GetAllPodCastModel.getPodCastAudio(index));
+                },
+                icon: Icon(
+                  cubit.isPlaying &&
+                          currentId == GetAllPodCastModel.getPodcastID(index)
+                      ? Icons.pause_circle_outline_outlined
+                      : Icons.play_circle_outline_outlined,
+                  size: 35,
+                ),
+              ),
+              text: cubit.isPlaying &&
+                      currentId == GetAllPodCastModel.getPodcastID(index)
+                  ? cubit.currentOlayingDurathion
+                  : cubit.pressedPause &&
+                          currentId == GetAllPodCastModel.getPodcastID(index)
+                      ? cubit.currentOlayingDurathion
+                      : null,
+            ),
             itemCount: GetAllPodCastModel.getAllPodCast?['data'].length,
           ),
         );

@@ -57,7 +57,7 @@ class MyApp extends StatelessWidget {
         title: 'PodLand',
         theme: lightMode,
         darkTheme: darkMode,
-        themeMode: ThemeMode.light,
+        themeMode: ThemeMode.system,
         home: startApp,
       ),
     );
