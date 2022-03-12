@@ -24,6 +24,8 @@ Widget podACastItem(
   bool likeState = GetAllPodCastModel.getPodcastlikeState(index);
   String podCastId = GetAllPodCastModel.getPodcastID(index);
   double time = GetAllPodCastModel.getPodCastAudio(index)[0]['duration'];
+  String convertedTime =
+      '${((time % (24 * 3600)) / 3600).round().toString()}:${((time % (24 * 3600 * 3600)) / 60).round().toString()}:${(time % 60).round().toString()}';
   var cubit = GeneralAppCubit?.get(context);
   ////////////////////////////////////////////////////////
   return SizedBox(
@@ -76,7 +78,11 @@ Widget podACastItem(
                             splashRadius: 25,
                             padding: EdgeInsets.zero,
                             onPressed: () {
-                              cubit.addLike(podCastId: podCastId, token: token);
+                              likeState
+                                  ? cubit.removeLike(
+                                      podCastId: podCastId, token: token)
+                                  : cubit.addLike(
+                                      podCastId: podCastId, token: token);
                             },
                             icon: Icon(
                               likeState
@@ -111,7 +117,7 @@ Widget podACastItem(
                 Row(
                   children: [
                     Text(
-                      time.toString(),
+                      convertedTime,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context)

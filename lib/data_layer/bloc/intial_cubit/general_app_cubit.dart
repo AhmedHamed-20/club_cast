@@ -85,4 +85,16 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       emit(PodCastLikeAddedError());
     });
   }
+
+  void removeLike({required String podCastId, required String token}) {
+    DioHelper.deleteData(
+        url: sendLike + '/${podCastId}',
+        token: {'Authorization': 'Bearer ${token}'}).then((value) {
+      getAllPodcast(token: token);
+      emit(PodCastLikeDeleatedSuccess());
+    }).catchError((onError) {
+      print(onError);
+      emit(PodCastLikeDeleatedError());
+    });
+  }
 }

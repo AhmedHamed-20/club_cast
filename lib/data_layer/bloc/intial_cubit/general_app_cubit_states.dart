@@ -11,3 +11,7 @@ class PodCastDataGetError extends GeneralAppStates {}
 class PodCastLikeAddedSuccess extends GeneralAppStates {}
 
 class PodCastLikeAddedError extends GeneralAppStates {}
+
+class PodCastLikeDeleatedSuccess extends GeneralAppStates {}
+
+class PodCastLikeDeleatedError extends GeneralAppStates {}
