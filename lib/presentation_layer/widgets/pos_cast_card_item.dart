@@ -63,12 +63,20 @@ Widget podACastItem(
                       child: CircleAvatar(
                         radius: 15,
                         backgroundColor: Theme.of(context).backgroundColor,
-                        child: Text(
-                          likes.toString(),
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyText1!
-                              .copyWith(fontSize: 15),
+                        child: InkWell(
+                          onTap: () {
+                            cubit.getPodCastLikes(
+                                context: context,
+                                token: token,
+                                podCastId: podCastId);
+                          },
+                          child: Text(
+                            likes.toString(),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyText1!
+                                .copyWith(fontSize: 15),
+                          ),
                         ),
                       ),
                     ),

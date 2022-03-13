@@ -4,6 +4,8 @@ import 'package:club_cast/data_layer/dio/dio_setup.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
 import 'package:club_cast/presentation_layer/components/constant/constant.dart';
 import 'package:club_cast/presentation_layer/models/get_all_podcst.dart';
+import 'package:club_cast/presentation_layer/models/podCastLikesUserModel.dart';
+import 'package:club_cast/presentation_layer/screens/podcastLikesScreen.dart';
 import 'package:club_cast/presentation_layer/screens/podcast_screen.dart';
 import 'package:club_cast/presentation_layer/screens/public_rooms_screen.dart';
 import 'package:flutter/material.dart';
@@ -197,5 +199,21 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
         emit(FileDownloadError());
       },
     );
+  }
+
+  void getPodCastLikes(
+      {required String token,
+      required String podCastId,
+      required BuildContext context}) {
+    DioHelper.getDate(
+        url: getPodcastLikesUsers + podCastId,
+        token: {'Authorization': 'Bearer ${token}'}).then((value) {
+      GetPodCastUsersLikesModel.getAllPodCastLikes =
+          Map<String, dynamic>.from(value.data);
+      navigatePushTo(context: context, navigateTo: PodCastLikesScreen());
+      //  print(GetPodCastUsersLikesModel.getPhotoUrltName(1));
+    }).catchError((onError) {
+      print(onError);
+    });
   }
 }
