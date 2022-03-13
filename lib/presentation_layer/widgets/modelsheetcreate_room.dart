@@ -6,6 +6,7 @@ var formKey = GlobalKey<FormState>();
 
 modalBottomSheetItem(BuildContext context) {
   showModalBottomSheet(
+    backgroundColor: Theme.of(context).backgroundColor,
     context: context,
     isScrollControlled: true,
     shape: const RoundedRectangleBorder(
