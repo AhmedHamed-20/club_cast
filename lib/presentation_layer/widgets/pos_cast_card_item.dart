@@ -13,6 +13,7 @@ Widget podACastItem(
   int? index,
   Widget? playingWidget,
   String? text,
+  Widget? downloadButton,
 }) {
   ////////////////////////////////////////////////////
   String token = CachHelper.getData(key: 'token');
@@ -131,13 +132,7 @@ Widget podACastItem(
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.16,
                     ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        Icons.cloud_download_outlined,
-                        size: 35,
-                      ),
-                    ),
+                    downloadButton!,
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.02,
                     ),

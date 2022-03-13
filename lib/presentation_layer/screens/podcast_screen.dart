@@ -11,7 +11,7 @@ class PodCastScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    late String currentId;
+    String? currentId;
     var cubit = GeneralAppCubit?.get(context);
     return BlocConsumer<GeneralAppCubit, GeneralAppStates>(
       listener: (BuildContext context, state) {},
@@ -24,6 +24,27 @@ class PodCastScreen extends StatelessWidget {
             itemBuilder: (context, index) => podACastItem(
               context,
               index: index,
+              downloadButton: IconButton(
+                onPressed: () {
+                  currentId = GetAllPodCastModel.getPodcastID(index);
+                  cubit.downloadPodCast(
+                      GetAllPodCastModel.getPodCastAudio(index)[0]['url'],
+                      '${GetAllPodCastModel.getPodcastName(index)}.wav');
+                },
+                icon: cubit.isDownloading &&
+                        currentId == GetAllPodCastModel.getPodcastID(index)
+                    ? CircularProgressIndicator(
+                        value: cubit.progress,
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                            Theme.of(context).primaryColor),
+                        // color: Theme.of(context).primaryColor,
+                        backgroundColor: Colors.grey,
+                      )
+                    : Icon(
+                        Icons.cloud_download_outlined,
+                        size: 35,
+                      ),
+              ),
               playingWidget: IconButton(
                 onPressed: () {
                   String podCastUrl =

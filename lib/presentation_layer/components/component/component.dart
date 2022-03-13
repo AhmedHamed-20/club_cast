@@ -19,6 +19,7 @@ Widget defaultTextFormField({
   required BuildContext context,
 }) {
   return TextFormField(
+    style: Theme.of(context).textTheme.bodyText1,
     controller: controller,
     keyboardType: keyboardType,
     decoration: InputDecoration(

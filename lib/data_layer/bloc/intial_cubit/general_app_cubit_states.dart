@@ -21,3 +21,9 @@ class ChangeTheme extends GeneralAppStates {}
 class ChangePlayingState extends GeneralAppStates {}
 
 class PlayingStateError extends GeneralAppStates {}
+
+class FileDownloadSuccess extends GeneralAppStates {}
+
+class FileDownloadError extends GeneralAppStates {}
+
+class FileDownloading extends GeneralAppStates {}
