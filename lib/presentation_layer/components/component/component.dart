@@ -125,6 +125,15 @@ void showToast({
   );
 }
 
+Widget userProfileImage({
+  required double size,
+  required String image,
+}) =>
+    CircleAvatar(
+      backgroundImage: AssetImage('assets/images/Adel.png'),
+      radius: size,
+    );
+
 enum ToastState { SUCCESS, WARNING, ERROR }
 
 Color toastColor(ToastState state) {
@@ -142,6 +151,31 @@ Color toastColor(ToastState state) {
   }
   return color;
 }
+
+Widget statusNumberProfile({
+  required String number,
+  required String statusType,
+}) =>
+    Column(
+      children: [
+        Text(
+          number,
+          style: TextStyle(
+            fontWeight: FontWeight.w900,
+            fontSize: 15.0,
+          ),
+        ),
+        SizedBox(
+          height: 3.0,
+        ),
+        Text(
+          statusType,
+          style: TextStyle(
+            fontSize: 15.0,
+          ),
+        ),
+      ],
+    );
 
 void logOut({
   required BuildContext context,

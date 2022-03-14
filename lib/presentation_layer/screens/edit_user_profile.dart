@@ -1,4 +1,3 @@
-import 'package:club_cast/components/components.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
 import 'package:club_cast/data_layer/cash/cash.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
@@ -9,13 +8,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../data_layer/bloc/intial_cubit/general_app_cubit.dart';
 
-
 TextEditingController? userNameController = TextEditingController();
 TextEditingController? emailController = TextEditingController();
 
 class EditUserProfileScreen extends StatelessWidget {
   EditUserProfileScreen({Key? key}) : super(key: key);
-
 
   var currentPasswordController = TextEditingController();
   var newPasswordController = TextEditingController();
@@ -28,11 +25,11 @@ class EditUserProfileScreen extends StatelessWidget {
   bool isPassword2 = true;
   IconData suffix2 = Icons.visibility_outlined;
 
-var  token = CachHelper.getData(key: 'token');
+  var token = CachHelper.getData(key: 'token');
   @override
   Widget build(BuildContext context) {
-     userNameController?.text = GetUserModel.getUserName();
-     emailController?.text = GetUserModel.getUserEmail();
+    userNameController?.text = GetUserModel.getUserName();
+    emailController?.text = GetUserModel.getUserEmail();
     return BlocConsumer<GeneralAppCubit, GeneralAppStates>(
       listener: (context, state) {},
       builder: (context, state) {
@@ -112,8 +109,7 @@ var  token = CachHelper.getData(key: 'token');
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5.0),
                         ),
-                        onPressed: ()
-                        {
+                        onPressed: () {
                           showModalBottomSheet(
                             context: context,
                             shape: RoundedRectangleBorder(
@@ -138,7 +134,7 @@ var  token = CachHelper.getData(key: 'token');
                     ),
                     ConditionalBuilder(
                       condition: state is! UpdateUserLoadingState,
-                      builder: (context)=> Container(
+                      builder: (context) => Container(
                         width: 322.0,
                         height: 45.0,
                         child: MaterialButton(
@@ -164,8 +160,9 @@ var  token = CachHelper.getData(key: 'token');
                           color: Theme.of(context).primaryColor,
                         ),
                       ),
-                      fallback: (context)=> Center(child: CircularProgressIndicator(
-                        color:Theme.of(context).primaryColor,
+                      fallback: (context) => Center(
+                          child: CircularProgressIndicator(
+                        color: Theme.of(context).primaryColor,
                       )),
                     ),
                     const SizedBox(
@@ -183,7 +180,8 @@ var  token = CachHelper.getData(key: 'token');
                             'token',
                           ).then((value) {
                             if (value) {
-                              navigateAndFinish(context, LoginScreen());
+                              navigatePushANDRemoveRout(
+                                  context: context, navigateTo: LoginScreen());
                             }
                           });
                         },
@@ -375,16 +373,19 @@ var  token = CachHelper.getData(key: 'token');
 
   void changePasswordVisibility() {
     isPassword = !isPassword;
-    suffix = isPassword ? Icons.visibility_outlined : Icons.visibility_off_outlined;
+    suffix =
+        isPassword ? Icons.visibility_outlined : Icons.visibility_off_outlined;
   }
 
   void changePasswordVisibility1() {
     isPassword1 = !isPassword1;
-    suffix1 = isPassword1 ? Icons.visibility_outlined : Icons.visibility_off_outlined;
+    suffix1 =
+        isPassword1 ? Icons.visibility_outlined : Icons.visibility_off_outlined;
   }
 
   void changePasswordVisibility2() {
     isPassword2 = !isPassword2;
-    suffix2 = isPassword2 ? Icons.visibility_outlined : Icons.visibility_off_outlined;
+    suffix2 =
+        isPassword2 ? Icons.visibility_outlined : Icons.visibility_off_outlined;
   }
 }

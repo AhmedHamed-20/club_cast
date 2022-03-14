@@ -1,4 +1,3 @@
-import 'package:club_cast/components/components.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/presentation_layer/screens/profile_detailes_screen.dart';
 import 'package:club_cast/presentation_layer/screens/user_profile_screen.dart';
@@ -51,11 +50,12 @@ class LayoutScreen extends StatelessWidget {
                 ),
                 InkWell(
                   onTap: () {
-                    navigateTo(context, UserProfileScreen());
+                    navigatePushTo(
+                        context: context, navigateTo: UserProfileScreen());
                   },
                   child: userProfileImage(
-                      size: 23,
-                      image:'assets/images/Adel.png',
+                    size: 23,
+                    image: 'assets/images/Adel.png',
                   ),
                 ),
                 const SizedBox(
