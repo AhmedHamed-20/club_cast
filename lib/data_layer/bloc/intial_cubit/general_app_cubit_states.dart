@@ -78,3 +78,9 @@ class FileDownloadError extends GeneralAppStates {}
 class FileDownloading extends GeneralAppStates {}
 
 class DataUpdatedSuccess extends GeneralAppStates {}
+
+class GetUserByIdLoadingState extends GeneralAppStates {}
+
+class GetUserByIdSuccessState extends GeneralAppStates {}
+
+class GetUserByIdErrorState extends GeneralAppStates {}

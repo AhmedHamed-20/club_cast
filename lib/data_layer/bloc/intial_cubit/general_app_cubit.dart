@@ -5,10 +5,10 @@ import 'package:club_cast/data_layer/dio/dio_setup.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
 import 'package:club_cast/presentation_layer/components/constant/constant.dart';
 import 'package:club_cast/presentation_layer/models/get_all_podcst.dart';
+import 'package:club_cast/presentation_layer/models/get_userId_model.dart';
 import 'package:club_cast/presentation_layer/models/login_model.dart';
 import 'package:club_cast/presentation_layer/models/podCastLikesUserModel.dart';
 import 'package:club_cast/presentation_layer/models/user_model.dart';
-import 'package:club_cast/presentation_layer/models/user_model_by_id.dart';
 import 'package:club_cast/presentation_layer/screens/podcastLikesScreen.dart';
 import 'package:club_cast/presentation_layer/screens/podcast_screen.dart';
 import 'package:club_cast/presentation_layer/screens/public_rooms_screen.dart';
@@ -237,16 +237,8 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
         },
     ).then((value)
     {
-      print('we are in get');
-//      // print(value.data);
-//      // ahmedModel=;
-//   //    var test=UserLoginModel.fromJson(value.data).data?.user?.name;
-// print('===========================================================');
-//     //  print("user:${test}");
       GetUserModel.getUserModel=  Map<String, dynamic>.from(value.data);
       print(  GetUserModel.getUserName());
-    //  emit(UserDataSuccessState(ahmedModel!));
-
     }).catchError((error)
     {
       print(error);
@@ -274,7 +266,6 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       GetUserModel.updateName(name1);
       GetUserModel.updateEmail(email1);
       emit(DataUpdatedSuccess());
-      //emit(UpdateUserSuccessState(ahmedModel!));
       showToast(
         message: 'Update Success',
         toastState: ToastState.SUCCESS,
@@ -349,6 +340,27 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
         );
         emit(UpdatePasswordErrorState(error));
       }
+    });
+  }
+
+  UserModelId? userId;
+
+  void getUserById()
+  {
+    emit(GetUserByIdLoadingState());
+    DioHelper.getDate(
+      url: userById,
+      token: {
+        'Authorization': 'Bearer ${token}',
+      },
+    ).then((value)
+    {
+      userId=UserModelId.fromJson(value.data);
+      emit(GetUserByIdSuccessState());
+    }).catchError((error)
+    {
+      print(error);
+      emit(GetUserByIdErrorState());
     });
   }
 }
