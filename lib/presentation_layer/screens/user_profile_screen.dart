@@ -1,5 +1,4 @@
-
-import 'package:club_cast/components/components.dart';
+import 'package:club_cast/presentation_layer/components/component/component.dart';
 import 'package:club_cast/presentation_layer/models/user_model.dart';
 import 'package:club_cast/presentation_layer/screens/edit_user_profile.dart';
 import 'package:club_cast/presentation_layer/screens/followers_screen.dart';
@@ -15,8 +14,7 @@ class UserProfileScreen extends StatelessWidget {
       appBar: AppBar(
         elevation: 0.0,
         leading: IconButton(
-          onPressed: ()
-          {
+          onPressed: () {
             Navigator.pop(context);
           },
           icon: Icon(
@@ -32,15 +30,14 @@ class UserProfileScreen extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Column(
-          children:
-          [
+          children: [
             const SizedBox(
               height: 10.0,
             ),
             Center(
               child: userProfileImage(
-                  image: 'assets/images/Adel.png',
-                  size: 75,
+                image: 'assets/images/Adel.png',
+                size: 75,
               ),
             ),
             const SizedBox(
@@ -49,17 +46,16 @@ class UserProfileScreen extends StatelessWidget {
             Text(
               '${GetUserModel.getUserName()}',
               style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                fontWeight: FontWeight.w900,
-                fontSize: 22.0,
-              ),
+                    fontWeight: FontWeight.w900,
+                    fontSize: 22.0,
+                  ),
             ),
             const SizedBox(
               height: 25.0,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children:
-              [
+              children: [
                 statusNumberProfile(
                   number: '1',
                   statusType: 'Podcasts',
@@ -68,9 +64,11 @@ class UserProfileScreen extends StatelessWidget {
                   width: 22.0,
                 ),
                 GestureDetector(
-                  onTap: ()
-                  {
-                    navigateTo(context, FollowersScreen(),);
+                  onTap: () {
+                    navigatePushTo(
+                      context: context,
+                      navigateTo: FollowersScreen(),
+                    );
                   },
                   child: statusNumberProfile(
                     number: '95',
@@ -81,11 +79,10 @@ class UserProfileScreen extends StatelessWidget {
                   width: 22.0,
                 ),
                 GestureDetector(
-                  onTap: ()
-                  {
-                    navigateTo(
-                      context,
-                      FollowingScreen(),
+                  onTap: () {
+                    navigatePushTo(
+                      context: context,
+                      navigateTo: FollowingScreen(),
                     );
                   },
                   child: statusNumberProfile(
@@ -102,43 +99,39 @@ class UserProfileScreen extends StatelessWidget {
               width: 280.0,
               height: 45.0,
               child: MaterialButton(
-              shape: RoundedRectangleBorder(
-              borderRadius:
-              BorderRadius.circular(
-                  5.0),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5.0),
                 ),
-                onPressed: ()
-                {
-                  navigateTo(context, EditUserProfileScreen(),
+                onPressed: () {
+                  navigatePushTo(
+                    context: context,
+                    navigateTo: EditUserProfileScreen(),
                   );
                 },
                 child: const Text(
-                 'Edit',
-                style: TextStyle(
-                color: Colors.white,
-                fontSize: 20.0,
+                  'Edit',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20.0,
+                  ),
+                ),
+                color: Theme.of(context).primaryColor,
               ),
             ),
-            color:Theme.of(context).primaryColor,
-          ),
-
-
-        ),
             const SizedBox(
               height: 20.0,
             ),
             Row(
-              children:
-              [
+              children: [
                 const SizedBox(
                   width: 20.0,
                 ),
                 Text(
                   'Podcasts',
                   style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                    fontWeight: FontWeight.w900,
-                    fontSize: 22.0,
-                  ),
+                        fontWeight: FontWeight.w900,
+                        fontSize: 22.0,
+                      ),
                 ),
               ],
             ),

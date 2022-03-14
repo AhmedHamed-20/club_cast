@@ -2,7 +2,6 @@ import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../components/components.dart';
 import '../../data_layer/bloc/intial_cubit/general_app_cubit.dart';
 
 class SearchScreen extends StatelessWidget {

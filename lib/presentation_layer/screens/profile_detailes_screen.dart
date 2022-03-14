@@ -1,6 +1,6 @@
-import 'package:club_cast/components/components.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
+import 'package:club_cast/presentation_layer/components/component/component.dart';
 import 'package:club_cast/presentation_layer/models/get_userId_model.dart';
 import 'package:club_cast/presentation_layer/models/podCastLikesUserModel.dart';
 import 'package:flutter/material.dart';
@@ -11,17 +11,15 @@ class ProfileDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<GeneralAppCubit,GeneralAppStates>(
-      listener: (context,index){},
-      builder: (context,index)
-      {
-        var cubit=GeneralAppCubit.get(context);
+    return BlocConsumer<GeneralAppCubit, GeneralAppStates>(
+      listener: (context, index) {},
+      builder: (context, index) {
+        var cubit = GeneralAppCubit.get(context);
         return Scaffold(
           appBar: AppBar(
             elevation: 0.0,
             leading: IconButton(
-              onPressed: ()
-              {
+              onPressed: () {
                 Navigator.pop(context);
               },
               icon: Icon(
@@ -37,8 +35,7 @@ class ProfileDetailsScreen extends StatelessWidget {
           ),
           body: SingleChildScrollView(
             child: Column(
-              children:
-              [
+              children: [
                 const SizedBox(
                   height: 10.0,
                 ),
@@ -54,17 +51,16 @@ class ProfileDetailsScreen extends StatelessWidget {
                 Text(
                   'Ahmed Adel',
                   style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                    fontWeight: FontWeight.w900,
-                    fontSize: 22.0,
-                  ),
+                        fontWeight: FontWeight.w900,
+                        fontSize: 22.0,
+                      ),
                 ),
                 const SizedBox(
                   height: 25.0,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children:
-                  [
+                  children: [
                     statusNumberProfile(
                       number: '1',
                       statusType: 'Podcasts',
@@ -93,12 +89,9 @@ class ProfileDetailsScreen extends StatelessWidget {
                   height: 45.0,
                   child: MaterialButton(
                     shape: RoundedRectangleBorder(
-                      borderRadius:
-                      BorderRadius.circular(
-                          5.0),
+                      borderRadius: BorderRadius.circular(5.0),
                     ),
-                    onPressed: ()
-                    {},
+                    onPressed: () {},
                     child: const Text(
                       'Follow',
                       style: TextStyle(
@@ -106,24 +99,23 @@ class ProfileDetailsScreen extends StatelessWidget {
                         fontSize: 20.0,
                       ),
                     ),
-                    color:Theme.of(context).primaryColor,
+                    color: Theme.of(context).primaryColor,
                   ),
                 ),
                 const SizedBox(
                   height: 20.0,
                 ),
                 Row(
-                  children:
-                  [
+                  children: [
                     const SizedBox(
                       width: 20.0,
                     ),
                     Text(
                       'Podcasts',
                       style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                        fontWeight: FontWeight.w900,
-                        fontSize: 22.0,
-                      ),
+                            fontWeight: FontWeight.w900,
+                            fontSize: 22.0,
+                          ),
                     ),
                   ],
                 ),
