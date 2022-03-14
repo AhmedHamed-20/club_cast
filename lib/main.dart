@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
           create: (context) => LoginCubit(),
         ),
         BlocProvider(
-          create: (context) => GeneralAppCubit()..getAllPodcast(token: token),
+          create: (context) => GeneralAppCubit()..getAllPodcast(token: token)..getUserData(token: token),
         ),
       ],
       child: MaterialApp(

@@ -1,5 +1,6 @@
 
 import 'package:club_cast/components/components.dart';
+import 'package:club_cast/presentation_layer/models/user_model.dart';
 import 'package:club_cast/presentation_layer/screens/edit_user_profile.dart';
 import 'package:club_cast/presentation_layer/screens/followers_screen.dart';
 import 'package:club_cast/presentation_layer/screens/following_screen.dart';
@@ -13,20 +14,27 @@ class UserProfileScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
-        leading: Icon(
-          Icons.arrow_back_ios,
-          color: Theme.of(context).iconTheme.color,
+        leading: IconButton(
+          onPressed: ()
+          {
+            Navigator.pop(context);
+          },
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: Theme.of(context).iconTheme.color,
+          ),
         ),
         title: Text(
           'Your Profile Details',
           style: Theme.of(context).textTheme.bodyText2,
         ),
+        backgroundColor: Colors.transparent,
       ),
       body: SingleChildScrollView(
         child: Column(
           children:
           [
-            SizedBox(
+            const SizedBox(
               height: 10.0,
             ),
             Center(
@@ -35,18 +43,17 @@ class UserProfileScreen extends StatelessWidget {
                   size: 75,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10.0,
             ),
             Text(
-              'Ahmed Adel',
+              '${GetUserModel.getUserName()}',
               style: Theme.of(context).textTheme.bodyText1!.copyWith(
                 fontWeight: FontWeight.w900,
                 fontSize: 22.0,
-                color: Colors.grey[800],
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 25.0,
             ),
             Row(
@@ -57,23 +64,20 @@ class UserProfileScreen extends StatelessWidget {
                   number: '1',
                   statusType: 'Podcasts',
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 22.0,
                 ),
                 GestureDetector(
                   onTap: ()
                   {
-                    navigateTo(
-                      context,
-                      FollowersScreen(),
-                    );
+                    navigateTo(context, FollowersScreen(),);
                   },
                   child: statusNumberProfile(
                     number: '95',
                     statusType: 'Followers',
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 22.0,
                 ),
                 GestureDetector(
@@ -91,7 +95,7 @@ class UserProfileScreen extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 17.0,
             ),
             Container(
@@ -105,39 +109,35 @@ class UserProfileScreen extends StatelessWidget {
                 ),
                 onPressed: ()
                 {
-                  navigateTo(
-                      context,
-                    EditUserProfileScreen(),
+                  navigateTo(context, EditUserProfileScreen(),
                   );
                 },
-                child: Text(
+                child: const Text(
                  'Edit',
                 style: TextStyle(
                 color: Colors.white,
                 fontSize: 20.0,
               ),
             ),
-            color: Color(0xff5ADAAC),
-
+            color:Theme.of(context).primaryColor,
           ),
 
 
         ),
-            SizedBox(
+            const SizedBox(
               height: 20.0,
             ),
             Row(
               children:
               [
-                SizedBox(
+                const SizedBox(
                   width: 20.0,
                 ),
                 Text(
                   'Podcasts',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20.0,
-                    color: Colors.grey[600],
+                  style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                    fontWeight: FontWeight.w900,
+                    fontSize: 22.0,
                   ),
                 ),
               ],

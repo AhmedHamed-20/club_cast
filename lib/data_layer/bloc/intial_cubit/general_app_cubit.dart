@@ -1,16 +1,21 @@
 import 'dart:io';
 
+import 'package:club_cast/data_layer/cash/cash.dart';
 import 'package:club_cast/data_layer/dio/dio_setup.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
 import 'package:club_cast/presentation_layer/components/constant/constant.dart';
 import 'package:club_cast/presentation_layer/models/get_all_podcst.dart';
+import 'package:club_cast/presentation_layer/models/login_model.dart';
 import 'package:club_cast/presentation_layer/models/podCastLikesUserModel.dart';
+import 'package:club_cast/presentation_layer/models/user_model.dart';
+import 'package:club_cast/presentation_layer/models/user_model_by_id.dart';
 import 'package:club_cast/presentation_layer/screens/podcastLikesScreen.dart';
 import 'package:club_cast/presentation_layer/screens/podcast_screen.dart';
 import 'package:club_cast/presentation_layer/screens/public_rooms_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:path_provider/path_provider.dart' as path;
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'general_app_cubit_states.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 
@@ -181,14 +186,14 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
 
     await DioHelper.dio!.download(url, file.path,
         onReceiveProgress: (rec, total) {
-      isDownloading = true;
+          isDownloading = true;
 
-      emit(FileDownloading());
+          emit(FileDownloading());
 
-      progress = ((rec / total) * 100);
-      print(progress);
-      counter++;
-    }).then((value) {
+          progress = ((rec / total) * 100);
+          print(progress);
+          counter++;
+        }).then((value) {
       var fullPath = file.path;
       isDownloading = false;
       emit(FileDownloadSuccess());
@@ -197,7 +202,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
           toastState: ToastState.SUCCESS);
       print(fullPath);
     }).catchError(
-      (onError) {
+          (onError) {
         print(onError);
         showToast(message: 'DownlaodError', toastState: ToastState.ERROR);
         emit(FileDownloadError());
@@ -207,17 +212,147 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
 
   void getPodCastLikes(
       {required String token,
-      required String podCastId,
-      required BuildContext context}) {
+        required String podCastId,
+        required BuildContext context}) {
     DioHelper.getDate(
         url: getPodcastLikesUsers + podCastId,
         token: {'Authorization': 'Bearer ${token}'}).then((value) {
       GetPodCastUsersLikesModel.getAllPodCastLikes =
-          Map<String, dynamic>.from(value.data);
+      Map<String, dynamic>.from(value.data);
       navigatePushTo(context: context, navigateTo: PodCastLikesScreen());
       //  print(GetPodCastUsersLikesModel.getPhotoUrltName(1));
     }).catchError((onError) {
       print(onError);
+    });
+  }
+
+
+
+  void getUserData(
+  {
+  required String token,
+})
+  {
+    emit(UserDataLoadingState());
+    DioHelper.getDate(
+        url: profile,
+        token: {
+          'Authorization': 'Bearer ${token}',
+        },
+    ).then((value)
+    {
+      print('we are in get');
+//      // print(value.data);
+//      // ahmedModel=;
+//   //    var test=UserLoginModel.fromJson(value.data).data?.user?.name;
+// print('===========================================================');
+//     //  print("user:${test}");
+      GetUserModel.getUserModel=  Map<String, dynamic>.from(value.data);
+      print(  GetUserModel.getUserName());
+    //  emit(UserDataSuccessState(ahmedModel!));
+
+    }).catchError((error)
+    {
+      print(error);
+      emit(UserDataErrorState(error.toString()));
+    });
+
+  }
+
+  void updateUserData(
+      {
+        required String name1,
+        required String email1,
+        required String token,
+      })
+  {
+    emit(UpdateUserLoadingState());
+    DioHelper.patchData(
+      url: updateProfile,
+      name:name1,
+      email:email1,
+      token: token,
+    ).then((value)
+    {
+      print(value);
+      GetUserModel.updateName(name1);
+      GetUserModel.updateEmail(email1);
+      emit(DataUpdatedSuccess());
+      //emit(UpdateUserSuccessState(ahmedModel!));
+      showToast(
+        message: 'Update Success',
+        toastState: ToastState.SUCCESS,
+      );
+    }).catchError((error)
+    {
+      print(error);
+      if (error.response!.statusCode == 400) {
+        showToast(
+          message: "this user already exist",
+          toastState: ToastState.ERROR,
+        );
+        emit(UpdateUserErrorState(error));
+      }
+    });
+  }
+
+  void updatePassword(
+      {
+        required String password_Current,
+        required String password_New,
+        required String password_Confirm,
+        required String token,
+      })
+  {
+    emit(UpdatePasswordLoadingState());
+    DioHelper.patchPassword(
+      url: update_Password,
+      passwordCurrent:password_Current,
+      passwordNew: password_New,
+      passwordConfirm: password_Confirm,
+      token: token,
+    ).then((value)
+    {
+      String newToken = value.data['token'];
+      CachHelper.setData(key: 'token', value: newToken);
+      ahmedModel=UserLoginModel.fromJson(value.data);
+      emit(UpdatePasswordSuccessState(ahmedModel!));
+      showToast(
+        message: 'Update Success',
+        toastState: ToastState.SUCCESS,
+      );
+    }).catchError((error)
+    {
+      print(error.toString());
+      if (error.response!.statusCode == 400) {
+        if (password_New.length < 8) {
+          showToast(
+            message: "password must have more or equal than 8 characters!",
+            toastState: ToastState.ERROR,
+          );
+          emit(UpdatePasswordErrorState(error));
+        } else if (password_New != password_Confirm) {
+          showToast(
+            message: " Passwords are not the same!",
+            toastState: ToastState.ERROR,
+          );
+          emit(UpdatePasswordErrorState(error));
+        }
+        else {
+          showToast(
+            message: "error,check your data",
+            toastState: ToastState.ERROR,
+          );
+          emit(UpdatePasswordErrorState(error));
+        }
+      }
+      else if (error.response!.statusCode == 401) {
+        showToast(
+          message: "This isn't current password",
+          toastState: ToastState.ERROR,
+        );
+        emit(UpdatePasswordErrorState(error));
+      }
     });
   }
 }
