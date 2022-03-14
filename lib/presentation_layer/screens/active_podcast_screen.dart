@@ -1,28 +1,40 @@
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:audio_wave/audio_wave.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
+import 'package:club_cast/presentation_layer/models/get_all_podcst.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ActivePodCastScreen extends StatelessWidget {
-  const ActivePodCastScreen({Key? key}) : super(key: key);
+  int? index;
+  ActivePodCastScreen(this.index);
 
   @override
   Widget build(BuildContext context) {
+    var cubit = GeneralAppCubit?.get(context);
+    double time = GetAllPodCastModel.getPodCastAudio(index!)[0]['duration'];
+    String convertedTime =
+        '${((time % (24 * 3600)) / 3600).round().toString()}:${((time % (24 * 3600 * 3600)) / 60).round().toString()}:${(time % 60).round().toString()}';
     return BlocConsumer<GeneralAppCubit, GeneralAppStates>(
       builder: (context, state) {
         return Scaffold(
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           appBar: AppBar(
             title: Text(
-              'Graduation Project',
+              GetAllPodCastModel.getPodcastName(index!),
               style: Theme.of(context).textTheme.bodyText2,
             ),
             backgroundColor: Colors.transparent,
             elevation: 0,
-            leading: Icon(
-              Icons.arrow_back_ios,
-              color: Theme.of(context).iconTheme.color,
+            leading: InkWell(
+              onTap: () {
+                Navigator.of(context).pop();
+              },
+              child: Icon(
+                Icons.arrow_back_ios,
+                color: Theme.of(context).iconTheme.color,
+              ),
             ),
           ),
           body: Column(
@@ -33,13 +45,17 @@ class ActivePodCastScreen extends StatelessWidget {
                   Center(
                     child: CircleAvatar(
                       radius: 80,
+                      backgroundImage: NetworkImage(
+                          GetAllPodCastModel.getPodcastUserPublishInform(
+                              index!)[0]['photo']),
                     ),
                   ),
                   SizedBox(
                     height: 10,
                   ),
                   Text(
-                    'AhmedHamed',
+                    GetAllPodCastModel.getPodcastUserPublishInform(index!)[0]
+                        ['name'],
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
                 ],
@@ -49,47 +65,27 @@ class ActivePodCastScreen extends StatelessWidget {
               ),
               Column(
                 children: [
-                  AudioWave(
-                    height: 32,
-                    width: 88,
-                    spacing: 2.5,
-                    alignment: 'top',
-                    animationLoop: 2,
-                    bars: [
-                      AudioWaveBar(
-                        height: 77,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                      AudioWaveBar(
-                        height: 77,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                      AudioWaveBar(
-                        height: 77,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                      AudioWaveBar(
-                        height: 77,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                      AudioWaveBar(
-                        height: 33,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                      AudioWaveBar(
-                        height: 50,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                      AudioWaveBar(
-                        height: 60,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                      AudioWaveBar(height: 55, color: Colors.grey[300]!),
-                      AudioWaveBar(height: 33, color: Colors.grey[300]!),
-                    ],
+                  Slider(
+                    activeColor: Theme.of(context).primaryColor,
+                    inactiveColor: Theme.of(context).backgroundColor,
+                    value: cubit.currentPostionDurationInsec,
+                    onChanged: (newval) {
+                      cubit.assetsAudioPlayer.seek(
+                        Duration(
+                          seconds: newval.toInt(),
+                        ),
+                      );
+                    },
+                    min: 0,
+                    max: GetAllPodCastModel.getPodCastAudio(index!)[0]
+                            ['duration']
+                        .toDouble(),
                   ),
                   Text(
-                    '55:33:10',
+                    cubit.currentOlayingDurathion == null ||
+                            cubit.isPlaying == false
+                        ? convertedTime
+                        : cubit.currentOlayingDurathion!,
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
                 ],
@@ -100,7 +96,7 @@ class ActivePodCastScreen extends StatelessWidget {
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height * 0.3,
                     child: Card(
-                      elevation: 10,
+                      elevation: 8,
                       color: Theme.of(context).backgroundColor,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.only(
@@ -117,7 +113,7 @@ class ActivePodCastScreen extends StatelessWidget {
                         child: Column(
                           children: [
                             Text(
-                              'Graduation Project',
+                              GetAllPodCastModel.getPodcastName(index!),
                               style: Theme.of(context).textTheme.bodyText2,
                             ),
                             SizedBox(
@@ -145,9 +141,30 @@ class ActivePodCastScreen extends StatelessWidget {
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(15),
                                     ),
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      String podCastUrl =
+                                          GetAllPodCastModel.getPodCastAudio(
+                                              index!)[0]['url'];
+                                      cubit.isPlaying
+                                          ? cubit.assetsAudioPlayer
+                                              .pause()
+                                              .then((value) {
+                                              cubit.isPlaying = false;
+                                              cubit.pressedPause = true;
+                                              cubit.changeState();
+                                            })
+                                          : cubit.playingPodcast(
+                                              podCastUrl,
+                                              GetAllPodCastModel.getPodcastName(
+                                                  index!),
+                                              GetAllPodCastModel
+                                                  .getPodcastUserPublishInform(
+                                                      index!)[0]['photo']);
+                                    },
                                     child: Icon(
-                                      Icons.pause,
+                                      cubit.isPlaying
+                                          ? Icons.pause
+                                          : Icons.play_arrow,
                                       color: Colors.white,
                                     ),
                                   ),

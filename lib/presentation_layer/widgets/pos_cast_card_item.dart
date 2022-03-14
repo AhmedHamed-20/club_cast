@@ -20,7 +20,7 @@ Widget podACastItem(
   String photoUrl =
       GetAllPodCastModel.getPodcastUserPublishInform(index!)[0]['photo'];
   ;
-  String Username =
+  String username =
       GetAllPodCastModel.getPodcastUserPublishInform(index)[0]['name'];
   String podCastName = GetAllPodCastModel.getPodcastName(index);
   int likes = GetAllPodCastModel.getPodcastLikes(index);
@@ -122,7 +122,7 @@ Widget podACastItem(
                 SizedBox(
                   height: MediaQuery.of(context).size.width * 0.02,
                 ),
-                Text(Username,
+                Text(username,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.bodyText1),

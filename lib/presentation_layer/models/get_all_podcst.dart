@@ -28,7 +28,7 @@ class GetAllPodCastModel {
   }
 
   static List getPodcastUserPublishInform(int index) {
-    return creditBy = [getAllPodCast!['data'][0]['createdBy']];
+    return creditBy = [getAllPodCast!['data'][index]['createdBy']];
   }
 
   static bool getPodcastlikeState(int index) {
