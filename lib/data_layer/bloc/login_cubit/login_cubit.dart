@@ -33,7 +33,7 @@ class LoginCubit extends Cubit<LoginStates> {
     emit(ChangeEyeSecureState());
   }
 
-  UserLoginModel? userLoginModel;
+   UserLoginModel? userLoginModel;
 
   void userLogin({
     required String email,
@@ -46,6 +46,8 @@ class LoginCubit extends Cubit<LoginStates> {
       'password': password,
     }).then((value) {
       userLoginModel = UserLoginModel.fromJson(value.data);
+      ahmedModel =userLoginModel ;
+      print(ahmedModel?.data!.user!.email);
       emit(UserLoginSuccessState(userLoginModel!));
     }).onError((DioError error, stackTrace) {
       if (error.response!.statusCode == 401) {
