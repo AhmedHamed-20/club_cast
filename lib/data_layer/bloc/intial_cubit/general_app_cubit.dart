@@ -30,6 +30,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   bool pressedPause = false;
   bool isDownloading = false;
   int counter = 0;
+  double currentPostionDurationInsec = 0;
   double? progress;
   String? currentOlayingDurathion;
   final assetsAudioPlayer = AssetsAudioPlayer();
@@ -96,7 +97,10 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
 
         assetsAudioPlayer.currentPosition.listen((event) {
           print(event);
+
+          currentPostionDurationInsec = event.inSeconds.toDouble();
           currentOlayingDurathion = event.toString().substring(0, 7);
+          //print(currentOlayingDurathion);
           if (event.inSeconds == 00.000000) {
             isPlaying = false;
             pressedPause = false;
