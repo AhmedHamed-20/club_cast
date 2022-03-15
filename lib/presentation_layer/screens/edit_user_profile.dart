@@ -62,9 +62,9 @@ class EditUserProfileScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     Center(
-                      child: userProfileImage(
-                        image: 'assets/images/Adel.png',
-                        size: 75,
+                      child: CircleAvatar(
+                        backgroundImage: NetworkImage('${GetUserModel.getUserPhoto()}'),
+                        radius: 75.0,
                       ),
                     ),
                     const SizedBox(

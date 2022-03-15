@@ -32,7 +32,24 @@ class UserData
     language=json['language'];
     userType=json['userType'];
   }
-
-
-
 }
+
+// class SaveDataModel {
+//   static Map<String, dynamic>? savaData;
+//   static String? photoUrl;
+//   static String? userid;
+//   static String? name;
+//
+//   static String getUserID() {
+//     return userid =
+//         savaData!['data']['_id'];
+//   }
+//
+//   static String getUserName() {
+//     return name = savaData!['data']['name'];
+//   }
+//
+//   static String getPhotoUrltName(int index) {
+//     return photoUrl = savaData!['data']['photo'];
+//   }
+// }

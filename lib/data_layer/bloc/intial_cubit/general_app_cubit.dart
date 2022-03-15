@@ -348,19 +348,27 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   }
 
   UserModelId? userId;
-
-  void getUserById()
+  bool isLoading=false;
+  void getUserById(
   {
+    required String profileId,
+    Map<String,dynamic>? save,
+})
+  {
+    isLoading=true;
     emit(GetUserByIdLoadingState());
     DioHelper.getDate(
-      url: userById,
+      url: userById + profileId,
       token: {
         'Authorization': 'Bearer ${token}',
       },
     ).then((value)
     {
+      // SaveDataModel.savaData=Map<String, dynamic>.from(value.data);
       userId=UserModelId.fromJson(value.data);
+
       emit(GetUserByIdSuccessState());
+      isLoading=false;
     }).catchError((error)
     {
       print(error);
@@ -368,3 +376,6 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     });
   }
 }
+// userId=UserModelId.fromJson(value.data);
+// save=userId as Map<String, dynamic>?;
+// userId!.data!.id=GetPodCastUsersLikesModel.getAllPodCastLikes!['data']['user']['_id'];
