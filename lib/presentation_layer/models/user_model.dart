@@ -4,6 +4,9 @@ class GetUserModel {
   static String? userid;
   static String? name;
   static String? email;
+  static int? followers;
+  static int? following;
+  static String? photo;
 
 
   static String getUserID()
@@ -18,12 +21,19 @@ class GetUserModel {
   }
   static String getUserEmail()
   {
-    return name = getUserModel!['data']['data']['email'];
+    return email = getUserModel!['data']['data']['email'];
   }
-
-  static String getPhotoUrlName()
+  static int getUserFollowers()
   {
-    return photoUrl = getUserModel!['data']['data']['photo'];
+    return followers = getUserModel!['data']['data']['followers'];
+  }
+  static int getUserFollowing()
+  {
+    return following = getUserModel!['data']['data']['following'];
+  }
+  static String getUserPhoto()
+  {
+    return photo = getUserModel!['data']['data']['photo'];
   }
   static void updateName(String name)
   {

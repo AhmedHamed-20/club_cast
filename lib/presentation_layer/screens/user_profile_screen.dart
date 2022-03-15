@@ -1,3 +1,4 @@
+
 import 'package:club_cast/presentation_layer/components/component/component.dart';
 import 'package:club_cast/presentation_layer/models/user_model.dart';
 import 'package:club_cast/presentation_layer/screens/edit_user_profile.dart';
@@ -14,7 +15,8 @@ class UserProfileScreen extends StatelessWidget {
       appBar: AppBar(
         elevation: 0.0,
         leading: IconButton(
-          onPressed: () {
+          onPressed: ()
+          {
             Navigator.pop(context);
           },
           icon: Icon(
@@ -30,14 +32,15 @@ class UserProfileScreen extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Column(
-          children: [
+          children:
+          [
             const SizedBox(
               height: 10.0,
             ),
             Center(
-              child: userProfileImage(
-                image: 'assets/images/Adel.png',
-                size: 75,
+              child: CircleAvatar(
+                backgroundImage: NetworkImage('${GetUserModel.getUserPhoto()}'),
+                radius: 75.0,
               ),
             ),
             const SizedBox(
@@ -46,32 +49,31 @@ class UserProfileScreen extends StatelessWidget {
             Text(
               '${GetUserModel.getUserName()}',
               style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                    fontWeight: FontWeight.w900,
-                    fontSize: 22.0,
-                  ),
+                fontWeight: FontWeight.w900,
+                fontSize: 22.0,
+              ),
             ),
             const SizedBox(
               height: 25.0,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+              children:
+              [
                 statusNumberProfile(
-                  number: '1',
+                  number: '0',
                   statusType: 'Podcasts',
                 ),
                 const SizedBox(
                   width: 22.0,
                 ),
                 GestureDetector(
-                  onTap: () {
-                    navigatePushTo(
-                      context: context,
-                      navigateTo: FollowersScreen(),
-                    );
+                  onTap: ()
+                  {
+                    navigatePushTo(context: context, navigateTo: FollowersScreen(),);
                   },
                   child: statusNumberProfile(
-                    number: '95',
+                    number: '${GetUserModel.getUserFollowers()}',
                     statusType: 'Followers',
                   ),
                 ),
@@ -79,14 +81,12 @@ class UserProfileScreen extends StatelessWidget {
                   width: 22.0,
                 ),
                 GestureDetector(
-                  onTap: () {
-                    navigatePushTo(
-                      context: context,
-                      navigateTo: FollowingScreen(),
-                    );
+                  onTap: ()
+                  {
+                    navigatePushTo(context: context, navigateTo: FollowingScreen(),);
                   },
                   child: statusNumberProfile(
-                    number: '225',
+                    number: '${GetUserModel.getUserFollowing()}',
                     statusType: 'Following',
                   ),
                 ),
@@ -99,39 +99,42 @@ class UserProfileScreen extends StatelessWidget {
               width: 280.0,
               height: 45.0,
               child: MaterialButton(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5.0),
+              shape: RoundedRectangleBorder(
+              borderRadius:
+              BorderRadius.circular(
+                  5.0),
                 ),
-                onPressed: () {
-                  navigatePushTo(
-                    context: context,
-                    navigateTo: EditUserProfileScreen(),
-                  );
+                onPressed: ()
+                {
+                  navigatePushTo(context: context, navigateTo: EditUserProfileScreen());
                 },
                 child: const Text(
-                  'Edit',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20.0,
-                  ),
-                ),
-                color: Theme.of(context).primaryColor,
+                 'Edit',
+                style: TextStyle(
+                color: Colors.white,
+                fontSize: 20.0,
               ),
             ),
+            color:Theme.of(context).primaryColor,
+          ),
+
+
+        ),
             const SizedBox(
               height: 20.0,
             ),
             Row(
-              children: [
+              children:
+              [
                 const SizedBox(
                   width: 20.0,
                 ),
                 Text(
                   'Podcasts',
                   style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                        fontWeight: FontWeight.w900,
-                        fontSize: 22.0,
-                      ),
+                    fontWeight: FontWeight.w900,
+                    fontSize: 22.0,
+                  ),
                 ),
               ],
             ),

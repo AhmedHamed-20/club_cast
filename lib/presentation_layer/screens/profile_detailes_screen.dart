@@ -1,4 +1,4 @@
-import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
+import '../../data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
 import 'package:club_cast/presentation_layer/models/get_userId_model.dart';
@@ -33,23 +33,27 @@ class ProfileDetailsScreen extends StatelessWidget {
             ),
             backgroundColor: Colors.transparent,
           ),
-          body: SingleChildScrollView(
+          body: cubit.isLoading?
+          Center(child: CircularProgressIndicator(
+            color: Theme.of(context).primaryColor,
+          )) :
+          SingleChildScrollView(
             child: Column(
               children: [
                 const SizedBox(
                   height: 10.0,
                 ),
                 Center(
-                  child: userProfileImage(
-                    image: 'assets/images/Adel.png',
-                    size: 75,
+                  child: CircleAvatar(
+                    backgroundImage: NetworkImage('${cubit.userId!.data!.photo}'),
+                    radius: 75.0,
                   ),
                 ),
                 const SizedBox(
                   height: 10.0,
                 ),
                 Text(
-                  'Ahmed Adel',
+                  '${cubit.userId!.data!.name}',
                   style: Theme.of(context).textTheme.bodyText1!.copyWith(
                         fontWeight: FontWeight.w900,
                         fontSize: 22.0,
@@ -62,21 +66,22 @@ class ProfileDetailsScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     statusNumberProfile(
-                      number: '1',
+                      number: '0',
                       statusType: 'Podcasts',
                     ),
                     const SizedBox(
                       width: 22.0,
                     ),
                     statusNumberProfile(
-                      number: '95',
+                      number: '${cubit.userId!.data!.followers}',
                       statusType: 'Followers',
                     ),
+                    // cubit.userId!.data!.followers
                     const SizedBox(
                       width: 22.0,
                     ),
                     statusNumberProfile(
-                      number: '225',
+                      number: '${cubit.userId!.data!.following}',
                       statusType: 'Following',
                     ),
                   ],
