@@ -1,10 +1,19 @@
+import 'dart:io';
+
 import 'package:bloc/bloc.dart';
+import 'package:club_cast/data_layer/cash/cash.dart';
 import 'package:club_cast/data_layer/dio/dio_setup.dart';
 import 'package:club_cast/presentation_layer/components/constant/constant.dart';
+import 'package:club_cast/presentation_layer/layout/layout_screen.dart';
 import 'package:club_cast/presentation_layer/models/login_model.dart';
+import 'package:club_cast/presentation_layer/models/user_model.dart';
+import 'package:club_cast/presentation_layer/screens/setup_avater_screen.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http_parser/http_parser.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../presentation_layer/components/component/component.dart';
 import 'login_states.dart';
@@ -13,13 +22,50 @@ class LoginCubit extends Cubit<LoginStates> {
   LoginCubit() : super(InitialLoginStates());
   static LoginCubit get(context) => BlocProvider.of(context);
   ////////////variable//////////////
-
+  // / var token = CachHelper.getData(key: 'token');
   bool obSecure = true;
   Widget suffix = const Icon(
     Icons.visibility_off,
   );
-
   ////////////Methods///////////////
+
+  //////////////////
+  File? profileAvatar;
+
+  Future pickImage() async {
+    try {
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (image == null) return;
+      profileAvatar = File(image.path);
+      print(profileAvatar);
+
+      emit(UserSetAvatarState());
+    } on PlatformException catch (e) {
+      print('error when pick image from galary:${e.toString()}');
+    }
+  }
+
+  void setAvatar() async {
+    emit(UserSetAvatarLoadingState());
+    print('======================');
+
+    print(CachHelper.getData(key: 'token'));
+    print(profileAvatar!.path);
+    await DioHelper.uploadImage(
+            url: updateProfile,
+            image: profileAvatar,
+            token: CachHelper.getData(key: 'token'))
+        .then((value) {
+      print(value.data);
+      showToast(
+          message: 'update avatar is succeeded',
+          toastState: ToastState.SUCCESS);
+      emit(UserSetAvatarSuccessState());
+    }).catchError((error) {
+      print("error when set user avatar :${error.toString()}");
+      emit(UserSetAvatarErrorState());
+    });
+  }
 
   void visibleEyeOrNot() {
     obSecure = !obSecure;
@@ -33,7 +79,7 @@ class LoginCubit extends Cubit<LoginStates> {
     emit(ChangeEyeSecureState());
   }
 
-   UserLoginModel? userLoginModel;
+  UserLoginModel? userLoginModel;
 
   void userLogin({
     required String email,
@@ -63,6 +109,7 @@ class LoginCubit extends Cubit<LoginStates> {
 
   UserLoginModel? userSignUpModel;
   void userSignUp({
+    required BuildContext context,
     required String? name,
     required String? email,
     required String? password,
@@ -82,9 +129,18 @@ class LoginCubit extends Cubit<LoginStates> {
       },
     ).then((value) {
       print(value.data);
-      userSignUpModel = UserLoginModel.fromJson(value.data);
-      emit(UserSignUpSuccessState(userSignUpModel!));
-    }).onError((DioError error, stackTrace) {
+
+      userLoginModel = UserLoginModel.fromJson(value.data);
+
+      CachHelper.setData(key: 'token', value: userLoginModel!.token)
+          .then((value) {
+        navigatePushANDRemoveRout(
+            context: context, navigateTo: SetUpAvatarScreen());
+      }).catchError((error) {
+        print('error when save token:${error.toString()}');
+      });
+      emit(UserSignUpSuccessState(userLoginModel!));
+    }).catchError((DioError error) {
       if (error.response!.statusCode == 400) {
         if (password!.length < 8) {
           showToast(
