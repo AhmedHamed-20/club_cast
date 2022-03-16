@@ -29,3 +29,11 @@ class UserForgetPasswordLoadingState extends LoginStates {}
 class UserForgetPasswordSuccessState extends LoginStates {}
 
 class UserForgetPasswordErrorState extends LoginStates {}
+
+class UserSetAvatarState extends LoginStates {}
+
+class UserSetAvatarLoadingState extends LoginStates {}
+
+class UserSetAvatarSuccessState extends LoginStates {}
+
+class UserSetAvatarErrorState extends LoginStates {}

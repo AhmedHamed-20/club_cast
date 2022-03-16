@@ -2,7 +2,9 @@ import 'package:club_cast/data_layer/bloc/login_cubit/login_cubit.dart';
 import 'package:club_cast/data_layer/bloc/login_cubit/login_states.dart';
 import 'package:club_cast/data_layer/cash/cash.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
+import 'package:club_cast/presentation_layer/components/constant/constant.dart';
 import 'package:club_cast/presentation_layer/layout/layout_screen.dart';
+import 'package:club_cast/presentation_layer/screens/setup_avater_screen.dart';
 import 'package:club_cast/presentation_layer/screens/user_screen/login_screen/login_screen.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
@@ -22,17 +24,17 @@ class RegisterScreen extends StatelessWidget {
       body: BlocConsumer<LoginCubit, LoginStates>(
         listener: (context, state) {
           if (state is UserSignUpSuccessState) {
-            print(state.userSignUpModel.data!.user!.name);
-            print(state.userSignUpModel.data!.user!.email);
-            print(state.userSignUpModel.token);
+            // print(state.userSignUpModel.data!.user!.name);
+            // print(state.userSignUpModel.data!.user!.email);
+            // print(state.userSignUpModel.token);
 
-            CachHelper.setData(key: 'token', value: state.userSignUpModel.token)
-                .then((value) {
-              navigatePushANDRemoveRout(
-                  context: context, navigateTo: LayoutScreen());
-            }).catchError((error) {
-              print('error when save token:${error.toString()}');
-            });
+            // CachHelper.setData(key: 'token', value: state.userSignUpModel.token)
+            //     .then((value) {
+            //   navigatePushANDRemoveRout(
+            //       context: context, navigateTo: LayoutScreen());
+            // }).catchError((error) {
+            //   print('error when save token:${error.toString()}');
+            // });
           }
         },
         builder: (context, state) {
@@ -135,6 +137,7 @@ class RegisterScreen extends StatelessWidget {
                           onPressed: () {
                             if (formKey.currentState!.validate()) {
                               cubit.userSignUp(
+                                context: context,
                                 name: nameController.text,
                                 email: emailController.text,
                                 password: passwordController.text,
