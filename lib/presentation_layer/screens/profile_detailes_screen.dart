@@ -76,7 +76,6 @@ class ProfileDetailsScreen extends StatelessWidget {
                       number: '${cubit.userId!.data!.followers}',
                       statusType: 'Followers',
                     ),
-                    // cubit.userId!.data!.followers
                     const SizedBox(
                       width: 22.0,
                     ),
@@ -89,14 +88,39 @@ class ProfileDetailsScreen extends StatelessWidget {
                 const SizedBox(
                   height: 17.0,
                 ),
-                Container(
+                cubit.isFollowing?Container(
                   width: 280.0,
                   height: 45.0,
                   child: MaterialButton(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5.0),
                     ),
-                    onPressed: () {},
+                    onPressed: ()
+                    {
+                      cubit.toggleFollowing();
+                      cubit.unFollowUser(userProfileId: '${cubit.userId!.data!.id}');
+                    },
+                    child: const Text(
+                      'UnFollow',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20.0,
+                      ),
+                    ),
+                    color: Theme.of(context).primaryColor,
+                  ),
+                ):Container(
+                  width: 280.0,
+                  height: 45.0,
+                  child: MaterialButton(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                    onPressed: ()
+                    {
+                      cubit.toggleFollowing();
+                      cubit.followUser(userProfileId: '${cubit.userId!.data!.id}');
+                    },
                     child: const Text(
                       'Follow',
                       style: TextStyle(

@@ -12,9 +12,9 @@ class UserDataLoadingState extends GeneralAppStates {}
 
 class UserDataSuccessState extends GeneralAppStates
 {
-  late final UserLoginModel? userModel;
-
-  UserDataSuccessState(this.userModel);
+  // late final UserLoginModel? userModel;
+  //
+  // UserDataSuccessState(this.userModel);
 }
 
 class UserDataErrorState extends GeneralAppStates
@@ -84,3 +84,18 @@ class GetUserByIdLoadingState extends GeneralAppStates {}
 class GetUserByIdSuccessState extends GeneralAppStates {}
 
 class GetUserByIdErrorState extends GeneralAppStates {}
+
+class FollowUserLoadingState extends GeneralAppStates {}
+
+class FollowUserSuccessState extends GeneralAppStates {}
+
+class FollowUserErrorState extends GeneralAppStates {}
+
+class UnFollowUserLoadingState extends GeneralAppStates {}
+
+class UnFollowUserSuccessState extends GeneralAppStates {}
+
+class UnFollowUserErrorState extends GeneralAppStates {}
+
+class ChangeFollowingState extends GeneralAppStates {}
+

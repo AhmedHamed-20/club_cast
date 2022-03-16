@@ -227,12 +227,13 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   }
 
 
-
+bool isLoadProfile=false;
   void getUserData(
   {
   required String token,
 })
   {
+    isLoadProfile=true;
     emit(UserDataLoadingState());
     DioHelper.getDate(
         url: profile,
@@ -243,6 +244,8 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     {
       GetUserModel.getUserModel=  Map<String, dynamic>.from(value.data);
       print(  GetUserModel.getUserName());
+      isLoadProfile=false;
+      emit(UserDataSuccessState());
     }).catchError((error)
     {
       print(error);
@@ -375,7 +378,55 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       emit(GetUserByIdErrorState());
     });
   }
+
+
+  void followUser(
+      {
+        required String userProfileId,
+      })
+  {
+    emit(FollowUserLoadingState());
+    DioHelper.postData(
+      url: 'v1/users/$userProfileId/following' ,
+      token:
+      {
+        'Authorization': 'Bearer ${token}',
+      },
+    ).then((value)
+    {
+      emit(FollowUserSuccessState());
+    }).catchError((error)
+    {
+      print(error);
+      emit(FollowUserErrorState());
+    });
+  }
+
+  void unFollowUser(
+      {
+        required String userProfileId,
+      })
+  {
+    emit(UnFollowUserLoadingState());
+    DioHelper.deleteData(
+      url: 'v1/users/$userProfileId/following' ,
+      token:
+      {
+        'Authorization': 'Bearer ${token}',
+      },
+    ).then((value)
+    {
+      emit(UnFollowUserSuccessState());
+    }).catchError((error)
+    {
+      print(error);
+      emit(UnFollowUserErrorState());
+    });
+  }
+
+  bool isFollowing=false;
+  void toggleFollowing() {
+    isFollowing = !isFollowing;
+    emit(ChangeFollowingState());
+  }
 }
-// userId=UserModelId.fromJson(value.data);
-// save=userId as Map<String, dynamic>?;
-// userId!.data!.id=GetPodCastUsersLikesModel.getAllPodCastLikes!['data']['user']['_id'];
