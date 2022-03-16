@@ -2,6 +2,7 @@ import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:audio_wave/audio_wave.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
+import 'package:club_cast/presentation_layer/components/constant/constant.dart';
 import 'package:club_cast/presentation_layer/models/get_all_podcst.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -141,10 +142,19 @@ class ActivePodCastScreen extends StatelessWidget {
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(15),
                                   ),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    cubit.isPlaying &&
+                                            GetAllPodCastModel.getPodcastID(
+                                                    index!) ==
+                                                cubit.activePodCastId
+                                        ? cubit.assetsAudioPlayer
+                                            .seekBy(Duration(seconds: -10))
+                                        : SizedBox();
+                                  },
                                   child: Icon(
-                                    Icons.skip_previous,
+                                    Icons.replay_10,
                                     color: Theme.of(context).iconTheme.color,
+                                    size: Theme.of(context).iconTheme.size,
                                   ),
                                 ),
                                 Card(
@@ -200,10 +210,19 @@ class ActivePodCastScreen extends StatelessWidget {
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(15),
                                   ),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    cubit.isPlaying &&
+                                            GetAllPodCastModel.getPodcastID(
+                                                    index!) ==
+                                                cubit.activePodCastId
+                                        ? cubit.assetsAudioPlayer
+                                            .seekBy(Duration(seconds: 10))
+                                        : SizedBox();
+                                  },
                                   child: Icon(
-                                    Icons.skip_next,
+                                    Icons.forward_10,
                                     color: Theme.of(context).iconTheme.color,
+                                    size: Theme.of(context).iconTheme.size,
                                   ),
                                 ),
                               ],

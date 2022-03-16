@@ -17,6 +17,7 @@ ThemeData darkMode = ThemeData(
   ),
   iconTheme: IconThemeData(
     color: Colors.white,
+    size: 30,
   ),
   scaffoldBackgroundColor: Color(0x2BE5E5E5),
   primaryColor: Color(
@@ -66,7 +67,7 @@ ThemeData lightMode = ThemeData(
       size: 28,
     ),
     unselectedIconTheme: IconThemeData(
-      size: 25,
+      size: 30,
     ),
   ),
   //  backgroundColor: Color(0xffF6F9F4),
