@@ -76,6 +76,7 @@ Widget defaultButton({
   return Container(
     height: height,
     width: width,
+    clipBehavior: Clip.antiAlias,
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(radius),
       color: Theme.of(context).primaryColor,
@@ -130,7 +131,7 @@ Widget userProfileImage({
   required String image,
 }) =>
     CircleAvatar(
-      backgroundImage: AssetImage('assets/images/Adel.png'),
+      backgroundImage: NetworkImage(image),
       radius: size,
     );
 

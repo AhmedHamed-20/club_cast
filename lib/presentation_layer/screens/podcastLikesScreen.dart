@@ -5,7 +5,6 @@ import 'package:club_cast/presentation_layer/models/podCastLikesUserModel.dart';
 import 'package:club_cast/presentation_layer/screens/profile_detailes_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class PodCastLikesScreen extends StatelessWidget {
   const PodCastLikesScreen({Key? key}) : super(key: key);
@@ -14,7 +13,6 @@ class PodCastLikesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<GeneralAppCubit, GeneralAppStates>(
         builder: (context, state) {
-          var cubit=GeneralAppCubit.get(context);
           return Scaffold(
             appBar: AppBar(
               title: Text(
@@ -44,10 +42,10 @@ class PodCastLikesScreen extends StatelessWidget {
                         .getAllPodCastLikes!['data'].length,
                     itemBuilder: (context, index) {
                       return InkWell(
-                        onTap: ()
-                        {
-                          cubit.getUserById(profileId: GetPodCastUsersLikesModel.getUserID(index));
-                          navigatePushTo(context: context, navigateTo: ProfileDetailsScreen());
+                        onTap: () {
+                          navigatePushTo(
+                              context: context,
+                              navigateTo: ProfileDetailsScreen());
                         },
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),

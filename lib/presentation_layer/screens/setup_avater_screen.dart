@@ -1,14 +1,11 @@
-import 'dart:io';
-
 import 'package:club_cast/data_layer/bloc/login_cubit/login_cubit.dart';
 import 'package:club_cast/data_layer/bloc/login_cubit/login_states.dart';
-import 'package:club_cast/data_layer/cash/cash.dart';
-import 'package:club_cast/data_layer/dio/dio_setup.dart';
-import 'package:club_cast/presentation_layer/components/constant/constant.dart';
+import 'package:club_cast/presentation_layer/layout/layout_screen.dart';
+import 'package:club_cast/presentation_layer/models/login_model.dart';
+
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
 
 import '../components/component/component.dart';
 
@@ -22,11 +19,27 @@ class SetUpAvatarScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<LoginCubit, LoginStates>(
-      listener: (BuildContext context, state) {},
+      listener: (BuildContext context, state) {
+        if (state is UserSetAvatarSuccessState) {
+          navigatePushANDRemoveRout(
+              context: context, navigateTo: LayoutScreen());
+        }
+      },
       builder: (BuildContext context, Object? state) {
         var cubit = LoginCubit.get(context);
 
         return Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: Icon(
+                Icons.arrow_back_ios_outlined,
+                color: Theme.of(context).iconTheme.color,
+              ),
+            ),
+          ),
           body: Padding(
             padding: const EdgeInsets.all(20.0),
             child: SafeArea(
@@ -47,25 +60,35 @@ class SetUpAvatarScreen extends StatelessWidget {
                                 width: 180,
                                 fit: BoxFit.cover,
                               )
-                            : Image(
-                                image: AssetImage('assets/images/default.jpg'),
-                                height: 180,
-                                width: 180,
-                                fit: BoxFit.cover,
-                              ),
+                            : UserLoginModel.getUserPhoto() != null
+                                ? Image(
+                                    image: NetworkImage(
+                                        UserLoginModel.getUserPhoto()
+                                            .toString()),
+                                    height: 180,
+                                    width: 180,
+                                    fit: BoxFit.cover,
+                                  )
+                                : const Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
                       ),
-                      InkWell(
+                      GestureDetector(
                         onTap: () {
                           cubit.pickImage();
                         },
                         child: Padding(
-                          padding: EdgeInsetsDirectional.only(
-                            end: 15,
-                            bottom: 5,
+                          padding: const EdgeInsetsDirectional.only(
+                            end: 10,
                           ),
-                          child: CircleAvatar(
-                            radius: 22,
-                            backgroundColor: Theme.of(context).primaryColor,
+                          child: Container(
+                            width: 50,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).primaryColor,
+                              borderRadius:
+                                  BorderRadiusDirectional.circular(200),
+                            ),
                             child: const Icon(
                               Icons.camera_alt_outlined,
                               color: Colors.white,
@@ -84,11 +107,6 @@ class SetUpAvatarScreen extends StatelessWidget {
                     builder: (context) => defaultButton(
                       context: context,
                       onPressed: () {
-                        // DioHelper.uploadImage(
-                        //   url: updateProfile,
-                        //   image: cubit.profileAvatar,
-                        //   token: CachHelper.getData(key: 'token'),
-                        // );
                         cubit.setAvatar();
                       },
                       text: 'Let\'s go',

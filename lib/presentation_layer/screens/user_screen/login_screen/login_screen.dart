@@ -3,6 +3,7 @@ import 'package:club_cast/data_layer/bloc/login_cubit/login_states.dart';
 import 'package:club_cast/data_layer/cash/cash.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
 import 'package:club_cast/presentation_layer/layout/layout_screen.dart';
+import 'package:club_cast/presentation_layer/models/login_model.dart';
 import 'package:club_cast/presentation_layer/screens/user_screen/forget_password_screen/forget_password_screen.dart';
 import 'package:club_cast/presentation_layer/screens/user_screen/register_screen/sign_up_screen.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
@@ -21,11 +22,11 @@ class LoginScreen extends StatelessWidget {
     return BlocConsumer<LoginCubit, LoginStates>(
       listener: (BuildContext context, state) {
         if (state is UserLoginSuccessState) {
-          print(state.userLoginModel.data!.user!.name);
-          print(state.userLoginModel.data!.user!.email);
-          print(state.userLoginModel.token);
+          // print(state.userLoginModel.data!.user!.name);
+          // print(state.userLoginModel.data!.user!.email);
+          // print(state.userLoginModel.token);
 
-          CachHelper.setData(key: 'token', value: state.userLoginModel.token)
+          CachHelper.setData(key: 'token', value: UserLoginModel.token)
               .then((value) {
             navigatePushANDRemoveRout(
                 context: context, navigateTo: LayoutScreen());
@@ -92,12 +93,12 @@ class LoginScreen extends StatelessWidget {
                           suffixIcon: IconButton(
                             padding: const EdgeInsets.symmetric(horizontal: 15),
                             onPressed: () {
-                              cubit.visibleEyeOrNot();
+                              cubit.loginVisibleEyeOrNot();
                             },
                             icon: cubit.suffix,
                             color: Theme.of(context).iconTheme.color,
                           ),
-                          obscureText: cubit.obSecure,
+                          obscureText: cubit.loginObSecure,
                           labelStyle: Theme.of(context).textTheme.bodyText1,
                           radius: 10,
                           onChanged: (value) {},

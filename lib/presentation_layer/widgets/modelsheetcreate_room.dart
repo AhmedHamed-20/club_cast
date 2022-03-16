@@ -1,5 +1,6 @@
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 var formKey = GlobalKey<FormState>();
@@ -71,7 +72,7 @@ Widget buildSheet(BuildContext context) {
                           .copyWith(fontSize: 20, fontWeight: FontWeight.w600),
                     ),
                     SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.28,
+                      width: MediaQuery.of(context).size.width * 0.2,
                     ),
                     buildCategoryDropDownButton(context: context),
                   ],
@@ -84,27 +85,66 @@ Widget buildSheet(BuildContext context) {
                   children: [
                     Row(
                       children: [
-                        cubit.isPublicRoom
-                            ? Text(
-                                'Public',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyText1!
-                                    .copyWith(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w600),
-                              )
-                            : Text(
-                                'Private',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyText1!
-                                    .copyWith(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w600),
-                              ),
                         SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.53,
+                          width: MediaQuery.of(context).size.width * 0.6,
+                          child: cubit.isPublicRoom
+                              ? Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Public',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1!
+                                          .copyWith(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w600),
+                                    ),
+                                    SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.width *
+                                              0.03,
+                                    ),
+                                    Text('Any one Can Enter The Room',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1!
+                                            .copyWith(
+                                              fontSize: 14,
+                                              color: Colors.grey[500],
+                                            ))
+                                  ],
+                                )
+                              : Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Private',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1!
+                                          .copyWith(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.w600),
+                                    ),
+                                    SizedBox(
+                                      height:
+                                          MediaQuery.of(context).size.width *
+                                              0.03,
+                                    ),
+                                    Text('Only people have link can enter',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1!
+                                            .copyWith(
+                                              fontSize: 14,
+                                              color: Colors.grey[500],
+                                            ))
+                                  ],
+                                ),
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.11,
                         ),
                         Switch.adaptive(
                           activeColor: Theme.of(context).primaryColor,
@@ -118,19 +158,6 @@ Widget buildSheet(BuildContext context) {
                         ),
                       ],
                     ),
-                    cubit.isPublicRoom
-                        ? Text('Any one Can Enter The Room',
-                            style:
-                                Theme.of(context).textTheme.bodyText1!.copyWith(
-                                      fontSize: 14,
-                                      color: Colors.grey[500],
-                                    ))
-                        : Text('Only people have link can enter',
-                            style:
-                                Theme.of(context).textTheme.bodyText1!.copyWith(
-                                      fontSize: 14,
-                                      color: Colors.grey[500],
-                                    )),
                   ],
                 ),
                 SizedBox(
@@ -177,6 +204,9 @@ Widget buildSheet(BuildContext context) {
                   onPressed: () {
                     if (formKey.currentState!.validate()) {
                       print(cubit.roomNameController.text);
+                      print(cubit.selectedCategoryItem);
+                      print("isPublicRoom :${cubit.isPublicRoom}");
+                      print("isRecordRoom: ${cubit.isRecordRoom}");
                     }
                   },
                   context: context,
@@ -207,6 +237,7 @@ Widget buildCategoryDropDownButton({required BuildContext context}) {
           child: DropdownButtonHideUnderline(
             child: DropdownButton<String>(
               value: cubit.selectedCategoryItem,
+              dropdownColor: Theme.of(context).backgroundColor,
               onChanged: (value) {
                 setState(() {
                   cubit.selectedCategoryItem = value!;
@@ -217,6 +248,8 @@ Widget buildCategoryDropDownButton({required BuildContext context}) {
                     (item) => DropdownMenuItem<String>(
                       child: Text(
                         item,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
                         style: Theme.of(context).textTheme.bodyText1,
                       ),
                       value: item,

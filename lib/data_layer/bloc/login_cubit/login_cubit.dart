@@ -6,13 +6,10 @@ import 'package:club_cast/data_layer/dio/dio_setup.dart';
 import 'package:club_cast/presentation_layer/components/constant/constant.dart';
 import 'package:club_cast/presentation_layer/layout/layout_screen.dart';
 import 'package:club_cast/presentation_layer/models/login_model.dart';
-import 'package:club_cast/presentation_layer/models/user_model.dart';
-import 'package:club_cast/presentation_layer/screens/setup_avater_screen.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../presentation_layer/components/component/component.dart';
@@ -22,14 +19,43 @@ class LoginCubit extends Cubit<LoginStates> {
   LoginCubit() : super(InitialLoginStates());
   static LoginCubit get(context) => BlocProvider.of(context);
   ////////////variable//////////////
-  // / var token = CachHelper.getData(key: 'token');
-  bool obSecure = true;
+
+  bool loginObSecure = true;
+  bool signUpObSecure = true;
   Widget suffix = const Icon(
+    Icons.visibility_off,
+  );
+  Widget signUpSuffix = const Icon(
     Icons.visibility_off,
   );
   ////////////Methods///////////////
 
-  //////////////////
+  void loginVisibleEyeOrNot() {
+    loginObSecure = !loginObSecure;
+    suffix = loginObSecure
+        ? const Icon(
+            Icons.visibility_off,
+          )
+        : const Icon(
+            Icons.visibility,
+          );
+    emit(ChangeLoginEyeSecureState());
+  }
+
+  void signUpVisibleEyeOrNot() {
+    signUpObSecure = !signUpObSecure;
+    signUpSuffix = signUpObSecure
+        ? const Icon(
+            Icons.visibility_off,
+          )
+        : const Icon(
+            Icons.visibility,
+          );
+    emit(ChangeSignUpEyeSecureState());
+  }
+
+  //////////////////////////////////
+
   File? profileAvatar;
 
   Future pickImage() async {
@@ -65,18 +91,6 @@ class LoginCubit extends Cubit<LoginStates> {
       print("error when set user avatar :${error.toString()}");
       emit(UserSetAvatarErrorState());
     });
-  }
-
-  void visibleEyeOrNot() {
-    obSecure = !obSecure;
-    suffix = obSecure
-        ? const Icon(
-            Icons.visibility_off,
-          )
-        : const Icon(
-            Icons.visibility,
-          );
-    emit(ChangeEyeSecureState());
   }
 
   UserLoginModel? userLoginModel;
@@ -132,15 +146,8 @@ class LoginCubit extends Cubit<LoginStates> {
 
       userLoginModel = UserLoginModel.fromJson(value.data);
 
-      CachHelper.setData(key: 'token', value: userLoginModel!.token)
-          .then((value) {
-        navigatePushANDRemoveRout(
-            context: context, navigateTo: SetUpAvatarScreen());
-      }).catchError((error) {
-        print('error when save token:${error.toString()}');
-      });
       emit(UserSignUpSuccessState(userLoginModel!));
-    }).catchError((DioError error) {
+    }).onError((DioError error, f) {
       if (error.response!.statusCode == 400) {
         if (password!.length < 8) {
           showToast(

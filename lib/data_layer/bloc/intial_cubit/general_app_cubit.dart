@@ -4,6 +4,7 @@ import 'package:club_cast/data_layer/cash/cash.dart';
 import 'package:club_cast/data_layer/dio/dio_setup.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
 import 'package:club_cast/presentation_layer/components/constant/constant.dart';
+import 'package:club_cast/presentation_layer/models/category_model.dart';
 import 'package:club_cast/presentation_layer/models/get_all_podcst.dart';
 import 'package:club_cast/presentation_layer/models/get_userId_model.dart';
 import 'package:club_cast/presentation_layer/models/login_model.dart';
@@ -24,13 +25,12 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   static GeneralAppCubit get(context) => BlocProvider.of(context);
 
   //////////// variable ///////////////////
-
   int bottomNavIndex = 0;
 
   var roomNameController = TextEditingController();
   bool isPublicRoom = true;
   bool isRecordRoom = false;
-  bool isDark = false;
+  // bool isDark = false;
   bool isPlaying = false;
   bool pressedPause = false;
   bool isDownloading = false;
@@ -56,16 +56,12 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     const PodCastScreen(),
   ];
 
-  static List<String> category = [
-    'sport',
-    'economy',
-    'reading',
-    'hunter',
-  ];
+  static List<String> category = ['ai'];
   String selectedCategoryItem = category.first;
   //////////// Methods ///////////////////
   void toggleDark() {
     isDark = !isDark;
+    CachHelper.setData(key: 'isDark', value: isDark);
     emit(ChangeTheme());
   }
 
@@ -81,6 +77,28 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
 
   void changeState() {
     emit(ChangePlayingState());
+  }
+
+  void getAllCategory() {
+    emit(GetAllCategoryLoadingState());
+    DioHelper.getData(
+      url: AllCategory,
+      token: {
+        'Authorization': 'Bearer ${token}',
+      },
+    ).then((value) {
+      CategoryModel.allCategory = Map<String, dynamic>.from(value.data);
+      // print(CategoryModel.allCategory);
+      for (int i = 1; i <= CategoryModel.allCategory!['results'] - 1; i++) {
+        category.add(CategoryModel.allCategory!['data']['data'][i]['name']);
+      }
+      print(category);
+
+      emit(GetAllCategorySuccessState());
+    }).catchError((error) {
+      print('error when getCategory :${error.toString()}');
+      emit(GetAllCategoryErrorState());
+    });
   }
 
   void playingPodcast(String url, String name, String iconurl,
@@ -152,7 +170,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   GetAllPodCastModel? podcastModel;
   void getAllPodcast({required String token}) {
     print(token);
-    DioHelper.getDate(
+    DioHelper.getData(
       url: GetAllPodcasts,
       token: {
         'Authorization': 'Bearer ${token}',
@@ -237,7 +255,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       {required String token,
       required String podCastId,
       required BuildContext context}) {
-    DioHelper.getDate(
+    DioHelper.getData(
         url: getPodcastLikesUsers + podCastId,
         token: {'Authorization': 'Bearer ${token}'}).then((value) {
       GetPodCastUsersLikesModel.getAllPodCastLikes =
@@ -255,7 +273,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   }) {
     isLoadProfile = true;
     emit(UserDataLoadingState());
-    DioHelper.getDate(
+    DioHelper.getData(
       url: profile,
       token: {
         'Authorization': 'Bearer ${token}',
@@ -365,7 +383,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   }) {
     isLoading = true;
     emit(GetUserByIdLoadingState());
-    DioHelper.getDate(
+    DioHelper.getData(
       url: userById + profileId,
       token: {
         'Authorization': 'Bearer ${token}',
