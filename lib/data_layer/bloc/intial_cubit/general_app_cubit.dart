@@ -98,6 +98,21 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
           await assetsAudioPlayer.open(
             Audio.network(url),
             showNotification: true,
+            notificationSettings: NotificationSettings(
+                stopEnabled: true,
+                customPlayPauseAction: (_) {
+                  pressedPause
+                      ? assetsAudioPlayer.play().then((value) {
+                          isPlaying = true;
+                          pressedPause = false;
+                          changeState();
+                        })
+                      : assetsAudioPlayer.pause().then((value) {
+                          isPlaying = false;
+                          pressedPause = true;
+                          changeState();
+                        });
+                }),
           );
           assetsAudioPlayer.updateCurrentAudioNotification(
             metas: Metas(
