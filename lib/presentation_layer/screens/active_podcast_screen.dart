@@ -68,13 +68,23 @@ class ActivePodCastScreen extends StatelessWidget {
                   Slider(
                     activeColor: Theme.of(context).primaryColor,
                     inactiveColor: Theme.of(context).backgroundColor,
-                    value: cubit.currentPostionDurationInsec,
+                    value: GetAllPodCastModel.getPodcastID(index!) ==
+                            cubit.activePodCastId
+                        ? cubit.currentPostionDurationInsec
+                        : 0,
                     onChanged: (newval) {
-                      cubit.assetsAudioPlayer.seek(
-                        Duration(
-                          seconds: newval.toInt(),
-                        ),
-                      );
+                      cubit.pressedPause &&
+                              GetAllPodCastModel.getPodcastID(index!) ==
+                                  cubit.activePodCastId
+                          ? SizedBox()
+                          : GetAllPodCastModel.getPodcastID(index!) ==
+                                  cubit.activePodCastId
+                              ? cubit.assetsAudioPlayer.seek(
+                                  Duration(
+                                    seconds: newval.toInt(),
+                                  ),
+                                )
+                              : SizedBox();
                     },
                     min: 0,
                     max: GetAllPodCastModel.getPodCastAudio(index!)[0]
@@ -82,10 +92,15 @@ class ActivePodCastScreen extends StatelessWidget {
                         .toDouble(),
                   ),
                   Text(
-                    cubit.currentOlayingDurathion == null ||
-                            cubit.isPlaying == false
-                        ? convertedTime
-                        : cubit.currentOlayingDurathion!,
+                    cubit.isPlaying &&
+                            GetAllPodCastModel.getPodcastID(index!) ==
+                                cubit.activePodCastId
+                        ? cubit.currentOlayingDurathion!
+                        : cubit.pressedPause &&
+                                GetAllPodCastModel.getPodcastID(index!) ==
+                                    cubit.activePodCastId
+                            ? cubit.currentOlayingDurathion!
+                            : convertedTime,
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
                 ],
@@ -145,12 +160,19 @@ class ActivePodCastScreen extends StatelessWidget {
                                       String podCastUrl =
                                           GetAllPodCastModel.getPodCastAudio(
                                               index!)[0]['url'];
-                                      cubit.isPlaying
-                                          ? cubit.assetsAudioPlayer
+                                      cubit.isPlaying &&
+                                              GetAllPodCastModel
+                                                      .getPodcastID(index!) ==
+                                                  cubit.activePodCastId
+                                          ? cubit
+                                              .assetsAudioPlayer
                                               .pause()
                                               .then((value) {
                                               cubit.isPlaying = false;
                                               cubit.pressedPause = true;
+                                              cubit.activePodCastId =
+                                                  GetAllPodCastModel
+                                                      .getPodcastID(index!);
                                               cubit.changeState();
                                             })
                                           : cubit.playingPodcast(
@@ -159,10 +181,15 @@ class ActivePodCastScreen extends StatelessWidget {
                                                   index!),
                                               GetAllPodCastModel
                                                   .getPodcastUserPublishInform(
-                                                      index!)[0]['photo']);
+                                                      index!)[0]['photo'],
+                                              GetAllPodCastModel.getPodcastID(
+                                                  index!));
                                     },
                                     child: Icon(
-                                      cubit.isPlaying
+                                      cubit.isPlaying &&
+                                              GetAllPodCastModel.getPodcastID(
+                                                      index!) ==
+                                                  cubit.activePodCastId
                                           ? Icons.pause
                                           : Icons.play_arrow,
                                       color: Colors.white,

@@ -13,11 +13,12 @@ class PodCastScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String? currentId;
     var cubit = GeneralAppCubit?.get(context);
+    String? currentId;
     return BlocConsumer<GeneralAppCubit, GeneralAppStates>(
       listener: (BuildContext context, state) {},
       builder: (BuildContext context, Object? state) {
+        currentId = cubit.activePodCastId;
         return Padding(
           padding:
               const EdgeInsetsDirectional.only(start: 10, end: 10, top: 20),
@@ -40,7 +41,7 @@ class PodCastScreen extends StatelessWidget {
                         '${GetAllPodCastModel.getPodcastName(index)}.wav');
                   },
                   icon: cubit.isDownloading &&
-                          currentId == GetAllPodCastModel.getPodcastID(index)
+                          GetAllPodCastModel.getPodcastID(index) == currentId
                       ? CircularProgressIndicator(
                           value: cubit.progress,
                           valueColor: AlwaysStoppedAnimation<Color>(
@@ -57,9 +58,9 @@ class PodCastScreen extends StatelessWidget {
                   onPressed: () {
                     String podCastUrl =
                         GetAllPodCastModel.getPodCastAudio(index)[0]['url'];
-                    currentId = GetAllPodCastModel.getPodcastID(index);
 
-                    cubit.isPlaying
+                    cubit.isPlaying &&
+                            GetAllPodCastModel.getPodcastID(index) == currentId
                         ? cubit.assetsAudioPlayer.pause().then((value) {
                             cubit.isPlaying = false;
                             cubit.pressedPause = true;
@@ -69,22 +70,24 @@ class PodCastScreen extends StatelessWidget {
                             podCastUrl,
                             GetAllPodCastModel.getPodcastName(index),
                             GetAllPodCastModel.getPodcastUserPublishInform(
-                                index)[0]['photo']);
+                                index)[0]['photo'],
+                            GetAllPodCastModel.getPodcastID(index));
                     print(GetAllPodCastModel.getPodCastAudio(index));
+                    print(currentId);
                   },
                   icon: Icon(
                     cubit.isPlaying &&
-                            currentId == GetAllPodCastModel.getPodcastID(index)
+                            GetAllPodCastModel.getPodcastID(index) == currentId
                         ? Icons.pause_circle_outline_outlined
                         : Icons.play_circle_outline_outlined,
                     size: 35,
                   ),
                 ),
                 text: cubit.isPlaying &&
-                        currentId == GetAllPodCastModel.getPodcastID(index)
+                        GetAllPodCastModel.getPodcastID(index) == currentId
                     ? cubit.currentOlayingDurathion
                     : cubit.pressedPause &&
-                            currentId == GetAllPodCastModel.getPodcastID(index)
+                            GetAllPodCastModel.getPodcastID(index) == currentId
                         ? cubit.currentOlayingDurathion
                         : null,
               ),

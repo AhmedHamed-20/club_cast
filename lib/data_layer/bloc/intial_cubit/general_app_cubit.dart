@@ -34,6 +34,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   bool isPlaying = false;
   bool pressedPause = false;
   bool isDownloading = false;
+  String? activePodCastId;
   int counter = 0;
   double currentPostionDurationInsec = 0;
   double? progress;
@@ -82,38 +83,45 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     emit(ChangePlayingState());
   }
 
-  void playingPodcast(String url, String name, String iconurl) async {
-    if (pressedPause) {
+  void playingPodcast(String url, String name, String iconurl,
+      String activePodCastIdnow) async {
+    if (pressedPause && activePodCastId == activePodCastIdnow) {
       assetsAudioPlayer.play();
+      activePodCastId = activePodCastIdnow;
+      print('nowwwww' + activePodCastId!);
       isPlaying = true;
+      pressedPause = false;
       emit(ChangePlayingState());
     } else {
       try {
-        await assetsAudioPlayer.open(
-          Audio.network(url),
-          showNotification: true,
-        );
-        assetsAudioPlayer.updateCurrentAudioNotification(
-          metas: Metas(
-            title: name,
-            image: MetasImage.network(iconurl),
-          ),
-        );
+        await assetsAudioPlayer.stop().then((value) async {
+          await assetsAudioPlayer.open(
+            Audio.network(url),
+            showNotification: true,
+          );
+          assetsAudioPlayer.updateCurrentAudioNotification(
+            metas: Metas(
+              title: name,
+              image: MetasImage.network(iconurl),
+            ),
+          );
+          activePodCastId = activePodCastIdnow;
+          print('nowwww' + activePodCastId!);
+          assetsAudioPlayer.currentPosition.listen((event) {
+            print(event);
 
-        assetsAudioPlayer.currentPosition.listen((event) {
-          print(event);
-
-          currentPostionDurationInsec = event.inSeconds.toDouble();
-          currentOlayingDurathion = event.toString().substring(0, 7);
-          //print(currentOlayingDurathion);
-          if (event.inSeconds == 00.000000) {
-            isPlaying = false;
-            pressedPause = false;
-            emit(ChangePlayingState());
-          } else {
-            isPlaying = true;
-            emit(ChangePlayingState());
-          }
+            currentPostionDurationInsec = event.inSeconds.toDouble();
+            currentOlayingDurathion = event.toString().substring(0, 7);
+            //print(currentOlayingDurathion);
+            if (event.inSeconds == 00.000000) {
+              isPlaying = false;
+              pressedPause = false;
+              emit(ChangePlayingState());
+            } else {
+              isPlaying = true;
+              emit(ChangePlayingState());
+            }
+          });
         });
 
         //togglePlaying();
@@ -186,14 +194,14 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
 
     await DioHelper.dio!.download(url, file.path,
         onReceiveProgress: (rec, total) {
-          isDownloading = true;
+      isDownloading = true;
 
-          emit(FileDownloading());
+      emit(FileDownloading());
 
-          progress = ((rec / total) * 100);
-          print(progress);
-          counter++;
-        }).then((value) {
+      progress = ((rec / total));
+      print(progress);
+      counter++;
+    }).then((value) {
       var fullPath = file.path;
       isDownloading = false;
       emit(FileDownloadSuccess());
@@ -202,7 +210,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
           toastState: ToastState.SUCCESS);
       print(fullPath);
     }).catchError(
-          (onError) {
+      (onError) {
         print(onError);
         showToast(message: 'DownlaodError', toastState: ToastState.ERROR);
         emit(FileDownloadError());
@@ -212,13 +220,13 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
 
   void getPodCastLikes(
       {required String token,
-        required String podCastId,
-        required BuildContext context}) {
+      required String podCastId,
+      required BuildContext context}) {
     DioHelper.getDate(
         url: getPodcastLikesUsers + podCastId,
         token: {'Authorization': 'Bearer ${token}'}).then((value) {
       GetPodCastUsersLikesModel.getAllPodCastLikes =
-      Map<String, dynamic>.from(value.data);
+          Map<String, dynamic>.from(value.data);
       navigatePushTo(context: context, navigateTo: PodCastLikesScreen());
       //  print(GetPodCastUsersLikesModel.getPhotoUrltName(1));
     }).catchError((onError) {
@@ -226,49 +234,40 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     });
   }
 
-
-bool isLoadProfile=false;
-  void getUserData(
-  {
-  required String token,
-})
-  {
-    isLoadProfile=true;
+  bool isLoadProfile = false;
+  void getUserData({
+    required String token,
+  }) {
+    isLoadProfile = true;
     emit(UserDataLoadingState());
     DioHelper.getDate(
-        url: profile,
-        token: {
-          'Authorization': 'Bearer ${token}',
-        },
-    ).then((value)
-    {
-      GetUserModel.getUserModel=  Map<String, dynamic>.from(value.data);
-      print(  GetUserModel.getUserName());
-      isLoadProfile=false;
+      url: profile,
+      token: {
+        'Authorization': 'Bearer ${token}',
+      },
+    ).then((value) {
+      GetUserModel.getUserModel = Map<String, dynamic>.from(value.data);
+      print(GetUserModel.getUserName());
+      isLoadProfile = false;
       emit(UserDataSuccessState());
-    }).catchError((error)
-    {
+    }).catchError((error) {
       print(error);
       emit(UserDataErrorState(error.toString()));
     });
-
   }
 
-  void updateUserData(
-      {
-        required String name1,
-        required String email1,
-        required String token,
-      })
-  {
+  void updateUserData({
+    required String name1,
+    required String email1,
+    required String token,
+  }) {
     emit(UpdateUserLoadingState());
     DioHelper.patchData(
       url: updateProfile,
-      name:name1,
-      email:email1,
+      name: name1,
+      email: email1,
       token: token,
-    ).then((value)
-    {
+    ).then((value) {
       print(value);
       GetUserModel.updateName(name1);
       GetUserModel.updateEmail(email1);
@@ -277,8 +276,7 @@ bool isLoadProfile=false;
         message: 'Update Success',
         toastState: ToastState.SUCCESS,
       );
-    }).catchError((error)
-    {
+    }).catchError((error) {
       print(error);
       if (error.response!.statusCode == 400) {
         showToast(
@@ -290,33 +288,29 @@ bool isLoadProfile=false;
     });
   }
 
-  void updatePassword(
-      {
-        required String password_Current,
-        required String password_New,
-        required String password_Confirm,
-        required String token,
-      })
-  {
+  void updatePassword({
+    required String password_Current,
+    required String password_New,
+    required String password_Confirm,
+    required String token,
+  }) {
     emit(UpdatePasswordLoadingState());
     DioHelper.patchPassword(
       url: update_Password,
-      passwordCurrent:password_Current,
+      passwordCurrent: password_Current,
       passwordNew: password_New,
       passwordConfirm: password_Confirm,
       token: token,
-    ).then((value)
-    {
+    ).then((value) {
       String newToken = value.data['token'];
       CachHelper.setData(key: 'token', value: newToken);
-      ahmedModel=UserLoginModel.fromJson(value.data);
+      ahmedModel = UserLoginModel.fromJson(value.data);
       emit(UpdatePasswordSuccessState(ahmedModel!));
       showToast(
         message: 'Update Success',
         toastState: ToastState.SUCCESS,
       );
-    }).catchError((error)
-    {
+    }).catchError((error) {
       print(error.toString());
       if (error.response!.statusCode == 400) {
         if (password_New.length < 8) {
@@ -331,16 +325,14 @@ bool isLoadProfile=false;
             toastState: ToastState.ERROR,
           );
           emit(UpdatePasswordErrorState(error));
-        }
-        else {
+        } else {
           showToast(
             message: "error,check your data",
             toastState: ToastState.ERROR,
           );
           emit(UpdatePasswordErrorState(error));
         }
-      }
-      else if (error.response!.statusCode == 401) {
+      } else if (error.response!.statusCode == 401) {
         showToast(
           message: "This isn't current password",
           toastState: ToastState.ERROR,
@@ -351,80 +343,65 @@ bool isLoadProfile=false;
   }
 
   UserModelId? userId;
-  bool isLoading=false;
-  void getUserById(
-  {
+  bool isLoading = false;
+  void getUserById({
     required String profileId,
-    Map<String,dynamic>? save,
-})
-  {
-    isLoading=true;
+    Map<String, dynamic>? save,
+  }) {
+    isLoading = true;
     emit(GetUserByIdLoadingState());
     DioHelper.getDate(
       url: userById + profileId,
       token: {
         'Authorization': 'Bearer ${token}',
       },
-    ).then((value)
-    {
+    ).then((value) {
       // SaveDataModel.savaData=Map<String, dynamic>.from(value.data);
-      userId=UserModelId.fromJson(value.data);
+      userId = UserModelId.fromJson(value.data);
 
       emit(GetUserByIdSuccessState());
-      isLoading=false;
-    }).catchError((error)
-    {
+      isLoading = false;
+    }).catchError((error) {
       print(error);
       emit(GetUserByIdErrorState());
     });
   }
 
-
-  void followUser(
-      {
-        required String userProfileId,
-      })
-  {
+  void followUser({
+    required String userProfileId,
+  }) {
     emit(FollowUserLoadingState());
     DioHelper.postData(
-      url: 'v1/users/$userProfileId/following' ,
-      token:
-      {
+      url: 'v1/users/$userProfileId/following',
+      token: {
         'Authorization': 'Bearer ${token}',
       },
-    ).then((value)
-    {
+    ).then((value) {
       emit(FollowUserSuccessState());
-    }).catchError((error)
-    {
+    }).catchError((error) {
       print(error);
       emit(FollowUserErrorState());
     });
   }
 
-  void unFollowUser(
-      {
-        required String userProfileId,
-      })
-  {
+  void unFollowUser({
+    required String userProfileId,
+  }) {
     emit(UnFollowUserLoadingState());
     DioHelper.deleteData(
-      url: 'v1/users/$userProfileId/following' ,
-      token:
-      {
+      url: 'v1/users/$userProfileId/following',
+      token: {
         'Authorization': 'Bearer ${token}',
       },
-    ).then((value)
-    {
+    ).then((value) {
       emit(UnFollowUserSuccessState());
-    }).catchError((error)
-    {
+    }).catchError((error) {
       print(error);
       emit(UnFollowUserErrorState());
     });
   }
 
-  bool isFollowing=false;
+  bool isFollowing = false;
   void toggleFollowing() {
     isFollowing = !isFollowing;
     emit(ChangeFollowingState());
