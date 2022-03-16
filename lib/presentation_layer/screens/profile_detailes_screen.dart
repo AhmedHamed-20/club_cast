@@ -1,3 +1,5 @@
+import 'package:club_cast/presentation_layer/models/login_model.dart';
+
 import '../../data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
@@ -47,7 +49,7 @@ class ProfileDetailsScreen extends StatelessWidget {
                       Center(
                         child: CircleAvatar(
                           backgroundImage:
-                              NetworkImage('${cubit.userId!.data!.photo}'),
+                              NetworkImage(UserLoginModel.getUserPhoto()),
                           radius: 75.0,
                         ),
                       ),

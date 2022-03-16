@@ -14,7 +14,6 @@ class UserLoginModel {
   }
 
   static String getUserPhoto() {
-    print(data!['user']['photo']);
     return photo = data!['user']['photo'];
   }
 

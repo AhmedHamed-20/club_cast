@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
 import '../components/component/component.dart';
+import '../models/login_model.dart';
 
 class LayoutScreen extends StatelessWidget {
   LayoutScreen({Key? key}) : super(key: key);
@@ -49,10 +50,18 @@ class LayoutScreen extends StatelessWidget {
                     navigatePushTo(
                         context: context, navigateTo: UserProfileScreen());
                   },
-                  child: userProfileImage(
-                    size: 23,
-                    image: 'assets/images/Adel.png',
+                  child: Center(
+                    child: CircleAvatar(
+                      backgroundImage:
+                          NetworkImage(UserLoginModel.photo.toString()),
+                      radius: 23,
+                    ),
                   ),
+                  //userProfileImage(
+                  //   size: 23,
+                  //   // UserLoginModel.getUserPhoto()
+                  //   image: 'assets/images/Adel.png',
+                  // ),
                 ),
                 const SizedBox(
                   width: 10,

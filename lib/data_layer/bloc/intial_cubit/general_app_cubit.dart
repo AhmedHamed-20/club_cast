@@ -4,6 +4,7 @@ import 'package:club_cast/data_layer/cash/cash.dart';
 import 'package:club_cast/data_layer/dio/dio_setup.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
 import 'package:club_cast/presentation_layer/components/constant/constant.dart';
+import 'package:club_cast/presentation_layer/models/category_model.dart';
 import 'package:club_cast/presentation_layer/models/get_all_podcst.dart';
 import 'package:club_cast/presentation_layer/models/get_userId_model.dart';
 import 'package:club_cast/presentation_layer/models/login_model.dart';
@@ -24,16 +25,16 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   static GeneralAppCubit get(context) => BlocProvider.of(context);
 
   //////////// variable ///////////////////
-
   int bottomNavIndex = 0;
 
   var roomNameController = TextEditingController();
   bool isPublicRoom = true;
   bool isRecordRoom = false;
-  bool isDark = false;
+  // bool isDark = false;
   bool isPlaying = false;
   bool pressedPause = false;
   bool isDownloading = false;
+  String? activePodCastId;
   int counter = 0;
   double currentPostionDurationInsec = 0;
   double? progress;
@@ -55,16 +56,12 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     const PodCastScreen(),
   ];
 
-  static List<String> category = [
-    'sport',
-    'economy',
-    'reading',
-    'hunter',
-  ];
+  static List<String> category = ['ai'];
   String selectedCategoryItem = category.first;
   //////////// Methods ///////////////////
   void toggleDark() {
     isDark = !isDark;
+    CachHelper.setData(key: 'isDark', value: isDark);
     emit(ChangeTheme());
   }
 
@@ -82,38 +79,82 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     emit(ChangePlayingState());
   }
 
-  void playingPodcast(String url, String name, String iconurl) async {
-    if (pressedPause) {
+  void getAllCategory() {
+    emit(GetAllCategoryLoadingState());
+    DioHelper.getData(
+      url: AllCategory,
+      token: {
+        'Authorization': 'Bearer ${token}',
+      },
+    ).then((value) {
+      CategoryModel.allCategory = Map<String, dynamic>.from(value.data);
+      // print(CategoryModel.allCategory);
+      for (int i = 1; i <= CategoryModel.allCategory!['results'] - 1; i++) {
+        category.add(CategoryModel.allCategory!['data']['data'][i]['name']);
+      }
+      print(category);
+
+      emit(GetAllCategorySuccessState());
+    }).catchError((error) {
+      print('error when getCategory :${error.toString()}');
+      emit(GetAllCategoryErrorState());
+    });
+  }
+
+  void playingPodcast(String url, String name, String iconurl,
+      String activePodCastIdnow) async {
+    if (pressedPause && activePodCastId == activePodCastIdnow) {
       assetsAudioPlayer.play();
+      activePodCastId = activePodCastIdnow;
+      print('nowwwww' + activePodCastId!);
       isPlaying = true;
+      pressedPause = false;
       emit(ChangePlayingState());
     } else {
       try {
-        await assetsAudioPlayer.open(
-          Audio.network(url),
-          showNotification: true,
-        );
-        assetsAudioPlayer.updateCurrentAudioNotification(
-          metas: Metas(
-            title: name,
-            image: MetasImage.network(iconurl),
-          ),
-        );
+        await assetsAudioPlayer.stop().then((value) async {
+          await assetsAudioPlayer.open(
+            Audio.network(url),
+            showNotification: true,
+            notificationSettings: NotificationSettings(
+                stopEnabled: true,
+                customPlayPauseAction: (_) {
+                  pressedPause
+                      ? assetsAudioPlayer.play().then((value) {
+                          isPlaying = true;
+                          pressedPause = false;
+                          changeState();
+                        })
+                      : assetsAudioPlayer.pause().then((value) {
+                          isPlaying = false;
+                          pressedPause = true;
+                          changeState();
+                        });
+                }),
+          );
+          assetsAudioPlayer.updateCurrentAudioNotification(
+            metas: Metas(
+              title: name,
+              image: MetasImage.network(iconurl),
+            ),
+          );
+          activePodCastId = activePodCastIdnow;
+          print('nowwww' + activePodCastId!);
+          assetsAudioPlayer.currentPosition.listen((event) {
+            print(event);
 
-        assetsAudioPlayer.currentPosition.listen((event) {
-          print(event);
-
-          currentPostionDurationInsec = event.inSeconds.toDouble();
-          currentOlayingDurathion = event.toString().substring(0, 7);
-          //print(currentOlayingDurathion);
-          if (event.inSeconds == 00.000000) {
-            isPlaying = false;
-            pressedPause = false;
-            emit(ChangePlayingState());
-          } else {
-            isPlaying = true;
-            emit(ChangePlayingState());
-          }
+            currentPostionDurationInsec = event.inSeconds.toDouble();
+            currentOlayingDurathion = event.toString().substring(0, 7);
+            //print(currentOlayingDurathion);
+            if (event.inSeconds == 00.000000) {
+              isPlaying = false;
+              pressedPause = false;
+              emit(ChangePlayingState());
+            } else {
+              isPlaying = true;
+              emit(ChangePlayingState());
+            }
+          });
         });
 
         //togglePlaying();
@@ -129,7 +170,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   GetAllPodCastModel? podcastModel;
   void getAllPodcast({required String token}) {
     print(token);
-    DioHelper.getDate(
+    DioHelper.getData(
       url: GetAllPodcasts,
       token: {
         'Authorization': 'Bearer ${token}',
@@ -190,7 +231,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
 
       emit(FileDownloading());
 
-      progress = ((rec / total) * 100);
+      progress = ((rec / total));
       print(progress);
       counter++;
     }).then((value) {
@@ -214,7 +255,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       {required String token,
       required String podCastId,
       required BuildContext context}) {
-    DioHelper.getDate(
+    DioHelper.getData(
         url: getPodcastLikesUsers + podCastId,
         token: {'Authorization': 'Bearer ${token}'}).then((value) {
       GetPodCastUsersLikesModel.getAllPodCastLikes =
@@ -226,11 +267,13 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     });
   }
 
+  bool isLoadProfile = false;
   void getUserData({
     required String token,
   }) {
+    isLoadProfile = true;
     emit(UserDataLoadingState());
-    DioHelper.getDate(
+    DioHelper.getData(
       url: profile,
       token: {
         'Authorization': 'Bearer ${token}',
@@ -238,6 +281,8 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     ).then((value) {
       GetUserModel.getUserModel = Map<String, dynamic>.from(value.data);
       print(GetUserModel.getUserName());
+      isLoadProfile = false;
+      emit(UserDataSuccessState());
     }).catchError((error) {
       print(error);
       emit(UserDataErrorState(error.toString()));
@@ -338,7 +383,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   }) {
     isLoading = true;
     emit(GetUserByIdLoadingState());
-    DioHelper.getDate(
+    DioHelper.getData(
       url: userById + profileId,
       token: {
         'Authorization': 'Bearer ${token}',
@@ -354,7 +399,44 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       emit(GetUserByIdErrorState());
     });
   }
+
+  void followUser({
+    required String userProfileId,
+  }) {
+    emit(FollowUserLoadingState());
+    DioHelper.postData(
+      url: 'v1/users/$userProfileId/following',
+      token: {
+        'Authorization': 'Bearer ${token}',
+      },
+    ).then((value) {
+      emit(FollowUserSuccessState());
+    }).catchError((error) {
+      print(error);
+      emit(FollowUserErrorState());
+    });
+  }
+
+  void unFollowUser({
+    required String userProfileId,
+  }) {
+    emit(UnFollowUserLoadingState());
+    DioHelper.deleteData(
+      url: 'v1/users/$userProfileId/following',
+      token: {
+        'Authorization': 'Bearer ${token}',
+      },
+    ).then((value) {
+      emit(UnFollowUserSuccessState());
+    }).catchError((error) {
+      print(error);
+      emit(UnFollowUserErrorState());
+    });
+  }
+
+  bool isFollowing = false;
+  void toggleFollowing() {
+    isFollowing = !isFollowing;
+    emit(ChangeFollowingState());
+  }
 }
-// userId=UserModelId.fromJson(value.data);
-// save=userId as Map<String, dynamic>?;
-// userId!.data!.id=GetPodCastUsersLikesModel.getAllPodCastLikes!['data']['user']['_id'];
