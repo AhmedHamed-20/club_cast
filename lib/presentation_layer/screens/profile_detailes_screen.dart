@@ -1,5 +1,3 @@
-import 'package:club_cast/presentation_layer/models/login_model.dart';
-
 import '../../data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
@@ -49,7 +47,7 @@ class ProfileDetailsScreen extends StatelessWidget {
                       Center(
                         child: CircleAvatar(
                           backgroundImage:
-                              NetworkImage(UserLoginModel.getUserPhoto()),
+                              NetworkImage('${cubit.userId!.data!.photo}'),
                           radius: 75.0,
                         ),
                       ),
@@ -80,7 +78,6 @@ class ProfileDetailsScreen extends StatelessWidget {
                             number: '${cubit.userId!.data!.followers}',
                             statusType: 'Followers',
                           ),
-                          // cubit.userId!.data!.followers
                           const SizedBox(
                             width: 22.0,
                           ),
@@ -93,24 +90,53 @@ class ProfileDetailsScreen extends StatelessWidget {
                       const SizedBox(
                         height: 17.0,
                       ),
-                      Container(
-                        width: 280.0,
-                        height: 45.0,
-                        child: MaterialButton(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5.0),
-                          ),
-                          onPressed: () {},
-                          child: const Text(
-                            'Follow',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20.0,
+                      cubit.isFollowing
+                          ? Container(
+                              width: 280.0,
+                              height: 45.0,
+                              child: MaterialButton(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5.0),
+                                ),
+                                onPressed: () {
+                                  cubit.toggleFollowing();
+                                  cubit.unFollowUser(
+                                      userProfileId:
+                                          '${cubit.userId!.data!.id}');
+                                },
+                                child: const Text(
+                                  'UnFollow',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20.0,
+                                  ),
+                                ),
+                                color: Theme.of(context).primaryColor,
+                              ),
+                            )
+                          : Container(
+                              width: 280.0,
+                              height: 45.0,
+                              child: MaterialButton(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5.0),
+                                ),
+                                onPressed: () {
+                                  cubit.toggleFollowing();
+                                  cubit.followUser(
+                                      userProfileId:
+                                          '${cubit.userId!.data!.id}');
+                                },
+                                child: const Text(
+                                  'Follow',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20.0,
+                                  ),
+                                ),
+                                color: Theme.of(context).primaryColor,
+                              ),
                             ),
-                          ),
-                          color: Theme.of(context).primaryColor,
-                        ),
-                      ),
                       const SizedBox(
                         height: 20.0,
                       ),
