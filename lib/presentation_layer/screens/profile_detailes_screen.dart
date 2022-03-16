@@ -33,100 +33,103 @@ class ProfileDetailsScreen extends StatelessWidget {
             ),
             backgroundColor: Colors.transparent,
           ),
-          body: cubit.isLoading?
-          Center(child: CircularProgressIndicator(
-            color: Theme.of(context).primaryColor,
-          )) :
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 10.0,
-                ),
-                Center(
-                  child: CircleAvatar(
-                    backgroundImage: NetworkImage('${cubit.userId!.data!.photo}'),
-                    radius: 75.0,
-                  ),
-                ),
-                const SizedBox(
-                  height: 10.0,
-                ),
-                Text(
-                  '${cubit.userId!.data!.name}',
-                  style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                        fontWeight: FontWeight.w900,
-                        fontSize: 22.0,
+          body: cubit.isLoading
+              ? Center(
+                  child: CircularProgressIndicator(
+                  color: Theme.of(context).primaryColor,
+                ))
+              : SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      const SizedBox(
+                        height: 10.0,
                       ),
-                ),
-                const SizedBox(
-                  height: 25.0,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    statusNumberProfile(
-                      number: '0',
-                      statusType: 'Podcasts',
-                    ),
-                    const SizedBox(
-                      width: 22.0,
-                    ),
-                    statusNumberProfile(
-                      number: '${cubit.userId!.data!.followers}',
-                      statusType: 'Followers',
-                    ),
-                    // cubit.userId!.data!.followers
-                    const SizedBox(
-                      width: 22.0,
-                    ),
-                    statusNumberProfile(
-                      number: '${cubit.userId!.data!.following}',
-                      statusType: 'Following',
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 17.0,
-                ),
-                Container(
-                  width: 280.0,
-                  height: 45.0,
-                  child: MaterialButton(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5.0),
-                    ),
-                    onPressed: () {},
-                    child: const Text(
-                      'Follow',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20.0,
+                      Center(
+                        child: CircleAvatar(
+                          backgroundImage:
+                              NetworkImage('${cubit.userId!.data!.photo}'),
+                          radius: 75.0,
+                        ),
                       ),
-                    ),
-                    color: Theme.of(context).primaryColor,
-                  ),
-                ),
-                const SizedBox(
-                  height: 20.0,
-                ),
-                Row(
-                  children: [
-                    const SizedBox(
-                      width: 20.0,
-                    ),
-                    Text(
-                      'Podcasts',
-                      style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                            fontWeight: FontWeight.w900,
-                            fontSize: 22.0,
+                      const SizedBox(
+                        height: 10.0,
+                      ),
+                      Text(
+                        '${cubit.userId!.data!.name}',
+                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                              fontWeight: FontWeight.w900,
+                              fontSize: 22.0,
+                            ),
+                      ),
+                      const SizedBox(
+                        height: 25.0,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          statusNumberProfile(
+                            number: '0',
+                            statusType: 'Podcasts',
                           ),
-                    ),
-                  ],
+                          const SizedBox(
+                            width: 22.0,
+                          ),
+                          statusNumberProfile(
+                            number: '${cubit.userId!.data!.followers}',
+                            statusType: 'Followers',
+                          ),
+                          // cubit.userId!.data!.followers
+                          const SizedBox(
+                            width: 22.0,
+                          ),
+                          statusNumberProfile(
+                            number: '${cubit.userId!.data!.following}',
+                            statusType: 'Following',
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 17.0,
+                      ),
+                      Container(
+                        width: 280.0,
+                        height: 45.0,
+                        child: MaterialButton(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5.0),
+                          ),
+                          onPressed: () {},
+                          child: const Text(
+                            'Follow',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20.0,
+                            ),
+                          ),
+                          color: Theme.of(context).primaryColor,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20.0,
+                      ),
+                      Row(
+                        children: [
+                          const SizedBox(
+                            width: 20.0,
+                          ),
+                          Text(
+                            'Podcasts',
+                            style:
+                                Theme.of(context).textTheme.bodyText1!.copyWith(
+                                      fontWeight: FontWeight.w900,
+                                      fontSize: 22.0,
+                                    ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ],
-            ),
-          ),
         );
       },
     );
