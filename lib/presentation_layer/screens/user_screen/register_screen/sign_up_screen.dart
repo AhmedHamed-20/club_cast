@@ -2,8 +2,7 @@ import 'package:club_cast/data_layer/bloc/login_cubit/login_cubit.dart';
 import 'package:club_cast/data_layer/bloc/login_cubit/login_states.dart';
 import 'package:club_cast/data_layer/cash/cash.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
-import 'package:club_cast/presentation_layer/components/constant/constant.dart';
-import 'package:club_cast/presentation_layer/layout/layout_screen.dart';
+import 'package:club_cast/presentation_layer/models/login_model.dart';
 import 'package:club_cast/presentation_layer/screens/setup_avater_screen.dart';
 import 'package:club_cast/presentation_layer/screens/user_screen/login_screen/login_screen.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
@@ -24,17 +23,13 @@ class RegisterScreen extends StatelessWidget {
       body: BlocConsumer<LoginCubit, LoginStates>(
         listener: (context, state) {
           if (state is UserSignUpSuccessState) {
-            // print(state.userSignUpModel.data!.user!.name);
-            // print(state.userSignUpModel.data!.user!.email);
-            // print(state.userSignUpModel.token);
-
-            // CachHelper.setData(key: 'token', value: state.userSignUpModel.token)
-            //     .then((value) {
-            //   navigatePushANDRemoveRout(
-            //       context: context, navigateTo: LayoutScreen());
-            // }).catchError((error) {
-            //   print('error when save token:${error.toString()}');
-            // });
+            CachHelper.setData(key: 'token', value: UserLoginModel.token)
+                .then((value) {
+              navigatePushANDRemoveRout(
+                  context: context, navigateTo: SetUpAvatarScreen());
+            }).catchError((error) {
+              print('error when save token:${error.toString()}');
+            });
           }
         },
         builder: (context, state) {
@@ -97,11 +92,11 @@ class RegisterScreen extends StatelessWidget {
                           labelText: "password",
                           suffixIcon: IconButton(
                             onPressed: () {
-                              cubit.visibleEyeOrNot();
+                              cubit.signUpVisibleEyeOrNot();
                             },
-                            icon: cubit.suffix,
+                            icon: cubit.signUpSuffix,
                           ),
-                          obscureText: cubit.obSecure,
+                          obscureText: cubit.signUpObSecure,
                           labelStyle: Theme.of(context).textTheme.bodyText1,
                           onChanged: (value) {},
                           onSubmit: (value) {},
@@ -118,7 +113,7 @@ class RegisterScreen extends StatelessWidget {
                           controller: confirmPasswordController,
                           keyboardType: TextInputType.visiblePassword,
                           labelText: "Confirm Password",
-                          obscureText: cubit.obSecure,
+                          obscureText: cubit.signUpObSecure,
                           labelStyle: Theme.of(context).textTheme.bodyText1,
                           onChanged: (value) {},
                           onSubmit: (value) {},

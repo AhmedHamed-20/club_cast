@@ -4,7 +4,9 @@ abstract class LoginStates {}
 
 class InitialLoginStates extends LoginStates {}
 
-class ChangeEyeSecureState extends LoginStates {}
+class ChangeLoginEyeSecureState extends LoginStates {}
+
+class ChangeSignUpEyeSecureState extends LoginStates {}
 
 class UserLoginLoadingState extends LoginStates {}
 

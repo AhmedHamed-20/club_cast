@@ -2,11 +2,13 @@ import 'package:club_cast/presentation_layer/models/login_model.dart';
 
 /////// end Points ////////////
 var token;
+bool isDark = false;
 UserLoginModel? ahmedModel;
 const String baseUrl = "https://audiocomms-podcast-platform.herokuapp.com/api/";
 const String login = "v1/users/login";
 const String signup = "v1/users/signup";
 const String forgotPassword = "v1/users/forgotPassword";
+const String AllCategory = "/v1/categories/";
 const String profile = "v1/users/me";
 const String updateProfile = "v1/users/updateMe";
 const String update_Password = "v1/users/updateMyPassword";

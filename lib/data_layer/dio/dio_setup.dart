@@ -14,7 +14,7 @@ class DioHelper {
     ));
   }
 
-  static Future<dynamic> getDate({
+  static Future<dynamic> getData({
     String? url,
     Map<String, dynamic>? query,
     Map<String, dynamic>? token,

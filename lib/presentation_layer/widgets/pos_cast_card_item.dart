@@ -1,8 +1,6 @@
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/data_layer/cash/cash.dart';
-import 'package:club_cast/presentation_layer/components/constant/constant.dart';
 import 'package:club_cast/presentation_layer/models/get_all_podcst.dart';
-import 'package:club_cast/presentation_layer/models/login_model.dart';
 import 'package:flutter/material.dart';
 
 Widget podACastItem(
@@ -19,7 +17,7 @@ Widget podACastItem(
   String token = CachHelper.getData(key: 'token');
   String photoUrl =
       GetAllPodCastModel.getPodcastUserPublishInform(index!)[0]['photo'];
-  ;
+
   String username =
       GetAllPodCastModel.getPodcastUserPublishInform(index)[0]['name'];
   String podCastName = GetAllPodCastModel.getPodcastName(index);
@@ -128,17 +126,17 @@ Widget podACastItem(
                     style: Theme.of(context).textTheme.bodyText1),
                 Row(
                   children: [
-                    Text(
-                      text == null ? convertedTime : text,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyText1
-                          ?.copyWith(color: Theme.of(context).primaryColor),
-                    ),
                     SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.16,
+                      width: MediaQuery.of(context).size.width * 0.33,
+                      child: Text(
+                        text == null ? convertedTime : text,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyText1
+                            ?.copyWith(color: Theme.of(context).primaryColor),
+                      ),
                     ),
                     downloadButton!,
                     SizedBox(
