@@ -1,5 +1,4 @@
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
-import 'package:club_cast/presentation_layer/models/login_model.dart';
 import 'package:club_cast/presentation_layer/screens/user_profile_screen.dart';
 import 'package:club_cast/presentation_layer/widgets/modelsheetcreate_room.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +23,7 @@ class LayoutScreen extends StatelessWidget {
                 FloatingActionButtonLocation.centerDocked,
             appBar: AppBar(
               backgroundColor: Colors.transparent,
+              elevation: 0,
               title: Text(
                 'Rooms',
                 style: Theme.of(context)
@@ -46,13 +46,12 @@ class LayoutScreen extends StatelessWidget {
                 ),
                 InkWell(
                   onTap: () {
-                    print(UserLoginModel.photo);
                     navigatePushTo(
                         context: context, navigateTo: UserProfileScreen());
                   },
-                  child: CircleAvatar(
-                    backgroundImage: NetworkImage(''),
-                    radius: 23.0,
+                  child: userProfileImage(
+                    size: 23,
+                    image: 'assets/images/Adel.png',
                   ),
                 ),
                 const SizedBox(

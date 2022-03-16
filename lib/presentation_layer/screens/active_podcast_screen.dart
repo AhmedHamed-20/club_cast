@@ -2,6 +2,7 @@ import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:audio_wave/audio_wave.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
+import 'package:club_cast/presentation_layer/components/constant/constant.dart';
 import 'package:club_cast/presentation_layer/models/get_all_podcst.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -68,13 +69,23 @@ class ActivePodCastScreen extends StatelessWidget {
                   Slider(
                     activeColor: Theme.of(context).primaryColor,
                     inactiveColor: Theme.of(context).backgroundColor,
-                    value: cubit.currentPostionDurationInsec,
+                    value: GetAllPodCastModel.getPodcastID(index!) ==
+                            cubit.activePodCastId
+                        ? cubit.currentPostionDurationInsec
+                        : 0,
                     onChanged: (newval) {
-                      cubit.assetsAudioPlayer.seek(
-                        Duration(
-                          seconds: newval.toInt(),
-                        ),
-                      );
+                      cubit.pressedPause &&
+                              GetAllPodCastModel.getPodcastID(index!) ==
+                                  cubit.activePodCastId
+                          ? SizedBox()
+                          : GetAllPodCastModel.getPodcastID(index!) ==
+                                  cubit.activePodCastId
+                              ? cubit.assetsAudioPlayer.seek(
+                                  Duration(
+                                    seconds: newval.toInt(),
+                                  ),
+                                )
+                              : SizedBox();
                     },
                     min: 0,
                     max: GetAllPodCastModel.getPodCastAudio(index!)[0]
@@ -82,10 +93,15 @@ class ActivePodCastScreen extends StatelessWidget {
                         .toDouble(),
                   ),
                   Text(
-                    cubit.currentOlayingDurathion == null ||
-                            cubit.isPlaying == false
-                        ? convertedTime
-                        : cubit.currentOlayingDurathion!,
+                    cubit.isPlaying &&
+                            GetAllPodCastModel.getPodcastID(index!) ==
+                                cubit.activePodCastId
+                        ? cubit.currentOlayingDurathion!
+                        : cubit.pressedPause &&
+                                GetAllPodCastModel.getPodcastID(index!) ==
+                                    cubit.activePodCastId
+                            ? cubit.currentOlayingDurathion!
+                            : convertedTime,
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
                 ],
@@ -126,10 +142,19 @@ class ActivePodCastScreen extends StatelessWidget {
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(15),
                                   ),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    cubit.isPlaying &&
+                                            GetAllPodCastModel.getPodcastID(
+                                                    index!) ==
+                                                cubit.activePodCastId
+                                        ? cubit.assetsAudioPlayer
+                                            .seekBy(Duration(seconds: -10))
+                                        : SizedBox();
+                                  },
                                   child: Icon(
-                                    Icons.skip_previous,
+                                    Icons.replay_10,
                                     color: Theme.of(context).iconTheme.color,
+                                    size: Theme.of(context).iconTheme.size,
                                   ),
                                 ),
                                 Card(
@@ -145,12 +170,19 @@ class ActivePodCastScreen extends StatelessWidget {
                                       String podCastUrl =
                                           GetAllPodCastModel.getPodCastAudio(
                                               index!)[0]['url'];
-                                      cubit.isPlaying
-                                          ? cubit.assetsAudioPlayer
+                                      cubit.isPlaying &&
+                                              GetAllPodCastModel
+                                                      .getPodcastID(index!) ==
+                                                  cubit.activePodCastId
+                                          ? cubit
+                                              .assetsAudioPlayer
                                               .pause()
                                               .then((value) {
                                               cubit.isPlaying = false;
                                               cubit.pressedPause = true;
+                                              cubit.activePodCastId =
+                                                  GetAllPodCastModel
+                                                      .getPodcastID(index!);
                                               cubit.changeState();
                                             })
                                           : cubit.playingPodcast(
@@ -159,10 +191,15 @@ class ActivePodCastScreen extends StatelessWidget {
                                                   index!),
                                               GetAllPodCastModel
                                                   .getPodcastUserPublishInform(
-                                                      index!)[0]['photo']);
+                                                      index!)[0]['photo'],
+                                              GetAllPodCastModel.getPodcastID(
+                                                  index!));
                                     },
                                     child: Icon(
-                                      cubit.isPlaying
+                                      cubit.isPlaying &&
+                                              GetAllPodCastModel.getPodcastID(
+                                                      index!) ==
+                                                  cubit.activePodCastId
                                           ? Icons.pause
                                           : Icons.play_arrow,
                                       color: Colors.white,
@@ -173,10 +210,19 @@ class ActivePodCastScreen extends StatelessWidget {
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(15),
                                   ),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    cubit.isPlaying &&
+                                            GetAllPodCastModel.getPodcastID(
+                                                    index!) ==
+                                                cubit.activePodCastId
+                                        ? cubit.assetsAudioPlayer
+                                            .seekBy(Duration(seconds: 10))
+                                        : SizedBox();
+                                  },
                                   child: Icon(
-                                    Icons.skip_next,
+                                    Icons.forward_10,
                                     color: Theme.of(context).iconTheme.color,
+                                    size: Theme.of(context).iconTheme.size,
                                   ),
                                 ),
                               ],

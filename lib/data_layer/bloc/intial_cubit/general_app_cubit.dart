@@ -4,7 +4,6 @@ import 'package:club_cast/data_layer/cash/cash.dart';
 import 'package:club_cast/data_layer/dio/dio_setup.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
 import 'package:club_cast/presentation_layer/components/constant/constant.dart';
-import 'package:club_cast/presentation_layer/models/category_model.dart';
 import 'package:club_cast/presentation_layer/models/get_all_podcst.dart';
 import 'package:club_cast/presentation_layer/models/get_userId_model.dart';
 import 'package:club_cast/presentation_layer/models/login_model.dart';
@@ -31,7 +30,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   var roomNameController = TextEditingController();
   bool isPublicRoom = true;
   bool isRecordRoom = false;
-  //bool isDark = false;
+  bool isDark = false;
   bool isPlaying = false;
   bool pressedPause = false;
   bool isDownloading = false;
@@ -56,13 +55,16 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     const PodCastScreen(),
   ];
 
-  static List<String> category = ['ai'];
+  static List<String> category = [
+    'sport',
+    'economy',
+    'reading',
+    'hunter',
+  ];
   String selectedCategoryItem = category.first;
   //////////// Methods ///////////////////
   void toggleDark() {
     isDark = !isDark;
-    print(isDark);
-    CachHelper.setData(key: 'isDark', value: isDark);
     emit(ChangeTheme());
   }
 
@@ -74,28 +76,6 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   void changeBottomNAvIndex(int index) {
     bottomNavIndex = index;
     emit(ChangeBottomNavIndex());
-  }
-
-  void getAllCategory() {
-    emit(GetAllCategoryLoadingState());
-    DioHelper.getData(
-      url: AllCategory,
-      token: {
-        'Authorization': 'Bearer ${token}',
-      },
-    ).then((value) {
-      CategoryModel.allCategory = Map<String, dynamic>.from(value.data);
-
-      for (int i = 1; i <= CategoryModel.allCategory!['results'] - 1; i++) {
-        category.add(CategoryModel.allCategory!['data']['data'][i]['name']);
-      }
-      print(category);
-
-      emit(GetAllCategorySuccessState());
-    }).catchError((error) {
-      print("error when get category :${error.toString()}");
-      emit(GetAllCategoryErrorState());
-    });
   }
 
   void changeState() {
@@ -149,7 +129,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   GetAllPodCastModel? podcastModel;
   void getAllPodcast({required String token}) {
     print(token);
-    DioHelper.getData(
+    DioHelper.getDate(
       url: GetAllPodcasts,
       token: {
         'Authorization': 'Bearer ${token}',
@@ -206,14 +186,14 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
 
     await DioHelper.dio!.download(url, file.path,
         onReceiveProgress: (rec, total) {
-      isDownloading = true;
+          isDownloading = true;
 
-      emit(FileDownloading());
+          emit(FileDownloading());
 
-      progress = ((rec / total) * 100);
-      print(progress);
-      counter++;
-    }).then((value) {
+          progress = ((rec / total) * 100);
+          print(progress);
+          counter++;
+        }).then((value) {
       var fullPath = file.path;
       isDownloading = false;
       emit(FileDownloadSuccess());
@@ -222,7 +202,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
           toastState: ToastState.SUCCESS);
       print(fullPath);
     }).catchError(
-      (onError) {
+          (onError) {
         print(onError);
         showToast(message: 'DownlaodError', toastState: ToastState.ERROR);
         emit(FileDownloadError());
@@ -232,13 +212,13 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
 
   void getPodCastLikes(
       {required String token,
-      required String podCastId,
-      required BuildContext context}) {
-    DioHelper.getData(
+        required String podCastId,
+        required BuildContext context}) {
+    DioHelper.getDate(
         url: getPodcastLikesUsers + podCastId,
         token: {'Authorization': 'Bearer ${token}'}).then((value) {
       GetPodCastUsersLikesModel.getAllPodCastLikes =
-          Map<String, dynamic>.from(value.data);
+      Map<String, dynamic>.from(value.data);
       navigatePushTo(context: context, navigateTo: PodCastLikesScreen());
       //  print(GetPodCastUsersLikesModel.getPhotoUrltName(1));
     }).catchError((onError) {
@@ -246,36 +226,46 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     });
   }
 
-  void getUserData({
-    required String token,
-  }) {
+
+
+  void getUserData(
+  {
+  required String token,
+})
+  {
     emit(UserDataLoadingState());
-    DioHelper.getData(
-      url: profile,
-      token: {
-        'Authorization': 'Bearer ${token}',
-      },
-    ).then((value) {
-      GetUserModel.getUserModel = Map<String, dynamic>.from(value.data);
-      print(GetUserModel.getUserName());
-    }).catchError((error) {
+    DioHelper.getDate(
+        url: profile,
+        token: {
+          'Authorization': 'Bearer ${token}',
+        },
+    ).then((value)
+    {
+      GetUserModel.getUserModel=  Map<String, dynamic>.from(value.data);
+      print(  GetUserModel.getUserName());
+    }).catchError((error)
+    {
       print(error);
       emit(UserDataErrorState(error.toString()));
     });
+
   }
 
-  void updateUserData({
-    required String name1,
-    required String email1,
-    required String token,
-  }) {
+  void updateUserData(
+      {
+        required String name1,
+        required String email1,
+        required String token,
+      })
+  {
     emit(UpdateUserLoadingState());
     DioHelper.patchData(
       url: updateProfile,
-      name: name1,
-      email: email1,
+      name:name1,
+      email:email1,
       token: token,
-    ).then((value) {
+    ).then((value)
+    {
       print(value);
       GetUserModel.updateName(name1);
       GetUserModel.updateEmail(email1);
@@ -284,7 +274,8 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
         message: 'Update Success',
         toastState: ToastState.SUCCESS,
       );
-    }).catchError((error) {
+    }).catchError((error)
+    {
       print(error);
       if (error.response!.statusCode == 400) {
         showToast(
@@ -296,29 +287,33 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     });
   }
 
-  void updatePassword({
-    required String password_Current,
-    required String password_New,
-    required String password_Confirm,
-    required String token,
-  }) {
+  void updatePassword(
+      {
+        required String password_Current,
+        required String password_New,
+        required String password_Confirm,
+        required String token,
+      })
+  {
     emit(UpdatePasswordLoadingState());
     DioHelper.patchPassword(
       url: update_Password,
-      passwordCurrent: password_Current,
+      passwordCurrent:password_Current,
       passwordNew: password_New,
       passwordConfirm: password_Confirm,
       token: token,
-    ).then((value) {
+    ).then((value)
+    {
       String newToken = value.data['token'];
       CachHelper.setData(key: 'token', value: newToken);
-      ahmedModel = UserLoginModel.fromJson(value.data);
+      ahmedModel=UserLoginModel.fromJson(value.data);
       emit(UpdatePasswordSuccessState(ahmedModel!));
       showToast(
         message: 'Update Success',
         toastState: ToastState.SUCCESS,
       );
-    }).catchError((error) {
+    }).catchError((error)
+    {
       print(error.toString());
       if (error.response!.statusCode == 400) {
         if (password_New.length < 8) {
@@ -333,14 +328,16 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
             toastState: ToastState.ERROR,
           );
           emit(UpdatePasswordErrorState(error));
-        } else {
+        }
+        else {
           showToast(
             message: "error,check your data",
             toastState: ToastState.ERROR,
           );
           emit(UpdatePasswordErrorState(error));
         }
-      } else if (error.response!.statusCode == 401) {
+      }
+      else if (error.response!.statusCode == 401) {
         showToast(
           message: "This isn't current password",
           toastState: ToastState.ERROR,
@@ -351,25 +348,29 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   }
 
   UserModelId? userId;
-  bool isLoading = false;
-  void getUserById({
+  bool isLoading=false;
+  void getUserById(
+  {
     required String profileId,
-    Map<String, dynamic>? save,
-  }) {
-    isLoading = true;
+    Map<String,dynamic>? save,
+})
+  {
+    isLoading=true;
     emit(GetUserByIdLoadingState());
-    DioHelper.getData(
+    DioHelper.getDate(
       url: userById + profileId,
       token: {
         'Authorization': 'Bearer ${token}',
       },
-    ).then((value) {
+    ).then((value)
+    {
       // SaveDataModel.savaData=Map<String, dynamic>.from(value.data);
-      userId = UserModelId.fromJson(value.data);
+      userId=UserModelId.fromJson(value.data);
 
       emit(GetUserByIdSuccessState());
-      isLoading = false;
-    }).catchError((error) {
+      isLoading=false;
+    }).catchError((error)
+    {
       print(error);
       emit(GetUserByIdErrorState());
     });
