@@ -34,6 +34,8 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   bool isPlaying = false;
   bool pressedPause = false;
   bool isDownloading = false;
+  bool? isDark = false;
+
   String? activePodCastId;
   int counter = 0;
   double currentPostionDurationInsec = 0;
@@ -55,14 +57,23 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     PublicRoomScreen(),
     const PodCastScreen(),
   ];
+  getDark(bool isDARK) {
+    print(isDARK);
+    isDark = isDARK;
+    emit(ChangeTheme());
+  }
 
   static List<String> category = ['ai'];
   String selectedCategoryItem = category.first;
   //////////// Methods ///////////////////
+
   void toggleDark() {
-    isDark = !isDark;
-    CachHelper.setData(key: 'isDark', value: isDark);
-    emit(ChangeTheme());
+    isDark = !isDark!;
+    CachHelper.setData(key: 'isDark', value: isDark).then((value) {
+      print(isDark);
+      print('cachValue:${value}');
+      emit(ChangeTheme());
+    });
   }
 
   void togglePlaying() {

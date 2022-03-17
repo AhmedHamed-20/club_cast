@@ -22,8 +22,11 @@ void main() async {
   DioHelper.init();
   await CachHelper.init();
   Bloc.observer = MyBlocObserver();
+  bool isDark;
   token = CachHelper.getData(key: 'token');
   isDark = CachHelper.getData(key: 'isDark');
+  print('mainValue:${isDark}');
+  // isDark == null ? isDark = false : isDark = isDark;
   Widget startApp;
   print(token);
 
@@ -32,13 +35,13 @@ void main() async {
   } else {
     startApp = LoginScreen();
   }
-  runApp(MyApp(startApp));
+  runApp(MyApp(startApp, isDark));
 }
 
 class MyApp extends StatelessWidget {
   final Widget startApp;
-
-  MyApp(this.startApp);
+  bool isDark;
+  MyApp(this.startApp, this.isDark);
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -54,20 +57,23 @@ class MyApp extends StatelessWidget {
           create: (context) => GeneralAppCubit()
             ..getAllPodcast(token: token)
             ..getUserData(token: token)
-            ..getAllCategory(),
+            ..getAllCategory()
+            ..getDark(isDark),
         ),
       ],
       child: BlocConsumer<GeneralAppCubit, GeneralAppStates>(
-        listener: (BuildContext context, state) {},
-        builder: (BuildContext context, Object? state) {
+        builder: (context, state) {
+          var cubit = GeneralAppCubit.get(context);
+          //  cubit.isDark = isDark;
+          //isDark == null ? isDark = false : SizedBox();
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             title: 'PodLand',
-            theme: isDark ? darkMode : lightMode,
-            themeMode: ThemeMode.system,
+            theme: cubit.isDark! ? darkMode : lightMode,
             home: startApp,
           );
         },
+        listener: (context, state) {},
       ),
     );
   }

@@ -6,41 +6,37 @@ class GetUserModel {
   static String? email;
   static int? followers;
   static int? following;
-  static String? photo;
+  static String photo = '';
 
-
-  static String getUserID()
-  {
-    return userid =
-        getUserModel!['data']['data']['_id'];
+  static String getUserID() {
+    return userid = getUserModel!['data']['data']['_id'];
   }
 
-  static String getUserName()
-  {
-    return name = getUserModel!['data']['data']['name'];
+  static String getUserName() {
+    return name = getUserModel?['data']['data']['name'];
   }
-  static String getUserEmail()
-  {
+
+  static String getUserEmail() {
     return email = getUserModel!['data']['data']['email'];
   }
-  static int getUserFollowers()
-  {
+
+  static int getUserFollowers() {
     return followers = getUserModel!['data']['data']['followers'];
   }
-  static int getUserFollowing()
-  {
-    return following = getUserModel!['data']['data']['following'];
+
+  static int getUserFollowing() {
+    return following = getUserModel?['data']['data']['following'];
   }
-  static String getUserPhoto()
-  {
-    return photo = getUserModel!['data']['data']['photo'];
+
+  static String getUserPhoto() {
+    return photo = getUserModel?['data']['data']['photo'];
   }
-  static void updateName(String name)
-  {
-    getUserModel!['data']['data']['name']=name;
+
+  static void updateName(String name) {
+    getUserModel!['data']['data']['name'] = name;
   }
-  static void updateEmail(String email)
-  {
-    getUserModel!['data']['data']['email']=email;
+
+  static void updateEmail(String email) {
+    getUserModel!['data']['data']['email'] = email;
   }
 }

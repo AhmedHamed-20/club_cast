@@ -1,4 +1,5 @@
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
+import 'package:club_cast/presentation_layer/models/user_model.dart';
 import 'package:club_cast/presentation_layer/screens/user_profile_screen.dart';
 import 'package:club_cast/presentation_layer/widgets/modelsheetcreate_room.dart';
 import 'package:flutter/material.dart';
@@ -51,11 +52,15 @@ class LayoutScreen extends StatelessWidget {
                         context: context, navigateTo: UserProfileScreen());
                   },
                   child: Center(
-                    child: CircleAvatar(
-                      backgroundImage:
-                          NetworkImage(UserLoginModel.photo.toString()),
-                      radius: 23,
-                    ),
+                    child: GetUserModel.getUserPhoto() == ''
+                        ? CircularProgressIndicator(
+                            strokeWidth: 1,
+                          )
+                        : CircleAvatar(
+                            backgroundImage:
+                                NetworkImage(GetUserModel.getUserPhoto()),
+                            radius: 23,
+                          ),
                   ),
                   //userProfileImage(
                   //   size: 23,
@@ -80,6 +85,8 @@ class LayoutScreen extends StatelessWidget {
               ],
             ),
             bottomNavigationBar: BottomNavigationBar(
+              selectedLabelStyle:
+                  TextStyle(color: Theme.of(context).primaryColor),
               items: cubit.bottomNavBarItem,
               backgroundColor: Theme.of(context).backgroundColor,
               selectedItemColor: Theme.of(context).primaryColor,
