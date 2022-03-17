@@ -19,12 +19,7 @@ class SetUpAvatarScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<LoginCubit, LoginStates>(
-      listener: (BuildContext context, state) {
-        if (state is UserSetAvatarSuccessState) {
-          navigatePushANDRemoveRout(
-              context: context, navigateTo: LayoutScreen());
-        }
-      },
+      listener: (BuildContext context, state) {},
       builder: (BuildContext context, Object? state) {
         var cubit = LoginCubit.get(context);
 
