@@ -22,17 +22,22 @@ void main() async {
   DioHelper.init();
   await CachHelper.init();
   Bloc.observer = MyBlocObserver();
-  bool isDark;
+  bool? isDark;
   token = CachHelper.getData(key: 'token');
-  isDark = CachHelper.getData(key: 'isDark');
+
   print('mainValue:${isDark}');
-  // isDark == null ? isDark = false : isDark = isDark;
+  if (await CachHelper.getData(key: 'isDark') == null) {
+    isDark = false;
+  } else {
+    isDark = CachHelper.getData(key: 'isDark');
+  }
   Widget startApp;
   print(token);
 
-  if (token != null) {
+  if (await CachHelper.getData(key: 'token') != null) {
     startApp = LayoutScreen();
   } else {
+    token = '';
     startApp = LoginScreen();
   }
   runApp(MyApp(startApp, isDark));
@@ -40,7 +45,7 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   final Widget startApp;
-  bool isDark;
+  bool? isDark;
   MyApp(this.startApp, this.isDark);
   // This widget is the root of your application.
   @override
@@ -58,7 +63,7 @@ class MyApp extends StatelessWidget {
             ..getAllPodcast(token: token)
             ..getUserData(token: token)
             ..getAllCategory()
-            ..getDark(isDark),
+            ..getDark(isDark!),
         ),
       ],
       child: BlocConsumer<GeneralAppCubit, GeneralAppStates>(

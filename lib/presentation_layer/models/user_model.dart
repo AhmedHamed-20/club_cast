@@ -6,7 +6,7 @@ class GetUserModel {
   static String? email;
   static int? followers;
   static int? following;
-  static String photo = '';
+  static String? photo;
 
   static String getUserID() {
     return userid = getUserModel!['data']['data']['_id'];
@@ -28,7 +28,7 @@ class GetUserModel {
     return following = getUserModel?['data']['data']['following'];
   }
 
-  static String getUserPhoto() {
+  static String? getUserPhoto() {
     return photo = getUserModel?['data']['data']['photo'];
   }
 

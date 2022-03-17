@@ -52,13 +52,13 @@ class LayoutScreen extends StatelessWidget {
                         context: context, navigateTo: UserProfileScreen());
                   },
                   child: Center(
-                    child: GetUserModel.getUserPhoto() == ''
+                    child: GetUserModel.getUserPhoto() == null
                         ? CircularProgressIndicator(
                             strokeWidth: 1,
                           )
                         : CircleAvatar(
                             backgroundImage:
-                                NetworkImage(GetUserModel.getUserPhoto()),
+                                NetworkImage(GetUserModel.getUserPhoto()!),
                             radius: 23,
                           ),
                   ),
