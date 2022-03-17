@@ -181,25 +181,28 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   GetAllPodCastModel? podcastModel;
   void getAllPodcast({required String token}) {
     print(token);
-    DioHelper.getData(
-      url: GetAllPodcasts,
-      token: {
-        'Authorization': 'Bearer ${token}',
-      },
-    ).then(
-      (value) {
-        //  print(value.data);
-        GetAllPodCastModel.getAllPodCast =
-            Map<String, dynamic>.from(value.data);
-        emit(PodCastDataGetSuccess());
-        //  print(GetAllPodCastModel.getPodcastName(2));
-      },
-    ).catchError(
-      (onError) {
-        print(onError);
-        emit(PodCastDataGetError());
-      },
-    );
+    if (token == '') {
+    } else {
+      DioHelper.getData(
+        url: GetAllPodcasts,
+        token: {
+          'Authorization': 'Bearer ${token}',
+        },
+      ).then(
+        (value) {
+          //  print(value.data);
+          GetAllPodCastModel.getAllPodCast =
+              Map<String, dynamic>.from(value.data);
+          emit(PodCastDataGetSuccess());
+          //  print(GetAllPodCastModel.getPodcastName(2));
+        },
+      ).catchError(
+        (onError) {
+          print(onError);
+          emit(PodCastDataGetError());
+        },
+      );
+    }
   }
 
   void addLike({required String podCastId, required String token}) {
@@ -282,22 +285,25 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   void getUserData({
     required String token,
   }) {
-    isLoadProfile = true;
-    emit(UserDataLoadingState());
-    DioHelper.getData(
-      url: profile,
-      token: {
-        'Authorization': 'Bearer ${token}',
-      },
-    ).then((value) {
-      GetUserModel.getUserModel = Map<String, dynamic>.from(value.data);
-      print(GetUserModel.getUserName());
-      isLoadProfile = false;
-      emit(UserDataSuccessState());
-    }).catchError((error) {
-      print(error);
-      emit(UserDataErrorState(error.toString()));
-    });
+    if (token == '') {
+    } else {
+      isLoadProfile = true;
+      emit(UserDataLoadingState());
+      DioHelper.getData(
+        url: profile,
+        token: {
+          'Authorization': 'Bearer ${token}',
+        },
+      ).then((value) {
+        GetUserModel.getUserModel = Map<String, dynamic>.from(value.data);
+        print(GetUserModel.getUserName());
+        isLoadProfile = false;
+        emit(UserDataSuccessState());
+      }).catchError((error) {
+        print(error);
+        emit(UserDataErrorState(error.toString()));
+      });
+    }
   }
 
   void updateUserData({
