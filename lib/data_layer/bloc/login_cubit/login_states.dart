@@ -39,3 +39,13 @@ class UserSetAvatarLoadingState extends LoginStates {}
 class UserSetAvatarSuccessState extends LoginStates {}
 
 class UserSetAvatarErrorState extends LoginStates {}
+
+class UserDataLoadingState extends LoginStates {}
+
+class UserDataSuccessState extends LoginStates {}
+
+class UserDataErrorState extends LoginStates {}
+
+class PodCastDataGetSuccess extends LoginStates {}
+
+class PodCastDataGetError extends LoginStates {}

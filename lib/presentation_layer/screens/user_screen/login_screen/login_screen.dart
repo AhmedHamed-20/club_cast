@@ -27,10 +27,8 @@ class LoginScreen extends StatelessWidget {
           // print(state.userLoginModel.token);
 
           CachHelper.setData(key: 'token', value: UserLoginModel.token)
-              .then((value) {
-            navigatePushANDRemoveRout(
-                context: context, navigateTo: LayoutScreen());
-          }).catchError((error) {
+              .then((value) {})
+              .catchError((error) {
             print('error when save token:${error.toString()}');
           });
         }
@@ -107,9 +105,9 @@ class LoginScreen extends StatelessWidget {
                               print(emailController.text);
                               print(passwordController.text);
                               cubit.userLogin(
-                                email: emailController.text,
-                                password: passwordController.text,
-                              );
+                                  email: emailController.text,
+                                  password: passwordController.text,
+                                  context: context);
                             }
                           },
                           validator: (value) {
@@ -149,6 +147,7 @@ class LoginScreen extends StatelessWidget {
                               cubit.userLogin(
                                 email: emailController.text,
                                 password: passwordController.text,
+                                context: context,
                               );
                             }
                           },

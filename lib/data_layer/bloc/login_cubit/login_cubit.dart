@@ -5,7 +5,10 @@ import 'package:club_cast/data_layer/cash/cash.dart';
 import 'package:club_cast/data_layer/dio/dio_setup.dart';
 import 'package:club_cast/presentation_layer/components/constant/constant.dart';
 import 'package:club_cast/presentation_layer/layout/layout_screen.dart';
+import 'package:club_cast/presentation_layer/models/get_all_podcst.dart';
 import 'package:club_cast/presentation_layer/models/login_model.dart';
+import 'package:club_cast/presentation_layer/models/user_model.dart';
+import 'package:club_cast/presentation_layer/screens/setup_avater_screen.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -22,6 +25,7 @@ class LoginCubit extends Cubit<LoginStates> {
 
   bool loginObSecure = true;
   bool signUpObSecure = true;
+  bool isLoadProfile = false;
   Widget suffix = const Icon(
     Icons.visibility_off,
   );
@@ -71,7 +75,7 @@ class LoginCubit extends Cubit<LoginStates> {
     }
   }
 
-  void setAvatar() async {
+  void setAvatar(BuildContext context) async {
     emit(UserSetAvatarLoadingState());
     print('======================');
 
@@ -83,10 +87,16 @@ class LoginCubit extends Cubit<LoginStates> {
             token: CachHelper.getData(key: 'token'))
         .then((value) {
       print(value.data);
-      showToast(
-          message: 'update avatar is succeeded',
-          toastState: ToastState.SUCCESS);
-      emit(UserSetAvatarSuccessState());
+      getUserData(token: token).then((value) {
+        getAllPodcast(token: token).then((value) {
+          navigatePushANDRemoveRout(
+              context: context, navigateTo: LayoutScreen());
+          showToast(
+              message: 'update avatar is succeeded',
+              toastState: ToastState.SUCCESS);
+          emit(UserSetAvatarSuccessState());
+        });
+      });
     }).catchError((error) {
       print("error when set user avatar :${error.toString()}");
       emit(UserSetAvatarErrorState());
@@ -98,6 +108,7 @@ class LoginCubit extends Cubit<LoginStates> {
   void userLogin({
     required String email,
     required String password,
+    required BuildContext context,
   }) {
     emit(UserLoginLoadingState());
 
@@ -106,6 +117,9 @@ class LoginCubit extends Cubit<LoginStates> {
       'password': password,
     }).then((value) {
       userLoginModel = UserLoginModel.fromJson(value.data);
+      token = UserLoginModel.token;
+
+      print(token);
       emit(UserLoginSuccessState(userLoginModel!));
     }).onError((DioError error, stackTrace) {
       if (error.response!.statusCode == 401) {
@@ -119,6 +133,56 @@ class LoginCubit extends Cubit<LoginStates> {
         emit(UserLoginErrorState());
       }
     });
+  }
+
+  Future getUserData({
+    required String token,
+  }) async {
+    if (token == '') {
+    } else {
+      isLoadProfile = true;
+      emit(UserDataLoadingState());
+      return await DioHelper.getData(
+        url: profile,
+        token: {
+          'Authorization': 'Bearer ${token}',
+        },
+      ).then((value) {
+        GetUserModel.getUserModel = Map<String, dynamic>.from(value.data);
+        print(GetUserModel.getUserName());
+        isLoadProfile = false;
+        emit(UserDataSuccessState());
+      }).catchError((error) {
+        print(error);
+        emit(UserDataErrorState());
+      });
+    }
+  }
+
+  Future getAllPodcast({required String token}) async {
+    print(token);
+    if (token == '') {
+    } else {
+      return await DioHelper.getData(
+        url: GetAllPodcasts,
+        token: {
+          'Authorization': 'Bearer ${token}',
+        },
+      ).then(
+        (value) {
+          //  print(value.data);
+          GetAllPodCastModel.getAllPodCast =
+              Map<String, dynamic>.from(value.data);
+          emit(PodCastDataGetSuccess());
+          //  print(GetAllPodCastModel.getPodcastName(2));
+        },
+      ).catchError(
+        (onError) {
+          print(onError);
+          emit(PodCastDataGetError());
+        },
+      );
+    }
   }
 
   UserLoginModel? userSignUpModel;
@@ -145,7 +209,13 @@ class LoginCubit extends Cubit<LoginStates> {
       print(value.data);
 
       userLoginModel = UserLoginModel.fromJson(value.data);
-
+      token = UserLoginModel.token;
+      getUserData(token: token).then((value) {
+        getAllPodcast(token: token).then((value) {
+          navigatePushANDRemoveRout(
+              context: context, navigateTo: SetUpAvatarScreen());
+        });
+      });
       emit(UserSignUpSuccessState(userLoginModel!));
     }).onError((DioError error, f) {
       if (error.response!.statusCode == 400) {

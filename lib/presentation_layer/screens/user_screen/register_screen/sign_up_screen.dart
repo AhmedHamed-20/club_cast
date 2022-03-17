@@ -24,10 +24,8 @@ class RegisterScreen extends StatelessWidget {
         listener: (context, state) {
           if (state is UserSignUpSuccessState) {
             CachHelper.setData(key: 'token', value: UserLoginModel.token)
-                .then((value) {
-              navigatePushANDRemoveRout(
-                  context: context, navigateTo: SetUpAvatarScreen());
-            }).catchError((error) {
+                .then((value) {})
+                .catchError((error) {
               print('error when save token:${error.toString()}');
             });
           }

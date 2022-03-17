@@ -30,6 +30,8 @@ class SetUpAvatarScreen extends StatelessWidget {
 
         return Scaffold(
           appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
             leading: IconButton(
               onPressed: () {
                 Navigator.pop(context);
@@ -107,7 +109,7 @@ class SetUpAvatarScreen extends StatelessWidget {
                     builder: (context) => defaultButton(
                       context: context,
                       onPressed: () {
-                        cubit.setAvatar();
+                        cubit.setAvatar(context);
                       },
                       text: 'Let\'s go',
                     ),
