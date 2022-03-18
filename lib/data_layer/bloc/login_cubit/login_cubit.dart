@@ -118,9 +118,16 @@ class LoginCubit extends Cubit<LoginStates> {
     }).then((value) {
       userLoginModel = UserLoginModel.fromJson(value.data);
       token = UserLoginModel.token;
-
-      print(token);
-      emit(UserLoginSuccessState(userLoginModel!));
+      getUserData(token: token).then(
+        (value) {
+          getAllPodcast(token: token).then((value) {
+            navigatePushANDRemoveRout(
+                context: context, navigateTo: LayoutScreen());
+            print(token);
+            emit(UserLoginSuccessState(userLoginModel!));
+          });
+        },
+      );
     }).onError((DioError error, stackTrace) {
       if (error.response!.statusCode == 401) {
         showToast(

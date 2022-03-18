@@ -12,6 +12,7 @@ Widget podACastItem(
   Widget? playingWidget,
   String? text,
   Widget? downloadButton,
+  Widget? removePodCast,
 }) {
   ////////////////////////////////////////////////////
   String token = CachHelper.getData(key: 'token');
@@ -34,6 +35,9 @@ Widget podACastItem(
     height: MediaQuery.of(context).size.height * 0.25,
     width: double.infinity,
     child: Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+      ),
       color: Theme.of(context).backgroundColor,
       elevation: 4,
       child: Padding(
@@ -113,17 +117,29 @@ Widget podACastItem(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(podCastName,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.bodyText2),
-                SizedBox(
-                  height: MediaQuery.of(context).size.width * 0.02,
+                Row(
+                  children: [
+                    Column(
+                      children: [
+                        Text(podCastName,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context).textTheme.bodyText2),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.width * 0.02,
+                        ),
+                        Text(username,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context).textTheme.bodyText1),
+                      ],
+                    ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.32,
+                    ),
+                    removePodCast!,
+                  ],
                 ),
-                Text(username,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.bodyText1),
                 Row(
                   children: [
                     SizedBox(
