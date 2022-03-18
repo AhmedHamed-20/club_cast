@@ -7,8 +7,13 @@ class GetAllPodCastModel {
   static String? name;
   static String? category;
   static bool? isLiked;
+  static int? podCastCount;
   static List getPodCastAudio(int index) {
     return audio = [getAllPodCast!['data'][index]['audio']];
+  }
+
+  static int? getPodCastcount() {
+    return podCastCount = getAllPodCast?['docsCount'];
   }
 
   static int getPodcastLikes(int index) {

@@ -7,12 +7,17 @@ class GetMyPodCastModel {
   static String? name;
   static String? category;
   static bool? isLiked;
+  static int? podCastCount;
   static List getPodCastAudio(int index) {
     return audio = [getMyPodCast!['data'][index]['audio']];
   }
 
   static int getPodcastLikes(int index) {
     return likes = getMyPodCast!['data'][index]['likes'];
+  }
+
+  static int? getPodCastcount() {
+    return podCastCount = getMyPodCast!['docsCount'];
   }
 
   static String getPodcastID(int index) {

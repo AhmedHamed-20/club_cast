@@ -3,6 +3,7 @@ import 'package:audio_wave/audio_wave.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
 import 'package:club_cast/presentation_layer/components/constant/constant.dart';
+import 'package:club_cast/presentation_layer/models/getMyFollowingPodcast.dart';
 import 'package:club_cast/presentation_layer/models/get_all_podcst.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,7 +15,8 @@ class ActivePodCastScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var cubit = GeneralAppCubit?.get(context);
-    double time = GetAllPodCastModel.getPodCastAudio(index!)[0]['duration'];
+    double time =
+        GetMyFollowingPodCastsModel.getPodCastAudio(index!)[0]['duration'];
     String convertedTime =
         '${((time % (24 * 3600)) / 3600).round().toString()}:${((time % (24 * 3600 * 3600)) / 60).round().toString()}:${(time % 60).round().toString()}';
     return BlocConsumer<GeneralAppCubit, GeneralAppStates>(
@@ -23,7 +25,7 @@ class ActivePodCastScreen extends StatelessWidget {
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           appBar: AppBar(
             title: Text(
-              GetAllPodCastModel.getPodcastName(index!),
+              GetMyFollowingPodCastsModel.getPodcastName(index!),
               style: Theme.of(context).textTheme.bodyText2,
             ),
             backgroundColor: Colors.transparent,
@@ -46,17 +48,16 @@ class ActivePodCastScreen extends StatelessWidget {
                   Center(
                     child: CircleAvatar(
                       radius: 80,
-                      backgroundImage: NetworkImage(
-                          GetAllPodCastModel.getPodcastUserPublishInform(
-                              index!)[0]['photo']),
+                      backgroundImage: NetworkImage(GetMyFollowingPodCastsModel
+                          .getPodcastUserPublishInform(index!)[0]['photo']),
                     ),
                   ),
                   SizedBox(
                     height: 10,
                   ),
                   Text(
-                    GetAllPodCastModel.getPodcastUserPublishInform(index!)[0]
-                        ['name'],
+                    GetMyFollowingPodCastsModel.getPodcastUserPublishInform(
+                        index!)[0]['name'],
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
                 ],
@@ -69,16 +70,17 @@ class ActivePodCastScreen extends StatelessWidget {
                   Slider(
                     activeColor: Theme.of(context).primaryColor,
                     inactiveColor: Theme.of(context).backgroundColor,
-                    value: GetAllPodCastModel.getPodcastID(index!) ==
+                    value: GetMyFollowingPodCastsModel.getPodcastID(index!) ==
                             cubit.activePodCastId
                         ? cubit.currentPostionDurationInsec
                         : 0,
                     onChanged: (newval) {
                       cubit.pressedPause &&
-                              GetAllPodCastModel.getPodcastID(index!) ==
+                              GetMyFollowingPodCastsModel.getPodcastID(
+                                      index!) ==
                                   cubit.activePodCastId
                           ? SizedBox()
-                          : GetAllPodCastModel.getPodcastID(index!) ==
+                          : GetMyFollowingPodCastsModel.getPodcastID(index!) ==
                                   cubit.activePodCastId
                               ? cubit.assetsAudioPlayer.seek(
                                   Duration(
@@ -88,17 +90,18 @@ class ActivePodCastScreen extends StatelessWidget {
                               : SizedBox();
                     },
                     min: 0,
-                    max: GetAllPodCastModel.getPodCastAudio(index!)[0]
+                    max: GetMyFollowingPodCastsModel.getPodCastAudio(index!)[0]
                             ['duration']
                         .toDouble(),
                   ),
                   Text(
                     cubit.isPlaying &&
-                            GetAllPodCastModel.getPodcastID(index!) ==
+                            GetMyFollowingPodCastsModel.getPodcastID(index!) ==
                                 cubit.activePodCastId
                         ? cubit.currentOlayingDurathion!
                         : cubit.pressedPause &&
-                                GetAllPodCastModel.getPodcastID(index!) ==
+                                GetMyFollowingPodCastsModel.getPodcastID(
+                                        index!) ==
                                     cubit.activePodCastId
                             ? cubit.currentOlayingDurathion!
                             : convertedTime,
@@ -129,7 +132,8 @@ class ActivePodCastScreen extends StatelessWidget {
                         child: Column(
                           children: [
                             Text(
-                              GetAllPodCastModel.getPodcastName(index!),
+                              GetMyFollowingPodCastsModel.getPodcastName(
+                                  index!),
                               style: Theme.of(context).textTheme.bodyText2,
                             ),
                             SizedBox(
@@ -144,8 +148,8 @@ class ActivePodCastScreen extends StatelessWidget {
                                   ),
                                   onPressed: () {
                                     cubit.isPlaying &&
-                                            GetAllPodCastModel.getPodcastID(
-                                                    index!) ==
+                                            GetMyFollowingPodCastsModel
+                                                    .getPodcastID(index!) ==
                                                 cubit.activePodCastId
                                         ? cubit.assetsAudioPlayer
                                             .seekBy(Duration(seconds: -10))
@@ -168,14 +172,14 @@ class ActivePodCastScreen extends StatelessWidget {
                                     ),
                                     onPressed: () {
                                       String podCastUrl =
-                                          GetAllPodCastModel.getPodCastAudio(
-                                              index!)[0]['url'];
+                                          GetMyFollowingPodCastsModel
+                                                  .getPodCastAudio(index!)[0]
+                                              ['url'];
                                       cubit.isPlaying &&
-                                              GetAllPodCastModel
+                                              GetMyFollowingPodCastsModel
                                                       .getPodcastID(index!) ==
                                                   cubit.activePodCastId
-                                          ? cubit
-                                              .assetsAudioPlayer
+                                          ? cubit.assetsAudioPlayer
                                               .pause()
                                               .then((value) {
                                               cubit.isPlaying = false;
@@ -187,18 +191,18 @@ class ActivePodCastScreen extends StatelessWidget {
                                             })
                                           : cubit.playingPodcast(
                                               podCastUrl,
-                                              GetAllPodCastModel.getPodcastName(
-                                                  index!),
-                                              GetAllPodCastModel
+                                              GetMyFollowingPodCastsModel
+                                                  .getPodcastName(index!),
+                                              GetMyFollowingPodCastsModel
                                                   .getPodcastUserPublishInform(
                                                       index!)[0]['photo'],
-                                              GetAllPodCastModel.getPodcastID(
-                                                  index!));
+                                              GetMyFollowingPodCastsModel
+                                                  .getPodcastID(index!));
                                     },
                                     child: Icon(
                                       cubit.isPlaying &&
-                                              GetAllPodCastModel.getPodcastID(
-                                                      index!) ==
+                                              GetMyFollowingPodCastsModel
+                                                      .getPodcastID(index!) ==
                                                   cubit.activePodCastId
                                           ? Icons.pause
                                           : Icons.play_arrow,
@@ -212,8 +216,8 @@ class ActivePodCastScreen extends StatelessWidget {
                                   ),
                                   onPressed: () {
                                     cubit.isPlaying &&
-                                            GetAllPodCastModel.getPodcastID(
-                                                    index!) ==
+                                            GetMyFollowingPodCastsModel
+                                                    .getPodcastID(index!) ==
                                                 cubit.activePodCastId
                                         ? cubit.assetsAudioPlayer
                                             .seekBy(Duration(seconds: 10))

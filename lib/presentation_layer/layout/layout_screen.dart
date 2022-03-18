@@ -54,11 +54,10 @@ class LayoutScreen extends StatelessWidget {
                 ),
                 InkWell(
                   onTap: () {
-                    cubit.getMyPodCast(token).then((value) {
-                      cubit.getUserData(token: token);
-                      navigatePushTo(
-                          context: context, navigateTo: UserProfileScreen());
-                    });
+                    cubit.getMyPodCast(token);
+                    cubit.getUserData(token: token);
+                    navigatePushTo(
+                        context: context, navigateTo: UserProfileScreen());
                   },
                   child: Center(
                     child: GetUserModel.getUserPhoto() == null

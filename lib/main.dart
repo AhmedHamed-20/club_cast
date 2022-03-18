@@ -60,7 +60,7 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => GeneralAppCubit()
-            ..getAllPodcast(token: token)
+            ..getMyFollowingPodcast(token)
             ..getUserData(token: token)
             ..getAllCategory()
             ..getDark(isDark!),

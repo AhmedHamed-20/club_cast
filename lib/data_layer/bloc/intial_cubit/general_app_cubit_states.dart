@@ -108,3 +108,11 @@ class SearchUserLoadingState extends GeneralAppStates {}
 class SearchUserSuccessState extends GeneralAppStates {}
 
 class SearchUserErrorState extends GeneralAppStates {}
+
+class GetMyFollowingSuccessState extends GeneralAppStates {}
+
+class GetMyFollowinErrorState extends GeneralAppStates {}
+
+class PodCastDeletedSuccess extends GeneralAppStates {}
+
+class PodCastDeletedError extends GeneralAppStates {}

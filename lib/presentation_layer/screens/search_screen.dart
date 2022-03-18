@@ -73,6 +73,12 @@ class SearchScreen extends StatelessWidget {
                         itemBuilder: (context, index) {
                           return InkWell(
                             onTap: () {
+                              cubit.getUserPodcast(
+                                token,
+                                cubit.search!['data'][index]['_id'],
+                              );
+
+                              print(cubit.search!['data'][index]['_id']);
                               cubit.getUserById(
                                   profileId: cubit.search!['data'][index]['_id']
                                       .toString());

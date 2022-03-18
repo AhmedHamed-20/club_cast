@@ -14,10 +14,12 @@ import 'package:club_cast/presentation_layer/models/user_model.dart';
 import 'package:club_cast/presentation_layer/screens/podcastLikesScreen.dart';
 import 'package:club_cast/presentation_layer/screens/podcast_screen.dart';
 import 'package:club_cast/presentation_layer/screens/public_rooms_screen.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart' as path;
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../presentation_layer/models/getMyFollowingPodcast.dart';
 import 'general_app_cubit_states.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 
@@ -243,10 +245,43 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     });
   }
 
-  void removePodCast(String podCastId, String token) {
-    DioHelper.deleteData(
+  Future getMyFollowingPodcast(String token) {
+    return DioHelper.getData(
+            token: {'Authorization': 'Bearer ${token}'},
+            url: getMyFollowingPodcasts)
+        .then((value) {
+      GetMyFollowingPodCastsModel.getMyFollowingPodcasts =
+          Map<String, dynamic>.from(value.data);
+      print('data: ${GetMyFollowingPodCastsModel.getMyFollowingPodcasts}');
+      emit(GetMyFollowingSuccessState());
+    }).catchError((onError) {
+      emit(GetMyFollowinErrorState());
+      print(onError);
+    });
+  }
+
+  Future getUserPodcast(String token, String userId) async {
+    return await DioHelper.getData(
+        url: getuserPodCast + '${userId}',
+        token: {'Authorization': 'Bearer ${token}'}).then((value) {
+      GetAllPodCastModel.getAllPodCast = Map<String, dynamic>.from(value.data);
+      emit(PodCastDataGetSuccess());
+    }).catchError((error) {
+      emit(PodCastDataGetError());
+      print(error);
+    });
+  }
+
+  Future removePodCast(String podCastId, String token) async {
+    return await DioHelper.deleteData(
         url: removePodCastById + '${podCastId}',
-        token: {'Authorization': 'Bearer ${token}'}).then((value) {});
+        token: {'Authorization': 'Bearer ${token}'}).then((value) {
+      getMyPodCast(token);
+      emit(PodCastDeletedSuccess());
+    }).catchError((onError) {
+      print(onError);
+      emit(PodCastDeletedError());
+    });
   }
 
   Future<List<Directory>?> getDownloadPath() {
@@ -476,19 +511,17 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     isFollowing = !isFollowing;
     emit(ChangeFollowingState());
   }
+
   Map<String, dynamic>? search;
-  void userSearch(
-      {
-        required String token,
-        required String value,
-      }) {
+  void userSearch({
+    required String token,
+    required String value,
+  }) {
     emit(SearchUserLoadingState());
     DioHelper.getData(
       url: searchUser + value,
-      token:
-      {'Authorization': 'Bearer $token'},
-    )
-        .then((value) {
+      token: {'Authorization': 'Bearer $token'},
+    ).then((value) {
       emit(SearchUserSuccessState());
       search = Map<String, dynamic>.from(value.data);
     }).catchError((onError) {

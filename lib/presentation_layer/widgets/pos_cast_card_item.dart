@@ -3,33 +3,29 @@ import 'package:club_cast/data_layer/cash/cash.dart';
 import 'package:club_cast/presentation_layer/models/get_all_podcst.dart';
 import 'package:flutter/material.dart';
 
-Widget podACastItem(
-  BuildContext context, {
-  String? roomName,
-  String? speaker,
-  String? roomTime,
-  int? index,
-  Widget? playingWidget,
-  String? text,
-  Widget? downloadButton,
-  Widget? removePodCast,
-}) {
+Widget podACastItem(BuildContext context,
+    {String? roomName,
+    String? speaker,
+    String? roomTime,
+    int? index,
+    Widget? playingWidget,
+    String? text,
+    Widget? downloadButton,
+    Widget? removePodCast,
+    Widget? podCastLikes,
+    Widget? likeWidget,
+    double? gettime,
+    String? photourl,
+    String? userName,
+    String? podcastName}) {
   ////////////////////////////////////////////////////
   String token = CachHelper.getData(key: 'token');
-  String photoUrl =
-      GetAllPodCastModel.getPodcastUserPublishInform(index!)[0]['photo'];
+  String photoUrl = photourl!;
 
-  String username =
-      GetAllPodCastModel.getPodcastUserPublishInform(index)[0]['name'];
-  String podCastName = GetAllPodCastModel.getPodcastName(index);
-  int likes = GetAllPodCastModel.getPodcastLikes(index);
-  bool likeState = GetAllPodCastModel.getPodcastlikeState(index);
-  String podCastId = GetAllPodCastModel.getPodcastID(index);
-  double time = GetAllPodCastModel.getPodCastAudio(index)[0]['duration'];
+  double time = gettime!;
   String convertedTime =
       '${((time % (24 * 3600)) / 3600).round().toString()}:${((time % (24 * 3600 * 3600)) / 60).round().toString()}:${(time % 60).round().toString()}';
   var cubit = GeneralAppCubit?.get(context);
-  String currentId = GetAllPodCastModel.getPodcastID(index);
   ////////////////////////////////////////////////////////
   return SizedBox(
     height: MediaQuery.of(context).size.height * 0.25,
@@ -60,52 +56,8 @@ Widget podACastItem(
                 Stack(
                   alignment: AlignmentDirectional.bottomStart,
                   children: [
-                    Padding(
-                      padding: const EdgeInsetsDirectional.only(end: 15),
-                      child: CircleAvatar(
-                        radius: 15,
-                        backgroundColor: Theme.of(context).backgroundColor,
-                        child: InkWell(
-                          onTap: () {
-                            cubit.getPodCastLikes(
-                                context: context,
-                                token: token,
-                                podCastId: podCastId);
-                          },
-                          child: Text(
-                            likes.toString(),
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyText1!
-                                .copyWith(fontSize: 15),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsetsDirectional.only(
-                          start: 15.0, bottom: 15),
-                      child: CircleAvatar(
-                        radius: 20,
-                        backgroundColor: Theme.of(context).backgroundColor,
-                        child: IconButton(
-                            splashRadius: 25,
-                            padding: EdgeInsets.zero,
-                            onPressed: () {
-                              likeState
-                                  ? cubit.removeLike(
-                                      podCastId: podCastId, token: token)
-                                  : cubit.addLike(
-                                      podCastId: podCastId, token: token);
-                            },
-                            icon: Icon(
-                              likeState
-                                  ? Icons.favorite
-                                  : Icons.favorite_border,
-                              color: Colors.red,
-                            )),
-                      ),
-                    ),
+                    podCastLikes!,
+                    likeWidget!,
                   ],
                 ),
               ],
@@ -121,14 +73,14 @@ Widget podACastItem(
                   children: [
                     Column(
                       children: [
-                        Text(podCastName,
+                        Text(podcastName!,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: Theme.of(context).textTheme.bodyText2),
                         SizedBox(
                           height: MediaQuery.of(context).size.width * 0.02,
                         ),
-                        Text(username,
+                        Text(userName!,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: Theme.of(context).textTheme.bodyText1),

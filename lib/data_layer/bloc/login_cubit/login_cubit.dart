@@ -16,6 +16,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../presentation_layer/components/component/component.dart';
+import '../../../presentation_layer/models/getMyFollowingPodcast.dart';
 import 'login_states.dart';
 
 class LoginCubit extends Cubit<LoginStates> {
@@ -88,7 +89,7 @@ class LoginCubit extends Cubit<LoginStates> {
         .then((value) {
       print(value.data);
       getUserData(token: token).then((value) {
-        getAllPodcast(token: token).then((value) {
+        getMyFollowingPodcast(token).then((value) {
           navigatePushANDRemoveRout(
               context: context, navigateTo: LayoutScreen());
           showToast(
@@ -120,7 +121,7 @@ class LoginCubit extends Cubit<LoginStates> {
       token = UserLoginModel.token;
       getUserData(token: token).then(
         (value) {
-          getAllPodcast(token: token).then((value) {
+          getMyFollowingPodcast(token).then((value) {
             navigatePushANDRemoveRout(
                 context: context, navigateTo: LayoutScreen());
             print(token);
@@ -166,30 +167,19 @@ class LoginCubit extends Cubit<LoginStates> {
     }
   }
 
-  Future getAllPodcast({required String token}) async {
-    print(token);
-    if (token == '') {
-    } else {
-      return await DioHelper.getData(
-        url: GetAllPodcasts,
-        token: {
-          'Authorization': 'Bearer ${token}',
-        },
-      ).then(
-        (value) {
-          //  print(value.data);
-          GetAllPodCastModel.getAllPodCast =
-              Map<String, dynamic>.from(value.data);
-          emit(PodCastDataGetSuccess());
-          //  print(GetAllPodCastModel.getPodcastName(2));
-        },
-      ).catchError(
-        (onError) {
-          print(onError);
-          emit(PodCastDataGetError());
-        },
-      );
-    }
+  Future getMyFollowingPodcast(String token) {
+    return DioHelper.getData(
+            token: {'Authorization': 'Bearer ${token}'},
+            url: getMyFollowingPodcasts)
+        .then((value) {
+      GetMyFollowingPodCastsModel.getMyFollowingPodcasts =
+          Map<String, dynamic>.from(value.data);
+      print('data: ${GetMyFollowingPodCastsModel.getMyFollowingPodcasts}');
+      emit(PodCastDataGetSuccess());
+    }).catchError((onError) {
+      emit(PodCastDataGetError());
+      print(onError);
+    });
   }
 
   UserLoginModel? userSignUpModel;
@@ -218,7 +208,7 @@ class LoginCubit extends Cubit<LoginStates> {
       userLoginModel = UserLoginModel.fromJson(value.data);
       token = UserLoginModel.token;
       getUserData(token: token).then((value) {
-        getAllPodcast(token: token).then((value) {
+        getMyFollowingPodcast(token).then((value) {
           navigatePushANDRemoveRout(
               context: context, navigateTo: SetUpAvatarScreen());
         });
