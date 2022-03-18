@@ -16,3 +16,4 @@ const String GetAllPodcasts = baseUrl + 'v1/podcasts';
 const String sendLike = baseUrl + 'v1/podcasts/likes/';
 const String getPodcastLikesUsers = baseUrl + 'v1/podcasts/likes/';
 const String userById = 'v1/users/';
+const String searchUser = 'v1/users/search?s=';
