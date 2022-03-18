@@ -54,6 +54,7 @@ class PodCastScreen extends StatelessWidget {
                           size: 35,
                         ),
                 ),
+                removePodCast: SizedBox(),
                 playingWidget: IconButton(
                   onPressed: () {
                     String podCastUrl =

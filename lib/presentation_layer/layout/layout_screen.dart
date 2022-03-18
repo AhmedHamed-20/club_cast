@@ -27,7 +27,7 @@ class LayoutScreen extends StatelessWidget {
               backgroundColor: Colors.transparent,
               elevation: 0,
               title: Text(
-                'Rooms',
+                cubit.bottomNavIndex == 0 ? 'Rooms' : 'Podcasts',
                 style: Theme.of(context)
                     .textTheme
                     .bodyText1

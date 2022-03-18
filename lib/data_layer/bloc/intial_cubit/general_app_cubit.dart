@@ -229,6 +229,21 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     });
   }
 
+  getMyPodCast(String token) {
+    DioHelper.getData(
+            url: getMyPodCasts, token: {'Authorization': 'Bearer ${token}'})
+        .then((value) {})
+        .catchError((onError) {
+      print(onError);
+    });
+  }
+
+  void removePodCast(String podCastId, String token) {
+    DioHelper.deleteData(
+        url: removePodCastById + '${podCastId}',
+        token: {'Authorization': 'Bearer ${token}'}).then((value) {});
+  }
+
   Future<List<Directory>?> getDownloadPath() {
     return path.getExternalStorageDirectories(
         type: path.StorageDirectory.documents);
