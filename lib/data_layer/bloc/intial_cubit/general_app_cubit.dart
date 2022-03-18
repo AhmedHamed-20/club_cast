@@ -471,4 +471,24 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     isFollowing = !isFollowing;
     emit(ChangeFollowingState());
   }
+  Map<String, dynamic>? search;
+  void userSearch(
+      {
+        required String token,
+        required String value,
+      }) {
+    emit(SearchUserLoadingState());
+    DioHelper.getData(
+      url: searchUser + value,
+      token:
+      {'Authorization': 'Bearer $token'},
+    )
+        .then((value) {
+      emit(SearchUserSuccessState());
+      search = Map<String, dynamic>.from(value.data);
+    }).catchError((onError) {
+      emit(SearchUserErrorState());
+      print(onError);
+    });
+  }
 }

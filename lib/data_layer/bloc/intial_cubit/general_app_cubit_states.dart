@@ -98,3 +98,9 @@ class GetAllCategoryLoadingState extends GeneralAppStates {}
 class GetAllCategorySuccessState extends GeneralAppStates {}
 
 class GetAllCategoryErrorState extends GeneralAppStates {}
+
+class SearchUserLoadingState extends GeneralAppStates {}
+
+class SearchUserSuccessState extends GeneralAppStates {}
+
+class SearchUserErrorState extends GeneralAppStates {}

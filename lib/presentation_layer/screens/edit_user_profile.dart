@@ -1,4 +1,5 @@
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
+import 'package:club_cast/data_layer/bloc/login_cubit/login_cubit.dart';
 import 'package:club_cast/data_layer/cash/cash.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
 import 'package:club_cast/presentation_layer/models/user_model.dart';
@@ -24,6 +25,7 @@ class EditUserProfileScreen extends StatelessWidget {
   IconData suffix1 = Icons.visibility_outlined;
   bool isPassword2 = true;
   IconData suffix2 = Icons.visibility_outlined;
+  bool isUpdatePhoto = false;
 
   var token = CachHelper.getData(key: 'token');
   @override
@@ -34,7 +36,7 @@ class EditUserProfileScreen extends StatelessWidget {
       listener: (context, state) {},
       builder: (context, state) {
         String token = CachHelper.getData(key: 'token');
-
+        var cubit = LoginCubit.get(context);
         return Scaffold(
           appBar: AppBar(
             elevation: 0.0,
@@ -61,11 +63,46 @@ class EditUserProfileScreen extends StatelessWidget {
                 physics: BouncingScrollPhysics(),
                 child: Column(
                   children: [
-                    Center(
-                      child: CircleAvatar(
-                        backgroundImage: NetworkImage('${GetUserModel.getUserPhoto()}'),
-                        radius: 75.0,
-                      ),
+                    Stack(
+                      alignment: AlignmentDirectional.bottomEnd,
+                      children:
+                      [
+                        Center(
+                          child: CircleAvatar(
+                            backgroundImage:
+                            NetworkImage('${GetUserModel.getUserPhoto()}'),
+                            radius: 75.0,
+                          ),
+                        ),
+                        // ${GetUserModel.getUserPhoto()}
+                        GestureDetector(
+                          onTap: ()
+                          {
+                            cubit.pickImage();
+                            isUpdatePhoto=true;
+                          },
+                          child: Padding(
+                            padding: const EdgeInsetsDirectional.only(
+                              end: 110,
+                            ),
+                            child: Container(
+                              width: 37,
+                              height: 37,
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).primaryColor,
+                                borderRadius:
+                                BorderRadiusDirectional.circular(200),
+                              ),
+                              child: const Icon(
+                                Icons.camera_alt_outlined,
+                                color: Colors.white,
+                                size: 25,
+                              ),
+                            ),
+                          ),
+                        ),
+
+                      ],
                     ),
                     const SizedBox(
                       height: 22.0,
@@ -132,38 +169,37 @@ class EditUserProfileScreen extends StatelessWidget {
                     const SizedBox(
                       height: 20.0,
                     ),
-                    ConditionalBuilder(
-                      condition: state is! UpdateUserLoadingState,
-                      builder: (context) => Container(
-                        width: 322.0,
-                        height: 45.0,
-                        child: MaterialButton(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5.0),
-                          ),
-                          onPressed: () {
-                            if (formKey.currentState!.validate()) {
-                              GeneralAppCubit.get(context).updateUserData(
-                                name1: userNameController!.text,
-                                email1: emailController!.text,
-                                token: token,
-                              );
-                            }
-                          },
-                          child: const Text(
-                            'Confirm',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20.0,
-                            ),
-                          ),
-                          color: Theme.of(context).primaryColor,
+                    GeneralAppCubit.get(context).isLoadProfile ?CircularProgressIndicator(
+                      color: Theme.of(context).primaryColor,
+                    ):
+                    Container(
+                      width: 322.0,
+                      height: 45.0,
+                      child: MaterialButton(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5.0),
                         ),
-                      ),
-                      fallback: (context) => Center(
-                          child: CircularProgressIndicator(
+                        onPressed: ()
+                        {
+                          GeneralAppCubit.get(context).getUserData(token: token);
+                          isUpdatePhoto? cubit.setAvatar(context):
+                          formKey.currentState!.validate()?
+                          GeneralAppCubit.get(context).updateUserData(
+                            name1: userNameController!.text,
+                            email1: emailController!.text,
+                            token: token,
+                          ): null;
+                          isUpdatePhoto=false;
+                        },
+                        child: const Text(
+                          'Confirm',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20.0,
+                          ),
+                        ),
                         color: Theme.of(context).primaryColor,
-                      )),
+                      ),
                     ),
                     const SizedBox(
                       height: 20.0,
