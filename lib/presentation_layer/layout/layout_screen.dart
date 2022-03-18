@@ -1,6 +1,8 @@
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/presentation_layer/components/constant/constant.dart';
+import 'package:club_cast/data_layer/cash/cash.dart';
 import 'package:club_cast/presentation_layer/models/user_model.dart';
+import 'package:club_cast/presentation_layer/screens/search_screen.dart';
 import 'package:club_cast/presentation_layer/screens/user_profile_screen.dart';
 import 'package:club_cast/presentation_layer/widgets/modelsheetcreate_room.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +10,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
 import '../components/component/component.dart';
-import '../models/login_model.dart';
 
 class LayoutScreen extends StatelessWidget {
   LayoutScreen({Key? key}) : super(key: key);
@@ -20,6 +21,7 @@ class LayoutScreen extends StatelessWidget {
     return BlocConsumer<GeneralAppCubit, GeneralAppStates>(
         listener: (BuildContext context, state) {},
         builder: (BuildContext context, Object? state) {
+          String token = CachHelper.getData(key: 'token');
           var cubit = GeneralAppCubit.get(context);
           return Scaffold(
             floatingActionButtonLocation:
@@ -37,7 +39,10 @@ class LayoutScreen extends StatelessWidget {
               actions: [
                 IconButton(
                   splashRadius: 30,
-                  onPressed: () {},
+                  onPressed: () {
+                    navigatePushTo(
+                        context: context, navigateTo: SearchScreen());
+                  },
                   icon: Icon(
                     Icons.search,
                     size: 30,
@@ -50,6 +55,7 @@ class LayoutScreen extends StatelessWidget {
                 InkWell(
                   onTap: () {
                     cubit.getMyPodCast(token).then((value) {
+                      cubit.getUserData(token: token);
                       navigatePushTo(
                           context: context, navigateTo: UserProfileScreen());
                     });
@@ -65,7 +71,7 @@ class LayoutScreen extends StatelessWidget {
                             radius: 23,
                           ),
                   ),
-                  //userProfileImage(
+                  // userProfileImage(
                   //   size: 23,
                   //   // UserLoginModel.getUserPhoto()
                   //   image: 'assets/images/Adel.png',

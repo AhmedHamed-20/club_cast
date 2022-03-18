@@ -102,3 +102,9 @@ class GetAllCategoryErrorState extends GeneralAppStates {}
 class GetMyPodCastSuccessState extends GeneralAppStates {}
 
 class GetMyPodCastErrorState extends GeneralAppStates {}
+
+class SearchUserLoadingState extends GeneralAppStates {}
+
+class SearchUserSuccessState extends GeneralAppStates {}
+
+class SearchUserErrorState extends GeneralAppStates {}

@@ -51,12 +51,16 @@ class UserProfileScreen extends StatelessWidget {
                       const SizedBox(
                         height: 10.0,
                       ),
-                      Center(
-                        child: CircleAvatar(
-                          backgroundImage:
-                              NetworkImage('${GetUserModel.getUserPhoto()}'),
-                          radius: 75.0,
-                        ),
+                      Stack(
+                        children: [
+                          Center(
+                            child: CircleAvatar(
+                              backgroundImage: NetworkImage(
+                                  '${GetUserModel.getUserPhoto()}'),
+                              radius: 75.0,
+                            ),
+                          ),
+                        ],
                       ),
                       const SizedBox(
                         height: 10.0,

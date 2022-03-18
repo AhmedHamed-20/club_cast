@@ -1,18 +1,104 @@
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
+import 'package:club_cast/data_layer/cash/cash.dart';
+import 'package:club_cast/presentation_layer/components/component/component.dart';
+import 'package:club_cast/presentation_layer/screens/profile_detailes_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data_layer/bloc/intial_cubit/general_app_cubit.dart';
 
 class SearchScreen extends StatelessWidget {
-  const SearchScreen({Key? key}) : super(key: key);
+  SearchScreen({Key? key}) : super(key: key);
 
+  var searchController = TextEditingController();
+  String token = CachHelper.getData(key: 'token');
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<GeneralAppCubit, GeneralAppStates>(
       listener: (context, index) {},
       builder: (context, index) {
-        return Scaffold();
+        var cubit = GeneralAppCubit.get(context);
+        return Scaffold(
+          appBar: AppBar(
+            elevation: 0.0,
+            leading: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: Icon(
+                Icons.arrow_back_ios,
+                color: Theme.of(context).iconTheme.color,
+              ),
+            ),
+            backgroundColor: Colors.transparent,
+          ),
+          body: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              children: [
+                defaultTextFormField(
+                  context: context,
+                  controller: searchController,
+                  keyboardType: TextInputType.text,
+                  prefixIcon: Icon(
+                    Icons.search,
+                    color: Theme.of(context).iconTheme.color,
+                  ),
+                  labelText: "Search",
+                  labelStyle: Theme.of(context).textTheme.bodyText1,
+                  onChanged: (value) {
+                    // cubit.userSearch(token: token, value: value,);
+                  },
+                  onSubmit: (value) {
+                    cubit.userSearch(
+                      token: token,
+                      value: value,
+                    );
+                  },
+                ),
+                const SizedBox(
+                  height: 20.0,
+                ),
+                cubit.search == null
+                    ? Center(
+                        child: Text(
+                          'Waiting to search',
+                          style: Theme.of(context).textTheme.bodyText1,
+                        ),
+                      )
+                    : ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: cubit.search!['data'].length,
+                        itemBuilder: (context, index) {
+                          return InkWell(
+                            onTap: () {
+                              cubit.getUserById(
+                                  profileId: cubit.search!['data'][index]['_id']
+                                      .toString());
+                              navigatePushTo(
+                                  context: context,
+                                  navigateTo: ProfileDetailsScreen());
+                            },
+                            child: ListTile(
+                              leading: CircleAvatar(
+                                radius: 30,
+                                backgroundImage: NetworkImage(
+                                  cubit.search!['data'][index]['photo'],
+                                ),
+                              ),
+                              title: Text(
+                                cubit.search!['data'][index]['name'],
+                                style: Theme.of(context).textTheme.bodyText1,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+              ],
+            ),
+          ),
+        );
       },
     );
   }
