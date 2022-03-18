@@ -1,6 +1,7 @@
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
+import 'package:club_cast/presentation_layer/models/getMyPodCastModel.dart';
 import 'package:club_cast/presentation_layer/models/get_all_podcst.dart';
 import 'package:club_cast/presentation_layer/models/user_model.dart';
 import 'package:club_cast/presentation_layer/screens/edit_user_profile.dart';
@@ -165,8 +166,8 @@ class UserProfileScreen extends StatelessWidget {
                                 width: 20.0,
                               ),
                               ListView.builder(
-                                itemCount: GetAllPodCastModel
-                                    .getAllPodCast?['data'].length,
+                                itemCount: GetMyPodCastModel
+                                    .getMyPodCast?['data'].length,
                                 shrinkWrap: true,
                                 physics: NeverScrollableScrollPhysics(),
                                 itemBuilder: (context, index) {
@@ -174,12 +175,12 @@ class UserProfileScreen extends StatelessWidget {
                                     context,
                                     index: index,
                                     text: cubit.isPlaying &&
-                                            GetAllPodCastModel.getPodcastID(
+                                            GetMyPodCastModel.getPodcastID(
                                                     index) ==
                                                 currentId
                                         ? cubit.currentOlayingDurathion
                                         : cubit.pressedPause &&
-                                                GetAllPodCastModel.getPodcastID(
+                                                GetMyPodCastModel.getPodcastID(
                                                         index) ==
                                                     currentId
                                             ? cubit.currentOlayingDurathion
@@ -187,15 +188,15 @@ class UserProfileScreen extends StatelessWidget {
                                     downloadButton: IconButton(
                                       onPressed: () {
                                         currentId =
-                                            GetAllPodCastModel.getPodcastID(
+                                            GetMyPodCastModel.getPodcastID(
                                                 index);
                                         cubit.downloadPodCast(
                                             GetAllPodCastModel.getPodCastAudio(
                                                 index)[0]['url'],
-                                            '${GetAllPodCastModel.getPodcastName(index)}.wav');
+                                            '${GetMyPodCastModel.getPodcastName(index)}.wav');
                                       },
                                       icon: cubit.isDownloading &&
-                                              GetAllPodCastModel.getPodcastID(
+                                              GetMyPodCastModel.getPodcastID(
                                                       index) ==
                                                   currentId
                                           ? CircularProgressIndicator(
@@ -220,12 +221,12 @@ class UserProfileScreen extends StatelessWidget {
                                     playingWidget: IconButton(
                                       onPressed: () {
                                         String podCastUrl =
-                                            GetAllPodCastModel.getPodCastAudio(
+                                            GetMyPodCastModel.getPodCastAudio(
                                                 index)[0]['url'];
 
                                         cubit.isPlaying &&
-                                                GetAllPodCastModel
-                                                        .getPodcastID(index) ==
+                                                GetMyPodCastModel.getPodcastID(
+                                                        index) ==
                                                     currentId
                                             ? cubit.assetsAudioPlayer
                                                 .pause()
@@ -236,21 +237,20 @@ class UserProfileScreen extends StatelessWidget {
                                               })
                                             : cubit.playingPodcast(
                                                 podCastUrl,
-                                                GetAllPodCastModel
+                                                GetMyPodCastModel
                                                     .getPodcastName(index),
-                                                GetAllPodCastModel
+                                                GetMyPodCastModel
                                                     .getPodcastUserPublishInform(
                                                         index)[0]['photo'],
-                                                GetAllPodCastModel.getPodcastID(
+                                                GetMyPodCastModel.getPodcastID(
                                                     index));
-                                        print(
-                                            GetAllPodCastModel.getPodCastAudio(
-                                                index));
+                                        print(GetMyPodCastModel.getPodCastAudio(
+                                            index));
                                         print(currentId);
                                       },
                                       icon: Icon(
                                         cubit.isPlaying &&
-                                                GetAllPodCastModel.getPodcastID(
+                                                GetMyPodCastModel.getPodcastID(
                                                         index) ==
                                                     currentId
                                             ? Icons

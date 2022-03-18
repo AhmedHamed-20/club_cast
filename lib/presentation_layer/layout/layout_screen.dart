@@ -1,4 +1,5 @@
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
+import 'package:club_cast/presentation_layer/components/constant/constant.dart';
 import 'package:club_cast/presentation_layer/models/user_model.dart';
 import 'package:club_cast/presentation_layer/screens/user_profile_screen.dart';
 import 'package:club_cast/presentation_layer/widgets/modelsheetcreate_room.dart';
@@ -48,8 +49,10 @@ class LayoutScreen extends StatelessWidget {
                 ),
                 InkWell(
                   onTap: () {
-                    navigatePushTo(
-                        context: context, navigateTo: UserProfileScreen());
+                    cubit.getMyPodCast(token).then((value) {
+                      navigatePushTo(
+                          context: context, navigateTo: UserProfileScreen());
+                    });
                   },
                   child: Center(
                     child: GetUserModel.getUserPhoto() == null

@@ -98,3 +98,7 @@ class GetAllCategoryLoadingState extends GeneralAppStates {}
 class GetAllCategorySuccessState extends GeneralAppStates {}
 
 class GetAllCategoryErrorState extends GeneralAppStates {}
+
+class GetMyPodCastSuccessState extends GeneralAppStates {}
+
+class GetMyPodCastErrorState extends GeneralAppStates {}

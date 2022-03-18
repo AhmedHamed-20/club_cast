@@ -5,6 +5,7 @@ import 'package:club_cast/data_layer/dio/dio_setup.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
 import 'package:club_cast/presentation_layer/components/constant/constant.dart';
 import 'package:club_cast/presentation_layer/models/category_model.dart';
+import 'package:club_cast/presentation_layer/models/getMyPodCastModel.dart';
 import 'package:club_cast/presentation_layer/models/get_all_podcst.dart';
 import 'package:club_cast/presentation_layer/models/get_userId_model.dart';
 import 'package:club_cast/presentation_layer/models/login_model.dart';
@@ -229,11 +230,15 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     });
   }
 
-  getMyPodCast(String token) {
-    DioHelper.getData(
-            url: getMyPodCasts, token: {'Authorization': 'Bearer ${token}'})
-        .then((value) {})
-        .catchError((onError) {
+  Future getMyPodCast(String token) async {
+    return await DioHelper.getData(
+        url: getMyPodCasts,
+        token: {'Authorization': 'Bearer ${token}'}).then((value) {
+      GetMyPodCastModel.getMyPodCast = Map<String, dynamic>.from(value.data);
+      print(GetMyPodCastModel.getMyPodCast);
+      emit(GetMyPodCastSuccessState());
+    }).catchError((onError) {
+      emit(GetMyPodCastErrorState());
       print(onError);
     });
   }

@@ -1,5 +1,5 @@
-class GetAllPodCastModel {
-  static Map<String, dynamic>? getAllPodCast;
+class GetMyPodCastModel {
+  static Map<String, dynamic>? getMyPodCast;
   static List? audio;
   static List? creditBy;
   static int? likes;
@@ -8,30 +8,30 @@ class GetAllPodCastModel {
   static String? category;
   static bool? isLiked;
   static List getPodCastAudio(int index) {
-    return audio = [getAllPodCast!['data'][index]['audio']];
+    return audio = [getMyPodCast!['data'][index]['audio']];
   }
 
   static int getPodcastLikes(int index) {
-    return likes = getAllPodCast!['data'][index]['likes'];
+    return likes = getMyPodCast!['data'][index]['likes'];
   }
 
   static String getPodcastID(int index) {
-    return id = getAllPodCast!['data'][index]['_id'].toString();
+    return id = getMyPodCast!['data'][index]['_id'].toString();
   }
 
   static String getPodcastName(int index) {
-    return name = getAllPodCast!['data'][index]['name'];
+    return name = getMyPodCast!['data'][index]['name'];
   }
 
   static String getPodcastGategory(int index) {
-    return category = getAllPodCast!['data'][index]['category'].toString();
+    return category = getMyPodCast!['data'][index]['category'].toString();
   }
 
   static List getPodcastUserPublishInform(int index) {
-    return creditBy = [getAllPodCast!['data'][index]['createdBy']];
+    return creditBy = [getMyPodCast!['data'][index]['createdBy']];
   }
 
   static bool getPodcastlikeState(int index) {
-    return isLiked = getAllPodCast!['data'][index]['isLiked'];
+    return isLiked = getMyPodCast!['data'][index]['isLiked'];
   }
 }
