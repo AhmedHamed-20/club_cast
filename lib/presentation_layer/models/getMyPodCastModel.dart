@@ -17,7 +17,7 @@ class GetMyPodCastModel {
   }
 
   static int? getPodCastcount() {
-    return podCastCount = getMyPodCast!['docsCount'];
+    return podCastCount = getMyPodCast?['docsCount'];
   }
 
   static String getPodcastID(int index) {
