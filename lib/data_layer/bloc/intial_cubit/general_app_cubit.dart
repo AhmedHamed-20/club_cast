@@ -38,8 +38,11 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   bool previewIsplaying = false;
   File? podcastFile;
   bool isProfilePage = false;
+  bool isLoadingprofile = false;
   // bool isDark = false;
   bool isPlaying = false;
+  bool isMyfollowingScreen = false;
+  bool isMyprofileScreen = false;
   bool pressedPause = false;
   bool isDownloading = false;
   bool? isDark = false;
@@ -218,7 +221,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       required String token,
       String? userId}) async {
     return await DioHelper.postData(
-        url: sendLike + '/${podCastId}',
+        url: sendLike + '${podCastId}',
         token: {'Authorization': 'Bearer ${token}'}).then((value) {
       //   isProfilePage ? getUserPodcast(token, userId!) : const SizedBox();
       emit(PodCastLikeAddedSuccess());
@@ -233,7 +236,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       required String token,
       String? userId}) async {
     return await DioHelper.deleteData(
-        url: sendLike + '/${podCastId}',
+        url: sendLike + '${podCastId}',
         token: {'Authorization': 'Bearer ${token}'}).then((value) {
       //  isProfilePage ? getUserPodcast(token, userId!) : const SizedBox();
       emit(PodCastLikeDeleatedSuccess());
@@ -309,6 +312,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
         url: getuserPodCast + '${userId}',
         token: {'Authorization': 'Bearer ${token}'}).then((value) {
       GetAllPodCastModel.getAllPodCast = Map<String, dynamic>.from(value.data);
+      isLoadingprofile = false;
       emit(PodCastDataGetSuccess());
     }).catchError((error) {
       emit(PodCastDataGetError());
@@ -492,12 +496,12 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   }
 
   UserModelId? userId;
-  bool isLoading = false;
+
   void getUserById({
     required String profileId,
     Map<String, dynamic>? save,
   }) {
-    isLoading = true;
+    isLoadingprofile = true;
     emit(GetUserByIdLoadingState());
     DioHelper.getData(
       url: userById + profileId,
@@ -509,7 +513,6 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       userId = UserModelId.fromJson(value.data);
 
       emit(GetUserByIdSuccessState());
-      isLoading = false;
     }).catchError((error) {
       print(error);
       emit(GetUserByIdErrorState());
@@ -556,19 +559,19 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     emit(ChangeFollowingState());
   }
 
-  bool isSearch=false;
+  bool isSearch = false;
   Map<String, dynamic>? search;
   void userSearch({
     required String token,
     required String value,
   }) {
-    isSearch=true;
+    isSearch = true;
     emit(SearchUserLoadingState());
     DioHelper.getData(
       url: searchUser + value,
       token: {'Authorization': 'Bearer $token'},
     ).then((value) {
-      isSearch=false;
+      isSearch = false;
       emit(SearchUserSuccessState());
       search = Map<String, dynamic>.from(value.data);
     }).catchError((onError) {
@@ -576,38 +579,37 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       print(onError);
     });
   }
-  bool followerLoad=false;
-  void getMyFollowers(
-      {required String token,
-      }) {
+
+  bool followerLoad = false;
+  void getMyFollowers({
+    required String token,
+  }) {
     emit(GetMyFollowersLoadingState());
-    followerLoad=true;
-    DioHelper.getData(
-        url: myFollowers ,
-        token: {'Authorization': 'Bearer ${token}',
-        }).then((value) {
+    followerLoad = true;
+    DioHelper.getData(url: myFollowers, token: {
+      'Authorization': 'Bearer ${token}',
+    }).then((value) {
       Followers.followersModel = Map<String, dynamic>.from(value.data);
       emit(GetMyFollowersSuccessState());
-      followerLoad=false;
+      followerLoad = false;
     }).catchError((onError) {
       emit(GetMyFollowersErrorState());
       print(onError);
     });
   }
 
-  bool followingLoad=false;
-  void getMyFollowing(
-      {required String token,
-      }) {
+  bool followingLoad = false;
+  void getMyFollowing({
+    required String token,
+  }) {
     emit(GetMyFollowingLoadingState());
-    followingLoad=true;
-    DioHelper.getData(
-        url: myFollowing ,
-        token: {'Authorization': 'Bearer ${token}',
-        }).then((value) {
+    followingLoad = true;
+    DioHelper.getData(url: myFollowing, token: {
+      'Authorization': 'Bearer ${token}',
+    }).then((value) {
       Following.followingModel = Map<String, dynamic>.from(value.data);
       emit(GetMyFollowingUsersSuccessState());
-      followingLoad=false;
+      followingLoad = false;
     }).catchError((onError) {
       emit(GetMyFollowingErrorState());
       print(onError);
@@ -618,7 +620,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     required String userProfileId,
   }) {
     emit(UserFollowersLoadingState());
-    followerLoad=true;
+    followerLoad = true;
     DioHelper.getData(
       url: 'v1/users/$userProfileId/followers',
       token: {
@@ -627,7 +629,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     ).then((value) {
       Followers.followersModel = Map<String, dynamic>.from(value.data);
       emit(UserFollowersSuccessState());
-      followerLoad=false;
+      followerLoad = false;
     }).catchError((error) {
       emit(UserFollowersErrorState());
       print(error);
@@ -638,7 +640,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     required String userProfileId,
   }) {
     emit(UserFollowingLoadingState());
-    followingLoad=true;
+    followingLoad = true;
     DioHelper.getData(
       url: 'v1/users/$userProfileId/following',
       token: {
@@ -647,7 +649,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     ).then((value) {
       Following.followingModel = Map<String, dynamic>.from(value.data);
       emit(UserFollowingSuccessState());
-      followingLoad=false;
+      followingLoad = false;
     }).catchError((error) {
       emit(UserFollowingErrorState());
       print(error);

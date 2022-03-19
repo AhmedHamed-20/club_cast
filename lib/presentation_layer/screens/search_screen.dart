@@ -20,105 +20,113 @@ class SearchScreen extends StatelessWidget {
       listener: (context, index) {},
       builder: (context, index) {
         var cubit = GeneralAppCubit.get(context);
-        return Scaffold(
-          appBar: AppBar(
-            elevation: 0.0,
-            leading: IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: Icon(
-                Icons.arrow_back_ios,
-                color: Theme.of(context).iconTheme.color,
+        return WillPopScope(
+          onWillPop: () async {
+            cubit.isProfilePage = false;
+            Navigator.of(context).pop();
+            return false;
+          },
+          child: Scaffold(
+            appBar: AppBar(
+              elevation: 0.0,
+              leading: IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: Icon(
+                  Icons.arrow_back_ios,
+                  color: Theme.of(context).iconTheme.color,
+                ),
               ),
+              backgroundColor: Colors.transparent,
             ),
-            backgroundColor: Colors.transparent,
-          ),
-          body: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Column(
-              children: [
-                defaultTextFormField(
-                  context: context,
-                  controller: searchController,
-                  keyboardType: TextInputType.text,
-                  prefixIcon: Icon(
-                    Icons.search,
-                    color: Theme.of(context).iconTheme.color,
+            body: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                children: [
+                  defaultTextFormField(
+                    context: context,
+                    controller: searchController,
+                    keyboardType: TextInputType.text,
+                    prefixIcon: Icon(
+                      Icons.search,
+                      color: Theme.of(context).iconTheme.color,
+                    ),
+                    labelText: "Search",
+                    labelStyle: Theme.of(context).textTheme.bodyText1,
+                    onChanged: (value) {
+                      cubit.userSearch(
+                        token: token,
+                        value: value,
+                      );
+                    },
+                    onSubmit: (value) {},
                   ),
-                  labelText: "Search",
-                  labelStyle: Theme.of(context).textTheme.bodyText1,
-                  onChanged: (value) {
-                    cubit.userSearch(
-                      token: token,
-                      value: value,
-                    );
-                  },
-                  onSubmit: (value) {},
-                ),
-                const SizedBox(
-                  height: 8.0,
-                ),
-                cubit.isSearch
-                    ? LinearProgressIndicator(
-                        color: Theme.of(context).primaryColor,
-                      )
-                    : const SizedBox(),
-                const SizedBox(
-                  height: 12.0,
-                ),
-                cubit.search == null
-                    ? Center(
-                        child: Text(
-                          'Waiting to search',
-                          style: Theme.of(context).textTheme.bodyText1,
-                        ),
-                      )
-                    : ListView.builder(
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount: cubit.search!['data'].length,
-                        itemBuilder: (context, index) {
-                          return InkWell(
-                            onTap: () {
-                              cubit.getUserPodcast(
-                                token,
-                                cubit.search!['data'][index]['_id'],
-                              );
+                  const SizedBox(
+                    height: 8.0,
+                  ),
+                  cubit.isSearch
+                      ? LinearProgressIndicator(
+                          color: Theme.of(context).primaryColor,
+                        )
+                      : const SizedBox(),
+                  const SizedBox(
+                    height: 12.0,
+                  ),
+                  cubit.search == null
+                      ? Center(
+                          child: Text(
+                            'Waiting to search',
+                            style: Theme.of(context).textTheme.bodyText1,
+                          ),
+                        )
+                      : ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: cubit.search!['data'].length,
+                          itemBuilder: (context, index) {
+                            return InkWell(
+                              onTap: () {
+                                cubit.getUserPodcast(
+                                  token,
+                                  cubit.search!['data'][index]['_id'],
+                                );
 
-                              print(cubit.search!['data'][index]['_id']);
-                              cubit.getUserById(
-                                  profileId: cubit.search!['data'][index]['_id']
-                                      .toString());
-                              if (cubit.search!['data'][index]['_id']
-                                      .toString() ==
-                                  GetUserModel.getUserID()) {
-                                navigatePushTo(
-                                    context: context,
-                                    navigateTo: UserProfileScreen());
-                              } else {
-                                navigatePushTo(
-                                    context: context,
-                                    navigateTo: ProfileDetailsScreen(
-                                        cubit.search!['data'][index]['_id']));
-                              }
-                            },
-                            child: ListTile(
-                              leading: CircleAvatar(
-                                radius: 30,
-                                backgroundImage: NetworkImage(
-                                  cubit.search!['data'][index]['photo'],
+                                print(cubit.search!['data'][index]['_id']);
+                                cubit.getUserById(
+                                    profileId: cubit.search!['data'][index]
+                                            ['_id']
+                                        .toString());
+                                if (cubit.search!['data'][index]['_id']
+                                        .toString() ==
+                                    GetUserModel.getUserID()) {
+                                  navigatePushTo(
+                                      context: context,
+                                      navigateTo: UserProfileScreen());
+                                } else {
+                                  navigatePushTo(
+                                      context: context,
+                                      navigateTo: ProfileDetailsScreen(
+                                          cubit.search!['data'][index]['_id']));
+                                }
+                              },
+                              child: ListTile(
+                                leading: CircleAvatar(
+                                  radius: 30,
+                                  backgroundImage: NetworkImage(
+                                    cubit.search!['data'][index]['photo'],
+                                  ),
+                                ),
+                                title: Text(
+                                  cubit.search!['data'][index]['name'],
+                                  style: Theme.of(context).textTheme.bodyText1,
                                 ),
                               ),
-                              title: Text(
-                                cubit.search!['data'][index]['name'],
-                                style: Theme.of(context).textTheme.bodyText1,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-              ],
+                            );
+                          },
+                        ),
+                ],
+              ),
             ),
           ),
         );

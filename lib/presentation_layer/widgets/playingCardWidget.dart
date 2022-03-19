@@ -1,14 +1,15 @@
+import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:flutter/material.dart';
 
 class PlayingCardWidget {
   static Widget likeState(
     BuildContext context,
     bool likeState,
-    cubit,
     String podCastId,
     String token,
-    getUserData,
+    String userId,
   ) {
+    var cubit = GeneralAppCubit.get(context);
     return Padding(
       padding: const EdgeInsetsDirectional.only(start: 15.0, bottom: 15),
       child: CircleAvatar(
@@ -24,17 +25,39 @@ class PlayingCardWidget {
                       podCastId: podCastId,
                       token: token,
                     )
-                      .then((val) {
-                      getUserData;
-                    })
+                      .then(
+                      (val) {
+                        //bool isMyfollowingScreen = false;
+                        // bool isMyprofileScreen = false;
+                        print(cubit.isMyfollowingScreen);
+                        if (cubit.isMyprofileScreen) {
+                          cubit.getMyPodCast(token);
+                        } else if (cubit.isProfilePage) {
+                          cubit.getUserPodcast(token, userId);
+                        } else {
+                          cubit.getMyFollowingPodcast(token);
+                        }
+                        //isProfilePage
+                        //getUserPodcast
+                      },
+                    )
                   : cubit
                       .addLike(
                       podCastId: podCastId,
                       token: token,
                     )
-                      .then((val) {
-                      getUserData;
-                    });
+                      .then(
+                      (val) {
+                        print(cubit.isProfilePage);
+                        if (cubit.isMyprofileScreen) {
+                          cubit.getMyPodCast(token);
+                        } else if (cubit.isProfilePage) {
+                          cubit.getUserPodcast(token, userId);
+                        } else {
+                          cubit.getMyFollowingPodcast(token);
+                        }
+                      },
+                    );
             },
             icon: Icon(
               likeState ? Icons.favorite : Icons.favorite_border,

@@ -23,6 +23,7 @@ class PodCastScreen extends StatelessWidget {
       listener: (BuildContext context, state) {},
       builder: (BuildContext context, Object? state) {
         currentId = cubit.activePodCastId;
+
         return Padding(
           padding:
               const EdgeInsetsDirectional.only(start: 10, end: 10, top: 20),
@@ -56,13 +57,12 @@ class PodCastScreen extends StatelessWidget {
                               ['url'],
                           GetMyFollowingPodCastsModel.getPodcastName(index)),
                       likeWidget: PlayingCardWidget.likeState(
-                          context,
-                          GetMyFollowingPodCastsModel.getPodcastlikeState(
-                              index),
-                          cubit,
-                          GetMyFollowingPodCastsModel.getPodcastID(index),
-                          token,
-                          cubit.getMyFollowingPodcast(token)),
+                        context,
+                        GetMyFollowingPodCastsModel.getPodcastlikeState(index),
+                        GetMyFollowingPodCastsModel.getPodcastID(index),
+                        token,
+                        '',
+                      ),
                       podCastLikes: PlayingCardWidget.podCastLikes(
                           context,
                           cubit,

@@ -26,8 +26,7 @@ class FollowersScreen extends StatelessWidget {
               ),
               backgroundColor: Colors.transparent,
               leading: MaterialButton(
-                onPressed: ()
-                {
+                onPressed: () {
                   Navigator.pop(context);
                 },
                 child: Icon(
@@ -38,65 +37,69 @@ class FollowersScreen extends StatelessWidget {
               elevation: 0,
             ),
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            body:cubit.followerLoad?Center(
-                child: CircularProgressIndicator(
-                  color: Theme.of(context).primaryColor,
-                )):
-            SingleChildScrollView(
-              child: Column(
-                children: [
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: Followers.followersModel!['data'].length,
-                    itemBuilder: (context, index) {
-                      return InkWell(
-                        onTap: ()
-                        {
-                          cubit.getUserById(profileId: Followers.getUserID(index));
-                          if ( Followers.getUserID(index) == GetUserModel.getUserID()) {
-                            navigatePushTo(
-                                context: context,
-                                navigateTo: UserProfileScreen());
-                          } else {
-                            navigatePushTo(
-                                context: context,
-                                navigateTo: ProfileDetailsScreen());
-                          }
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ListTile(
-                            leading: CircleAvatar(
-                              backgroundImage:
-                              NetworkImage('${Followers.getUserPhoto(index)}'),
-                              radius: 30.0,
-                            ),
-                            title: Text(
-                              '${Followers.getUserName(index)}',
-                              style: Theme.of(context).textTheme.bodyText1,
-                            ),
-                            trailing: MaterialButton(
-                              color: Theme.of(context).primaryColor,
-                              onPressed: () {},
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child:const Text(
-                                'Follow',
-                                style: TextStyle(
-                                  color: Colors.white,
+            body: cubit.followerLoad
+                ? Center(
+                    child: CircularProgressIndicator(
+                    color: Theme.of(context).primaryColor,
+                  ))
+                : SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: Followers.followersModel!['data'].length,
+                          itemBuilder: (context, index) {
+                            return InkWell(
+                              onTap: () {
+                                cubit.getUserById(
+                                    profileId: Followers.getUserID(index));
+                                if (Followers.getUserID(index) ==
+                                    GetUserModel.getUserID()) {
+                                  navigatePushTo(
+                                      context: context,
+                                      navigateTo: UserProfileScreen());
+                                } else {
+                                  navigatePushTo(
+                                      context: context,
+                                      navigateTo: ProfileDetailsScreen(
+                                          Followers.getUserID(index)));
+                                }
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: ListTile(
+                                  leading: CircleAvatar(
+                                    backgroundImage: NetworkImage(
+                                        '${Followers.getUserPhoto(index)}'),
+                                    radius: 30.0,
+                                  ),
+                                  title: Text(
+                                    '${Followers.getUserName(index)}',
+                                    style:
+                                        Theme.of(context).textTheme.bodyText1,
+                                  ),
+                                  trailing: MaterialButton(
+                                    color: Theme.of(context).primaryColor,
+                                    onPressed: () {},
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: const Text(
+                                      'Follow',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  )
-                ],
-              ),
-            ),
+                            );
+                          },
+                        )
+                      ],
+                    ),
+                  ),
           );
         },
         listener: (context, state) {});

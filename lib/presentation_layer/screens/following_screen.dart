@@ -26,8 +26,7 @@ class FollowingScreen extends StatelessWidget {
               ),
               backgroundColor: Colors.transparent,
               leading: MaterialButton(
-                onPressed: ()
-                {
+                onPressed: () {
                   Navigator.pop(context);
                 },
                 child: Icon(
@@ -38,65 +37,69 @@ class FollowingScreen extends StatelessWidget {
               elevation: 0,
             ),
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            body:cubit.followingLoad?Center(
-                child: CircularProgressIndicator(
-                  color: Theme.of(context).primaryColor,
-                )):
-            SingleChildScrollView(
-              child: Column(
-                children: [
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: Following.followingModel!['data'].length,
-                    itemBuilder: (context, index) {
-                      return InkWell(
-                        onTap: ()
-                        {
-                          cubit.getUserById(profileId: Following.getUserID(index));
-                          if ( Following.getUserID(index) == GetUserModel.getUserID()) {
-                            navigatePushTo(
-                                context: context,
-                                navigateTo: UserProfileScreen());
-                          } else {
-                            navigatePushTo(
-                                context: context,
-                                navigateTo: ProfileDetailsScreen());
-                          }
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ListTile(
-                            leading: CircleAvatar(
-                              backgroundImage:
-                              NetworkImage('${Following.getUserPhoto(index)}'),
-                              radius: 30.0,
-                            ),
-                            title: Text(
-                              '${Following.getUserName(index)}',
-                              style: Theme.of(context).textTheme.bodyText1,
-                            ),
-                            trailing: MaterialButton(
-                              color: Theme.of(context).primaryColor,
-                              onPressed: () {},
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child:const Text(
-                                'Unfollow',
-                                style: TextStyle(
-                                  color: Colors.white,
+            body: cubit.followingLoad
+                ? Center(
+                    child: CircularProgressIndicator(
+                    color: Theme.of(context).primaryColor,
+                  ))
+                : SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: Following.followingModel!['data'].length,
+                          itemBuilder: (context, index) {
+                            return InkWell(
+                              onTap: () {
+                                cubit.getUserById(
+                                    profileId: Following.getUserID(index));
+                                if (Following.getUserID(index) ==
+                                    GetUserModel.getUserID()) {
+                                  navigatePushTo(
+                                      context: context,
+                                      navigateTo: UserProfileScreen());
+                                } else {
+                                  navigatePushTo(
+                                      context: context,
+                                      navigateTo: ProfileDetailsScreen(
+                                          Following.getUserID(index)));
+                                }
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: ListTile(
+                                  leading: CircleAvatar(
+                                    backgroundImage: NetworkImage(
+                                        '${Following.getUserPhoto(index)}'),
+                                    radius: 30.0,
+                                  ),
+                                  title: Text(
+                                    '${Following.getUserName(index)}',
+                                    style:
+                                        Theme.of(context).textTheme.bodyText1,
+                                  ),
+                                  trailing: MaterialButton(
+                                    color: Theme.of(context).primaryColor,
+                                    onPressed: () {},
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: const Text(
+                                      'Unfollow',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  )
-                ],
-              ),
-            ),
+                            );
+                          },
+                        )
+                      ],
+                    ),
+                  ),
           );
         },
         listener: (context, state) {});

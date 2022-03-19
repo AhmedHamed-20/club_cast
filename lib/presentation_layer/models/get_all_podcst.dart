@@ -9,7 +9,7 @@ class GetAllPodCastModel {
   static bool? isLiked;
   static int? podCastCount;
   static List getPodCastAudio(int index) {
-    return audio = [getAllPodCast!['data'][index]['audio']];
+    return audio = [getAllPodCast?['data'][index]['audio']];
   }
 
   static int? getPodCastcount() {
@@ -17,7 +17,7 @@ class GetAllPodCastModel {
   }
 
   static int getPodcastLikes(int index) {
-    return likes = getAllPodCast!['data'][index]['likes'];
+    return likes = getAllPodCast?['data'][index]['likes'];
   }
 
   static String getPodcastID(int index) {
@@ -33,10 +33,10 @@ class GetAllPodCastModel {
   }
 
   static List getPodcastUserPublishInform(int index) {
-    return creditBy = [getAllPodCast!['data'][index]['createdBy']];
+    return creditBy = [getAllPodCast?['data'][index]['createdBy']];
   }
 
   static bool getPodcastlikeState(int index) {
-    return isLiked = getAllPodCast!['data'][index]['isLiked'];
+    return isLiked = getAllPodCast?['data'][index]['isLiked'];
   }
 }
