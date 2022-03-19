@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../data_layer/cash/cash.dart';
 import '../components/component/component.dart';
 import '../models/user_model.dart';
 
@@ -18,6 +19,7 @@ class FollowersScreen extends StatelessWidget {
     return BlocConsumer<GeneralAppCubit, GeneralAppStates>(
         builder: (context, state) {
           var cubit = GeneralAppCubit.get(context);
+          var token = CachHelper.getData(key: 'token');
           return Scaffold(
             appBar: AppBar(
               title: Text(
@@ -52,6 +54,8 @@ class FollowersScreen extends StatelessWidget {
                           itemBuilder: (context, index) {
                             return InkWell(
                               onTap: () {
+                                cubit.getUserPodcast(
+                                    token, Followers.getUserID(index));
                                 cubit.getUserById(
                                     profileId: Followers.getUserID(index));
                                 if (Followers.getUserID(index) ==
