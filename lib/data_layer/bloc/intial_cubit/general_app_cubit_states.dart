@@ -109,6 +109,30 @@ class SearchUserSuccessState extends GeneralAppStates {}
 
 class SearchUserErrorState extends GeneralAppStates {}
 
+class GetMyFollowersLoadingState extends GeneralAppStates {}
+
+class GetMyFollowersSuccessState extends GeneralAppStates {}
+
+class GetMyFollowersErrorState extends GeneralAppStates {}
+
+class GetMyFollowingLoadingState extends GeneralAppStates {}
+
+class GetMyFollowingUsersSuccessState extends GeneralAppStates {}
+
+class GetMyFollowingErrorState extends GeneralAppStates {}
+
+class UserFollowersLoadingState extends GeneralAppStates {}
+
+class UserFollowersSuccessState extends GeneralAppStates {}
+
+class UserFollowersErrorState extends GeneralAppStates {}
+
+class UserFollowingLoadingState extends GeneralAppStates {}
+
+class UserFollowingSuccessState extends GeneralAppStates {}
+
+class UserFollowingErrorState extends GeneralAppStates {}
+
 class GetMyFollowingSuccessState extends GeneralAppStates {}
 
 class GetMyFollowinErrorState extends GeneralAppStates {}

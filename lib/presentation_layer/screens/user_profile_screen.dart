@@ -23,9 +23,9 @@ class UserProfileScreen extends StatelessWidget {
     return BlocConsumer<GeneralAppCubit, GeneralAppStates>(
       listener: (context, index) {},
       builder: (context, index) {
+        String token = CachHelper.getData(key: 'token');
         var cubit = GeneralAppCubit.get(context);
         currentId = cubit.activePodCastId;
-        String token = CachHelper.getData(key: 'token');
         return Scaffold(
           appBar: AppBar(
             elevation: 0.0,
@@ -90,7 +90,9 @@ class UserProfileScreen extends StatelessWidget {
                             width: 22.0,
                           ),
                           GestureDetector(
-                            onTap: () {
+                            onTap: ()
+                            {
+                              cubit.getMyFollowers(token: token);
                               navigatePushTo(
                                 context: context,
                                 navigateTo: FollowersScreen(),
@@ -105,7 +107,9 @@ class UserProfileScreen extends StatelessWidget {
                             width: 22.0,
                           ),
                           GestureDetector(
-                            onTap: () {
+                            onTap: ()
+                            {
+                              cubit.getMyFollowing(token: token);
                               navigatePushTo(
                                 context: context,
                                 navigateTo: FollowingScreen(),

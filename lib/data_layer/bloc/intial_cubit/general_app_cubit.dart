@@ -20,6 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart' as path;
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../presentation_layer/models/followers_following_model.dart';
 import '../../../presentation_layer/models/getMyFollowingPodcast.dart';
 import 'general_app_cubit_states.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
@@ -555,21 +556,101 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     emit(ChangeFollowingState());
   }
 
+  bool isSearch=false;
   Map<String, dynamic>? search;
   void userSearch({
     required String token,
     required String value,
   }) {
+    isSearch=true;
     emit(SearchUserLoadingState());
     DioHelper.getData(
       url: searchUser + value,
       token: {'Authorization': 'Bearer $token'},
     ).then((value) {
+      isSearch=false;
       emit(SearchUserSuccessState());
       search = Map<String, dynamic>.from(value.data);
     }).catchError((onError) {
       emit(SearchUserErrorState());
       print(onError);
+    });
+  }
+  bool followerLoad=false;
+  void getMyFollowers(
+      {required String token,
+      }) {
+    emit(GetMyFollowersLoadingState());
+    followerLoad=true;
+    DioHelper.getData(
+        url: myFollowers ,
+        token: {'Authorization': 'Bearer ${token}',
+        }).then((value) {
+      Followers.followersModel = Map<String, dynamic>.from(value.data);
+      emit(GetMyFollowersSuccessState());
+      followerLoad=false;
+    }).catchError((onError) {
+      emit(GetMyFollowersErrorState());
+      print(onError);
+    });
+  }
+
+  bool followingLoad=false;
+  void getMyFollowing(
+      {required String token,
+      }) {
+    emit(GetMyFollowingLoadingState());
+    followingLoad=true;
+    DioHelper.getData(
+        url: myFollowing ,
+        token: {'Authorization': 'Bearer ${token}',
+        }).then((value) {
+      Following.followingModel = Map<String, dynamic>.from(value.data);
+      emit(GetMyFollowingUsersSuccessState());
+      followingLoad=false;
+    }).catchError((onError) {
+      emit(GetMyFollowingErrorState());
+      print(onError);
+    });
+  }
+
+  void userFollowers({
+    required String userProfileId,
+  }) {
+    emit(UserFollowersLoadingState());
+    followerLoad=true;
+    DioHelper.getData(
+      url: 'v1/users/$userProfileId/followers',
+      token: {
+        'Authorization': 'Bearer ${token}',
+      },
+    ).then((value) {
+      Followers.followersModel = Map<String, dynamic>.from(value.data);
+      emit(UserFollowersSuccessState());
+      followerLoad=false;
+    }).catchError((error) {
+      emit(UserFollowersErrorState());
+      print(error);
+    });
+  }
+
+  void userFollowing({
+    required String userProfileId,
+  }) {
+    emit(UserFollowingLoadingState());
+    followingLoad=true;
+    DioHelper.getData(
+      url: 'v1/users/$userProfileId/following',
+      token: {
+        'Authorization': 'Bearer ${token}',
+      },
+    ).then((value) {
+      Following.followingModel = Map<String, dynamic>.from(value.data);
+      emit(UserFollowingSuccessState());
+      followingLoad=false;
+    }).catchError((error) {
+      emit(UserFollowingErrorState());
+      print(error);
     });
   }
 }
