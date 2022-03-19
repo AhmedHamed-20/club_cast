@@ -21,3 +21,5 @@ const String searchUser = 'v1/users/search?s=';
 const String removePodCastById = baseUrl + 'v1/podcasts/';
 const String getMyPodCasts = baseUrl + 'v1/podcasts/me';
 const String getMyFollowingPodcasts = baseUrl + 'v1/podcasts/following/me';
+const String myFollowers = 'v1/users/me/followers';
+const String myFollowing = 'v1/users/me/following';
