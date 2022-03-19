@@ -1,6 +1,8 @@
 import 'package:club_cast/data_layer/cash/cash.dart';
 import 'package:club_cast/presentation_layer/models/getMyPodCastModel.dart';
 import 'package:club_cast/presentation_layer/models/get_all_podcst.dart';
+import 'package:club_cast/presentation_layer/screens/followers_screen.dart';
+import 'package:club_cast/presentation_layer/screens/following_screen.dart';
 import 'package:club_cast/presentation_layer/widgets/playingCardWidget.dart';
 import 'package:club_cast/presentation_layer/widgets/pos_cast_card_item.dart';
 
@@ -84,16 +86,30 @@ class ProfileDetailsScreen extends StatelessWidget {
                         const SizedBox(
                           width: 22.0,
                         ),
-                        statusNumberProfile(
-                          number: '${cubit.userId!.data!.followers}',
-                          statusType: 'Followers',
+                        InkWell(
+                          onTap: ()
+                          {
+                            cubit.userFollowers(userProfileId: '${cubit.userId!.data!.id}');
+                            navigatePushTo(context: context, navigateTo: FollowersScreen());
+                          },
+                          child: statusNumberProfile(
+                            number: '${cubit.userId!.data!.followers}',
+                            statusType: 'Followers',
+                          ),
                         ),
                         const SizedBox(
                           width: 22.0,
                         ),
-                        statusNumberProfile(
-                          number: '${cubit.userId!.data!.following}',
-                          statusType: 'Following',
+                        InkWell(
+                          onTap: ()
+                          {
+                            cubit.userFollowing(userProfileId: '${cubit.userId!.data!.id}');
+                            navigatePushTo(context: context, navigateTo: FollowingScreen());
+                          },
+                          child: statusNumberProfile(
+                            number: '${cubit.userId!.data!.following}',
+                            statusType: 'Following',
+                          ),
                         ),
                       ],
                     ),
