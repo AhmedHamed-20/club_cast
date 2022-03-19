@@ -57,7 +57,9 @@ class PodCastLikesScreen extends StatelessWidget {
                           } else {
                             navigatePushTo(
                                 context: context,
-                                navigateTo: ProfileDetailsScreen());
+                                navigateTo: ProfileDetailsScreen(
+                                    GetPodCastUsersLikesModel.getUserID(
+                                        index)));
                           }
                         },
                         child: Padding(

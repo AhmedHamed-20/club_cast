@@ -36,6 +36,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   bool isRecordRoom = false;
   bool previewIsplaying = false;
   File? podcastFile;
+  bool isProfilePage = false;
   // bool isDark = false;
   bool isPlaying = false;
   bool pressedPause = false;
@@ -211,11 +212,14 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     }
   }
 
-  void addLike({required String podCastId, required String token}) {
-    DioHelper.postData(
+  Future addLike(
+      {required String podCastId,
+      required String token,
+      String? userId}) async {
+    return await DioHelper.postData(
         url: sendLike + '/${podCastId}',
         token: {'Authorization': 'Bearer ${token}'}).then((value) {
-      getAllPodcast(token: token);
+      //   isProfilePage ? getUserPodcast(token, userId!) : const SizedBox();
       emit(PodCastLikeAddedSuccess());
     }).catchError((onError) {
       print(onError);
@@ -223,11 +227,14 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     });
   }
 
-  void removeLike({required String podCastId, required String token}) {
-    DioHelper.deleteData(
+  Future removeLike(
+      {required String podCastId,
+      required String token,
+      String? userId}) async {
+    return await DioHelper.deleteData(
         url: sendLike + '/${podCastId}',
         token: {'Authorization': 'Bearer ${token}'}).then((value) {
-      getAllPodcast(token: token);
+      //  isProfilePage ? getUserPodcast(token, userId!) : const SizedBox();
       emit(PodCastLikeDeleatedSuccess());
     }).catchError((onError) {
       print(onError);

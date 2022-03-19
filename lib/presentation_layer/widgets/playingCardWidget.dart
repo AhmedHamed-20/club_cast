@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 
 class PlayingCardWidget {
-  static Widget likeState(BuildContext context, bool likeState, cubit,
-      String podCastId, String token) {
+  static Widget likeState(
+    BuildContext context,
+    bool likeState,
+    cubit,
+    String podCastId,
+    String token,
+    getUserData,
+  ) {
     return Padding(
       padding: const EdgeInsetsDirectional.only(start: 15.0, bottom: 15),
       child: CircleAvatar(
@@ -13,8 +19,22 @@ class PlayingCardWidget {
             padding: EdgeInsets.zero,
             onPressed: () {
               likeState
-                  ? cubit.removeLike(podCastId: podCastId, token: token)
-                  : cubit.addLike(podCastId: podCastId, token: token);
+                  ? cubit
+                      .removeLike(
+                      podCastId: podCastId,
+                      token: token,
+                    )
+                      .then((val) {
+                      getUserData;
+                    })
+                  : cubit
+                      .addLike(
+                      podCastId: podCastId,
+                      token: token,
+                    )
+                      .then((val) {
+                      getUserData;
+                    });
             },
             icon: Icon(
               likeState ? Icons.favorite : Icons.favorite_border,

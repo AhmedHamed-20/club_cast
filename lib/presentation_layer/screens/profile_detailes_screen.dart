@@ -13,8 +13,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProfileDetailsScreen extends StatelessWidget {
-  const ProfileDetailsScreen({Key? key}) : super(key: key);
-
+  String userId;
+  ProfileDetailsScreen(this.userId);
   @override
   Widget build(BuildContext context) {
     String? currentId;
@@ -24,12 +24,13 @@ class ProfileDetailsScreen extends StatelessWidget {
         String token = CachHelper.getData(key: 'token');
         var cubit = GeneralAppCubit.get(context);
         currentId = cubit.activePodCastId;
-
+        cubit.isProfilePage = true;
         return Scaffold(
           appBar: AppBar(
             elevation: 0.0,
             leading: IconButton(
               onPressed: () {
+                cubit.isProfilePage = false;
                 Navigator.pop(context);
               },
               icon: Icon(
@@ -204,13 +205,14 @@ class ProfileDetailsScreen extends StatelessWidget {
                                               ? cubit.currentOlayingDurathion
                                               : null,
                                       likeWidget: PlayingCardWidget.likeState(
-                                        context,
-                                        GetAllPodCastModel.getPodcastlikeState(
-                                            index),
-                                        cubit,
-                                        GetAllPodCastModel.getPodcastID(index),
-                                        token,
-                                      ),
+                                          context,
+                                          GetAllPodCastModel
+                                              .getPodcastlikeState(index),
+                                          cubit,
+                                          GetAllPodCastModel.getPodcastID(
+                                              index),
+                                          token,
+                                          cubit.getUserPodcast(token, userId)),
                                       podCastLikes:
                                           PlayingCardWidget.podCastLikes(
                                               context,

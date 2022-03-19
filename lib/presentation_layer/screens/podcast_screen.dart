@@ -61,7 +61,8 @@ class PodCastScreen extends StatelessWidget {
                               index),
                           cubit,
                           GetMyFollowingPodCastsModel.getPodcastID(index),
-                          token),
+                          token,
+                          cubit.getMyFollowingPodcast(token)),
                       podCastLikes: PlayingCardWidget.podCastLikes(
                           context,
                           cubit,

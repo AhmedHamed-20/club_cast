@@ -315,7 +315,8 @@ class UserProfileScreen extends StatelessWidget {
                                             index),
                                         cubit,
                                         GetMyPodCastModel.getPodcastID(index),
-                                        token),
+                                        token,
+                                        cubit.getMyPodCast(token)),
                                     playingWidget:
                                         PlayingCardWidget.playingButton(
                                             index,

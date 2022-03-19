@@ -84,7 +84,8 @@ class SearchScreen extends StatelessWidget {
                                       .toString());
                               navigatePushTo(
                                   context: context,
-                                  navigateTo: ProfileDetailsScreen());
+                                  navigateTo: ProfileDetailsScreen(
+                                      cubit.search!['data'][index]['_id']));
                             },
                             child: ListTile(
                               leading: CircleAvatar(
