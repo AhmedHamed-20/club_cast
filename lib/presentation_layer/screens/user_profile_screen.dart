@@ -8,6 +8,7 @@ import 'package:club_cast/presentation_layer/models/user_model.dart';
 import 'package:club_cast/presentation_layer/screens/edit_user_profile.dart';
 import 'package:club_cast/presentation_layer/screens/followers_screen.dart';
 import 'package:club_cast/presentation_layer/screens/following_screen.dart';
+import 'package:club_cast/presentation_layer/screens/uploadPodcastScreen.dart';
 import 'package:club_cast/presentation_layer/widgets/playingCardWidget.dart';
 import 'package:club_cast/presentation_layer/widgets/pos_cast_card_item.dart';
 import 'package:flutter/material.dart';
@@ -82,8 +83,7 @@ class UserProfileScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           statusNumberProfile(
-                            number:
-                                GetMyPodCastModel?.getPodCastcount().toString(),
+                            number: '${GetMyPodCastModel.getPodCastcount()}',
                             statusType: 'Podcasts',
                           ),
                           const SizedBox(
@@ -137,7 +137,11 @@ class UserProfileScreen extends StatelessWidget {
                         height: 10,
                       ),
                       defaultButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          navigatePushTo(
+                              context: context,
+                              navigateTo: UploadPodCastScreen());
+                        },
                         context: context,
                         height: 45,
                         width: 280,
@@ -183,14 +187,14 @@ class UserProfileScreen extends StatelessWidget {
                                     context,
                                     index: index,
                                     gettime: GetMyPodCastModel.getPodCastAudio(
-                                        index)[0]['duration'],
+                                        index)[0]?['duration'],
                                     text: cubit.isPlaying &&
                                             GetMyPodCastModel.getPodcastID(
                                                     index) ==
                                                 currentId
                                         ? cubit.currentOlayingDurathion
                                         : cubit.pressedPause &&
-                                                GetMyPodCastModel.getPodcastID(
+                                                GetMyPodCastModel?.getPodcastID(
                                                         index) ==
                                                     currentId
                                             ? cubit.currentOlayingDurathion
@@ -199,12 +203,12 @@ class UserProfileScreen extends StatelessWidget {
                                         PlayingCardWidget.downloadingWidget(
                                       currentId.toString(),
                                       index,
-                                      GetMyPodCastModel.getPodcastID(index),
+                                      GetMyPodCastModel?.getPodcastID(index),
                                       cubit,
                                       context,
-                                      GetMyPodCastModel.getPodCastAudio(
+                                      GetMyPodCastModel?.getPodCastAudio(
                                           index)[0]['url'],
-                                      GetMyPodCastModel.getPodcastName(index),
+                                      GetMyPodCastModel?.getPodcastName(index),
                                     ),
                                     removePodCast: IconButton(
                                         onPressed: () {

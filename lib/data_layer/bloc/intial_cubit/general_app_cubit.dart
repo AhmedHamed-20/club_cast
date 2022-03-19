@@ -15,6 +15,7 @@ import 'package:club_cast/presentation_layer/screens/podcastLikesScreen.dart';
 import 'package:club_cast/presentation_layer/screens/podcast_screen.dart';
 import 'package:club_cast/presentation_layer/screens/public_rooms_screen.dart';
 import 'package:dio/dio.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart' as path;
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -33,6 +34,8 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   var roomNameController = TextEditingController();
   bool isPublicRoom = true;
   bool isRecordRoom = false;
+  bool previewIsplaying = false;
+  File? podcastFile;
   // bool isDark = false;
   bool isPlaying = false;
   bool pressedPause = false;
@@ -238,6 +241,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
         token: {'Authorization': 'Bearer ${token}'}).then((value) {
       GetMyPodCastModel.getMyPodCast = Map<String, dynamic>.from(value.data);
       print(GetMyPodCastModel.getMyPodCast);
+      isLoadProfile = false;
       emit(GetMyPodCastSuccessState());
     }).catchError((onError) {
       emit(GetMyPodCastErrorState());
@@ -256,6 +260,38 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       emit(GetMyFollowingSuccessState());
     }).catchError((onError) {
       emit(GetMyFollowinErrorState());
+      print(onError);
+    });
+  }
+
+  pickPocCastFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+    if (result != null) {
+      podcastFile = File(result.files.single.path!);
+      print(podcastFile?.path);
+      emit(FilePickedSuccess());
+    } else {
+      emit(FilePickedError());
+      // User canceled the picker
+    }
+  }
+
+  playPreviewPodcast() {
+    assetsAudioPlayer.open(Audio.file(podcastFile!.path)).then((value) {
+      previewIsplaying = true;
+      emit(PreviewPlaying());
+    }).catchError((onError) {
+      emit(PreviewPlayingError());
+      print(onError);
+    });
+  }
+
+  pausePreview() {
+    assetsAudioPlayer.pause().then((value) {
+      previewIsplaying = false;
+      emit(PreviewStoped());
+    }).catchError((onError) {
       print(onError);
     });
   }
@@ -352,7 +388,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       ).then((value) {
         GetUserModel.getUserModel = Map<String, dynamic>.from(value.data);
         print(GetUserModel.getUserName());
-        isLoadProfile = false;
+        // isLoadProfile = false;
         emit(UserDataSuccessState());
       }).catchError((error) {
         print(error);

@@ -116,3 +116,13 @@ class GetMyFollowinErrorState extends GeneralAppStates {}
 class PodCastDeletedSuccess extends GeneralAppStates {}
 
 class PodCastDeletedError extends GeneralAppStates {}
+
+class FilePickedSuccess extends GeneralAppStates {}
+
+class FilePickedError extends GeneralAppStates {}
+
+class PreviewPlaying extends GeneralAppStates {}
+
+class PreviewPlayingError extends GeneralAppStates {}
+
+class PreviewStoped extends GeneralAppStates {}

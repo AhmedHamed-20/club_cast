@@ -42,13 +42,13 @@ dependencies:
   google_fonts: ^2.3.1
   shared_preferences: ^2.0.13
   material_design_icons_flutter: ^5.0.6595
-  audio_wave: ^0.1.2
   conditional_builder_null_safety: ^0.0.6
   fluttertoast: ^8.0.9
   assets_audio_player: ^3.0.4+1
   path_provider: ^2.0.9
   image_picker: ^0.8.4+11
   http_parser: ^4.0.0
+  file_picker: ^4.5.1
 
 
 dev_dependencies:
