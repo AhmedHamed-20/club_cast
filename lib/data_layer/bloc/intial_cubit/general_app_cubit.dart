@@ -17,7 +17,9 @@ import 'package:club_cast/presentation_layer/screens/public_rooms_screen.dart';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart' as path;
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -589,13 +591,13 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
 
   UserModelId? userId;
 
-  void getUserById({
+  Future getUserById({
     required String profileId,
     Map<String, dynamic>? save,
-  }) {
+  }) async{
     isLoadingprofile = true;
     emit(GetUserByIdLoadingState());
-    DioHelper.getData(
+    return await DioHelper.getData(
       url: userById + profileId,
       token: {
         'Authorization': 'Bearer ${token}',
@@ -611,11 +613,11 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     });
   }
 
-  void followUser({
+  Future followUser({
     required String userProfileId,
-  }) {
+  })async {
     emit(FollowUserLoadingState());
-    DioHelper.postData(
+    return await DioHelper.postData(
       url: 'v1/users/$userProfileId/following',
       token: {
         'Authorization': 'Bearer ${token}',
@@ -628,11 +630,11 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     });
   }
 
-  void unFollowUser({
+  Future unFollowUser({
     required String userProfileId,
-  }) {
+  })async {
     emit(UnFollowUserLoadingState());
-    DioHelper.deleteData(
+    return await DioHelper.deleteData(
       url: 'v1/users/$userProfileId/following',
       token: {
         'Authorization': 'Bearer ${token}',
@@ -746,5 +748,19 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       emit(UserFollowingErrorState());
       print(error);
     });
+  }
+  File? profileAvatar;
+
+  Future pickImage() async {
+    try {
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (image == null) return;
+      profileAvatar = File(image.path);
+      print(profileAvatar);
+
+      emit(UserAvatarState());
+    } on PlatformException catch (e) {
+      print('error when pick image from galary:${e.toString()}');
+    }
   }
 }

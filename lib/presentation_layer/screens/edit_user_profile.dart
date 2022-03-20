@@ -1,10 +1,12 @@
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
 import 'package:club_cast/data_layer/bloc/login_cubit/login_cubit.dart';
+import 'package:club_cast/data_layer/bloc/login_cubit/login_states.dart';
 import 'package:club_cast/data_layer/cash/cash.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
 import 'package:club_cast/presentation_layer/models/user_model.dart';
 import 'package:club_cast/presentation_layer/screens/user_screen/login_screen/login_screen.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../data_layer/bloc/intial_cubit/general_app_cubit.dart';
@@ -37,205 +39,227 @@ class EditUserProfileScreen extends StatelessWidget {
       builder: (context, state) {
         String token = CachHelper.getData(key: 'token');
         var cubit = LoginCubit.get(context);
-        return Scaffold(
-          appBar: AppBar(
-            elevation: 0.0,
-            leading: IconButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              icon: Icon(
-                Icons.arrow_back_ios,
-                color: Theme.of(context).iconTheme.color,
+        var cubit1 = GeneralAppCubit.get(context);
+        return WillPopScope(
+
+          onWillPop: ()
+          async{
+            cubit1.profileAvatar=null;
+            Navigator.pop(context);
+            return false;
+          },
+          child: Scaffold(
+            appBar: AppBar(
+              elevation: 0.0,
+              leading: IconButton(
+                onPressed: () {
+                  cubit1.profileAvatar=null;
+                  Navigator.pop(context);
+                },
+                icon: Icon(
+                  Icons.arrow_back_ios,
+                  color: Theme.of(context).iconTheme.color,
+                ),
               ),
+              title: Text(
+                'Edit Your Profile Details',
+                style: Theme.of(context).textTheme.bodyText2,
+              ),
+              backgroundColor: Colors.transparent,
             ),
-            title: Text(
-              'Edit Your Profile Details',
-              style: Theme.of(context).textTheme.bodyText2,
-            ),
-            backgroundColor: Colors.transparent,
-          ),
-          body: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Form(
-              key: formKey,
-              child: SingleChildScrollView(
-                physics: BouncingScrollPhysics(),
-                child: Column(
-                  children: [
-                    Stack(
-                      alignment: AlignmentDirectional.bottomEnd,
-                      children: [
-                        Center(
-                          child: CircleAvatar(
-                            backgroundImage:
-                                NetworkImage('${GetUserModel.getUserPhoto()}'),
-                            radius: 75.0,
-                          ),
-                        ),
-                        // ${GetUserModel.getUserPhoto()}
-                        GestureDetector(
-                          onTap: () {
-                            cubit.pickImage();
-                            isUpdatePhoto = true;
-                          },
-                          child: Padding(
-                            padding: const EdgeInsetsDirectional.only(
-                              end: 110,
-                            ),
-                            child: Container(
-                              width: 37,
-                              height: 37,
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).primaryColor,
-                                borderRadius:
-                                    BorderRadiusDirectional.circular(200),
-                              ),
-                              child: const Icon(
-                                Icons.camera_alt_outlined,
-                                color: Colors.white,
-                                size: 25,
-                              ),
+            body: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Form(
+                key: formKey,
+                child: SingleChildScrollView(
+                  physics: BouncingScrollPhysics(),
+                  child: Column(
+                    children: [
+                      Stack(
+                        alignment: AlignmentDirectional.bottomEnd,
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(200),
+                            child: cubit1.profileAvatar != null
+                                ? Image.file(
+                              cubit1.profileAvatar!,
+                              height: 160,
+                              width: 160,
+                              fit: BoxFit.cover,
+                            ) : Image(
+                              image: NetworkImage(
+                                  '${GetUserModel.getUserPhoto()}'),
+                              height: 180,
+                              width: 180,
+                              fit: BoxFit.cover,
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 22.0,
-                    ),
-                    defaultTextFormField(
-                      context: context,
-                      controller: userNameController,
-                      labelText: 'User Name',
-                      labelStyle: Theme.of(context).textTheme.bodyText1,
-                      keyboardType: TextInputType.name,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'name must not be empty ';
-                        }
-                      },
-                    ),
-                    const SizedBox(
-                      height: 20.0,
-                    ),
-                    defaultTextFormField(
-                      context: context,
-                      controller: emailController,
-                      keyboardType: TextInputType.emailAddress,
-                      labelText: "Email",
-                      labelStyle: Theme.of(context).textTheme.bodyText1,
-                      onChanged: (value) {},
-                      onSubmit: (value) {},
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Email Address must not be empty ';
-                        }
-                      },
-                    ),
-                    const SizedBox(
-                      height: 20.0,
-                    ),
-                    Container(
-                      width: 322.0,
-                      height: 45.0,
-                      child: MaterialButton(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5.0),
-                        ),
-                        onPressed: () {
-                          showModalBottomSheet(
-                            context: context,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(80),
-                            ),
-                            isScrollControlled: true,
-                            builder: (context) => modalSheet(context),
-                          );
-                        },
-                        child: const Text(
-                          'Change Password',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20.0,
-                          ),
-                        ),
-                        color: Colors.grey,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 20.0,
-                    ),
-                    GeneralAppCubit.get(context).isLoadProfile
-                        ? CircularProgressIndicator(
-                            color: Theme.of(context).primaryColor,
-                          )
-                        : Container(
-                            width: 322.0,
-                            height: 45.0,
-                            child: MaterialButton(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5.0),
+                          GestureDetector(
+                            onTap: () {
+                              cubit1.pickImage();
+                              isUpdatePhoto = true;
+                            },
+                            child: Padding(
+                              padding: const EdgeInsetsDirectional.only(
+                                end: 35,
                               ),
-                              onPressed: () {
-                                GeneralAppCubit.get(context)
-                                    .getUserData(token: token);
-                                isUpdatePhoto
-                                    ? cubit.setAvatar(context)
-                                    : formKey.currentState!.validate()
-                                        ? GeneralAppCubit.get(context)
-                                            .updateUserData(
-                                            name1: userNameController!.text,
-                                            email1: emailController!.text,
-                                            token: token,
-                                          )
-                                        : null;
-                                isUpdatePhoto = false;
-                              },
-                              child: const Text(
-                                'Confirm',
-                                style: TextStyle(
+                              child: Container(
+                                width: 37,
+                                height: 37,
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).primaryColor,
+                                  borderRadius:
+                                      BorderRadiusDirectional.circular(200),
+                                ),
+                                child: const Icon(
+                                  Icons.camera_alt_outlined,
                                   color: Colors.white,
-                                  fontSize: 20.0,
+                                  size: 25,
                                 ),
                               ),
-                              color: Theme.of(context).primaryColor,
                             ),
                           ),
-                    const SizedBox(
-                      height: 20.0,
-                    ),
-                    Container(
-                      width: 322.0,
-                      height: 45.0,
-                      child: MaterialButton(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5.0),
-                        ),
-                        onPressed: () {
-                          CachHelper.deleteData(
-                            'token',
-                          ).then((value) {
-                            if (value) {
-                              navigatePushANDRemoveRout(
-                                  context: context, navigateTo: LoginScreen());
-                            }
-                          });
-                        },
-                        child: const Text(
-                          'LogOut',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20.0,
-                          ),
-                        ),
-                        color: Theme.of(context).primaryColor,
+                        ],
                       ),
-                    ),
-                    const SizedBox(
-                      height: 20.0,
-                    ),
-                  ],
+                      const SizedBox(
+                        height: 22.0,
+                      ),
+                      defaultTextFormField(
+                        context: context,
+                        controller: userNameController,
+                        labelText: 'User Name',
+                        labelStyle: Theme.of(context).textTheme.bodyText1,
+                        keyboardType: TextInputType.name,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'name must not be empty ';
+                          }
+                        },
+                      ),
+                      const SizedBox(
+                        height: 20.0,
+                      ),
+                      defaultTextFormField(
+                        context: context,
+                        controller: emailController,
+                        keyboardType: TextInputType.emailAddress,
+                        labelText: "Email",
+                        labelStyle: Theme.of(context).textTheme.bodyText1,
+                        onChanged: (value) {},
+                        onSubmit: (value) {},
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Email Address must not be empty ';
+                          }
+                        },
+                      ),
+                      const SizedBox(
+                        height: 20.0,
+                      ),
+                      Container(
+                        width: 322.0,
+                        height: 45.0,
+                        child: MaterialButton(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5.0),
+                          ),
+                          onPressed: () {
+                            showModalBottomSheet(
+                              context: context,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(80),
+                              ),
+                              isScrollControlled: true,
+                              builder: (context) => modalSheet(context),
+                            );
+                          },
+                          child: const Text(
+                            'Change Password',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20.0,
+                            ),
+                          ),
+                          color: Colors.grey,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20.0,
+                      ),
+                      GeneralAppCubit.get(context).isLoadProfile
+                          ? CircularProgressIndicator(
+                              color: Theme.of(context).primaryColor,
+                            )
+                          : Container(
+                              width: 322.0,
+                              height: 45.0,
+                              child: MaterialButton(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(5.0),
+                                ),
+                                onPressed: () {
+                                  GeneralAppCubit.get(context)
+                                      .getUserData(token: token);
+                                  isUpdatePhoto
+                                      ? cubit.setAvatar(context)
+                                      : formKey.currentState!.validate()
+                                          ? GeneralAppCubit.get(context)
+                                              .updateUserData(
+                                              name1: userNameController!.text,
+                                              email1: emailController!.text,
+                                              token: token,
+                                            )
+                                          : null;
+                                  isUpdatePhoto = false;
+                                },
+                                child: const Text(
+                                  'Confirm',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20.0,
+                                  ),
+                                ),
+                                color: Theme.of(context).primaryColor,
+                              ),
+                            ),
+                      const SizedBox(
+                        height: 20.0,
+                      ),
+                      Container(
+                        width: 322.0,
+                        height: 45.0,
+                        child: MaterialButton(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5.0),
+                          ),
+                          onPressed: () {
+                            CachHelper.deleteData(
+                              'token',
+                            ).then((value) {
+                              if (value) {
+                                navigatePushANDRemoveRout(
+                                    context: context, navigateTo: LoginScreen());
+                              }
+                            }).then((value)
+                            {
+                              GeneralAppCubit.get(context).search=null;
+                            });
+                          },
+                          child: const Text(
+                            'LogOut',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20.0,
+                            ),
+                          ),
+                          color: Theme.of(context).primaryColor,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20.0,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

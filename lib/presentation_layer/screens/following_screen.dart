@@ -55,7 +55,7 @@ class FollowingScreen extends StatelessWidget {
                             return InkWell(
                               onTap: () {
                                 cubit.getUserPodcast(
-                                    token, Followers.getUserID(index));
+                                    token, Following.getUserID(index));
                                 cubit.getUserById(
                                     profileId: Following.getUserID(index));
                                 if (Following.getUserID(index) ==
@@ -82,19 +82,6 @@ class FollowingScreen extends StatelessWidget {
                                     '${Following.getUserName(index)}',
                                     style:
                                         Theme.of(context).textTheme.bodyText1,
-                                  ),
-                                  trailing: MaterialButton(
-                                    color: Theme.of(context).primaryColor,
-                                    onPressed: () {},
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    child: const Text(
-                                      'Unfollow',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                      ),
-                                    ),
                                   ),
                                 ),
                               ),
