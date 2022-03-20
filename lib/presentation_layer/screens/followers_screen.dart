@@ -83,19 +83,6 @@ class FollowersScreen extends StatelessWidget {
                                     style:
                                         Theme.of(context).textTheme.bodyText1,
                                   ),
-                                  trailing: MaterialButton(
-                                    color: Theme.of(context).primaryColor,
-                                    onPressed: () {},
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    child: const Text(
-                                      'Follow',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ),
                                 ),
                               ),
                             );

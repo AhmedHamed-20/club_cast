@@ -20,6 +20,7 @@ class UserData
   String? country;
   String? language;
   String? userType;
+  bool? isFollowed;
 
   UserData.fromJson(Map<String, dynamic>json)
   {
@@ -31,6 +32,7 @@ class UserData
     country=json['country'];
     language=json['language'];
     userType=json['userType'];
+    isFollowed=json['isFollowed'];
   }
 }
 

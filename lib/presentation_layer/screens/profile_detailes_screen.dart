@@ -128,7 +128,7 @@ class ProfileDetailsScreen extends StatelessWidget {
                       const SizedBox(
                         height: 17.0,
                       ),
-                      cubit.isFollowing
+                      cubit.userId!.data!.isFollowed ==true
                           ? Container(
                               width: 280.0,
                               height: 45.0,
@@ -137,10 +137,13 @@ class ProfileDetailsScreen extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(5.0),
                                 ),
                                 onPressed: () {
-                                  cubit.toggleFollowing();
-                                  cubit.unFollowUser(
-                                      userProfileId:
-                                          '${cubit.userId!.data!.id}');
+                                  cubit.unFollowUser(userProfileId: '${cubit.userId!.data!.id}').then((value)
+                                  {
+                                    cubit.getUserById(profileId: '${cubit.userId!.data!.id}').then((value)
+                                    {
+                                      cubit.isLoadingprofile=false;
+                                    });
+                                  });
                                 },
                                 child: const Text(
                                   'UnFollow',
@@ -160,10 +163,15 @@ class ProfileDetailsScreen extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(5.0),
                                 ),
                                 onPressed: () {
-                                  cubit.toggleFollowing();
                                   cubit.followUser(
                                       userProfileId:
-                                          '${cubit.userId!.data!.id}');
+                                          '${cubit.userId!.data!.id}').then((value)
+                                  {
+                                    cubit.getUserById(profileId: '${cubit.userId!.data!.id}').then((value)
+                                    {
+                                      cubit.isLoadingprofile=false;
+                                    });
+                                  });
                                 },
                                 child: const Text(
                                   'Follow',

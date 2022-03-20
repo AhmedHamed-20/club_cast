@@ -151,6 +151,8 @@ class PreviewPlayingError extends GeneralAppStates {}
 
 class PreviewStoped extends GeneralAppStates {}
 
+class UserAvatarState extends GeneralAppStates {}
+
 class PodcastUploadedLoading extends GeneralAppStates {}
 
 class PodcastUploadedSuccess extends GeneralAppStates {}
