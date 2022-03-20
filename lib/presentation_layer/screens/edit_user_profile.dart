@@ -37,13 +37,11 @@ class EditUserProfileScreen extends StatelessWidget {
     return BlocConsumer<GeneralAppCubit, GeneralAppStates>(
       listener: (context, state) {},
       builder: (context, state) {
-        String token = CachHelper.getData(key: 'token');
+        //   String token = CachHelper.getData(key: 'token');
         var cubit = GeneralAppCubit.get(context);
         return WillPopScope(
-
-          onWillPop: ()
-          async{
-            cubit.profileAvatar=null;
+          onWillPop: () async {
+            cubit.profileAvatar = null;
             Navigator.pop(context);
             return false;
           },
@@ -52,7 +50,7 @@ class EditUserProfileScreen extends StatelessWidget {
               elevation: 0.0,
               leading: IconButton(
                 onPressed: () {
-                  cubit.profileAvatar=null;
+                  cubit.profileAvatar = null;
                   Navigator.pop(context);
                 },
                 icon: Icon(
@@ -81,17 +79,18 @@ class EditUserProfileScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(200),
                             child: cubit.profileAvatar != null
                                 ? Image.file(
-                              cubit.profileAvatar!,
-                              height: 160,
-                              width: 160,
-                              fit: BoxFit.cover,
-                            ) : Image(
-                              image: NetworkImage(
-                                  '${GetUserModel.getUserPhoto()}'),
-                              height: 180,
-                              width: 180,
-                              fit: BoxFit.cover,
-                            ),
+                                    cubit.profileAvatar!,
+                                    height: 160,
+                                    width: 160,
+                                    fit: BoxFit.cover,
+                                  )
+                                : Image(
+                                    image: NetworkImage(
+                                        '${GetUserModel.getUserPhoto()}'),
+                                    height: 180,
+                                    width: 180,
+                                    fit: BoxFit.cover,
+                                  ),
                           ),
                           GestureDetector(
                             onTap: () {
@@ -185,40 +184,45 @@ class EditUserProfileScreen extends StatelessWidget {
                       const SizedBox(
                         height: 20.0,
                       ),
-                      cubit.isUploadPhoto?CircularProgressIndicator(
-                        color: Theme.of(context).primaryColor,
-                      ):cubit.isUpdateUserData? CircularProgressIndicator(
-                        color: Theme.of(context).primaryColor,
-                      ):Container(
-                              width: 322.0,
-                              height: 45.0,
-                              child: MaterialButton(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(5.0),
-                                ),
-                                onPressed: () {
-                                  isUpdatePhoto
-                                      ? cubit.setAvatar(context)
-                                      : formKey.currentState!.validate()
-                                          ? GeneralAppCubit.get(context)
-                                              .updateUserData(
-                                              name1: userNameController!.text,
-                                              email1: emailController!.text,
-                                              token: token,
-                                            )
-                                          : null;
-                                  isUpdatePhoto = false;
-                                },
-                                child: const Text(
-                                  'Confirm',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 20.0,
+                      cubit.isUploadPhoto
+                          ? CircularProgressIndicator(
+                              color: Theme.of(context).primaryColor,
+                            )
+                          : cubit.isUpdateUserData
+                              ? CircularProgressIndicator(
+                                  color: Theme.of(context).primaryColor,
+                                )
+                              : Container(
+                                  width: 322.0,
+                                  height: 45.0,
+                                  child: MaterialButton(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5.0),
+                                    ),
+                                    onPressed: () {
+                                      isUpdatePhoto
+                                          ? cubit.setAvatar(context)
+                                          : formKey.currentState!.validate()
+                                              ? GeneralAppCubit.get(context)
+                                                  .updateUserData(
+                                                  name1:
+                                                      userNameController!.text,
+                                                  email1: emailController!.text,
+                                                  token: token,
+                                                )
+                                              : null;
+                                      isUpdatePhoto = false;
+                                    },
+                                    child: const Text(
+                                      'Confirm',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 20.0,
+                                      ),
+                                    ),
+                                    color: Theme.of(context).primaryColor,
                                   ),
                                 ),
-                                color: Theme.of(context).primaryColor,
-                              ),
-                            ),
                       const SizedBox(
                         height: 20.0,
                       ),
@@ -234,12 +238,18 @@ class EditUserProfileScreen extends StatelessWidget {
                               'token',
                             ).then((value) {
                               if (value) {
+                                cubit.assetsAudioPlayer.stop();
                                 navigatePushANDRemoveRout(
-                                    context: context, navigateTo: LoginScreen());
+                                    context: context,
+                                    navigateTo: LoginScreen());
                               }
-                            }).then((value)
-                            {
-                              GeneralAppCubit.get(context).search=null;
+                            }).then((value) {
+                              cubit.isPlaying = false;
+                              cubit.isPausedInHome = false;
+                              GeneralAppCubit.get(context).search = null;
+                              cubit.currentOlayingDurathion = null;
+                              cubit.activePodCastId = null;
+                              cubit.currentPostionDurationInsec = 0;
                             });
                           },
                           child: const Text(

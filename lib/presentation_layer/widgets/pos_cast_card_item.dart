@@ -27,85 +27,45 @@ Widget podACastItem(BuildContext context,
       '${((time % (24 * 3600)) / 3600).round().toString()}:${((time % (24 * 3600 * 3600)) / 60).round().toString()}:${(time % 60).round().toString()}';
   var cubit = GeneralAppCubit?.get(context);
   ////////////////////////////////////////////////////////
-  return SizedBox(
-    height: MediaQuery.of(context).size.height * 0.25,
-    width: double.infinity,
-    child: Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
-      ),
-      color: Theme.of(context).backgroundColor,
-      elevation: 4,
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.03,
-                ),
-                CircleAvatar(
-                  radius: 30,
-                  backgroundImage: NetworkImage(photoUrl),
-                ),
-                Spacer(),
-                Stack(
-                  alignment: AlignmentDirectional.bottomStart,
-                  children: [
-                    podCastLikes!,
-                    likeWidget!,
-                  ],
-                ),
-              ],
+  return Card(
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(15),
+    ),
+    color: Theme.of(context).backgroundColor,
+    elevation: 4,
+    child: Padding(
+      padding: const EdgeInsets.all(12.0),
+      child: Column(
+        children: [
+          ListTile(
+            leading: CircleAvatar(
+              radius: 30,
+              backgroundImage: NetworkImage(photoUrl),
             ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.04,
-            ),
-            Column(
+            title: Text(podcastName!,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.bodyText2),
+            subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Row(
-                  children: [
-                    Column(
-                      children: [
-                        Text(podcastName!,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context).textTheme.bodyText2),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.width * 0.02,
-                        ),
-                        Text(userName!,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context).textTheme.bodyText1),
-                      ],
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.32,
-                    ),
-                    removePodCast!,
-                  ],
+                Text(userName!,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.bodyText1),
+                Text(
+                  text == null ? convertedTime : text,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyText1
+                      ?.copyWith(color: Theme.of(context).primaryColor),
                 ),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.33,
-                      child: Text(
-                        text == null ? convertedTime : text,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyText1
-                            ?.copyWith(color: Theme.of(context).primaryColor),
-                      ),
-                    ),
                     downloadButton!,
                     SizedBox(
                       width: MediaQuery.of(context).size.width * 0.02,
@@ -115,8 +75,22 @@ Widget podACastItem(BuildContext context,
                 ),
               ],
             ),
-          ],
-        ),
+            trailing: removePodCast!,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 18,
+              right: 18,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                podCastLikes!,
+                likeWidget!,
+              ],
+            ),
+          )
+        ],
       ),
     ),
   );

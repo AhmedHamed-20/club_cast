@@ -48,8 +48,10 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   bool isMyprofileScreen = false;
   bool pressedPause = false;
   bool isDownloading = false;
+  bool isPausedInHome = false;
   bool? isDark = false;
-
+  String? activePodcastname = '';
+  String? activepodcastPhotUrl = '';
   String? activePodCastId;
   int counter = 0;
   double currentPostionDurationInsec = 0;
@@ -126,11 +128,17 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     });
   }
 
-  void playingPodcast(String url, String name, String iconurl,
-      String activePodCastIdnow) async {
+  void playingPodcast(
+    String url,
+    String name,
+    String iconurl,
+    String activePodCastIdnow,
+  ) async {
     if (pressedPause && activePodCastId == activePodCastIdnow) {
       assetsAudioPlayer.play();
       activePodCastId = activePodCastIdnow;
+      activePodcastname = name;
+      activepodcastPhotUrl = iconurl;
       print('nowwwww' + activePodCastId!);
       isPlaying = true;
       pressedPause = false;
@@ -147,16 +155,21 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
                   pressedPause
                       ? assetsAudioPlayer.play().then((value) {
                           isPlaying = true;
+
                           pressedPause = false;
                           changeState();
                         })
                       : assetsAudioPlayer.pause().then((value) {
                           isPlaying = false;
                           pressedPause = true;
+
                           changeState();
                         });
                 }),
           );
+
+          activePodcastname = name;
+          activepodcastPhotUrl = iconurl;
           assetsAudioPlayer.updateCurrentAudioNotification(
             metas: Metas(
               title: name,
@@ -174,6 +187,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
             if (event.inSeconds == 00.000000) {
               isPlaying = false;
               pressedPause = false;
+
               emit(ChangePlayingState());
             } else {
               isPlaying = true;
@@ -486,7 +500,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     } else {
       isLoadProfile = true;
       emit(UserDataLoadingState());
-        DioHelper.getData(
+      DioHelper.getData(
         url: profile,
         token: {
           'Authorization': 'Bearer ${token}',
@@ -503,14 +517,14 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     }
   }
 
-  bool isUpdateUserData=false;
+  bool isUpdateUserData = false;
   void updateUserData({
     required String name1,
     required String email1,
     required String token,
   }) {
     emit(UpdateUserLoadingState());
-    isUpdateUserData=true;
+    isUpdateUserData = true;
     DioHelper.patchData(
       url: updateProfile,
       name: name1,
@@ -520,7 +534,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       print(value);
       GetUserModel.updateName(name1);
       GetUserModel.updateEmail(email1);
-      isUpdateUserData=false;
+      isUpdateUserData = false;
       emit(DataUpdatedSuccess());
       showToast(
         message: 'Update Success',
@@ -597,7 +611,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   Future getUserById({
     required String profileId,
     Map<String, dynamic>? save,
-  }) async{
+  }) async {
     isLoadingprofile = true;
     emit(GetUserByIdLoadingState());
     return await DioHelper.getData(
@@ -618,7 +632,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
 
   Future followUser({
     required String userProfileId,
-  })async {
+  }) async {
     emit(FollowUserLoadingState());
     return await DioHelper.postData(
       url: 'v1/users/$userProfileId/following',
@@ -635,7 +649,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
 
   Future unFollowUser({
     required String userProfileId,
-  })async {
+  }) async {
     emit(UnFollowUserLoadingState());
     return await DioHelper.deleteData(
       url: 'v1/users/$userProfileId/following',
@@ -752,6 +766,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       print(error);
     });
   }
+
   File? profileAvatar;
 
   Future pickImage() async {
@@ -767,23 +782,23 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     }
   }
 
-  bool isUploadPhoto=false;
+  bool isUploadPhoto = false;
   void setAvatar(BuildContext context) async {
     emit(UserUpdateAvatarLoadingState());
-    isUploadPhoto=true;
+    isUploadPhoto = true;
 
     print(CachHelper.getData(key: 'token'));
     print(profileAvatar!.path);
     await DioHelper.uploadImage(
-        url: updateProfile,
-        image: profileAvatar,
-        token: CachHelper.getData(key: 'token'))
+            url: updateProfile,
+            image: profileAvatar,
+            token: CachHelper.getData(key: 'token'))
         .then((value) {
       print(value.data);
       showToast(
           message: 'update avatar is succeeded',
           toastState: ToastState.SUCCESS);
-      isUploadPhoto=false;
+      isUploadPhoto = false;
       emit(UserUpdateAvatarSuccessState());
     }).catchError((error) {
       print("error when set user avatar :${error.toString()}");

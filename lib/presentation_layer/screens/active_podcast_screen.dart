@@ -196,7 +196,8 @@ class ActivePodCastScreen extends StatelessWidget {
                                                   .getPodcastUserPublishInform(
                                                       index!)[0]['photo'],
                                               GetMyFollowingPodCastsModel
-                                                  .getPodcastID(index!));
+                                                  .getPodcastID(index!),
+                                            );
                                     },
                                     child: Icon(
                                       cubit.isPlaying &&

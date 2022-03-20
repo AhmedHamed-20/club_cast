@@ -1,3 +1,4 @@
+import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/data_layer/cash/cash.dart';
 import 'package:club_cast/presentation_layer/components/constant/constant.dart';
 import 'package:club_cast/presentation_layer/screens/user_screen/login_screen/login_screen.dart';
@@ -182,8 +183,14 @@ void logOut({
   required BuildContext context,
 }) {
   CachHelper.deleteData("token").then((value) {
+    var cubit = GeneralAppCubit.get(context);
     print(value);
     token = null;
+    cubit.search?.clear();
+    cubit.activePodCastId = null;
+    cubit.currentOlayingDurathion = null;
+    cubit.currentPostionDurationInsec = 0;
+    cubit.isPlaying ? cubit.assetsAudioPlayer.stop() : const SizedBox();
     if (token == null) {
       navigatePushANDRemoveRout(context: context, navigateTo: LoginScreen());
     }

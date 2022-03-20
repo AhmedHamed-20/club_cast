@@ -14,6 +14,8 @@ import 'package:club_cast/presentation_layer/widgets/pos_cast_card_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../components/constant/constant.dart';
+
 class UserProfileScreen extends StatelessWidget {
   const UserProfileScreen({Key? key}) : super(key: key);
 
@@ -27,7 +29,7 @@ class UserProfileScreen extends StatelessWidget {
     return BlocConsumer<GeneralAppCubit, GeneralAppStates>(
       listener: (context, index) {},
       builder: (context, index) {
-        String token = CachHelper.getData(key: 'token');
+        // String token = CachHelper.getData(key: 'token');
 
         currentId = cubit.activePodCastId;
         return WillPopScope(
@@ -309,6 +311,9 @@ class UserProfileScreen extends StatelessWidget {
                                           },
                                           icon: Icon(
                                             Icons.clear,
+                                            color: Theme.of(context)
+                                                .iconTheme
+                                                .color,
                                           )),
                                       photourl: GetMyPodCastModel
                                           .getPodcastUserPublishInform(

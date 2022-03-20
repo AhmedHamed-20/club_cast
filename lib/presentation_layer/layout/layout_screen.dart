@@ -21,11 +21,101 @@ class LayoutScreen extends StatelessWidget {
     return BlocConsumer<GeneralAppCubit, GeneralAppStates>(
         listener: (BuildContext context, state) {},
         builder: (BuildContext context, Object? state) {
-          String token = CachHelper.getData(key: 'token');
           var cubit = GeneralAppCubit.get(context);
           return Scaffold(
+            bottomSheet: cubit.isPlaying || cubit.isPausedInHome
+                ? Container(
+                    color: Theme.of(context).primaryColor,
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          left: 12.0, right: 12, top: 15, bottom: 15),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          CircleAvatar(
+                            radius: 20,
+                            backgroundImage: NetworkImage(
+                                cubit.activepodcastPhotUrl.toString()),
+                          ),
+                          Text(
+                            cubit.activePodcastname.toString(),
+                            style: Theme.of(context).textTheme.bodyText1,
+                          ),
+                          Row(
+                            children: [
+                              IconButton(
+                                onPressed: () {
+                                  cubit.isPlaying
+                                      ? cubit.assetsAudioPlayer
+                                          .seekBy(Duration(seconds: -10))
+                                      : SizedBox();
+                                },
+                                icon: Icon(
+                                  Icons.replay_10,
+                                  color: Theme.of(context).iconTheme.color,
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  cubit.isPlaying
+                                      ? cubit.assetsAudioPlayer
+                                          .pause()
+                                          .then((value) {
+                                          cubit.isPlaying = false;
+                                          cubit.isPausedInHome = true;
+                                          cubit.changeState();
+                                        })
+                                      : cubit.assetsAudioPlayer
+                                          .play()
+                                          .then((value) {
+                                          cubit.isPlaying = true;
+                                          cubit.isPausedInHome = false;
+                                          cubit.changeState();
+                                        });
+                                },
+                                icon: Icon(
+                                  cubit.isPlaying
+                                      ? Icons.pause_circle_outline_outlined
+                                      : Icons.play_circle_outline_outlined,
+                                  color: Theme.of(context).iconTheme.color,
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  cubit.assetsAudioPlayer.stop().then((value) {
+                                    cubit.isPlaying = false;
+                                    cubit.isPausedInHome = false;
+                                    cubit.changeState();
+                                  });
+                                },
+                                icon: Icon(
+                                  Icons.stop_circle_outlined,
+                                  color: Theme.of(context).iconTheme.color,
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  cubit.isPlaying
+                                      ? cubit.assetsAudioPlayer
+                                          .seekBy(Duration(seconds: 10))
+                                      : SizedBox();
+                                },
+                                icon: Icon(
+                                  Icons.forward_10,
+                                  color: Theme.of(context).iconTheme.color,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                : const SizedBox(),
             floatingActionButtonLocation:
-                FloatingActionButtonLocation.centerDocked,
+                cubit.isPlaying || cubit.isPausedInHome
+                    ? FloatingActionButtonLocation.centerTop
+                    : FloatingActionButtonLocation.centerDocked,
             appBar: AppBar(
               backgroundColor: Colors.transparent,
               elevation: 0,

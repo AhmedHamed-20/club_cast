@@ -66,7 +66,7 @@ class ProfileDetailsScreen extends StatelessWidget {
                       Center(
                         child: CircleAvatar(
                           backgroundImage:
-                              NetworkImage('${cubit.userId!.data!.photo}'),
+                              NetworkImage('${cubit.userId?.data?.photo}'),
                           radius: 75.0,
                         ),
                       ),
@@ -74,7 +74,7 @@ class ProfileDetailsScreen extends StatelessWidget {
                         height: 10.0,
                       ),
                       Text(
-                        '${cubit.userId!.data!.name}',
+                        '${cubit.userId?.data?.name}',
                         style: Theme.of(context).textTheme.bodyText1!.copyWith(
                               fontWeight: FontWeight.w900,
                               fontSize: 22.0,
@@ -97,13 +97,13 @@ class ProfileDetailsScreen extends StatelessWidget {
                           InkWell(
                             onTap: () {
                               cubit.userFollowers(
-                                  userProfileId: '${cubit.userId!.data!.id}');
+                                  userProfileId: '${cubit.userId?.data?.id}');
                               navigatePushTo(
                                   context: context,
                                   navigateTo: FollowersScreen());
                             },
                             child: statusNumberProfile(
-                              number: '${cubit.userId!.data!.followers}',
+                              number: '${cubit.userId?.data?.followers}',
                               statusType: 'Followers',
                             ),
                           ),
@@ -128,7 +128,7 @@ class ProfileDetailsScreen extends StatelessWidget {
                       const SizedBox(
                         height: 17.0,
                       ),
-                      cubit.userId!.data!.isFollowed ==true
+                      cubit.userId!.data!.isFollowed == true
                           ? Container(
                               width: 280.0,
                               height: 45.0,
@@ -137,11 +137,17 @@ class ProfileDetailsScreen extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(5.0),
                                 ),
                                 onPressed: () {
-                                  cubit.unFollowUser(userProfileId: '${cubit.userId!.data!.id}').then((value)
-                                  {
-                                    cubit.getUserById(profileId: '${cubit.userId!.data!.id}').then((value)
-                                    {
-                                      cubit.isLoadingprofile=false;
+                                  cubit
+                                      .unFollowUser(
+                                          userProfileId:
+                                              '${cubit.userId!.data!.id}')
+                                      .then((value) {
+                                    cubit
+                                        .getUserById(
+                                            profileId:
+                                                '${cubit.userId!.data!.id}')
+                                        .then((value) {
+                                      cubit.isLoadingprofile = false;
                                     });
                                   });
                                 },
@@ -163,13 +169,17 @@ class ProfileDetailsScreen extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(5.0),
                                 ),
                                 onPressed: () {
-                                  cubit.followUser(
-                                      userProfileId:
-                                          '${cubit.userId!.data!.id}').then((value)
-                                  {
-                                    cubit.getUserById(profileId: '${cubit.userId!.data!.id}').then((value)
-                                    {
-                                      cubit.isLoadingprofile=false;
+                                  cubit
+                                      .followUser(
+                                          userProfileId:
+                                              '${cubit.userId!.data!.id}')
+                                      .then((value) {
+                                    cubit
+                                        .getUserById(
+                                            profileId:
+                                                '${cubit.userId!.data!.id}')
+                                        .then((value) {
+                                      cubit.isLoadingprofile = false;
                                     });
                                   });
                                 },

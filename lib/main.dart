@@ -25,7 +25,7 @@ void main() async {
   bool? isDark;
   token = CachHelper.getData(key: 'token');
 
-  print('mainValue:${isDark}');
+  //print('mainValue:${isDark}');
   if (await CachHelper.getData(key: 'isDark') == null) {
     isDark = false;
   } else {

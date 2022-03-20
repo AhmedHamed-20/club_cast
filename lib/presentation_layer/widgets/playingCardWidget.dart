@@ -69,21 +69,17 @@ class PlayingCardWidget {
 
   static Widget podCastLikes(BuildContext context, cubit, String token,
       int index, String podcastID, String podCatLikesNumber) {
-    return Padding(
-      padding: const EdgeInsetsDirectional.only(end: 15),
+    return InkWell(
+      onTap: () {
+        cubit.getPodCastLikes(
+            context: context, token: token, podCastId: podcastID);
+      },
       child: CircleAvatar(
         radius: 15,
-        backgroundColor: Theme.of(context).backgroundColor,
-        child: InkWell(
-          onTap: () {
-            cubit.getPodCastLikes(
-                context: context, token: token, podCastId: podcastID);
-          },
-          child: Text(
-            podCatLikesNumber,
-            style:
-                Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 15),
-          ),
+        backgroundColor: Theme.of(context).primaryColor,
+        child: Text(
+          podCatLikesNumber,
+          style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 15),
         ),
       ),
     );
