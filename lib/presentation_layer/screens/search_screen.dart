@@ -13,13 +13,22 @@ class SearchScreen extends StatelessWidget {
   SearchScreen({Key? key}) : super(key: key);
 
   var searchController = TextEditingController();
+
   String token = CachHelper.getData(key: 'token');
   @override
   Widget build(BuildContext context) {
+    var cubit = GeneralAppCubit.get(context);
+    searchController.addListener(() {
+      Future.delayed(Duration(seconds: 1), () {
+        cubit.userSearch(
+          token: token,
+          value: searchController.text,
+        );
+      });
+    });
     return BlocConsumer<GeneralAppCubit, GeneralAppStates>(
       listener: (context, index) {},
       builder: (context, index) {
-        var cubit = GeneralAppCubit.get(context);
         return WillPopScope(
           onWillPop: () async {
             cubit.isProfilePage = false;
@@ -55,10 +64,10 @@ class SearchScreen extends StatelessWidget {
                     labelText: "Search",
                     labelStyle: Theme.of(context).textTheme.bodyText1,
                     onChanged: (value) {
-                      cubit.userSearch(
-                        token: token,
-                        value: value,
-                      );
+                      // cubit.userSearch(
+                      //   token: token,
+                      //   value: value,
+                      // );
                     },
                     onSubmit: (value) {},
                   ),

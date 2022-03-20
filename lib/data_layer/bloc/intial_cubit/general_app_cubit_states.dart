@@ -150,3 +150,13 @@ class PreviewPlaying extends GeneralAppStates {}
 class PreviewPlayingError extends GeneralAppStates {}
 
 class PreviewStoped extends GeneralAppStates {}
+
+class PodcastUploadedLoading extends GeneralAppStates {}
+
+class PodcastUploadedSuccess extends GeneralAppStates {}
+
+class PodcastUploadedNow extends GeneralAppStates {}
+
+class CreatePodcastInServer extends GeneralAppStates {}
+
+class PodcastUploadedError extends GeneralAppStates {}

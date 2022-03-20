@@ -17,6 +17,7 @@ import 'package:club_cast/presentation_layer/screens/public_rooms_screen.dart';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:http_parser/http_parser.dart';
 import 'package:path_provider/path_provider.dart' as path;
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -317,6 +318,97 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     }).catchError((error) {
       emit(PodCastDataGetError());
       print(error);
+    });
+  }
+
+  bool isLoadPodCast = false;
+  bool isUploading = false;
+  double? uploadProgress;
+  void uploadPodCast(String token, String podCastName, String category) async {
+    isLoadPodCast = true;
+    emit(PodcastUploadedLoading());
+    await DioHelper.dio!
+        .get(generateSignature,
+            options: Options(
+              headers: {'Authorization': 'Bearer ${token}'},
+            ))
+        .then((value) async {
+      //timestamp
+      //signature
+      //cloudName
+      //apiKey
+
+      String podcastname = podcastFile!.path.split('/').last;
+      var cloudname = value.data['cloudName'];
+      var timestamp = value.data['timestamp'];
+      var signature = value.data['signature'];
+      var apiKey = value.data['apiKey'];
+      print(podcastFile!.path);
+      DioHelper.dio!.post(
+        'https://api.cloudinary.com/v1_1/${cloudname}/video/upload?api_key=${apiKey}&timestamp=${timestamp}&signature=${signature}',
+        options: Options(
+          headers: {'Authorization': 'Bearer ${token}'},
+        ),
+        data: FormData.fromMap({
+          'file': await MultipartFile.fromFile(
+            podcastFile!.path,
+            filename: podcastname,
+            contentType: MediaType('audio', 'mp3'),
+          ),
+          'folder': 'podcasts',
+          'resource_type': 'auto',
+        }),
+        onSendProgress: (whatsend, total) {
+          isUploading = true;
+          isLoadPodCast = false;
+          emit(PodcastUploadedNow());
+          uploadProgress = whatsend / total;
+        },
+      ).then((value) {
+        print(value);
+        isUploading = false;
+        isLoadPodCast = true;
+        emit(CreatePodcastInServer());
+        DioHelper.dio!.post(createPodCast,
+            options: Options(
+              headers: {'Authorization': 'Bearer ${token}'},
+            ),
+            data: {
+              'name': podCastName,
+              'category': category,
+              'audio': {'public_id': value.data['public_id']}
+            }).then((value) {
+          print('yessss');
+          getMyPodCast(token);
+          isLoadPodCast = false;
+          showToast(
+              message: 'PodCast Uploaded Success',
+              toastState: ToastState.SUCCESS);
+          emit(PodcastUploadedSuccess());
+          print(value);
+        }).catchError((error) {
+          isLoadPodCast = false;
+          isUploading = false;
+          showToast(
+              message: 'PodCast Uploaded Error', toastState: ToastState.ERROR);
+          emit(PodcastUploadedError());
+          print(error.message);
+        });
+      }).catchError((onError) {
+        showToast(
+            message: 'PodCast Uploaded Error', toastState: ToastState.ERROR);
+        isLoadPodCast = false;
+        isUploading = false;
+        emit(PodcastUploadedError());
+        print(onError);
+      });
+    }).catchError((onError) {
+      showToast(
+          message: 'PodCast Uploaded Error', toastState: ToastState.ERROR);
+      isLoadPodCast = false;
+      isUploading = false;
+      emit(PodcastUploadedError());
+      print(onError);
     });
   }
 
