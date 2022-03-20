@@ -162,3 +162,9 @@ class PodcastUploadedNow extends GeneralAppStates {}
 class CreatePodcastInServer extends GeneralAppStates {}
 
 class PodcastUploadedError extends GeneralAppStates {}
+
+class UserUpdateAvatarLoadingState extends GeneralAppStates {}
+
+class UserUpdateAvatarSuccessState extends GeneralAppStates {}
+
+class UserUpdateAvatarErrorState extends GeneralAppStates {}

@@ -38,13 +38,12 @@ class EditUserProfileScreen extends StatelessWidget {
       listener: (context, state) {},
       builder: (context, state) {
         String token = CachHelper.getData(key: 'token');
-        var cubit = LoginCubit.get(context);
-        var cubit1 = GeneralAppCubit.get(context);
+        var cubit = GeneralAppCubit.get(context);
         return WillPopScope(
 
           onWillPop: ()
           async{
-            cubit1.profileAvatar=null;
+            cubit.profileAvatar=null;
             Navigator.pop(context);
             return false;
           },
@@ -53,7 +52,7 @@ class EditUserProfileScreen extends StatelessWidget {
               elevation: 0.0,
               leading: IconButton(
                 onPressed: () {
-                  cubit1.profileAvatar=null;
+                  cubit.profileAvatar=null;
                   Navigator.pop(context);
                 },
                 icon: Icon(
@@ -80,9 +79,9 @@ class EditUserProfileScreen extends StatelessWidget {
                         children: [
                           ClipRRect(
                             borderRadius: BorderRadius.circular(200),
-                            child: cubit1.profileAvatar != null
+                            child: cubit.profileAvatar != null
                                 ? Image.file(
-                              cubit1.profileAvatar!,
+                              cubit.profileAvatar!,
                               height: 160,
                               width: 160,
                               fit: BoxFit.cover,
@@ -96,7 +95,7 @@ class EditUserProfileScreen extends StatelessWidget {
                           ),
                           GestureDetector(
                             onTap: () {
-                              cubit1.pickImage();
+                              cubit.pickImage();
                               isUpdatePhoto = true;
                             },
                             child: Padding(
@@ -186,11 +185,11 @@ class EditUserProfileScreen extends StatelessWidget {
                       const SizedBox(
                         height: 20.0,
                       ),
-                      GeneralAppCubit.get(context).isLoadProfile
-                          ? CircularProgressIndicator(
-                              color: Theme.of(context).primaryColor,
-                            )
-                          : Container(
+                      cubit.isUploadPhoto?CircularProgressIndicator(
+                        color: Theme.of(context).primaryColor,
+                      ):cubit.isUpdateUserData? CircularProgressIndicator(
+                        color: Theme.of(context).primaryColor,
+                      ):Container(
                               width: 322.0,
                               height: 45.0,
                               child: MaterialButton(
@@ -198,8 +197,6 @@ class EditUserProfileScreen extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(5.0),
                                 ),
                                 onPressed: () {
-                                  GeneralAppCubit.get(context)
-                                      .getUserData(token: token);
                                   isUpdatePhoto
                                       ? cubit.setAvatar(context)
                                       : formKey.currentState!.validate()

@@ -486,7 +486,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     } else {
       isLoadProfile = true;
       emit(UserDataLoadingState());
-      DioHelper.getData(
+        DioHelper.getData(
         url: profile,
         token: {
           'Authorization': 'Bearer ${token}',
@@ -503,12 +503,14 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     }
   }
 
+  bool isUpdateUserData=false;
   void updateUserData({
     required String name1,
     required String email1,
     required String token,
   }) {
     emit(UpdateUserLoadingState());
+    isUpdateUserData=true;
     DioHelper.patchData(
       url: updateProfile,
       name: name1,
@@ -518,6 +520,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       print(value);
       GetUserModel.updateName(name1);
       GetUserModel.updateEmail(email1);
+      isUpdateUserData=false;
       emit(DataUpdatedSuccess());
       showToast(
         message: 'Update Success',
@@ -762,5 +765,29 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     } on PlatformException catch (e) {
       print('error when pick image from galary:${e.toString()}');
     }
+  }
+
+  bool isUploadPhoto=false;
+  void setAvatar(BuildContext context) async {
+    emit(UserUpdateAvatarLoadingState());
+    isUploadPhoto=true;
+
+    print(CachHelper.getData(key: 'token'));
+    print(profileAvatar!.path);
+    await DioHelper.uploadImage(
+        url: updateProfile,
+        image: profileAvatar,
+        token: CachHelper.getData(key: 'token'))
+        .then((value) {
+      print(value.data);
+      showToast(
+          message: 'update avatar is succeeded',
+          toastState: ToastState.SUCCESS);
+      isUploadPhoto=false;
+      emit(UserUpdateAvatarSuccessState());
+    }).catchError((error) {
+      print("error when set user avatar :${error.toString()}");
+      emit(UserUpdateAvatarErrorState());
+    });
   }
 }
