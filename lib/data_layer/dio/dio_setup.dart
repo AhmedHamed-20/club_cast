@@ -38,10 +38,12 @@ class DioHelper {
   }
 
   static Future<dynamic> postData(
-      {required String url,
-      Map<String, dynamic>? data,
-      Map<String, dynamic>? token}) async {
-    return await dio!.post(url, data: data, options: Options(headers: token));
+      {required String url, dynamic data, Map<String, dynamic>? token}) async {
+    return await dio!.post(
+      url,
+      data: data,
+      options: Options(headers: token),
+    );
   }
 
   static Future<dynamic> patchData({
