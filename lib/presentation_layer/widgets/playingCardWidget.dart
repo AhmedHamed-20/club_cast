@@ -121,10 +121,11 @@ class PlayingCardWidget {
       cubit, BuildContext context, String podcastUrl, String podcastName) {
     return IconButton(
       onPressed: () {
-        currentId = podcastId;
-        cubit.downloadPodCast(podcastUrl, '${podcastName}.wav');
+        var cubit = GeneralAppCubit.get(context);
+        //  currentId = podcastId;
+        cubit.downloadPodCast(podcastUrl, '${podcastName}.wav', podcastId);
       },
-      icon: cubit.isDownloading && podcastId == currentId
+      icon: cubit.isDownloading && podcastId == cubit.downloadedPodCastId
           ? CircularProgressIndicator(
               value: cubit.progress,
               valueColor:

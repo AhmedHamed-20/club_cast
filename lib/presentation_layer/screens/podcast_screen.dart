@@ -23,10 +23,10 @@ class PodCastScreen extends StatelessWidget {
       listener: (BuildContext context, state) {},
       builder: (BuildContext context, Object? state) {
         currentId = cubit.activePodCastId;
-
+        print(currentId);
         return Padding(
           padding:
-              const EdgeInsetsDirectional.only(start: 10, end: 10, top: 20),
+              const EdgeInsets.only(left: 10.0, right: 10, top: 10, bottom: 40),
           child: GetMyFollowingPodCastsModel
                   .getMyFollowingPodcasts!['data'].isEmpty
               ? Center(

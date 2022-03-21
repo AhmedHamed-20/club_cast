@@ -75,7 +75,7 @@ class ProfileDetailsScreen extends StatelessWidget {
                       ),
                       Text(
                         '${cubit.userId?.data?.name}',
-                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                        style: Theme.of(context).textTheme.bodyText1?.copyWith(
                               fontWeight: FontWeight.w900,
                               fontSize: 22.0,
                             ),
@@ -113,13 +113,13 @@ class ProfileDetailsScreen extends StatelessWidget {
                           InkWell(
                             onTap: () {
                               cubit.userFollowing(
-                                  userProfileId: '${cubit.userId!.data!.id}');
+                                  userProfileId: '${cubit.userId?.data?.id}');
                               navigatePushTo(
                                   context: context,
                                   navigateTo: FollowingScreen());
                             },
                             child: statusNumberProfile(
-                              number: '${cubit.userId!.data!.following}',
+                              number: '${cubit.userId?.data?.following}',
                               statusType: 'Following',
                             ),
                           ),
@@ -140,12 +140,13 @@ class ProfileDetailsScreen extends StatelessWidget {
                                   cubit
                                       .unFollowUser(
                                           userProfileId:
-                                              '${cubit.userId!.data!.id}')
+                                              '${cubit.userId?.data?.id}')
                                       .then((value) {
+                                    cubit.getMyFollowingPodcast(token);
                                     cubit
                                         .getUserById(
                                             profileId:
-                                                '${cubit.userId!.data!.id}')
+                                                '${cubit.userId?.data?.id}')
                                         .then((value) {
                                       cubit.isLoadingprofile = false;
                                     });
@@ -172,12 +173,13 @@ class ProfileDetailsScreen extends StatelessWidget {
                                   cubit
                                       .followUser(
                                           userProfileId:
-                                              '${cubit.userId!.data!.id}')
+                                              '${cubit.userId?.data?.id}')
                                       .then((value) {
+                                    cubit.getMyFollowingPodcast(token);
                                     cubit
                                         .getUserById(
                                             profileId:
-                                                '${cubit.userId!.data!.id}')
+                                                '${cubit.userId?.data?.id}')
                                         .then((value) {
                                       cubit.isLoadingprofile = false;
                                     });
@@ -204,7 +206,7 @@ class ProfileDetailsScreen extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Text(
-                              'Your Podcasts',
+                              'Podcasts',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyText1!

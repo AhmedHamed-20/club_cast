@@ -445,7 +445,9 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
         type: path.StorageDirectory.documents);
   }
 
-  Future downloadPodCast(String url, String fileName) async {
+  String? downloadedPodCastId;
+  Future downloadPodCast(String url, String fileName, String podcastId) async {
+    downloadedPodCastId = podcastId;
     final dirList = await getDownloadPath();
     final path = dirList![0].path;
     final file = File('$path/$fileName');

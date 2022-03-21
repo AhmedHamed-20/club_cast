@@ -40,6 +40,7 @@ class SearchScreen extends StatelessWidget {
               elevation: 0.0,
               leading: IconButton(
                 onPressed: () {
+                  cubit.isProfilePage = false;
                   Navigator.pop(context);
                 },
                 icon: Icon(

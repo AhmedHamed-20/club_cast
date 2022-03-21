@@ -28,7 +28,7 @@ class LayoutScreen extends StatelessWidget {
                     color: Theme.of(context).primaryColor,
                     child: Padding(
                       padding: const EdgeInsets.only(
-                          left: 12.0, right: 12, top: 15, bottom: 15),
+                          left: 12.0, right: 12, top: 10, bottom: 10),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
