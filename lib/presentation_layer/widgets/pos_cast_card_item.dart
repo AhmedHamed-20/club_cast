@@ -76,6 +76,7 @@ Widget podACastItem(BuildContext context,
               ],
             ),
             trailing: removePodCast!,
+            horizontalTitleGap: 30,
           ),
           Padding(
             padding: const EdgeInsets.only(

@@ -151,6 +151,18 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
             showNotification: true,
             notificationSettings: NotificationSettings(
                 stopEnabled: true,
+                customNextIcon: AndroidResDrawable(name: 'ic_next_custom'),
+                customPreviousIcon: AndroidResDrawable(name: 'ic_prev_custom'),
+                customNextAction: (assetaudio) {
+                  assetaudio.seekBy(
+                    Duration(seconds: 10),
+                  );
+                },
+                customPrevAction: (assetaudio) {
+                  assetaudio.seekBy(
+                    Duration(seconds: -10),
+                  );
+                },
                 customPlayPauseAction: (_) {
                   pressedPause
                       ? assetsAudioPlayer.play().then((value) {
@@ -204,6 +216,38 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
         //mp3 unreachable
       }
     }
+  }
+
+  int page = 2;
+  bool noData = false;
+  bool loadMyFollowinPodcast = false;
+  pageinathionMyFollowingPodcast(String token) {
+    loadMyFollowinPodcast = true;
+    emit(LoadDataPaginattion());
+    DioHelper.getData(
+        url: getMyFollowingPodcasts + '?page=${page}',
+        token: {'Authorization': 'Bearer ${token}'}).then((value) {
+      // print(value.data['results']);
+      if (value.data['results'] == 0) {
+        page = page;
+        noData = true;
+        emit(DataPaginattiongetSuccess());
+        showToast(message: 'End Of Data(:', toastState: ToastState.SUCCESS);
+        loadMyFollowinPodcast = false;
+      } else {
+        page++;
+        GetMyFollowingPodCastsModel.getMyFollowingPodcasts
+            ?.addAll(value.data['data']);
+        print(GetMyFollowingPodCastsModel.getMyFollowingPodcasts);
+
+        loadMyFollowinPodcast = false;
+        emit(DataPaginattiongetSuccess());
+      }
+    }).onError((error, stackTrace) {
+      print(error);
+      loadMyFollowinPodcast = false;
+      emit(DataPaginattiongetError());
+    });
   }
 
   GetAllPodCastModel? podcastModel;

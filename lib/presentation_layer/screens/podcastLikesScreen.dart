@@ -1,6 +1,7 @@
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
+import 'package:club_cast/presentation_layer/components/constant/constant.dart';
 import 'package:club_cast/presentation_layer/models/podCastLikesUserModel.dart';
 import 'package:club_cast/presentation_layer/models/user_model.dart';
 import 'package:club_cast/presentation_layer/screens/profile_detailes_screen.dart';
@@ -49,6 +50,8 @@ class PodCastLikesScreen extends StatelessWidget {
                           cubit.getUserById(
                               profileId:
                                   GetPodCastUsersLikesModel.getUserID(index));
+                          cubit.getUserPodcast(token,
+                              GetPodCastUsersLikesModel.getUserID(index));
                           if (GetPodCastUsersLikesModel.getUserID(index) ==
                               GetUserModel.getUserID()) {
                             navigatePushTo(

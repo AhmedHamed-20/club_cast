@@ -168,3 +168,9 @@ class UserUpdateAvatarLoadingState extends GeneralAppStates {}
 class UserUpdateAvatarSuccessState extends GeneralAppStates {}
 
 class UserUpdateAvatarErrorState extends GeneralAppStates {}
+
+class LoadDataPaginattion extends GeneralAppStates {}
+
+class DataPaginattiongetSuccess extends GeneralAppStates {}
+
+class DataPaginattiongetError extends GeneralAppStates {}
