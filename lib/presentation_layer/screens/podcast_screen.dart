@@ -1,8 +1,11 @@
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
+import 'package:club_cast/presentation_layer/components/constant/constant.dart';
 import 'package:club_cast/presentation_layer/models/getMyFollowingPodcast.dart';
 import 'package:club_cast/presentation_layer/models/get_all_podcst.dart';
 import 'package:club_cast/presentation_layer/screens/active_podcast_screen.dart';
+import 'package:club_cast/presentation_layer/screens/explore_screen.dart';
+import 'package:club_cast/presentation_layer/screens/profile_detailes_screen.dart';
 import 'package:club_cast/presentation_layer/widgets/pos_cast_card_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -33,9 +36,31 @@ class PodCastScreen extends StatelessWidget {
           child: GetMyFollowingPodCastsModel
                   .getMyFollowingPodcasts!['data'].isEmpty
               ? Center(
-                  child: Text(
-                    'Follow someone to see following podcasts',
-                    style: Theme.of(context).textTheme.bodyText1,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Follow someone to see following podcasts',
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.bodyText1,
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      defaultButton(
+                        onPressed: () {
+                          cubit.getExplorePodcast(token: token);
+                          navigatePushTo(
+                            context: context,
+                            navigateTo: ExploreScreen(),
+                          );
+                        },
+                        context: context,
+                        text: 'Explore',
+                        width: 150,
+                        radius: 25,
+                      ),
+                    ],
                   ),
                 )
               : RefreshIndicator(
@@ -110,6 +135,23 @@ class PodCastScreen extends StatelessWidget {
                               photourl: GetMyFollowingPodCastsModel
                                       .getPodcastUserPublishInform(index)[0]
                                   ['photo'],
+                              ontapOnCircleAvater: () {
+                                cubit.getUserById(
+                                    profileId: GetMyFollowingPodCastsModel
+                                        .getPodcastUserPublishInform(
+                                            index)[0]['_id']);
+                                cubit.getUserPodcast(
+                                    token,
+                                    GetMyFollowingPodCastsModel
+                                        .getPodcastUserPublishInform(
+                                            index)[0]['_id']);
+                                navigatePushTo(
+                                    context: context,
+                                    navigateTo: ProfileDetailsScreen(
+                                        GetMyFollowingPodCastsModel
+                                            .getPodcastUserPublishInform(
+                                                index)[0]['_id']));
+                              },
                               podcastName:
                                   GetMyFollowingPodCastsModel.getPodcastName(
                                       index),
@@ -135,11 +177,13 @@ class PodCastScreen extends StatelessWidget {
                         const SizedBox(
                           height: 10,
                         ),
-                        cubit.noData
+                        cubit.noDataMyfollowingPodcast
                             ? const SizedBox()
                             : InkWell(
                                 onTap: () {
-                                  cubit.pageinathionMyFollowingPodcast(token);
+                                  cubit.pageinathionMyFollowingPodcast(
+                                    token,
+                                  );
                                 },
                                 child: CircleAvatar(
                                   backgroundColor:

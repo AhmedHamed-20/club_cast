@@ -3,21 +3,24 @@ import 'package:club_cast/data_layer/cash/cash.dart';
 import 'package:club_cast/presentation_layer/models/get_all_podcst.dart';
 import 'package:flutter/material.dart';
 
-Widget podACastItem(BuildContext context,
-    {String? roomName,
-    String? speaker,
-    String? roomTime,
-    int? index,
-    Widget? playingWidget,
-    String? text,
-    Widget? downloadButton,
-    Widget? removePodCast,
-    Widget? podCastLikes,
-    Widget? likeWidget,
-    double? gettime,
-    String? photourl,
-    String? userName,
-    String? podcastName}) {
+Widget podACastItem(
+  BuildContext context, {
+  String? roomName,
+  String? speaker,
+  String? roomTime,
+  int? index,
+  Widget? playingWidget,
+  String? text,
+  Widget? downloadButton,
+  Widget? removePodCast,
+  Widget? podCastLikes,
+  Widget? likeWidget,
+  double? gettime,
+  String? photourl,
+  String? userName,
+  String? podcastName,
+  VoidCallback? ontapOnCircleAvater,
+}) {
   ////////////////////////////////////////////////////
   String token = CachHelper.getData(key: 'token');
   String photoUrl = photourl!;
@@ -38,12 +41,15 @@ Widget podACastItem(BuildContext context,
       child: Column(
         children: [
           ListTile(
-            leading: CircleAvatar(
-              radius: 30,
-              backgroundImage: NetworkImage(photoUrl),
+            leading: InkWell(
+              onTap: ontapOnCircleAvater,
+              child: CircleAvatar(
+                radius: 30,
+                backgroundImage: NetworkImage(photoUrl),
+              ),
             ),
             title: Text(podcastName!,
-                maxLines: 1,
+                maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: Theme.of(context).textTheme.bodyText2),
             subtitle: Column(
@@ -52,7 +58,10 @@ Widget podACastItem(BuildContext context,
                 Text(userName!,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.bodyText1),
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText1
+                        ?.copyWith(color: Colors.grey)),
                 Text(
                   text == null ? convertedTime : text,
                   maxLines: 1,

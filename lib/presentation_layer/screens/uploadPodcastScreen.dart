@@ -18,6 +18,9 @@ class UploadPodCastScreen extends StatelessWidget {
           var cubit = GeneralAppCubit.get(context);
           return WillPopScope(
             onWillPop: () async {
+              cubit.previewIsplaying
+                  ? cubit.assetsAudioPlayer.stop()
+                  : const SizedBox();
               cubit.podcastFile = null;
               nameController.clear();
               cubit.selectedCategoryItem = 'ai';
@@ -38,6 +41,9 @@ class UploadPodCastScreen extends StatelessWidget {
                     color: Theme.of(context).iconTheme.color,
                   ),
                   onPressed: () {
+                    cubit.previewIsplaying
+                        ? cubit.assetsAudioPlayer.stop()
+                        : const SizedBox();
                     cubit.podcastFile = null;
                     nameController.clear();
                     cubit.selectedCategoryItem = 'ai';
@@ -126,6 +132,9 @@ class UploadPodCastScreen extends StatelessWidget {
                                     )
                                   : defaultButton(
                                       onPressed: () {
+                                        cubit.previewIsplaying
+                                            ? cubit.assetsAudioPlayer.stop()
+                                            : const SizedBox();
                                         cubit.uploadPodCast(
                                             token,
                                             nameController.text,
