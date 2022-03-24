@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data_layer/bloc/intial_cubit/general_app_cubit.dart';
+import 'explore_screen.dart';
 
 class SearchScreen extends StatelessWidget {
   SearchScreen({Key? key}) : super(key: key);
@@ -62,7 +63,7 @@ class SearchScreen extends StatelessWidget {
                       Icons.search,
                       color: Theme.of(context).iconTheme.color,
                     ),
-                    labelText: "Search",
+                    labelText: "Search About User",
                     labelStyle: Theme.of(context).textTheme.bodyText1,
                     onChanged: (value) {
                       // cubit.userSearch(
@@ -90,54 +91,77 @@ class SearchScreen extends StatelessWidget {
                             style: Theme.of(context).textTheme.bodyText1,
                           ),
                         )
-                      : ListView.builder(
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemCount: cubit.search!['data'].length,
-                          itemBuilder: (context, index) {
-                            return InkWell(
-                              onTap: () {
-                                cubit.getUserPodcast(
-                                  token,
-                                  cubit.search!['data'][index]['_id'],
-                                );
+                      : SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              ListView.builder(
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemCount: cubit.search!['data'].length,
+                                itemBuilder: (context, index) {
+                                  return InkWell(
+                                    onTap: () {
+                                      cubit.getUserPodcast(
+                                        token,
+                                        cubit.search!['data'][index]['_id'],
+                                      );
 
-                                print(cubit.search!['data'][index]['_id']);
-                                cubit.getUserById(
-                                    profileId: cubit.search!['data'][index]
-                                            ['_id']
-                                        .toString());
-                                if (cubit.search!['data'][index]['_id']
-                                        .toString() ==
-                                    GetUserModel.getUserID()) {
-                                  navigatePushTo(
-                                      context: context,
-                                      navigateTo: UserProfileScreen());
-                                } else {
-                                  navigatePushTo(
-                                      context: context,
-                                      navigateTo: ProfileDetailsScreen(
-                                          cubit.search!['data'][index]['_id']));
-                                }
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: ListTile(
-                                  leading: CircleAvatar(
-                                    radius: 30,
-                                    backgroundImage: NetworkImage(
-                                      cubit.search!['data'][index]['photo'],
+                                      print(
+                                          cubit.search!['data'][index]['_id']);
+                                      cubit.getUserById(
+                                          profileId: cubit.search!['data']
+                                                  [index]['_id']
+                                              .toString());
+                                      if (cubit.search!['data'][index]['_id']
+                                              .toString() ==
+                                          GetUserModel.getUserID()) {
+                                        navigatePushTo(
+                                            context: context,
+                                            navigateTo: UserProfileScreen());
+                                      } else {
+                                        navigatePushTo(
+                                            context: context,
+                                            navigateTo: ProfileDetailsScreen(
+                                                cubit.search!['data'][index]
+                                                    ['_id']));
+                                      }
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: ListTile(
+                                        leading: CircleAvatar(
+                                          radius: 30,
+                                          backgroundImage: NetworkImage(
+                                            cubit.search!['data'][index]
+                                                ['photo'],
+                                          ),
+                                        ),
+                                        title: Text(
+                                          cubit.search!['data'][index]['name'],
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyText1,
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                  title: Text(
-                                    cubit.search!['data'][index]['name'],
-                                    style:
-                                        Theme.of(context).textTheme.bodyText1,
-                                  ),
-                                ),
+                                  );
+                                },
                               ),
-                            );
-                          },
+                              defaultButton(
+                                onPressed: () {
+                                  cubit.getExplorePodcast(token: token);
+                                  navigatePushTo(
+                                    context: context,
+                                    navigateTo: ExploreScreen(),
+                                  );
+                                },
+                                context: context,
+                                text: 'Explore',
+                                width: 150,
+                                radius: 25,
+                              ),
+                            ],
+                          ),
                         ),
                 ],
               ),
