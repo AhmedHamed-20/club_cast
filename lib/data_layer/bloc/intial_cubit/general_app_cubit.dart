@@ -453,6 +453,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     });
   }
 
+  CancelToken cancelToken = CancelToken();
   bool isLoadPodCast = false;
   bool isUploading = false;
   double? uploadProgress;
@@ -460,10 +461,12 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     isLoadPodCast = true;
     emit(PodcastUploadedLoading());
     await DioHelper.dio!
-        .get(generateSignature,
-            options: Options(
-              headers: {'Authorization': 'Bearer ${token}'},
-            ))
+        .get(
+      generateSignature,
+      options: Options(
+        headers: {'Authorization': 'Bearer ${token}'},
+      ),
+    )
         .then((value) async {
       //timestamp
       //signature
@@ -490,6 +493,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
           'folder': 'podcasts',
           'resource_type': 'auto',
         }),
+        cancelToken: cancelToken,
         onSendProgress: (whatsend, total) {
           isUploading = true;
           isLoadPodCast = false;
@@ -527,8 +531,12 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
           print(error.message);
         });
       }).catchError((onError) {
-        showToast(
-            message: 'PodCast Uploaded Error', toastState: ToastState.ERROR);
+        cancelToken.isCancelled
+            ? showToast(
+                message: 'PodCast Canceled', toastState: ToastState.SUCCESS)
+            : showToast(
+                message: 'PodCast Uploaded Error',
+                toastState: ToastState.ERROR);
         isLoadPodCast = false;
         isUploading = false;
         emit(PodcastUploadedError());

@@ -2,6 +2,7 @@ import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
 import 'package:club_cast/presentation_layer/components/constant/constant.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -23,6 +24,7 @@ class UploadPodCastScreen extends StatelessWidget {
                   : const SizedBox();
               cubit.podcastFile = null;
               nameController.clear();
+              cubit.cancelToken.cancel();
               cubit.selectedCategoryItem = 'ai';
               Navigator.of(context).pop();
               return false;
@@ -47,6 +49,7 @@ class UploadPodCastScreen extends StatelessWidget {
                     cubit.podcastFile = null;
                     nameController.clear();
                     cubit.selectedCategoryItem = 'ai';
+                    cubit.cancelToken.cancel();
                     Navigator.of(context).pop();
                   },
                 ),
@@ -121,10 +124,30 @@ class UploadPodCastScreen extends StatelessWidget {
                       cubit.podcastFile == null
                           ? const SizedBox()
                           : cubit.isUploading
-                              ? LinearProgressIndicator(
-                                  valueColor: AlwaysStoppedAnimation<Color>(
-                                      Theme.of(context).primaryColor),
-                                  value: cubit.uploadProgress,
+                              ? Column(
+                                  children: [
+                                    LinearProgressIndicator(
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                          Theme.of(context).primaryColor),
+                                      value: cubit.uploadProgress,
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    defaultButton(
+                                      onPressed: () {
+                                        cubit.cancelToken.cancel();
+                                        cubit.cancelToken.isCancelled
+                                            ? cubit.cancelToken =
+                                                new CancelToken()
+                                            : const SizedBox();
+                                        // cubit.cancelToken.requestOptions
+                                      },
+                                      context: context,
+                                      text: 'cancel',
+                                      width: 150,
+                                    )
+                                  ],
                                 )
                               : cubit.isLoadPodCast
                                   ? LinearProgressIndicator(
