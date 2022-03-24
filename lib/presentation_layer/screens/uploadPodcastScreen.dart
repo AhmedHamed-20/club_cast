@@ -24,7 +24,9 @@ class UploadPodCastScreen extends StatelessWidget {
                   : const SizedBox();
               cubit.podcastFile = null;
               nameController.clear();
-              cubit.cancelToken.cancel();
+              cubit.cancelToken.isCancelled
+                  ? cubit.cancelToken.cancel()
+                  : const SizedBox();
               cubit.selectedCategoryItem = 'ai';
               Navigator.of(context).pop();
               return false;
@@ -49,7 +51,9 @@ class UploadPodCastScreen extends StatelessWidget {
                     cubit.podcastFile = null;
                     nameController.clear();
                     cubit.selectedCategoryItem = 'ai';
-                    cubit.cancelToken.cancel();
+                    cubit.cancelToken.isCancelled
+                        ? cubit.cancelToken.cancel()
+                        : const SizedBox();
                     Navigator.of(context).pop();
                   },
                 ),

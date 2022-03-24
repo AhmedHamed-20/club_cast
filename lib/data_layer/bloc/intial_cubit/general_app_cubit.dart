@@ -331,8 +331,6 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
 
   bool loadingExplore = false;
   Future getExplorePodcast({required String token}) async {
-    pageExplore = 2;
-    noDataExplore = false;
     loadingExplore = true;
     print(token);
     if (token == '') {
@@ -348,6 +346,8 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
           GetExplorePodCastModel.getExplorePodCast =
               Map<String, dynamic>.from(value.data);
           loadingExplore = false;
+          pageExplore = 2;
+          noDataExplore = false;
           emit(PodCastDataGetSuccess());
           //  print(GetAllPodCastModel.getPodcastName(2));
         },
@@ -405,8 +405,6 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   }
 
   Future getMyFollowingPodcast(String token) {
-    pagemyfollowingPodcast = 2;
-    noDataMyfollowingPodcast = false;
     return DioHelper.getData(
             token: {'Authorization': 'Bearer ${token}'},
             url: getMyFollowingPodcasts)
@@ -414,6 +412,8 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       GetMyFollowingPodCastsModel.getMyFollowingPodcasts =
           Map<String, dynamic>.from(value.data);
       print('data: ${GetMyFollowingPodCastsModel.getMyFollowingPodcasts}');
+      pagemyfollowingPodcast = 2;
+      noDataMyfollowingPodcast = false;
       emit(GetMyFollowingSuccessState());
     }).catchError((onError) {
       emit(GetMyFollowinErrorState());

@@ -120,16 +120,20 @@ class SearchScreen extends StatelessWidget {
                                           cubit.search!['data'][index]['_id']));
                                 }
                               },
-                              child: ListTile(
-                                leading: CircleAvatar(
-                                  radius: 30,
-                                  backgroundImage: NetworkImage(
-                                    cubit.search!['data'][index]['photo'],
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: ListTile(
+                                  leading: CircleAvatar(
+                                    radius: 30,
+                                    backgroundImage: NetworkImage(
+                                      cubit.search!['data'][index]['photo'],
+                                    ),
                                   ),
-                                ),
-                                title: Text(
-                                  cubit.search!['data'][index]['name'],
-                                  style: Theme.of(context).textTheme.bodyText1,
+                                  title: Text(
+                                    cubit.search!['data'][index]['name'],
+                                    style:
+                                        Theme.of(context).textTheme.bodyText1,
+                                  ),
                                 ),
                               ),
                             );
