@@ -43,6 +43,12 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   File? podcastFile;
   bool isProfilePage = false;
   bool isLoadingprofile = false;
+  int pagemyfollowingPodcast = 2;
+  bool noDataMyfollowingPodcast = false;
+  bool loadMyFollowinPodcast = false;
+  int pageExplore = 2;
+  bool noDataExplore = false;
+  bool loadExplore = false;
   // bool isDark = false;
   bool isPlaying = false;
   bool isMyfollowingScreen = false;
@@ -231,12 +237,6 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     }
   }
 
-  int pagemyfollowingPodcast = 2;
-  bool noDataMyfollowingPodcast = false;
-  bool loadMyFollowinPodcast = false;
-  int pageExplore = 2;
-  bool noDataExplore = false;
-  bool loadExplore = false;
   pageinathionExplore(
     String token,
   ) {
@@ -333,6 +333,8 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
 
   bool loadingExplore = false;
   Future getExplorePodcast({required String token}) async {
+    pageExplore = 2;
+    noDataExplore = false;
     loadingExplore = true;
     print(token);
     if (token == '') {
@@ -405,6 +407,8 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   }
 
   Future getMyFollowingPodcast(String token) {
+    pagemyfollowingPodcast = 2;
+    noDataMyfollowingPodcast = false;
     return DioHelper.getData(
             token: {'Authorization': 'Bearer ${token}'},
             url: getMyFollowingPodcasts)
