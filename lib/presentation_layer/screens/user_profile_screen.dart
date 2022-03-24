@@ -281,6 +281,13 @@ class UserProfileScreen extends StatelessWidget {
                                                                 //     .getPodcastID(
                                                                 //         index));
                                                                 cubit
+                                                                    .assetsAudioPlayer
+                                                                    .stop();
+                                                                cubit.currentOlayingDurathion =
+                                                                    null;
+                                                                cubit.activePodCastId =
+                                                                    null;
+                                                                cubit
                                                                     .removePodCast(
                                                                         GetMyPodCastModel.getPodcastID(
                                                                             index),

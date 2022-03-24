@@ -208,13 +208,11 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
             ),
           );
           activePodCastId = activePodCastIdnow;
-          print('nowwww' + activePodCastId!);
-          assetsAudioPlayer.currentPosition.listen((event) {
-            print(event);
 
+          assetsAudioPlayer.currentPosition.listen((event) {
             currentPostionDurationInsec = event.inSeconds.toDouble();
             currentOlayingDurathion = event.toString().substring(0, 7);
-            //print(currentOlayingDurathion);
+
             if (event.inSeconds == 00.000000) {
               isPlaying = false;
               pressedPause = false;
