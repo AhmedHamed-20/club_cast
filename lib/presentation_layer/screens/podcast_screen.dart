@@ -181,7 +181,7 @@ class PodCastScreen extends StatelessWidget {
                         cubit.noDataMyfollowingPodcast
                             ? const SizedBox()
                             : InkWell(
-                                radius: 35,
+                                borderRadius: BorderRadius.circular(40),
                                 onTap: () {
                                   cubit.pageinathionMyFollowingPodcast(
                                     token,

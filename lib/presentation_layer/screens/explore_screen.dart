@@ -193,6 +193,7 @@ class ExploreScreen extends StatelessWidget {
                               cubit.noDataExplore
                                   ? const SizedBox()
                                   : InkWell(
+                                      borderRadius: BorderRadius.circular(40),
                                       onTap: () {
                                         cubit.pageinathionExplore(
                                           token,
