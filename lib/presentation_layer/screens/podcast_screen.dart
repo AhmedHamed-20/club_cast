@@ -128,7 +128,8 @@ class PodCastScreen extends StatelessWidget {
                                       index),
                                   GetMyFollowingPodCastsModel
                                           .getPodcastUserPublishInform(index)[0]
-                                      ['photo']),
+                                      ['photo'],
+                                  context),
                               gettime:
                                   GetMyFollowingPodCastsModel.getPodCastAudio(
                                       index)[0]['duration'],

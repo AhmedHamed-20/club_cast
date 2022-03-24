@@ -20,178 +20,206 @@ class ExploreScreen extends StatelessWidget {
     var cubit = GeneralAppCubit?.get(context);
     String? currentId;
     currentId = cubit.activePodCastId;
+    refresh() {
+      return cubit.getExplorePodcast(token: token);
+    }
+
     return BlocConsumer<GeneralAppCubit, GeneralAppStates>(
         builder: (context, state) {
-          return Scaffold(
-            appBar: AppBar(
-              title: Text(
-                'Explore',
-                style: Theme.of(context).textTheme.bodyText2,
-              ),
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              leading: IconButton(
-                icon: Icon(
-                  Icons.arrow_back_ios,
-                  color: Theme.of(context).iconTheme.color,
+          cubit.isExplore = true;
+          return WillPopScope(
+            onWillPop: () async {
+              cubit.isExplore = false;
+              Navigator.of(context).pop();
+              return false;
+            },
+            child: Scaffold(
+              appBar: AppBar(
+                title: Text(
+                  'Explore',
+                  style: Theme.of(context).textTheme.bodyText2,
                 ),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                leading: IconButton(
+                  icon: Icon(
+                    Icons.arrow_back_ios,
+                    color: Theme.of(context).iconTheme.color,
+                  ),
+                  onPressed: () {
+                    cubit.isExplore = false;
+                    Navigator.of(context).pop();
+                  },
+                ),
               ),
-            ),
-            body: cubit.loadingExplore
-                ? Center(
-                    child: CircularProgressIndicator(
-                      color: Theme.of(context).primaryColor,
-                    ),
-                  )
-                : Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: SingleChildScrollView(
-                      physics: const BouncingScrollPhysics(),
-                      child: Column(
-                        children: [
-                          ListView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: GetExplorePodCastModel
-                                .getExplorePodCast?['data'].length,
-                            itemBuilder: (context, index) {
-                              return podACastItem(
-                                context,
-                                index: index,
-                                downloadButton:
-                                    PlayingCardWidget.downloadingWidget(
-                                        currentId.toString(),
-                                        index,
-                                        GetExplorePodCastModel.getPodcastID(
-                                            index),
-                                        cubit,
-                                        context,
-                                        GetExplorePodCastModel.getPodCastAudio(
-                                            index)[0]['url'],
-                                        GetExplorePodCastModel.getPodcastName(
-                                            index)),
-                                likeWidget: PlayingCardWidget.likeState(
-                                  context,
-                                  GetExplorePodCastModel.getPodcastlikeState(
-                                      index),
-                                  GetExplorePodCastModel.getPodcastID(index),
-                                  token,
-                                  '',
-                                ),
-                                podCastLikes: PlayingCardWidget.podCastLikes(
+              body: cubit.loadingExplore
+                  ? Center(
+                      child: CircularProgressIndicator(
+                        color: Theme.of(context).primaryColor,
+                      ),
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: RefreshIndicator(
+                        backgroundColor: Theme.of(context).backgroundColor,
+                        color: Theme.of(context).primaryColor,
+                        onRefresh: refresh,
+                        child: SingleChildScrollView(
+                          physics: const BouncingScrollPhysics(),
+                          child: Column(
+                            children: [
+                              ListView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: GetExplorePodCastModel
+                                    .getExplorePodCast?['data'].length,
+                                itemBuilder: (context, index) {
+                                  return podACastItem(
                                     context,
-                                    cubit,
-                                    token,
-                                    index,
-                                    GetExplorePodCastModel.getPodcastID(index),
-                                    GetExplorePodCastModel.getPodcastLikes(
-                                            index)
-                                        .toString()),
-                                removePodCast: SizedBox(),
-                                playingWidget: PlayingCardWidget.playingButton(
-                                    index,
-                                    cubit,
-                                    GetExplorePodCastModel.getPodCastAudio(
-                                        index)[0]['url'],
-                                    currentId.toString(),
-                                    GetExplorePodCastModel.getPodcastID(index),
-                                    GetExplorePodCastModel.getPodcastName(
-                                        index),
-                                    GetExplorePodCastModel
-                                        .getPodcastUserPublishInform(
-                                            index)[0]['photo']),
-                                gettime: GetExplorePodCastModel.getPodCastAudio(
-                                    index)[0]['duration'],
-                                photourl: GetExplorePodCastModel
-                                        .getPodcastUserPublishInform(index)[0]
-                                    ['photo'],
-                                ontapOnCircleAvater: () {
-                                  if (GetUserModel.getUserID() ==
+                                    index: index,
+                                    downloadButton:
+                                        PlayingCardWidget.downloadingWidget(
+                                            cubit.downloadedPodCastId
+                                                .toString(),
+                                            index,
+                                            GetExplorePodCastModel.getPodcastID(
+                                                index),
+                                            cubit,
+                                            context,
+                                            GetExplorePodCastModel
+                                                    .getPodCastAudio(index)[0]
+                                                ['url'],
+                                            GetExplorePodCastModel
+                                                .getPodcastName(index)),
+                                    likeWidget: PlayingCardWidget.likeState(
+                                      context,
                                       GetExplorePodCastModel
-                                          .getPodcastUserPublishInform(
-                                              index)[0]['_id']) {
-                                    cubit.getUserById(
-                                        profileId: GetExplorePodCastModel
-                                            .getPodcastUserPublishInform(
-                                                index)[0]['_id']);
-                                    cubit.getMyPodCast(
+                                          .getPodcastlikeState(index),
+                                      GetExplorePodCastModel.getPodcastID(
+                                          index),
                                       token,
-                                    );
-                                    navigatePushTo(
-                                        context: context,
-                                        navigateTo: UserProfileScreen());
-                                  } else {
-                                    cubit.getUserById(
-                                        profileId: GetExplorePodCastModel
-                                            .getPodcastUserPublishInform(
-                                                index)[0]['_id']);
-                                    cubit.getUserPodcast(
-                                        token,
-                                        GetExplorePodCastModel
-                                            .getPodcastUserPublishInform(
-                                                index)[0]['_id']);
-                                    navigatePushTo(
-                                        context: context,
-                                        navigateTo: ProfileDetailsScreen(
+                                      '',
+                                    ),
+                                    podCastLikes:
+                                        PlayingCardWidget.podCastLikes(
+                                            context,
+                                            cubit,
+                                            token,
+                                            index,
+                                            GetExplorePodCastModel.getPodcastID(
+                                                index),
+                                            GetExplorePodCastModel
+                                                    .getPodcastLikes(index)
+                                                .toString()),
+                                    removePodCast: SizedBox(),
+                                    playingWidget:
+                                        PlayingCardWidget.playingButton(
+                                            index,
+                                            cubit,
+                                            GetExplorePodCastModel
+                                                    .getPodCastAudio(index)[0]
+                                                ['url'],
+                                            cubit.activePodCastId.toString(),
+                                            GetExplorePodCastModel.getPodcastID(
+                                                index),
+                                            GetExplorePodCastModel
+                                                .getPodcastName(index),
                                             GetExplorePodCastModel
                                                 .getPodcastUserPublishInform(
-                                                    index)[0]['_id']));
-                                  }
-                                },
-                                podcastName:
-                                    GetExplorePodCastModel.getPodcastName(
-                                        index),
-                                userName: GetExplorePodCastModel
-                                        .getPodcastUserPublishInform(index)[0]
-                                    ['name'],
-                                text: cubit.isPlaying &&
-                                        GetExplorePodCastModel.getPodcastID(
-                                                index) ==
-                                            currentId
-                                    ? cubit.currentOlayingDurathion
-                                    : cubit.pressedPause &&
+                                                    index)[0]['photo'],
+                                            context),
+                                    gettime:
+                                        GetExplorePodCastModel.getPodCastAudio(
+                                            index)[0]['duration'],
+                                    photourl: GetExplorePodCastModel
+                                        .getPodcastUserPublishInform(
+                                            index)[0]['photo'],
+                                    ontapOnCircleAvater: () {
+                                      if (GetUserModel.getUserID() ==
+                                          GetExplorePodCastModel
+                                              .getPodcastUserPublishInform(
+                                                  index)[0]['_id']) {
+                                        cubit.getUserById(
+                                            profileId: GetExplorePodCastModel
+                                                .getPodcastUserPublishInform(
+                                                    index)[0]['_id']);
+                                        cubit.getMyPodCast(
+                                          token,
+                                        );
+                                        navigatePushTo(
+                                            context: context,
+                                            navigateTo: UserProfileScreen());
+                                      } else {
+                                        cubit.getUserById(
+                                            profileId: GetExplorePodCastModel
+                                                .getPodcastUserPublishInform(
+                                                    index)[0]['_id']);
+                                        cubit.getUserPodcast(
+                                            token,
+                                            GetExplorePodCastModel
+                                                .getPodcastUserPublishInform(
+                                                    index)[0]['_id']);
+                                        navigatePushTo(
+                                            context: context,
+                                            navigateTo: ProfileDetailsScreen(
+                                                GetExplorePodCastModel
+                                                    .getPodcastUserPublishInform(
+                                                        index)[0]['_id']));
+                                      }
+                                    },
+                                    podcastName:
+                                        GetExplorePodCastModel.getPodcastName(
+                                            index),
+                                    userName: GetExplorePodCastModel
+                                        .getPodcastUserPublishInform(
+                                            index)[0]['name'],
+                                    text: cubit.isPlaying &&
                                             GetExplorePodCastModel.getPodcastID(
                                                     index) ==
-                                                currentId
+                                                cubit.activePodCastId
                                         ? cubit.currentOlayingDurathion
-                                        : null,
-                              );
-                            },
+                                        : cubit.pressedPause &&
+                                                GetExplorePodCastModel
+                                                        .getPodcastID(index) ==
+                                                    cubit.activePodCastId
+                                            ? cubit.currentOlayingDurathion
+                                            : null,
+                                  );
+                                },
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              cubit.noDataExplore
+                                  ? const SizedBox()
+                                  : InkWell(
+                                      onTap: () {
+                                        cubit.pageinathionExplore(
+                                          token,
+                                        );
+                                      },
+                                      child: CircleAvatar(
+                                        backgroundColor:
+                                            Theme.of(context).backgroundColor,
+                                        radius: 30,
+                                        child: cubit.loadExplore
+                                            ? CircularProgressIndicator(
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                              )
+                                            : Icon(
+                                                Icons.arrow_downward,
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                              ),
+                                      ),
+                                    ),
+                            ],
                           ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          cubit.noDataExplore
-                              ? const SizedBox()
-                              : InkWell(
-                                  onTap: () {
-                                    cubit.pageinathionExplore(
-                                      token,
-                                    );
-                                  },
-                                  child: CircleAvatar(
-                                    backgroundColor:
-                                        Theme.of(context).backgroundColor,
-                                    radius: 30,
-                                    child: cubit.loadExplore
-                                        ? CircularProgressIndicator(
-                                            color:
-                                                Theme.of(context).primaryColor,
-                                          )
-                                        : Icon(
-                                            Icons.arrow_downward,
-                                            color:
-                                                Theme.of(context).primaryColor,
-                                          ),
-                                  ),
-                                ),
-                        ],
+                        ),
                       ),
                     ),
-                  ),
+            ),
           );
         },
         listener: (context, state) {});

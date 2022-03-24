@@ -34,6 +34,8 @@ class PlayingCardWidget {
                           cubit.getMyPodCast(token);
                         } else if (cubit.isProfilePage) {
                           cubit.getUserPodcast(token, userId);
+                        } else if (cubit.isExplore) {
+                          cubit.getExplorePodcast(token: token);
                         } else {
                           cubit.getMyFollowingPodcast(token);
                         }
@@ -48,11 +50,13 @@ class PlayingCardWidget {
                     )
                       .then(
                       (val) {
-                        print(cubit.isProfilePage);
+                        print(cubit.isExplore);
                         if (cubit.isMyprofileScreen) {
                           cubit.getMyPodCast(token);
                         } else if (cubit.isProfilePage) {
                           cubit.getUserPodcast(token, userId);
+                        } else if (cubit.isExplore) {
+                          cubit.getExplorePodcast(token: token);
                         } else {
                           cubit.getMyFollowingPodcast(token);
                         }
@@ -92,11 +96,13 @@ class PlayingCardWidget {
       String currentId,
       String podCastId,
       String podCastName,
-      String userPhoto) {
+      String userPhoto,
+      BuildContext context) {
     return IconButton(
       onPressed: () {
         String podCastUrl = podcastUrl;
-
+        print('podcastId:' + podCastId);
+        print('currentId:' + currentId);
         cubit.isPlaying && podCastId == currentId
             ? cubit.assetsAudioPlayer.pause().then((value) {
                 cubit.isPlaying = false;
@@ -104,7 +110,7 @@ class PlayingCardWidget {
                 cubit.changeState();
               })
             : cubit.playingPodcast(
-                podCastUrl, podCastName, userPhoto, podCastId);
+                podCastUrl, podCastName, userPhoto, podCastId, context);
         // print(GetAllPodCastModel.getPodCastAudio(index));
         print(currentId);
       },

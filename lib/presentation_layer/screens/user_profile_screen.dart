@@ -368,7 +368,8 @@ class UserProfileScreen extends StatelessWidget {
                                                     .getPodcastName(index),
                                                 GetMyPodCastModel
                                                     .getPodcastUserPublishInform(
-                                                        index)[0]['photo']),
+                                                        index)[0]['photo'],
+                                                context),
                                       );
                                     },
                                   )

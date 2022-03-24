@@ -54,6 +54,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   String? activePodcastname = '';
   String? activepodcastPhotUrl = '';
   String? activePodCastId;
+  bool isExplore = false;
   int counter = 0;
   double currentPostionDurationInsec = 0;
   double? progress;
@@ -134,6 +135,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     String name,
     String iconurl,
     String activePodCastIdnow,
+    BuildContext context,
   ) async {
     if (pressedPause && activePodCastId == activePodCastIdnow) {
       assetsAudioPlayer.play();
@@ -147,6 +149,16 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     } else {
       try {
         await assetsAudioPlayer.stop().then((value) async {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: Theme.of(context).primaryColor,
+              duration: const Duration(seconds: 1),
+              content: Text(
+                'Loading',
+                style: Theme.of(context).textTheme.bodyText1,
+              ),
+            ),
+          );
           await assetsAudioPlayer.open(
             Audio.network(url),
             showNotification: true,
@@ -232,7 +244,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     loadExplore = true;
     emit(LoadDataPaginattion());
     DioHelper.getData(
-        url: GetAllPodcasts + '?page=${pageExplore}',
+        url: getAllPodCastWithoutMe + '?page=${pageExplore}',
         token: {'Authorization': 'Bearer ${token}'}).then((value) {
       // print(value.data['results']);
       print('here');
@@ -320,13 +332,13 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   }
 
   bool loadingExplore = false;
-  void getExplorePodcast({required String token}) {
+  Future getExplorePodcast({required String token}) async {
     loadingExplore = true;
     print(token);
     if (token == '') {
     } else {
-      DioHelper.getData(
-        url: GetAllPodcasts,
+      return await DioHelper.getData(
+        url: getAllPodCastWithoutMe,
         token: {
           'Authorization': 'Bearer ${token}',
         },

@@ -317,19 +317,20 @@ class ProfileDetailsScreen extends StatelessWidget {
                                                   index)[0]['name'],
                                           playingWidget:
                                               PlayingCardWidget.playingButton(
-                                            index,
-                                            cubit,
-                                            GetAllPodCastModel.getPodCastAudio(
-                                                index)[0]['url'],
-                                            currentId.toString(),
-                                            GetAllPodCastModel.getPodcastID(
-                                                index),
-                                            GetAllPodCastModel.getPodcastName(
-                                                index),
-                                            GetAllPodCastModel
-                                                .getPodcastUserPublishInform(
-                                                    index)[0]['photo'],
-                                          ),
+                                                  index,
+                                                  cubit,
+                                                  GetAllPodCastModel
+                                                      .getPodCastAudio(
+                                                          index)[0]['url'],
+                                                  currentId.toString(),
+                                                  GetAllPodCastModel
+                                                      .getPodcastID(index),
+                                                  GetAllPodCastModel
+                                                      .getPodcastName(index),
+                                                  GetAllPodCastModel
+                                                      .getPodcastUserPublishInform(
+                                                          index)[0]['photo'],
+                                                  context),
                                         );
                                       },
                                     )
