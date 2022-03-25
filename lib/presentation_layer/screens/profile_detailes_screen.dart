@@ -1,6 +1,7 @@
 import 'package:club_cast/data_layer/cash/cash.dart';
 import 'package:club_cast/presentation_layer/models/getMyPodCastModel.dart';
 import 'package:club_cast/presentation_layer/models/get_all_podcst.dart';
+import 'package:club_cast/presentation_layer/screens/active_podcast_screen.dart';
 import 'package:club_cast/presentation_layer/screens/followers_screen.dart';
 import 'package:club_cast/presentation_layer/screens/following_screen.dart';
 import 'package:club_cast/presentation_layer/widgets/playingCardWidget.dart';
@@ -250,87 +251,114 @@ class ProfileDetailsScreen extends StatelessWidget {
                                       shrinkWrap: true,
                                       physics: NeverScrollableScrollPhysics(),
                                       itemBuilder: (context, index) {
-                                        return podACastItem(
-                                          context,
-                                          index: index,
-                                          gettime: GetAllPodCastModel
-                                                  .getPodCastAudio(index)[0]
-                                              ?['duration'],
-                                          text: cubit.isPlaying &&
-                                                  GetAllPodCastModel
-                                                          .getPodcastID(
-                                                              index) ==
-                                                      currentId
-                                              ? cubit.currentOlayingDurathion
-                                              : cubit.pressedPause &&
+                                        return InkWell(
+                                          onTap: () {
+                                            navigatePushTo(
+                                                context: context,
+                                                navigateTo: ActivePodCastScreen(
+                                                  duration: GetAllPodCastModel
+                                                      .getPodCastAudio(
+                                                          index)[0]['duration'],
+                                                  podCastId: GetAllPodCastModel
+                                                      .getPodcastID(index),
+                                                  podcastName:
                                                       GetAllPodCastModel
-                                                              .getPodcastID(
-                                                                  index) ==
-                                                          currentId
-                                                  ? cubit
-                                                      .currentOlayingDurathion
-                                                  : null,
-                                          likeWidget:
-                                              PlayingCardWidget.likeState(
-                                                  context,
-                                                  GetAllPodCastModel
-                                                      ?.getPodcastlikeState(
-                                                          index),
-                                                  GetAllPodCastModel
-                                                      .getPodcastID(index),
-                                                  token,
-                                                  userId),
-                                          podCastLikes:
-                                              PlayingCardWidget.podCastLikes(
-                                                  context,
-                                                  cubit,
-                                                  token,
-                                                  index,
-                                                  GetAllPodCastModel
-                                                      .getPodcastID(index),
-                                                  GetAllPodCastModel
-                                                          .getPodcastLikes(
-                                                              index)
-                                                      .toString()),
-                                          downloadButton: PlayingCardWidget
-                                              .downloadingWidget(
-                                            currentId.toString(),
-                                            index,
-                                            GetAllPodCastModel.getPodcastID(
-                                                index),
-                                            cubit,
-                                            context,
-                                            GetAllPodCastModel.getPodCastAudio(
-                                                index)[0]['url'],
-                                            GetAllPodCastModel.getPodcastName(
-                                                index),
-                                          ),
-                                          removePodCast: SizedBox(),
-                                          photourl: GetAllPodCastModel
-                                              .getPodcastUserPublishInform(
-                                                  index)[0]['photo'],
-                                          podcastName:
-                                              GetAllPodCastModel.getPodcastName(
-                                                  index),
-                                          userName: GetAllPodCastModel
-                                              .getPodcastUserPublishInform(
-                                                  index)[0]['name'],
-                                          playingWidget:
-                                              PlayingCardWidget.playingButton(
-                                                  index,
-                                                  cubit,
-                                                  GetAllPodCastModel
+                                                          .getPodcastName(
+                                                              index),
+                                                  podcastUrl: GetAllPodCastModel
                                                       .getPodCastAudio(
                                                           index)[0]['url'],
-                                                  currentId.toString(),
-                                                  GetAllPodCastModel
-                                                      .getPodcastID(index),
-                                                  GetAllPodCastModel
-                                                      .getPodcastName(index),
-                                                  GetAllPodCastModel
+                                                  userName: GetAllPodCastModel
+                                                      .getPodcastUserPublishInform(
+                                                          index)[0]['name'],
+                                                  userPhoto: GetAllPodCastModel
                                                       .getPodcastUserPublishInform(
                                                           index)[0]['photo'],
-                                                  context),
+                                                  index: index,
+                                                ));
+                                          },
+                                          child: podACastItem(
+                                            context,
+                                            index: index,
+                                            gettime: GetAllPodCastModel
+                                                    .getPodCastAudio(index)[0]
+                                                ?['duration'],
+                                            text: cubit.isPlaying &&
+                                                    GetAllPodCastModel
+                                                            .getPodcastID(
+                                                                index) ==
+                                                        currentId
+                                                ? cubit.currentOlayingDurathion
+                                                : cubit.pressedPause &&
+                                                        GetAllPodCastModel
+                                                                .getPodcastID(
+                                                                    index) ==
+                                                            currentId
+                                                    ? cubit
+                                                        .currentOlayingDurathion
+                                                    : null,
+                                            likeWidget:
+                                                PlayingCardWidget.likeState(
+                                                    context,
+                                                    GetAllPodCastModel
+                                                        ?.getPodcastlikeState(
+                                                            index),
+                                                    GetAllPodCastModel
+                                                        .getPodcastID(index),
+                                                    token,
+                                                    userId),
+                                            podCastLikes:
+                                                PlayingCardWidget.podCastLikes(
+                                                    context,
+                                                    cubit,
+                                                    token,
+                                                    index,
+                                                    GetAllPodCastModel
+                                                        .getPodcastID(index),
+                                                    GetAllPodCastModel
+                                                            .getPodcastLikes(
+                                                                index)
+                                                        .toString()),
+                                            downloadButton: PlayingCardWidget
+                                                .downloadingWidget(
+                                              currentId.toString(),
+                                              index,
+                                              GetAllPodCastModel.getPodcastID(
+                                                  index),
+                                              cubit,
+                                              context,
+                                              GetAllPodCastModel
+                                                      .getPodCastAudio(index)[0]
+                                                  ['url'],
+                                              GetAllPodCastModel.getPodcastName(
+                                                  index),
+                                            ),
+                                            removePodCast: SizedBox(),
+                                            photourl: GetAllPodCastModel
+                                                .getPodcastUserPublishInform(
+                                                    index)[0]['photo'],
+                                            podcastName: GetAllPodCastModel
+                                                .getPodcastName(index),
+                                            userName: GetAllPodCastModel
+                                                .getPodcastUserPublishInform(
+                                                    index)[0]['name'],
+                                            playingWidget:
+                                                PlayingCardWidget.playingButton(
+                                                    index,
+                                                    cubit,
+                                                    GetAllPodCastModel
+                                                        .getPodCastAudio(
+                                                            index)[0]['url'],
+                                                    currentId.toString(),
+                                                    GetAllPodCastModel
+                                                        .getPodcastID(index),
+                                                    GetAllPodCastModel
+                                                        .getPodcastName(index),
+                                                    GetAllPodCastModel
+                                                        .getPodcastUserPublishInform(
+                                                            index)[0]['photo'],
+                                                    context),
+                                          ),
                                         );
                                       },
                                     )

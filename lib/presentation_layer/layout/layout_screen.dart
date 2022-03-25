@@ -25,7 +25,13 @@ class LayoutScreen extends StatelessWidget {
           return Scaffold(
             bottomSheet: cubit.isPlaying || cubit.isPausedInHome
                 ? Container(
-                    color: Theme.of(context).primaryColor,
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(25),
+                        topRight: Radius.circular(25),
+                      ),
+                      color: Theme.of(context).primaryColor.withAlpha(100),
+                    ),
                     child: Padding(
                       padding: const EdgeInsets.only(
                           left: 12.0, right: 12, top: 10, bottom: 10),

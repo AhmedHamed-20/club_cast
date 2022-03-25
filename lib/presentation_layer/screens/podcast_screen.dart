@@ -80,7 +80,23 @@ class PodCastScreen extends StatelessWidget {
                               //  print(GetAllPodCastModel.getPodcastUserPublishInform(index));
                               navigatePushTo(
                                   context: context,
-                                  navigateTo: ActivePodCastScreen(index));
+                                  navigateTo: ActivePodCastScreen(
+                                    duration: GetMyFollowingPodCastsModel
+                                        .getPodCastAudio(index)[0]['duration'],
+                                    podCastId: GetMyFollowingPodCastsModel
+                                        .getPodcastID(index),
+                                    podcastName: GetMyFollowingPodCastsModel
+                                        .getPodcastName(index),
+                                    podcastUrl: GetMyFollowingPodCastsModel
+                                        .getPodCastAudio(index)[0]['url'],
+                                    userName: GetMyFollowingPodCastsModel
+                                        .getPodcastUserPublishInform(
+                                            index)[0]['name'],
+                                    userPhoto: GetMyFollowingPodCastsModel
+                                        .getPodcastUserPublishInform(
+                                            index)[0]['photo'],
+                                    index: index,
+                                  ));
                             },
                             child: podACastItem(
                               context,

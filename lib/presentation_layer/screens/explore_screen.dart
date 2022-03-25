@@ -2,7 +2,9 @@ import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
 import 'package:club_cast/presentation_layer/models/explore_podcasts_model.dart';
+import 'package:club_cast/presentation_layer/models/get_all_podcst.dart';
 import 'package:club_cast/presentation_layer/models/user_model.dart';
+import 'package:club_cast/presentation_layer/screens/active_podcast_screen.dart';
 import 'package:club_cast/presentation_layer/screens/profile_detailes_screen.dart';
 import 'package:club_cast/presentation_layer/screens/user_profile_screen.dart';
 import 'package:club_cast/presentation_layer/widgets/playingCardWidget.dart';
@@ -74,116 +76,142 @@ class ExploreScreen extends StatelessWidget {
                                 itemCount: GetExplorePodCastModel
                                     .getExplorePodCast?['data'].length,
                                 itemBuilder: (context, index) {
-                                  return podACastItem(
-                                    context,
-                                    index: index,
-                                    downloadButton:
-                                        PlayingCardWidget.downloadingWidget(
-                                            cubit.downloadedPodCastId
-                                                .toString(),
-                                            index,
-                                            GetExplorePodCastModel.getPodcastID(
-                                                index),
-                                            cubit,
-                                            context,
-                                            GetExplorePodCastModel
+                                  return InkWell(
+                                    onTap: () {
+                                      navigatePushTo(
+                                          context: context,
+                                          navigateTo: ActivePodCastScreen(
+                                            duration: GetExplorePodCastModel
                                                     .getPodCastAudio(index)[0]
-                                                ['url'],
-                                            GetExplorePodCastModel
-                                                .getPodcastName(index)),
-                                    likeWidget: PlayingCardWidget.likeState(
-                                      context,
-                                      GetExplorePodCastModel
-                                          .getPodcastlikeState(index),
-                                      GetExplorePodCastModel.getPodcastID(
-                                          index),
-                                      token,
-                                      '',
-                                    ),
-                                    podCastLikes:
-                                        PlayingCardWidget.podCastLikes(
-                                            context,
-                                            cubit,
-                                            token,
-                                            index,
-                                            GetExplorePodCastModel.getPodcastID(
-                                                index),
-                                            GetExplorePodCastModel
-                                                    .getPodcastLikes(index)
-                                                .toString()),
-                                    removePodCast: SizedBox(),
-                                    playingWidget:
-                                        PlayingCardWidget.playingButton(
-                                            index,
-                                            cubit,
-                                            GetExplorePodCastModel
-                                                    .getPodCastAudio(index)[0]
-                                                ['url'],
-                                            cubit.activePodCastId.toString(),
-                                            GetExplorePodCastModel.getPodcastID(
-                                                index),
-                                            GetExplorePodCastModel
+                                                ['duration'],
+                                            podCastId: GetExplorePodCastModel
+                                                .getPodcastID(index),
+                                            podcastName: GetExplorePodCastModel
                                                 .getPodcastName(index),
-                                            GetExplorePodCastModel
+                                            podcastUrl: GetExplorePodCastModel
+                                                    .getPodCastAudio(index)[0]
+                                                ['url'],
+                                            userName: GetExplorePodCastModel
+                                                .getPodcastUserPublishInform(
+                                                    index)[0]['name'],
+                                            userPhoto: GetExplorePodCastModel
                                                 .getPodcastUserPublishInform(
                                                     index)[0]['photo'],
-                                            context),
-                                    gettime:
-                                        GetExplorePodCastModel.getPodCastAudio(
-                                            index)[0]['duration'],
-                                    photourl: GetExplorePodCastModel
-                                        .getPodcastUserPublishInform(
-                                            index)[0]['photo'],
-                                    ontapOnCircleAvater: () {
-                                      if (GetUserModel.getUserID() ==
-                                          GetExplorePodCastModel
-                                              .getPodcastUserPublishInform(
-                                                  index)[0]['_id']) {
-                                        cubit.getUserById(
-                                            profileId: GetExplorePodCastModel
-                                                .getPodcastUserPublishInform(
-                                                    index)[0]['_id']);
-                                        cubit.getMyPodCast(
-                                          token,
-                                        );
-                                        navigatePushTo(
-                                            context: context,
-                                            navigateTo: UserProfileScreen());
-                                      } else {
-                                        cubit.getUserById(
-                                            profileId: GetExplorePodCastModel
-                                                .getPodcastUserPublishInform(
-                                                    index)[0]['_id']);
-                                        cubit.getUserPodcast(
-                                            token,
+                                            index: index,
+                                          ));
+                                    },
+                                    child: podACastItem(
+                                      context,
+                                      index: index,
+                                      downloadButton:
+                                          PlayingCardWidget.downloadingWidget(
+                                              cubit.downloadedPodCastId
+                                                  .toString(),
+                                              index,
+                                              GetExplorePodCastModel
+                                                  .getPodcastID(index),
+                                              cubit,
+                                              context,
+                                              GetExplorePodCastModel
+                                                      .getPodCastAudio(index)[0]
+                                                  ['url'],
+                                              GetExplorePodCastModel
+                                                  .getPodcastName(index)),
+                                      likeWidget: PlayingCardWidget.likeState(
+                                        context,
+                                        GetExplorePodCastModel
+                                            .getPodcastlikeState(index),
+                                        GetExplorePodCastModel.getPodcastID(
+                                            index),
+                                        token,
+                                        '',
+                                      ),
+                                      podCastLikes:
+                                          PlayingCardWidget.podCastLikes(
+                                              context,
+                                              cubit,
+                                              token,
+                                              index,
+                                              GetExplorePodCastModel
+                                                  .getPodcastID(index),
+                                              GetExplorePodCastModel
+                                                      .getPodcastLikes(index)
+                                                  .toString()),
+                                      removePodCast: SizedBox(),
+                                      playingWidget:
+                                          PlayingCardWidget.playingButton(
+                                              index,
+                                              cubit,
+                                              GetExplorePodCastModel
+                                                      .getPodCastAudio(index)[0]
+                                                  ['url'],
+                                              cubit.activePodCastId.toString(),
+                                              GetExplorePodCastModel
+                                                  .getPodcastID(index),
+                                              GetExplorePodCastModel
+                                                  .getPodcastName(index),
+                                              GetExplorePodCastModel
+                                                  .getPodcastUserPublishInform(
+                                                      index)[0]['photo'],
+                                              context),
+                                      gettime: GetExplorePodCastModel
+                                              .getPodCastAudio(index)[0]
+                                          ['duration'],
+                                      photourl: GetExplorePodCastModel
+                                          .getPodcastUserPublishInform(
+                                              index)[0]['photo'],
+                                      ontapOnCircleAvater: () {
+                                        if (GetUserModel.getUserID() ==
                                             GetExplorePodCastModel
                                                 .getPodcastUserPublishInform(
-                                                    index)[0]['_id']);
-                                        navigatePushTo(
-                                            context: context,
-                                            navigateTo: ProfileDetailsScreen(
-                                                GetExplorePodCastModel
-                                                    .getPodcastUserPublishInform(
-                                                        index)[0]['_id']));
-                                      }
-                                    },
-                                    podcastName:
-                                        GetExplorePodCastModel.getPodcastName(
-                                            index),
-                                    userName: GetExplorePodCastModel
-                                        .getPodcastUserPublishInform(
-                                            index)[0]['name'],
-                                    text: cubit.isPlaying &&
-                                            GetExplorePodCastModel.getPodcastID(
-                                                    index) ==
-                                                cubit.activePodCastId
-                                        ? cubit.currentOlayingDurathion
-                                        : cubit.pressedPause &&
-                                                GetExplorePodCastModel
-                                                        .getPodcastID(index) ==
-                                                    cubit.activePodCastId
-                                            ? cubit.currentOlayingDurathion
-                                            : null,
+                                                    index)[0]['_id']) {
+                                          cubit.getUserById(
+                                              profileId: GetExplorePodCastModel
+                                                  .getPodcastUserPublishInform(
+                                                      index)[0]['_id']);
+                                          cubit.getMyPodCast(
+                                            token,
+                                          );
+                                          navigatePushTo(
+                                              context: context,
+                                              navigateTo: UserProfileScreen());
+                                        } else {
+                                          cubit.getUserById(
+                                              profileId: GetExplorePodCastModel
+                                                  .getPodcastUserPublishInform(
+                                                      index)[0]['_id']);
+                                          cubit.getUserPodcast(
+                                              token,
+                                              GetExplorePodCastModel
+                                                  .getPodcastUserPublishInform(
+                                                      index)[0]['_id']);
+                                          navigatePushTo(
+                                              context: context,
+                                              navigateTo: ProfileDetailsScreen(
+                                                  GetExplorePodCastModel
+                                                      .getPodcastUserPublishInform(
+                                                          index)[0]['_id']));
+                                        }
+                                      },
+                                      podcastName:
+                                          GetExplorePodCastModel.getPodcastName(
+                                              index),
+                                      userName: GetExplorePodCastModel
+                                          .getPodcastUserPublishInform(
+                                              index)[0]['name'],
+                                      text: cubit.isPlaying &&
+                                              GetExplorePodCastModel
+                                                      .getPodcastID(index) ==
+                                                  cubit.activePodCastId
+                                          ? cubit.currentOlayingDurathion
+                                          : cubit.pressedPause &&
+                                                  GetExplorePodCastModel
+                                                          .getPodcastID(
+                                                              index) ==
+                                                      cubit.activePodCastId
+                                              ? cubit.currentOlayingDurathion
+                                              : null,
+                                    ),
                                   );
                                 },
                               ),

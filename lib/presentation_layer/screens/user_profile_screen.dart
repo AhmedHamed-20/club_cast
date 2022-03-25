@@ -5,6 +5,7 @@ import 'package:club_cast/presentation_layer/components/component/component.dart
 import 'package:club_cast/presentation_layer/models/getMyPodCastModel.dart';
 import 'package:club_cast/presentation_layer/models/get_all_podcst.dart';
 import 'package:club_cast/presentation_layer/models/user_model.dart';
+import 'package:club_cast/presentation_layer/screens/active_podcast_screen.dart';
 import 'package:club_cast/presentation_layer/screens/edit_user_profile.dart';
 import 'package:club_cast/presentation_layer/screens/followers_screen.dart';
 import 'package:club_cast/presentation_layer/screens/following_screen.dart';
@@ -211,172 +212,205 @@ class UserProfileScreen extends StatelessWidget {
                                     shrinkWrap: true,
                                     physics: NeverScrollableScrollPhysics(),
                                     itemBuilder: (context, index) {
-                                      return podACastItem(
-                                        context,
-                                        index: index,
-                                        gettime:
-                                            GetMyPodCastModel.getPodCastAudio(
-                                                index)[0]?['duration'],
-                                        text: cubit.isPlaying &&
-                                                GetMyPodCastModel.getPodcastID(
-                                                        index) ==
-                                                    currentId
-                                            ? cubit.currentOlayingDurathion
-                                            : cubit.pressedPause &&
-                                                    GetMyPodCastModel
-                                                            ?.getPodcastID(
-                                                                index) ==
-                                                        currentId
-                                                ? cubit.currentOlayingDurathion
-                                                : null,
-                                        downloadButton:
-                                            PlayingCardWidget.downloadingWidget(
-                                          currentId.toString(),
-                                          index,
-                                          GetMyPodCastModel?.getPodcastID(
-                                              index),
-                                          cubit,
+                                      return InkWell(
+                                        onTap: () {
+                                          navigatePushTo(
+                                            context: context,
+                                            navigateTo: ActivePodCastScreen(
+                                              duration: GetMyPodCastModel
+                                                      .getPodCastAudio(index)[0]
+                                                  ['duration'],
+                                              podCastId: GetMyPodCastModel
+                                                  .getPodcastID(index),
+                                              podcastName: GetMyPodCastModel
+                                                  .getPodcastName(index),
+                                              podcastUrl: GetMyPodCastModel
+                                                      .getPodCastAudio(index)[0]
+                                                  ['url'],
+                                              userName: GetMyPodCastModel
+                                                  .getPodcastUserPublishInform(
+                                                      index)[0]['name'],
+                                              userPhoto: GetMyPodCastModel
+                                                  .getPodcastUserPublishInform(
+                                                      index)[0]['photo'],
+                                              index: index,
+                                            ),
+                                          );
+                                        },
+                                        child: podACastItem(
                                           context,
-                                          GetMyPodCastModel?.getPodCastAudio(
-                                              index)[0]['url'],
-                                          GetMyPodCastModel?.getPodcastName(
-                                              index),
-                                        ),
-                                        removePodCast: IconButton(
-                                            onPressed: () {
-                                              showDialog(
-                                                  context: context,
-                                                  builder: (context) {
-                                                    return AlertDialog(
-                                                      shape:
-                                                          RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(15),
-                                                      ),
-                                                      backgroundColor:
-                                                          Theme.of(context)
-                                                              .backgroundColor,
-                                                      title: Text(
-                                                        'Are You Sure',
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .bodyText2,
-                                                      ),
-                                                      content: Text(
-                                                        'delete ${GetMyPodCastModel.getPodcastName(index)} podcast?',
-                                                        style: Theme.of(context)
-                                                            .textTheme
-                                                            .bodyText1,
-                                                      ),
-                                                      actions: [
-                                                        Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceAround,
-                                                          children: [
-                                                            MaterialButton(
-                                                              onPressed: () {
-                                                                // print(GetMyPodCastModel
-                                                                //     .getPodcastID(
-                                                                //         index));
-                                                                cubit
-                                                                    .assetsAudioPlayer
-                                                                    .stop();
-                                                                cubit.currentOlayingDurathion =
-                                                                    null;
-                                                                cubit.activePodCastId =
-                                                                    null;
-                                                                cubit
-                                                                    .removePodCast(
-                                                                        GetMyPodCastModel.getPodcastID(
-                                                                            index),
-                                                                        token)
-                                                                    .then(
-                                                                        (value) {
+                                          index: index,
+                                          gettime:
+                                              GetMyPodCastModel.getPodCastAudio(
+                                                  index)[0]?['duration'],
+                                          text: cubit.isPlaying &&
+                                                  GetMyPodCastModel
+                                                          .getPodcastID(
+                                                              index) ==
+                                                      currentId
+                                              ? cubit.currentOlayingDurathion
+                                              : cubit.pressedPause &&
+                                                      GetMyPodCastModel
+                                                              ?.getPodcastID(
+                                                                  index) ==
+                                                          currentId
+                                                  ? cubit
+                                                      .currentOlayingDurathion
+                                                  : null,
+                                          downloadButton: PlayingCardWidget
+                                              .downloadingWidget(
+                                            currentId.toString(),
+                                            index,
+                                            GetMyPodCastModel?.getPodcastID(
+                                                index),
+                                            cubit,
+                                            context,
+                                            GetMyPodCastModel?.getPodCastAudio(
+                                                index)[0]['url'],
+                                            GetMyPodCastModel?.getPodcastName(
+                                                index),
+                                          ),
+                                          removePodCast: IconButton(
+                                              onPressed: () {
+                                                showDialog(
+                                                    context: context,
+                                                    builder: (context) {
+                                                      return AlertDialog(
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(15),
+                                                        ),
+                                                        backgroundColor: Theme
+                                                                .of(context)
+                                                            .backgroundColor,
+                                                        title: Text(
+                                                          'Are You Sure',
+                                                          style:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .bodyText2,
+                                                        ),
+                                                        content: Text(
+                                                          'delete ${GetMyPodCastModel.getPodcastName(index)} podcast?',
+                                                          style:
+                                                              Theme.of(context)
+                                                                  .textTheme
+                                                                  .bodyText1,
+                                                        ),
+                                                        actions: [
+                                                          Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceAround,
+                                                            children: [
+                                                              MaterialButton(
+                                                                onPressed: () {
+                                                                  // print(GetMyPodCastModel
+                                                                  //     .getPodcastID(
+                                                                  //         index));
+                                                                  cubit
+                                                                      .assetsAudioPlayer
+                                                                      .stop();
+                                                                  cubit.currentOlayingDurathion =
+                                                                      null;
+                                                                  cubit.activePodCastId =
+                                                                      null;
+                                                                  cubit
+                                                                      .removePodCast(
+                                                                          GetMyPodCastModel.getPodcastID(
+                                                                              index),
+                                                                          token)
+                                                                      .then(
+                                                                          (value) {
+                                                                    Navigator.of(
+                                                                            context)
+                                                                        .pop();
+                                                                  });
+                                                                },
+                                                                child: Text(
+                                                                  'Yes',
+                                                                  style: Theme.of(
+                                                                          context)
+                                                                      .textTheme
+                                                                      .bodyText1,
+                                                                ),
+                                                              ),
+                                                              MaterialButton(
+                                                                onPressed: () {
                                                                   Navigator.of(
                                                                           context)
                                                                       .pop();
-                                                                });
-                                                              },
-                                                              child: Text(
-                                                                'Yes',
-                                                                style: Theme.of(
-                                                                        context)
-                                                                    .textTheme
-                                                                    .bodyText1,
+                                                                },
+                                                                child: Text(
+                                                                  'No',
+                                                                  style: Theme.of(
+                                                                          context)
+                                                                      .textTheme
+                                                                      .bodyText1,
+                                                                ),
                                                               ),
-                                                            ),
-                                                            MaterialButton(
-                                                              onPressed: () {
-                                                                Navigator.of(
-                                                                        context)
-                                                                    .pop();
-                                                              },
-                                                              child: Text(
-                                                                'No',
-                                                                style: Theme.of(
-                                                                        context)
-                                                                    .textTheme
-                                                                    .bodyText1,
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ],
-                                                    );
-                                                  });
-                                            },
-                                            icon: Icon(
-                                              Icons.clear,
-                                              color: Theme.of(context)
-                                                  .iconTheme
-                                                  .color,
-                                            )),
-                                        photourl: GetMyPodCastModel
-                                            .getPodcastUserPublishInform(
-                                                index)[0]['photo'],
-                                        podcastName:
-                                            GetMyPodCastModel.getPodcastName(
-                                                index),
-                                        userName: GetMyPodCastModel
-                                            .getPodcastUserPublishInform(
-                                                index)[0]['name'],
-                                        podCastLikes:
-                                            PlayingCardWidget.podCastLikes(
-                                                context,
-                                                cubit,
-                                                token,
-                                                index,
-                                                GetMyPodCastModel.getPodcastID(
-                                                    index),
-                                                GetMyPodCastModel
-                                                        .getPodcastLikes(index)
-                                                    .toString()),
-                                        likeWidget: PlayingCardWidget.likeState(
-                                            context,
-                                            GetMyPodCastModel
-                                                .getPodcastlikeState(index),
-                                            GetMyPodCastModel.getPodcastID(
-                                                index),
-                                            token,
-                                            ''),
-                                        playingWidget:
-                                            PlayingCardWidget.playingButton(
-                                                index,
-                                                cubit,
-                                                GetMyPodCastModel
-                                                    .getPodCastAudio(
-                                                        index)[0]['url'],
-                                                currentId.toString(),
-                                                GetMyPodCastModel.getPodcastID(
-                                                    index),
-                                                GetMyPodCastModel
-                                                    .getPodcastName(index),
-                                                GetMyPodCastModel
-                                                    .getPodcastUserPublishInform(
-                                                        index)[0]['photo'],
-                                                context),
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      );
+                                                    });
+                                              },
+                                              icon: Icon(
+                                                Icons.clear,
+                                                color: Theme.of(context)
+                                                    .iconTheme
+                                                    .color,
+                                              )),
+                                          photourl: GetMyPodCastModel
+                                              .getPodcastUserPublishInform(
+                                                  index)[0]['photo'],
+                                          podcastName:
+                                              GetMyPodCastModel.getPodcastName(
+                                                  index),
+                                          userName: GetMyPodCastModel
+                                              .getPodcastUserPublishInform(
+                                                  index)[0]['name'],
+                                          podCastLikes:
+                                              PlayingCardWidget.podCastLikes(
+                                                  context,
+                                                  cubit,
+                                                  token,
+                                                  index,
+                                                  GetMyPodCastModel
+                                                      .getPodcastID(index),
+                                                  GetMyPodCastModel
+                                                          .getPodcastLikes(
+                                                              index)
+                                                      .toString()),
+                                          likeWidget:
+                                              PlayingCardWidget.likeState(
+                                                  context,
+                                                  GetMyPodCastModel
+                                                      .getPodcastlikeState(
+                                                          index),
+                                                  GetMyPodCastModel
+                                                      .getPodcastID(index),
+                                                  token,
+                                                  ''),
+                                          playingWidget:
+                                              PlayingCardWidget.playingButton(
+                                                  index,
+                                                  cubit,
+                                                  GetMyPodCastModel
+                                                      .getPodCastAudio(
+                                                          index)[0]['url'],
+                                                  currentId.toString(),
+                                                  GetMyPodCastModel
+                                                      .getPodcastID(index),
+                                                  GetMyPodCastModel
+                                                      .getPodcastName(index),
+                                                  GetMyPodCastModel
+                                                      .getPodcastUserPublishInform(
+                                                          index)[0]['photo'],
+                                                  context),
+                                        ),
                                       );
                                     },
                                   )
