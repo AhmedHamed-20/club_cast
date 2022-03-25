@@ -4,14 +4,17 @@ import 'package:club_cast/data_layer/cash/cash.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
 import 'package:club_cast/presentation_layer/models/getMyPodCastModel.dart';
 import 'package:club_cast/presentation_layer/models/get_all_podcst.dart';
+import 'package:club_cast/presentation_layer/models/get_my_events.dart';
 import 'package:club_cast/presentation_layer/models/user_model.dart';
 import 'package:club_cast/presentation_layer/screens/active_podcast_screen.dart';
 import 'package:club_cast/presentation_layer/screens/edit_user_profile.dart';
 import 'package:club_cast/presentation_layer/screens/followers_screen.dart';
 import 'package:club_cast/presentation_layer/screens/following_screen.dart';
 import 'package:club_cast/presentation_layer/screens/uploadPodcastScreen.dart';
+import 'package:club_cast/presentation_layer/screens/user_screen/event_screen/event_screen.dart';
 import 'package:club_cast/presentation_layer/widgets/playingCardWidget.dart';
 import 'package:club_cast/presentation_layer/widgets/pos_cast_card_item.dart';
+import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -93,7 +96,7 @@ class UserProfileScreen extends StatelessWidget {
                             height: 10.0,
                           ),
                           Text(
-                            '${GetUserModel.getUserName()}',
+                            GetUserModel.getUserName(),
                             style:
                                 Theme.of(context).textTheme.bodyText1!.copyWith(
                                       fontWeight: FontWeight.w900,
@@ -160,7 +163,7 @@ class UserProfileScreen extends StatelessWidget {
                             text: 'Edit',
                             radius: 8,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           defaultButton(
@@ -173,6 +176,22 @@ class UserProfileScreen extends StatelessWidget {
                             height: 45,
                             width: 280,
                             text: 'Upload Podcast',
+                            radius: 8,
+                          ),
+                          const SizedBox(
+                            height: 20.0,
+                          ),
+                          defaultButton(
+                            onPressed: () {
+                              navigatePushTo(
+                                context: context,
+                                navigateTo: EventScreen(),
+                              );
+                            },
+                            context: context,
+                            height: 45,
+                            width: 280,
+                            text: 'My Events',
                             radius: 8,
                           ),
                           const SizedBox(

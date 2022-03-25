@@ -5,6 +5,7 @@ import 'package:club_cast/data_layer/dio/dio_setup.dart';
 import 'package:club_cast/presentation_layer/components/constant/constant.dart';
 import 'package:club_cast/presentation_layer/components/theme/app_theme.dart';
 import 'package:club_cast/presentation_layer/layout/layout_screen.dart';
+import 'package:club_cast/presentation_layer/models/user_model.dart';
 import 'package:club_cast/presentation_layer/screens/edit_user_profile.dart';
 import 'package:club_cast/presentation_layer/screens/user_screen/login_screen/login_screen.dart';
 import 'package:club_cast/presentation_layer/screens/user_screen/login_screen/login_screen.dart';
@@ -24,7 +25,6 @@ void main() async {
   Bloc.observer = MyBlocObserver();
   bool? isDark;
   token = CachHelper.getData(key: 'token');
-
   //print('mainValue:${isDark}');
   if (await CachHelper.getData(key: 'isDark') == null) {
     isDark = false;
@@ -63,7 +63,9 @@ class MyApp extends StatelessWidget {
             ..getMyFollowingPodcast(token)
             ..getUserData(token: token)
             ..getAllCategory()
-            ..getDark(isDark!),
+            ..getDark(isDark!)
+            ..getMyEvents()
+            ..getMyFollowingEvents(),
         ),
       ],
       child: BlocConsumer<GeneralAppCubit, GeneralAppStates>(

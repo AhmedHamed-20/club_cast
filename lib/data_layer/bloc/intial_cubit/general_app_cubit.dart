@@ -5,9 +5,12 @@ import 'package:club_cast/data_layer/dio/dio_setup.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
 import 'package:club_cast/presentation_layer/components/constant/constant.dart';
 import 'package:club_cast/presentation_layer/models/category_model.dart';
+import 'package:club_cast/presentation_layer/models/create_event_model.dart';
 import 'package:club_cast/presentation_layer/models/explore_podcasts_model.dart';
+import 'package:club_cast/presentation_layer/models/getMyFollowingEvents.dart';
 import 'package:club_cast/presentation_layer/models/getMyPodCastModel.dart';
 import 'package:club_cast/presentation_layer/models/get_all_podcst.dart';
+import 'package:club_cast/presentation_layer/models/get_my_events.dart';
 import 'package:club_cast/presentation_layer/models/get_userId_model.dart';
 import 'package:club_cast/presentation_layer/models/login_model.dart';
 import 'package:club_cast/presentation_layer/models/podCastLikesUserModel.dart';
@@ -943,6 +946,128 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     }).catchError((error) {
       print("error when set user avatar :${error.toString()}");
       emit(UserUpdateAvatarErrorState());
+    });
+  }
+
+  ///////////////Events////////////////////
+
+  Future<void> createMyEvent({
+    required String eventName,
+    required String eventDescription,
+    required String eventDate,
+  }) async {
+    emit(CreateEventLoadingState());
+
+    DioHelper.postData(url: createEvent, token: {
+      'Authorization': 'Bearer ${token}',
+    }, data: {
+      "name": eventName,
+      "description": eventDescription,
+      "date": eventDate,
+    }).then((value) {
+      CreateEventModel.data = Map<String, dynamic>.from(value.data);
+      print("create events : ${CreateEventModel.data}");
+      print(GetUserModel.getUserID());
+
+      showToast(
+          message: 'Create Your Event Successfully',
+          toastState: ToastState.SUCCESS);
+      emit(CreateEventSuccessState());
+    }).onError((DioError error, stackTrace) {
+      if (error.response!.statusCode == 400) {
+        showToast(
+          message: 'Duplicate,sorry change your event name :(',
+          toastState: ToastState.WARNING,
+        );
+      }
+      emit(CreateEventErrorState());
+    });
+  }
+
+  void getMyFollowingEvents() {
+    emit(GetMyFollowingEventsLoadingState());
+
+    DioHelper.getData(
+      url: getMyFollowingEvent,
+      token: {
+        'Authorization': 'Bearer ${token}',
+      },
+    ).then((value) {
+      GetMyFollowingEvents.data = Map<String, dynamic>.from(value.data);
+      print(" getMyFollowingEvents : ${GetMyFollowingEvents.data}");
+
+      emit(GetMyFollowingEventsSuccessState());
+    }).catchError((error) {
+      print("error when get my following events:${error.toString()}");
+      emit(GetMyFollowingEventsErrorState());
+    });
+  }
+
+  void getMyEvents() {
+    emit(GetMyEventsLoadingState());
+
+    DioHelper.getData(
+      url: getMyEvent,
+      token: {
+        'Authorization': 'Bearer ${token}',
+      },
+    ).then((value) {
+      GetMyEvents.data = Map<String, dynamic>.from(value.data);
+
+      emit(GetMyEventsSuccessState());
+    }).catchError((error) {
+      print("error when get my events:${error.toString()}");
+      emit(GetMyEventsErrorState());
+    });
+  }
+
+  void deleteEventById({
+    required String eventId,
+    required String eventName,
+  }) {
+    emit(DeleteEventLoadingState());
+
+    DioHelper.deleteData(
+      url: deleteEvent + eventId,
+      token: {
+        'Authorization': 'Bearer ${token}',
+      },
+    ).then((value) {
+      showToast(
+          message: 'Event $eventName deleted Successfully',
+          toastState: ToastState.SUCCESS);
+      emit(DeleteEventSuccessState());
+    }).catchError((error) {
+      print("error when delete event:${error.toString()}");
+      emit(DeleteEventErrorState());
+    });
+  }
+
+  void updateEventById({
+    required String eventId,
+    required String eventName,
+    required String eventDate,
+    required String eventTime,
+    required String eventDescription,
+  }) {
+    emit(UpdateEventLoadingState());
+
+    DioHelper.patchEventData(
+      url: updateEventData + eventId,
+      data: {
+        "name": eventName,
+        "description": eventDescription,
+        "date": "$eventDate,$eventTime",
+      },
+      token: token,
+    ).then((value) {
+      showToast(
+          message: 'Event $eventName updated Successfully',
+          toastState: ToastState.SUCCESS);
+      emit(UpdateEventSuccessState());
+    }).catchError((error) {
+      print("error when updated event:${error.toString()}");
+      emit(UpdateEventErrorState());
     });
   }
 }
