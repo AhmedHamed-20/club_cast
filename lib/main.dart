@@ -75,7 +75,7 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             title: 'PodLand',
             theme: cubit.isDark! ? darkMode : lightMode,
-            home: startApp,
+            home: ,
           );
         },
         listener: (context, state) {},
