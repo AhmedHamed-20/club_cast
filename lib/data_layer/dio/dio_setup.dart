@@ -37,8 +37,11 @@ class DioHelper {
     );
   }
 
-  static Future<dynamic> postData(
-      {required String url, dynamic data, Map<String, dynamic>? token}) async {
+  static Future<dynamic> postData({
+    required String url,
+    dynamic data,
+    Map<String, dynamic>? token,
+  }) async {
     return await dio!.post(
       url,
       data: data,
@@ -113,6 +116,19 @@ class DioHelper {
         'Content-Type': 'application/json'
       }),
     );
+  }
+
+  static Future<dynamic> patchEventData({
+    required String url,
+    required Map<String, dynamic> data,
+    String? token,
+  }) async {
+    return response = (await dio?.patch(url,
+        data: data,
+        options: Options(headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json'
+        })))!;
   }
 }
 /*

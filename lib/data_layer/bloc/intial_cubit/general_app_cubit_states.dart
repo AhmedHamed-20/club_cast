@@ -174,3 +174,33 @@ class LoadDataPaginattion extends GeneralAppStates {}
 class DataPaginattiongetSuccess extends GeneralAppStates {}
 
 class DataPaginattiongetError extends GeneralAppStates {}
+
+class CreateEventLoadingState extends GeneralAppStates {}
+
+class CreateEventSuccessState extends GeneralAppStates {}
+
+class CreateEventErrorState extends GeneralAppStates {}
+
+class GetMyFollowingEventsLoadingState extends GeneralAppStates {}
+
+class GetMyFollowingEventsSuccessState extends GeneralAppStates {}
+
+class GetMyFollowingEventsErrorState extends GeneralAppStates {}
+
+class GetMyEventsLoadingState extends GeneralAppStates {}
+
+class GetMyEventsSuccessState extends GeneralAppStates {}
+
+class GetMyEventsErrorState extends GeneralAppStates {}
+
+class DeleteEventLoadingState extends GeneralAppStates {}
+
+class DeleteEventSuccessState extends GeneralAppStates {}
+
+class DeleteEventErrorState extends GeneralAppStates {}
+
+class UpdateEventLoadingState extends GeneralAppStates {}
+
+class UpdateEventSuccessState extends GeneralAppStates {}
+
+class UpdateEventErrorState extends GeneralAppStates {}

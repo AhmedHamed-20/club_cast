@@ -17,9 +17,13 @@ Widget defaultTextFormField({
   FormFieldValidator<String>? validator,
   ValueChanged<String>? onSubmit,
   bool obscureText = false,
+  int maxLine = 1,
+  TextDirection textDirection = TextDirection.ltr,
   required BuildContext context,
 }) {
   return TextFormField(
+    maxLines: maxLine,
+    textDirection: textDirection,
     style: Theme.of(context).textTheme.bodyText1,
     controller: controller,
     keyboardType: keyboardType,

@@ -70,7 +70,7 @@ class ProfileDetailsScreen extends StatelessWidget {
                     color: Theme.of(context).primaryColor,
                     onRefresh: refresh,
                     child: SingleChildScrollView(
-                      physics: BouncingScrollPhysics(
+                      physics: const BouncingScrollPhysics(
                           parent: AlwaysScrollableScrollPhysics()),
                       child: Column(children: [
                         const SizedBox(

@@ -13,7 +13,7 @@ Widget publicRoomItem(
       height: MediaQuery.of(context).size.height * 0.25,
       width: double.infinity,
       child: Card(
-        color: Theme.of(context).backgroundColor,
+        color: Theme.of(context).scaffoldBackgroundColor,
         elevation: 4,
         child: Padding(
           padding: const EdgeInsets.all(7),
