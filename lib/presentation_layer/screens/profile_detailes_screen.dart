@@ -95,7 +95,23 @@ class ProfileDetailsScreen extends StatelessWidget {
                                   ),
                         ),
                         const SizedBox(
-                          height: 25.0,
+                          height: 8.0,
+                        ),
+                        Container(
+                          width: 260.0,
+                          child:Column(
+                            children: [
+                              cubit.userId?.data?.bio==null?const SizedBox():
+                              Text(
+                                '${cubit.userId?.data?.bio}',
+                                style:
+                                Theme.of(context).textTheme.bodyText1!,
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 15.0,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,

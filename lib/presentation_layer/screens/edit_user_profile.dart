@@ -13,6 +13,8 @@ import '../../data_layer/bloc/intial_cubit/general_app_cubit.dart';
 
 TextEditingController? userNameController = TextEditingController();
 TextEditingController? emailController = TextEditingController();
+TextEditingController? bioController = TextEditingController();
+TextEditingController? emptyController = TextEditingController();
 
 class EditUserProfileScreen extends StatelessWidget {
   EditUserProfileScreen({Key? key}) : super(key: key);
@@ -34,6 +36,7 @@ class EditUserProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     userNameController?.text = GetUserModel.getUserName();
     emailController?.text = GetUserModel.getUserEmail();
+    bioController?.text = GetUserModel.getUserBio()!;
     return BlocConsumer<GeneralAppCubit, GeneralAppStates>(
       listener: (context, state) {},
       builder: (context, state) {
@@ -152,6 +155,16 @@ class EditUserProfileScreen extends StatelessWidget {
                         },
                       ),
                       const SizedBox(
+                        height: 22.0,
+                      ),
+                      defaultTextFormField(
+                        context: context,
+                        controller: bioController,
+                        labelText: 'Bio',
+                        labelStyle: Theme.of(context).textTheme.bodyText1,
+                        keyboardType: TextInputType.text,
+                      ),
+                      const SizedBox(
                         height: 20.0,
                       ),
                       Container(
@@ -208,6 +221,7 @@ class EditUserProfileScreen extends StatelessWidget {
                                                   name1:
                                                       userNameController!.text,
                                                   email1: emailController!.text,
+                                                  bio1: bioController!.text,
                                                   token: token,
                                                 )
                                               : null;

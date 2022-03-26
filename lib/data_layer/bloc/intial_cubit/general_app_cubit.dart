@@ -664,6 +664,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   void updateUserData({
     required String name1,
     required String email1,
+    required String bio1,
     required String token,
   }) {
     emit(UpdateUserLoadingState());
@@ -672,11 +673,13 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       url: updateProfile,
       name: name1,
       email: email1,
+      bio: bio1,
       token: token,
     ).then((value) {
       print(value);
       GetUserModel.updateName(name1);
       GetUserModel.updateEmail(email1);
+      GetUserModel.updateBio(bio1);
       isUpdateUserData = false;
       emit(DataUpdatedSuccess());
       showToast(
