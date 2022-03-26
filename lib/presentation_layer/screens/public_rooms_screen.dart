@@ -23,54 +23,60 @@ class PublicRoomScreen extends StatelessWidget {
       builder: (BuildContext context, Object? state) {
         return GetMyFollowingEvents.data != null
             ? SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
                 child: Padding(
                     padding: const EdgeInsetsDirectional.only(top: 40.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsetsDirectional.only(start: 12.0),
-                              child: Text(
-                                'UPCOMING EVENTS ~~~~~~',
-                                style: Theme.of(context).textTheme.bodyText1,
-                              ),
-                            ),
-                            SizedBox(
-                              width: double.infinity,
-                              height: MediaQuery.of(context).size.height * 0.31,
-                              child: ListView.builder(
-                                physics: const BouncingScrollPhysics(),
-                                scrollDirection: Axis.horizontal,
-                                itemBuilder: (context, index) => eventCardItem(
-                                  context: context,
-                                  index: index,
-                                  userWhoCreateEventId:
-                                      GetMyFollowingEvents.userWhoCreateEvent(
-                                          index)["_id"],
-                                  userName:
-                                      GetMyFollowingEvents.userWhoCreateEvent(
-                                          index)["name"],
-                                  userUrl:
-                                      GetMyFollowingEvents.userWhoCreateEvent(
-                                          index)['photo'],
-                                  eventDescription:
-                                      GetMyFollowingEvents.eventDescription(
-                                          index),
-                                  eventName:
-                                      GetMyFollowingEvents.eventName(index),
-                                  eventDate:
-                                      GetMyFollowingEvents.eventDate(index),
-                                ),
-                                itemCount:
-                                    GetMyFollowingEvents.allEvent().length,
-                              ),
-                            ),
-                          ],
-                        ),
+                        GetMyFollowingEvents.allEvent().isNotEmpty
+                            ? Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsetsDirectional.only(
+                                        start: 12.0),
+                                    child: Text(
+                                      'UPCOMING EVENTS ~~~~~~',
+                                      style:
+                                          Theme.of(context).textTheme.bodyText1,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: double.infinity,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.277,
+                                    child: ListView.builder(
+                                      physics: const BouncingScrollPhysics(),
+                                      scrollDirection: Axis.horizontal,
+                                      itemBuilder: (context, index) =>
+                                          eventCardItem(
+                                        context: context,
+                                        index: index,
+                                        userWhoCreateEventId:
+                                            GetMyFollowingEvents
+                                                .userWhoCreateEvent(
+                                                    index)["_id"],
+                                        userName: GetMyFollowingEvents
+                                            .userWhoCreateEvent(index)["name"],
+                                        userUrl: GetMyFollowingEvents
+                                            .userWhoCreateEvent(index)['photo'],
+                                        eventDescription: GetMyFollowingEvents
+                                            .eventDescription(index),
+                                        eventName:
+                                            GetMyFollowingEvents.eventName(
+                                                index),
+                                        eventDate:
+                                            GetMyFollowingEvents.eventDate(
+                                                index),
+                                      ),
+                                      itemCount: GetMyFollowingEvents.allEvent()
+                                          .length,
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : const SizedBox(),
                         Padding(
                           padding:
                               const EdgeInsetsDirectional.only(start: 12.0),

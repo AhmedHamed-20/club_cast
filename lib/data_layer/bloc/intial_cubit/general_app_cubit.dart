@@ -18,6 +18,7 @@ import 'package:club_cast/presentation_layer/models/user_model.dart';
 import 'package:club_cast/presentation_layer/screens/podcastLikesScreen.dart';
 import 'package:club_cast/presentation_layer/screens/podcast_screen.dart';
 import 'package:club_cast/presentation_layer/screens/public_rooms_screen.dart';
+import 'package:club_cast/presentation_layer/screens/user_screen/event_screen/event_screen.dart';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -786,6 +787,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
         'Authorization': 'Bearer ${token}',
       },
     ).then((value) {
+      getMyFollowingEvents();
       emit(FollowUserSuccessState());
     }).catchError((error) {
       print(error);
@@ -803,6 +805,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
         'Authorization': 'Bearer ${token}',
       },
     ).then((value) {
+      getMyFollowingEvents();
       emit(UnFollowUserSuccessState());
     }).catchError((error) {
       print(error);
@@ -971,9 +974,9 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       CreateEventModel.data = Map<String, dynamic>.from(value.data);
       print("create events : ${CreateEventModel.data}");
       print(GetUserModel.getUserID());
-
+      getMyEvents();
       showToast(
-          message: 'Create Your Event Successfully',
+          message: 'Your Event Created Successfully',
           toastState: ToastState.SUCCESS);
       emit(CreateEventSuccessState());
     }).onError((DioError error, stackTrace) {
@@ -1039,8 +1042,11 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       showToast(
           message: 'Event $eventName deleted Successfully',
           toastState: ToastState.SUCCESS);
+      getMyEvents();
+
       emit(DeleteEventSuccessState());
-    }).catchError((error) {
+    }).onError((DioError error, f) {
+      showToast(message: error.message, toastState: ToastState.SUCCESS);
       print("error when delete event:${error.toString()}");
       emit(DeleteEventErrorState());
     });
@@ -1067,8 +1073,14 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       showToast(
           message: 'Event $eventName updated Successfully',
           toastState: ToastState.SUCCESS);
+
+      GetMyEvents();
+
       emit(UpdateEventSuccessState());
-    }).catchError((error) {
+    }).onError((DioError error, stackTrace) {
+      showToast(
+          message: error.response!.statusMessage.toString(),
+          toastState: ToastState.ERROR);
       print("error when updated event:${error.toString()}");
       emit(UpdateEventErrorState());
     });

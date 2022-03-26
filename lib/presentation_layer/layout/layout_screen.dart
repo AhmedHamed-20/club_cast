@@ -5,6 +5,7 @@ import 'package:club_cast/presentation_layer/models/user_model.dart';
 import 'package:club_cast/presentation_layer/screens/search_screen.dart';
 import 'package:club_cast/presentation_layer/screens/user_profile_screen.dart';
 import 'package:club_cast/presentation_layer/widgets/modelsheetcreate_room.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -43,9 +44,16 @@ class LayoutScreen extends StatelessWidget {
                             backgroundImage: NetworkImage(
                                 cubit.activepodcastPhotUrl.toString()),
                           ),
-                          Text(
-                            cubit.activePodcastname.toString(),
-                            style: Theme.of(context).textTheme.bodyText1,
+                          Container(
+                            padding: EdgeInsetsDirectional.only(start: 3),
+                            width: MediaQuery.of(context).size.width * 0.25,
+                            height: 40,
+                            child: Center(
+                              child: Text(
+                                cubit.activePodcastname.toString(),
+                                style: Theme.of(context).textTheme.bodyText1,
+                              ),
+                            ),
                           ),
                           Row(
                             children: [

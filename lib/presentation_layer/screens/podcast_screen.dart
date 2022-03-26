@@ -32,7 +32,11 @@ class PodCastScreen extends StatelessWidget {
               ? const EdgeInsets.only(
                   left: 10.0, right: 10, top: 10, bottom: 70)
               : const EdgeInsets.only(
-                  left: 10.0, right: 10, top: 10, bottom: 20),
+                  left: 10.0,
+                  right: 10,
+                  top: 10,
+                  //    bottom: 20,
+                ),
           child: GetMyFollowingPodCastsModel
                   .getMyFollowingPodcasts!['data'].isEmpty
               ? Center(
