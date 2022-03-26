@@ -72,7 +72,6 @@ Widget podACastItem(
                       ?.copyWith(color: Theme.of(context).primaryColor),
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     downloadButton!,
