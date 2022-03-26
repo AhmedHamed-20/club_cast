@@ -104,7 +104,23 @@ class UserProfileScreen extends StatelessWidget {
                                     ),
                           ),
                           const SizedBox(
-                            height: 25.0,
+                            height: 4.0,
+                          ),
+                          Container(
+                            width: 260.0,
+                            child: Column(
+                              children: [
+                                GetUserModel.getUserBio()==null?const SizedBox():
+                                Text(
+                                  '${GetUserModel.getUserBio()}',
+                                  style:
+                                  Theme.of(context).textTheme.bodyText1!,
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 13.0,
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,

@@ -7,6 +7,7 @@ class GetUserModel {
   static int? followers;
   static int? following;
   static String? photo;
+  static String? bio;
 
   static String getUserID() {
     return userid = getUserModel!['data']['data']['_id'];
@@ -31,6 +32,9 @@ class GetUserModel {
   static String? getUserPhoto() {
     return photo = getUserModel?['data']['data']['photo'];
   }
+  static String? getUserBio() {
+    return bio = getUserModel!['data']['data']['bio'];
+  }
 
   static void updateName(String name) {
     getUserModel!['data']['data']['name'] = name;
@@ -38,5 +42,8 @@ class GetUserModel {
 
   static void updateEmail(String email) {
     getUserModel!['data']['data']['email'] = email;
+  }
+  static void updateBio(String bio) {
+    getUserModel!['data']['data']['bio'] = bio;
   }
 }
