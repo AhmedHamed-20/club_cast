@@ -72,13 +72,10 @@ Widget podACastItem(
                       ?.copyWith(color: Theme.of(context).primaryColor),
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     downloadButton!,
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.02,
-                    ),
                     playingWidget!,
                   ],
                 ),

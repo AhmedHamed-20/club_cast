@@ -3,30 +3,42 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 ThemeData darkMode = ThemeData(
-    bottomSheetTheme: const BottomSheetThemeData(
-      backgroundColor: Colors.transparent,
-      modalBackgroundColor: Colors.transparent,
+  bottomSheetTheme: const BottomSheetThemeData(
+    backgroundColor: Colors.transparent,
+    modalBackgroundColor: Colors.transparent,
+  ),
+  appBarTheme: const AppBarTheme(
+    titleSpacing: 20,
+    systemOverlayStyle: SystemUiOverlayStyle(),
+    backgroundColor: Colors.transparent,
+    elevation: 0.0,
+    titleTextStyle: TextStyle(
+      color: Colors.black,
+      fontSize: 20,
+      fontWeight: FontWeight.bold,
     ),
-    backgroundColor: Colors.grey[800],
-    textTheme: TextTheme(
-      bodyText1: GoogleFonts.rubik(
-        color: Colors.white,
-        fontSize: 18,
-      ),
-      bodyText2: GoogleFonts.rubik(
-        color: Colors.white,
-        fontSize: 18,
-        fontWeight: FontWeight.bold,
-      ),
-    ),
-    iconTheme: const IconThemeData(
+  ),
+  backgroundColor: Colors.grey[800],
+  textTheme: TextTheme(
+    bodyText1: GoogleFonts.rubik(
       color: Colors.white,
-      size: 28,
+      fontSize: 18,
     ),
-    scaffoldBackgroundColor: const Color(0x2BE5E5E5),
-    primaryColor: const Color(
-      0xff6A4CFF,
-    ));
+    bodyText2: GoogleFonts.rubik(
+      color: Colors.white,
+      fontSize: 18,
+      fontWeight: FontWeight.bold,
+    ),
+  ),
+  iconTheme: const IconThemeData(
+    color: Colors.white,
+    size: 28,
+  ),
+  scaffoldBackgroundColor: const Color(0x2BE5E5E5),
+  primaryColor: const Color(
+    0xff6A4CFF,
+  ),
+);
 
 ThemeData lightMode = ThemeData(
   bottomSheetTheme: const BottomSheetThemeData(
