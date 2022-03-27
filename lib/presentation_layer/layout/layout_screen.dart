@@ -32,7 +32,7 @@ class LayoutScreen extends StatelessWidget {
                         topLeft: Radius.circular(25),
                         topRight: Radius.circular(25),
                       ),
-                      color: Theme.of(context).primaryColor.withAlpha(100),
+                      color: Theme.of(context).primaryColor,
                     ),
                     child: Padding(
                       padding: const EdgeInsets.only(
