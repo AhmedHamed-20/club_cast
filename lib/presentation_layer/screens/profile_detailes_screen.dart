@@ -99,14 +99,19 @@ class ProfileDetailsScreen extends StatelessWidget {
                         ),
                         Container(
                           width: 260.0,
-                          child:Column(
+                          child: Column(
                             children: [
-                              cubit.userId?.data?.bio==null?const SizedBox():
-                              Text(
-                                '${cubit.userId?.data?.bio}',
-                                style:
-                                Theme.of(context).textTheme.bodyText1!,
-                              ),
+                              cubit.userId?.data?.bio == null
+                                  ? const SizedBox()
+                                  : Text(
+                                      '${cubit.userId?.data?.bio}',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1!
+                                          .copyWith(
+                                            color: Colors.grey,
+                                          ),
+                                    ),
                             ],
                           ),
                         ),
