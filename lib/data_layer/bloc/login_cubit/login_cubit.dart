@@ -1,11 +1,14 @@
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
+import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/data_layer/cash/cash.dart';
 import 'package:club_cast/data_layer/dio/dio_setup.dart';
 import 'package:club_cast/presentation_layer/components/constant/constant.dart';
 import 'package:club_cast/presentation_layer/layout/layout_screen.dart';
+import 'package:club_cast/presentation_layer/models/getMyFollowingEvents.dart';
 import 'package:club_cast/presentation_layer/models/get_all_podcst.dart';
+import 'package:club_cast/presentation_layer/models/get_my_events.dart';
 import 'package:club_cast/presentation_layer/models/login_model.dart';
 import 'package:club_cast/presentation_layer/models/user_model.dart';
 import 'package:club_cast/presentation_layer/screens/setup_avater_screen.dart';
@@ -118,9 +121,12 @@ class LoginCubit extends Cubit<LoginStates> {
       'password': password,
     }).then((value) {
       userLoginModel = UserLoginModel.fromJson(value.data);
+
       token = UserLoginModel.token;
       getUserData(token: token).then(
         (value) {
+          GeneralAppCubit.get(context).getMyEvents();
+          GeneralAppCubit.get(context).getMyFollowingEvents();
           getMyFollowingPodcast(token).then((value) {
             navigatePushANDRemoveRout(
                 context: context, navigateTo: LayoutScreen());
@@ -207,7 +213,10 @@ class LoginCubit extends Cubit<LoginStates> {
 
       userLoginModel = UserLoginModel.fromJson(value.data);
       token = UserLoginModel.token;
+
       getUserData(token: token).then((value) {
+        GeneralAppCubit.get(context).getMyEvents();
+        GeneralAppCubit.get(context).getMyFollowingEvents();
         getMyFollowingPodcast(token).then((value) {
           navigatePushANDRemoveRout(
               context: context, navigateTo: SetUpAvatarScreen());

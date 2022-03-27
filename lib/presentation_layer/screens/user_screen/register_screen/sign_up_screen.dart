@@ -1,3 +1,4 @@
+import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/data_layer/bloc/login_cubit/login_cubit.dart';
 import 'package:club_cast/data_layer/bloc/login_cubit/login_states.dart';
 import 'package:club_cast/data_layer/cash/cash.dart';
@@ -128,6 +129,7 @@ class RegisterScreen extends StatelessWidget {
                         builder: (context) => defaultButton(
                           context: context,
                           onPressed: () {
+
                             if (formKey.currentState!.validate()) {
                               cubit.userSignUp(
                                 context: context,
