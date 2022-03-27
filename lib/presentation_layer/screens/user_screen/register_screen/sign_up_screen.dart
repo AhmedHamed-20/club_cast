@@ -90,6 +90,7 @@ class RegisterScreen extends StatelessWidget {
                           keyboardType: TextInputType.visiblePassword,
                           labelText: "password",
                           suffixIcon: IconButton(
+                            color: Theme.of(context).iconTheme.color,
                             onPressed: () {
                               cubit.signUpVisibleEyeOrNot();
                             },
@@ -129,7 +130,6 @@ class RegisterScreen extends StatelessWidget {
                         builder: (context) => defaultButton(
                           context: context,
                           onPressed: () {
-
                             if (formKey.currentState!.validate()) {
                               cubit.userSignUp(
                                 context: context,
@@ -169,7 +169,7 @@ class RegisterScreen extends StatelessWidget {
                                   .textTheme
                                   .bodyText1
                                   ?.copyWith(
-                                    color: const Color(0xff5ADAAC),
+                                    color: Theme.of(context).primaryColor,
                                     fontWeight: FontWeight.w500,
                                   ),
                             ),

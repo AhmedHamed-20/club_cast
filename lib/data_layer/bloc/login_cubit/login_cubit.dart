@@ -79,13 +79,13 @@ class LoginCubit extends Cubit<LoginStates> {
     }
   }
 
-  void setAvatar(BuildContext context) async {
+  Future setAvatar(BuildContext context) async {
     emit(UserSetAvatarLoadingState());
     print('======================');
 
     print(CachHelper.getData(key: 'token'));
     print(profileAvatar!.path);
-    await DioHelper.uploadImage(
+    return await DioHelper.uploadImage(
             url: updateProfile,
             image: profileAvatar,
             token: CachHelper.getData(key: 'token'))
@@ -99,6 +99,7 @@ class LoginCubit extends Cubit<LoginStates> {
               message: 'update avatar is succeeded',
               toastState: ToastState.SUCCESS);
           emit(UserSetAvatarSuccessState());
+          profileAvatar = null;
         });
       });
     }).catchError((error) {
