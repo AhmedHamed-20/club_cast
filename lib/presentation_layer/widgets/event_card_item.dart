@@ -82,7 +82,7 @@ Widget eventCardItem({
                         style: Theme.of(context)
                             .textTheme
                             .bodyText1
-                            ?.copyWith(fontSize: 13)),
+                            ?.copyWith(fontSize: 13, color: Colors.grey)),
                     const SizedBox(
                       height: 2,
                     ),
@@ -96,6 +96,7 @@ Widget eventCardItem({
                         style: Theme.of(context).textTheme.bodyText1!.copyWith(
                               fontSize: 16,
                               fontWeight: FontWeight.w400,
+                              color: Colors.grey,
                             ),
                       ),
                     ),

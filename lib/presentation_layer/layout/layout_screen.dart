@@ -8,7 +8,8 @@ import 'package:club_cast/presentation_layer/widgets/modelsheetcreate_room.dart'
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:intl/intl.dart';
+import 'package:marquee/marquee.dart';
 import '../../data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
 import '../components/component/component.dart';
 
@@ -45,14 +46,13 @@ class LayoutScreen extends StatelessWidget {
                                 cubit.activepodcastPhotUrl.toString()),
                           ),
                           Container(
-                            padding: EdgeInsetsDirectional.only(start: 3),
-                            width: MediaQuery.of(context).size.width * 0.25,
-                            height: 40,
-                            child: Center(
-                              child: Text(
-                                cubit.activePodcastname.toString(),
-                                style: Theme.of(context).textTheme.bodyText1,
-                              ),
+                            width: MediaQuery.of(context).size.width * 0.28,
+                            height: 25,
+                            child: Marquee(
+                              style: Theme.of(context).textTheme.bodyText1,
+                              text: cubit.activePodcastname.toString(),
+                              scrollAxis: Axis.horizontal,
+                              blankSpace: 5,
                             ),
                           ),
                           Row(

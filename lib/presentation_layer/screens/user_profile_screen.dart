@@ -110,12 +110,15 @@ class UserProfileScreen extends StatelessWidget {
                             width: 260.0,
                             child: Column(
                               children: [
-                                GetUserModel.getUserBio()==null?const SizedBox():
-                                Text(
-                                  '${GetUserModel.getUserBio()}',
-                                  style:
-                                  Theme.of(context).textTheme.bodyText1!,
-                                ),
+                                GetUserModel.getUserBio() == null
+                                    ? const SizedBox()
+                                    : Text(
+                                        '${GetUserModel.getUserBio()}',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1!
+                                            .copyWith(color: Colors.grey),
+                                      ),
                               ],
                             ),
                           ),
@@ -180,7 +183,7 @@ class UserProfileScreen extends StatelessWidget {
                             radius: 8,
                           ),
                           const SizedBox(
-                            height: 10,
+                            height: 20,
                           ),
                           defaultButton(
                             onPressed: () {
