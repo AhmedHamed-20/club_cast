@@ -28,8 +28,11 @@ class ActivePodCastScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var cubit = GeneralAppCubit?.get(context);
     double time = duration;
+    var hours = (time / (60 * 60)).floor();
+    var minutes = ((time - hours * 60 * 60) / 60).floor();
+    var second = ((time - hours * 60 * 60 - minutes * 60)).floor();
     String convertedTime =
-        '${((time % (24 * 3600)) / 3600).round().toString()}:${((time % (24 * 3600 * 3600)) / 60).round().toString()}:${(time % 60).round().toString()}';
+        '${hours.toString()}:${minutes.toString()}:${second.toString()}';
     return BlocConsumer<GeneralAppCubit, GeneralAppStates>(
       builder: (context, state) {
         return Scaffold(
