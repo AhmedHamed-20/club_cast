@@ -280,7 +280,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     loadMyFollowinPodcast = true;
     emit(LoadDataPaginattion());
     DioHelper.getData(
-        url: getMyFollowingPodcasts + '?page=${pageExplore}',
+        url: getMyFollowingPodcasts + '?page=${pagemyfollowingPodcast}',
         token: {'Authorization': 'Bearer ${token}'}).then((value) {
       // print(value.data['results']);
       print('here');
