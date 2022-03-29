@@ -2,6 +2,7 @@ import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/data_layer/cash/cash.dart';
 import 'package:club_cast/presentation_layer/components/constant/constant.dart';
 import 'package:club_cast/presentation_layer/screens/user_screen/login_screen/login_screen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -101,7 +102,7 @@ void navigatePushTo({
   required BuildContext context,
   required Widget navigateTo,
 }) {
-  Navigator.push(context, MaterialPageRoute(builder: (context) => navigateTo));
+  Navigator.push(context, CupertinoPageRoute(builder: (context) => navigateTo));
 }
 
 void navigatePushANDRemoveRout({
@@ -110,7 +111,7 @@ void navigatePushANDRemoveRout({
 }) {
   Navigator.pushAndRemoveUntil(
       context,
-      MaterialPageRoute(
+      CupertinoPageRoute(
         builder: (context) => navigateTo,
       ),
       (route) => false);
