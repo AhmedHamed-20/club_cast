@@ -72,7 +72,7 @@ class EditUserProfileScreen extends StatelessWidget {
               child: Form(
                 key: formKey,
                 child: SingleChildScrollView(
-                  physics: BouncingScrollPhysics(),
+                  physics: const BouncingScrollPhysics(),
                   child: Column(
                     children: [
                       Stack(
