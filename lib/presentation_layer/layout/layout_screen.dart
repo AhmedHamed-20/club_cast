@@ -4,6 +4,7 @@ import 'package:club_cast/data_layer/cash/cash.dart';
 import 'package:club_cast/presentation_layer/models/user_model.dart';
 import 'package:club_cast/presentation_layer/screens/search_screen.dart';
 import 'package:club_cast/presentation_layer/screens/user_profile_screen.dart';
+import 'package:club_cast/presentation_layer/widgets/alertDialog.dart';
 import 'package:club_cast/presentation_layer/widgets/modelsheetcreate_room.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ import 'package:intl/intl.dart';
 import 'package:marquee/marquee.dart';
 import '../../data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
 import '../components/component/component.dart';
+import '../screens/user_screen/login_screen/login_screen.dart';
 
 class LayoutScreen extends StatelessWidget {
   LayoutScreen({Key? key}) : super(key: key);
@@ -40,10 +42,17 @@ class LayoutScreen extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          CircleAvatar(
-                            radius: 20,
-                            backgroundImage: NetworkImage(
-                                cubit.activepodcastPhotUrl.toString()),
+                          Container(
+                            width: 50,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              image: DecorationImage(
+                                image: NetworkImage(
+                                    cubit.activepodcastPhotUrl.toString()),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
                           ),
                           Container(
                             width: MediaQuery.of(context).size.width * 0.28,
@@ -163,15 +172,23 @@ class LayoutScreen extends StatelessWidget {
                     navigatePushTo(
                         context: context, navigateTo: UserProfileScreen());
                   },
+
                   child: Center(
                     child: GetUserModel.getUserPhoto() == null
                         ? CircularProgressIndicator(
                             strokeWidth: 1,
                           )
-                        : CircleAvatar(
-                            backgroundImage:
-                                NetworkImage(GetUserModel.getUserPhoto()!),
-                            radius: 23,
+                        : Container(
+                            width: 45,
+                            height: 45,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              image: DecorationImage(
+                                image:
+                                    NetworkImage(GetUserModel.getUserPhoto()!),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
                           ),
                   ),
                   // userProfileImage(
@@ -189,7 +206,50 @@ class LayoutScreen extends StatelessWidget {
                     cubit.toggleDark();
                   },
                   icon: Icon(
-                    Icons.dark_mode,
+                    cubit.isDark! ? Icons.light_mode : Icons.dark_mode,
+                    size: 30,
+                    color: Theme.of(context).iconTheme.color,
+                  ),
+                ),
+                IconButton(
+                  splashRadius: 30,
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return alertDialog(
+                              context: context,
+                              title: 'Are You Sure',
+                              content: Text(
+                                'Logout?',
+                                style: Theme.of(context).textTheme.bodyText1,
+                              ),
+                              yesFunction: () {
+                                CachHelper.deleteData(
+                                  'token',
+                                ).then((value) {
+                                  if (value) {
+                                    cubit.assetsAudioPlayer.stop();
+                                    navigatePushANDRemoveRout(
+                                        context: context,
+                                        navigateTo: LoginScreen());
+                                  }
+                                }).then((value) {
+                                  cubit.isPlaying = false;
+                                  cubit.isPausedInHome = false;
+                                  GeneralAppCubit.get(context).search = null;
+                                  cubit.currentOlayingDurathion = null;
+                                  cubit.activePodCastId = null;
+                                  cubit.currentPostionDurationInsec = 0;
+                                });
+                              },
+                              noFunction: () {
+                                Navigator.of(context).pop();
+                              });
+                        });
+                  },
+                  icon: Icon(
+                    Icons.logout,
                     size: 30,
                     color: Theme.of(context).iconTheme.color,
                   ),

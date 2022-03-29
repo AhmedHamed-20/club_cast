@@ -12,6 +12,7 @@ import 'package:club_cast/presentation_layer/screens/followers_screen.dart';
 import 'package:club_cast/presentation_layer/screens/following_screen.dart';
 import 'package:club_cast/presentation_layer/screens/uploadPodcastScreen.dart';
 import 'package:club_cast/presentation_layer/screens/user_screen/event_screen/event_screen.dart';
+import 'package:club_cast/presentation_layer/widgets/alertDialog.dart';
 import 'package:club_cast/presentation_layer/widgets/playingCardWidget.dart';
 import 'package:club_cast/presentation_layer/widgets/pos_cast_card_item.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
@@ -84,10 +85,17 @@ class UserProfileScreen extends StatelessWidget {
                           Stack(
                             children: [
                               Center(
-                                child: CircleAvatar(
-                                  backgroundImage: NetworkImage(
-                                      '${GetUserModel.getUserPhoto()}'),
-                                  radius: 75.0,
+                                child: Container(
+                                  width: 200,
+                                  height: 200,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15),
+                                    image: DecorationImage(
+                                      image: NetworkImage(
+                                          '${GetUserModel.getUserPhoto()}'),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ],
@@ -248,7 +256,8 @@ class UserProfileScreen extends StatelessWidget {
                                     itemCount: GetMyPodCastModel
                                         .getMyPodCast?['data'].length,
                                     shrinkWrap: true,
-                                    physics: NeverScrollableScrollPhysics(),
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
                                     itemBuilder: (context, index) {
                                       return InkWell(
                                         onTap: () {
@@ -313,86 +322,41 @@ class UserProfileScreen extends StatelessWidget {
                                                 showDialog(
                                                     context: context,
                                                     builder: (context) {
-                                                      return AlertDialog(
-                                                        shape:
-                                                            RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(15),
-                                                        ),
-                                                        backgroundColor: Theme
-                                                                .of(context)
-                                                            .backgroundColor,
-                                                        title: Text(
-                                                          'Are You Sure',
-                                                          style:
-                                                              Theme.of(context)
-                                                                  .textTheme
-                                                                  .bodyText2,
-                                                        ),
-                                                        content: Text(
-                                                          'delete ${GetMyPodCastModel.getPodcastName(index)} podcast?',
-                                                          style:
-                                                              Theme.of(context)
-                                                                  .textTheme
-                                                                  .bodyText1,
-                                                        ),
-                                                        actions: [
-                                                          Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceAround,
-                                                            children: [
-                                                              MaterialButton(
-                                                                onPressed: () {
-                                                                  // print(GetMyPodCastModel
-                                                                  //     .getPodcastID(
-                                                                  //         index));
-                                                                  cubit
-                                                                      .assetsAudioPlayer
-                                                                      .stop();
-                                                                  cubit.currentOlayingDurathion =
-                                                                      null;
-                                                                  cubit.activePodCastId =
-                                                                      null;
-                                                                  cubit
-                                                                      .removePodCast(
-                                                                          GetMyPodCastModel.getPodcastID(
-                                                                              index),
-                                                                          token)
-                                                                      .then(
-                                                                          (value) {
-                                                                    Navigator.of(
-                                                                            context)
-                                                                        .pop();
-                                                                  });
-                                                                },
-                                                                child: Text(
-                                                                  'Yes',
-                                                                  style: Theme.of(
-                                                                          context)
-                                                                      .textTheme
-                                                                      .bodyText1,
-                                                                ),
-                                                              ),
-                                                              MaterialButton(
-                                                                onPressed: () {
-                                                                  Navigator.of(
-                                                                          context)
-                                                                      .pop();
-                                                                },
-                                                                child: Text(
-                                                                  'No',
-                                                                  style: Theme.of(
-                                                                          context)
-                                                                      .textTheme
-                                                                      .bodyText1,
-                                                                ),
-                                                              ),
-                                                            ],
+                                                      return alertDialog(
+                                                          context: context,
+                                                          content: Text(
+                                                            'delete ${GetMyPodCastModel.getPodcastName(index)} podcast?',
+                                                            style: Theme.of(
+                                                                    context)
+                                                                .textTheme
+                                                                .bodyText1,
                                                           ),
-                                                        ],
-                                                      );
+                                                          title: 'Are You Sure',
+                                                          yesFunction: () {
+                                                            cubit
+                                                                .assetsAudioPlayer
+                                                                .stop();
+                                                            cubit.currentOlayingDurathion =
+                                                                null;
+                                                            cubit.activePodCastId =
+                                                                null;
+                                                            cubit
+                                                                .removePodCast(
+                                                                    GetMyPodCastModel
+                                                                        .getPodcastID(
+                                                                            index),
+                                                                    token)
+                                                                .then((value) {
+                                                              Navigator.of(
+                                                                      context)
+                                                                  .pop();
+                                                            });
+                                                          },
+                                                          noFunction: () {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                          });
                                                     });
                                               },
                                               icon: Icon(

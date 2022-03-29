@@ -46,9 +46,16 @@ Widget podACastItem(
           ListTile(
             leading: InkWell(
               onTap: ontapOnCircleAvater,
-              child: CircleAvatar(
-                radius: 30,
-                backgroundImage: NetworkImage(photoUrl),
+              child: Container(
+                width: 60,
+                height: 60,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  image: DecorationImage(
+                    image: NetworkImage(photoUrl),
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
             ),
             title: Text(podcastName!,

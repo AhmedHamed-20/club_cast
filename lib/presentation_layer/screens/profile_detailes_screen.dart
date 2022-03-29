@@ -77,10 +77,17 @@ class ProfileDetailsScreen extends StatelessWidget {
                           height: 10.0,
                         ),
                         Center(
-                          child: CircleAvatar(
-                            backgroundImage:
-                                NetworkImage('${cubit.userId?.data?.photo}'),
-                            radius: 75.0,
+                          child: Container(
+                            width: 200,
+                            height: 200,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              image: DecorationImage(
+                                image: NetworkImage(
+                                    '${cubit.userId?.data?.photo}'),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
                           ),
                         ),
                         const SizedBox(

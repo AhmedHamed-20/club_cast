@@ -60,9 +60,16 @@ class ActivePodCastScreen extends StatelessWidget {
               Column(
                 children: [
                   Center(
-                    child: CircleAvatar(
-                      radius: 80,
-                      backgroundImage: NetworkImage(userPhoto),
+                    child: Container(
+                      width: 200,
+                      height: 200,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        image: DecorationImage(
+                          image: NetworkImage(userPhoto),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
                     ),
                   ),
                   const SizedBox(
