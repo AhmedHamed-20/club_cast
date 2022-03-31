@@ -34,7 +34,7 @@ ThemeData darkMode = ThemeData(
     color: Colors.white,
     size: 28,
   ),
-  scaffoldBackgroundColor: const Color(0x2BE5E5E5),
+  scaffoldBackgroundColor: Colors.grey[900],
   primaryColor: const Color(
     0xff6A4CFF,
   ),

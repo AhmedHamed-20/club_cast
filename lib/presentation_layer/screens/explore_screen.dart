@@ -67,10 +67,11 @@ class ExploreScreen extends StatelessWidget {
                         color: Theme.of(context).primaryColor,
                         onRefresh: refresh,
                         child: SingleChildScrollView(
-                          physics: const BouncingScrollPhysics(),
+                          //     physics: const AlwaysScrollableScrollPhysics(),
                           child: Column(
                             children: [
                               ListView.builder(
+                                addAutomaticKeepAlives: false,
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
                                 itemCount: GetExplorePodCastModel
