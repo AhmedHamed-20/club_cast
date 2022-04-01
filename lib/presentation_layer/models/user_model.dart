@@ -9,6 +9,8 @@ class GetUserModel {
   static String? photo;
   static String? bio;
 
+
+
   static String getUserID() {
     return userid = getUserModel!['data']['data']['_id'];
   }
@@ -16,6 +18,7 @@ class GetUserModel {
   static String getUserName() {
     return name = getUserModel?['data']['data']['name'];
   }
+
 
   static String getUserEmail() {
     return email = getUserModel!['data']['data']['email'];
