@@ -1,4 +1,5 @@
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
+import 'package:club_cast/data_layer/sockets/sockets_io.dart';
 import 'package:club_cast/presentation_layer/components/constant/constant.dart';
 import 'package:club_cast/data_layer/cash/cash.dart';
 import 'package:club_cast/presentation_layer/models/user_model.dart';
@@ -271,6 +272,11 @@ class LayoutScreen extends StatelessWidget {
             floatingActionButton: FloatingActionButton(
               onPressed: () {
                 modalBottomSheetItem(context);
+                SocketFunc.createRoom({
+                  'name': 'testhamed5',
+                  'category': 'ai',
+                  'status': 'public',
+                });
               },
               elevation: 15,
               backgroundColor: Theme.of(context).scaffoldBackgroundColor,

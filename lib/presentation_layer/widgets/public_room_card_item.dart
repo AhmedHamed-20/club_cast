@@ -1,4 +1,7 @@
+import 'package:club_cast/data_layer/sockets/sockets_io.dart';
 import 'package:flutter/material.dart';
+
+import '../../data_layer/agora/rtc_engine.dart';
 
 Widget publicRoomItem(
   BuildContext context,
@@ -8,7 +11,10 @@ Widget publicRoomItem(
   String category,
 ) {
   return GestureDetector(
-    onTap: () {},
+    onTap: () {
+      print('hi');
+      SocketFunc.connectWithSocket();
+    },
     child: SizedBox(
       height: MediaQuery.of(context).size.height * 0.25,
       width: double.infinity,
