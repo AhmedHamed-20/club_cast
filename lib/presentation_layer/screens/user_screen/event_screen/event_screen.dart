@@ -188,7 +188,8 @@ class EventScreen extends StatelessWidget {
                                         toastState: ToastState.ERROR,
                                       );
                                     } else {
-                                      cubit.updateEventById(
+                                      cubit
+                                          .updateEventById(
                                         eventId:
                                             GetMyEvents.eventId(eventIndex),
                                         eventName: eventNameController.text,
@@ -196,7 +197,11 @@ class EventScreen extends StatelessWidget {
                                         eventTime: timeController.text,
                                         eventDescription:
                                             eventDescriptionController.text,
-                                      );
+                                      )
+                                          .then((value) {
+                                        clearCrime(context: context);
+                                        isUpdate = false;
+                                      });
                                       cubit.getMyEvents();
                                     }
                                   }

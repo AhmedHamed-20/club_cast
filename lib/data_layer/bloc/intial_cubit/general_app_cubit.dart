@@ -1052,13 +1052,13 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     });
   }
 
-  void updateEventById({
+  Future<void> updateEventById({
     required String eventId,
     required String eventName,
     required String eventDate,
     required String eventTime,
     required String eventDescription,
-  }) {
+  }) async {
     emit(UpdateEventLoadingState());
 
     DioHelper.patchEventData(
