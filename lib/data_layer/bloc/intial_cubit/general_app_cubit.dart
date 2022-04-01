@@ -670,7 +670,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   }) {
     emit(UpdateUserLoadingState());
     isUpdateUserData = true;
-    DioHelper.patchData(
+     DioHelper.patchData(
       url: updateProfile,
       name: name1,
       email: email1,
@@ -687,15 +687,25 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
         message: 'Update Success',
         toastState: ToastState.SUCCESS,
       );
-    }).catchError((error) {
+    }).onError((DioError error, stackTrace) {
       print(error);
       if (error.response!.statusCode == 400) {
         showToast(
           message: "this user already exist",
           toastState: ToastState.ERROR,
         );
-        emit(UpdateUserErrorState(error));
+        print(error.message);
+        print(error.message.characters);
+        // print(GetUserModel.getMessage());
+        print('/////////////////////////');
+        isUpdateUserData = false;
+        emit(UpdateUserErrorState());
       }
+      else
+        {
+          isUpdateUserData = false;
+          emit(UpdateUserErrorState());
+        }
     });
   }
 
