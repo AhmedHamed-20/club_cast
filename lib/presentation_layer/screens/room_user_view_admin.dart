@@ -11,8 +11,9 @@ class RoomAdminViewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List speakers = ActiveRoomAdminModel.getRoomsBrodCasters();
-    List listener = ActiveRoomAdminModel.getRoomsAudienc();
+    var cubit = RoomCubit.get(context);
+    cubit.speakers = ActiveRoomAdminModel.getRoomsBrodCasters();
+    cubit.listener = ActiveRoomAdminModel.getRoomsAudienc();
     return BlocConsumer<RoomCubit, RoomStates>(
       builder: (context, state) {
         return Scaffold(
@@ -97,7 +98,7 @@ class RoomAdminViewScreen extends StatelessWidget {
                               child: GridView.builder(
                                 shrinkWrap: true,
                                 physics: NeverScrollableScrollPhysics(),
-                                itemCount: speakers.length,
+                                itemCount: cubit.speakers.length,
                                 itemBuilder: (context, index) {
                                   return InkWell(
                                     onTap: () {
@@ -200,7 +201,7 @@ class RoomAdminViewScreen extends StatelessWidget {
                           child: GridView.builder(
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
-                            itemCount: listener.length,
+                            itemCount: cubit.listener.length,
                             itemBuilder: (context, index) {
                               return InkWell(
                                 borderRadius: BorderRadius.circular(20),

@@ -15,6 +15,8 @@ class RoomCubit extends Cubit<RoomStates> {
   static RoomCubit get(context) => BlocProvider.of(context);
 //////var/////////////////////////
   static bool muted = false;
+  List speakers = [];
+  List listener = [];
 /////////Func/////////////////////
 
   void onToggleMute() {
@@ -44,11 +46,12 @@ class RoomCubit extends Cubit<RoomStates> {
     return DioHelper.getData(
         url: getRoom + roomId,
         token: {'Authorization': 'Bearer $token'}).then((value) {
-      print(value.data);
+      //   print(value.data);
       ActiveRoomAdminModel.activeRoomData =
           Map<String, dynamic>.from(value.data);
       ActiveRoomUserModel.activeRoomData =
           Map<String, dynamic>.from(value.data);
+      print(ActiveRoomAdminModel.activeRoomData);
       emit(GetRoomDataGetSuccess());
     }).catchError((onError) {
       print(onError);

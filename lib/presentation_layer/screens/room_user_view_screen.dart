@@ -1,5 +1,7 @@
 import 'package:club_cast/data_layer/bloc/room_cubit/room_cubit.dart';
 import 'package:club_cast/data_layer/bloc/room_cubit/room_states.dart';
+import 'package:club_cast/data_layer/sockets/sockets_io.dart';
+import 'package:club_cast/presentation_layer/models/activeRoomModelUser.dart';
 import 'package:club_cast/presentation_layer/widgets/model_sheet_room_contant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,15 +12,17 @@ class RoomUserViewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List speakers = [1, 2, 3, 4, 5, 6];
-    List Listener = [1, 2, 3, 4, 5, 6];
+    List speakers = ActiveRoomUserModel.getRoomsBrodCasters();
+    List Listener = ActiveRoomUserModel.getRoomsAudienc();
     return BlocConsumer<RoomCubit, RoomStates>(
       builder: (context, state) {
         return Scaffold(
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           appBar: AppBar(
             leading: MaterialButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
               child: Icon(
                 Icons.arrow_back_ios,
                 color: Theme.of(context).iconTheme.color,
@@ -30,7 +34,9 @@ class RoomUserViewScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: MaterialButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    SocketFunc.leaveRoom(context);
+                  },
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
