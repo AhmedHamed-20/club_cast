@@ -1,3 +1,11 @@
+import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
+import 'package:club_cast/presentation_layer/components/component/component.dart';
+import 'package:club_cast/presentation_layer/layout/layout_screen.dart';
+import 'package:club_cast/presentation_layer/models/activeRoomModelAdmin.dart';
+import 'package:club_cast/presentation_layer/models/activeRoomModelUser.dart';
+import 'package:club_cast/presentation_layer/screens/room_user_view_admin.dart';
+import 'package:club_cast/presentation_layer/screens/room_user_view_screen.dart';
+import 'package:flutter/widgets.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
 import '../../presentation_layer/components/constant/constant.dart';
@@ -5,7 +13,8 @@ import '../../presentation_layer/components/constant/constant.dart';
 class SocketFunc {
   static Socket? socket;
   static bool isAdminLeft = false;
-  static void connectWithSocket() {
+  static bool isConnected = false;
+  static void connectWithSocket(BuildContext context) {
     print(token);
 
     socket = io(
@@ -24,25 +33,44 @@ class SocketFunc {
         'error',
         (data) => {
               print(data),
+              showToast(
+                  message: data.toString(), toastState: ToastState.WARNING),
             });
     socket?.on('connect', (_) {
       print('connect');
+      isConnected = true;
       socket?.emit('msg', 'test');
     });
     socket?.on('event', (data) => print(data));
-    socket?.on('disconnect', (_) => print('disconnect'));
+    socket?.on('disconnect', (_) {
+      print('disconnect');
+      isConnected = false;
+
+      navigatePushTo(context: context, navigateTo: LayoutScreen());
+
+      GeneralAppCubit.get(context).getAllRoomsData();
+    });
     socket?.on('fromServer', (_) => print(_));
   }
 
-  static createRoom(
-    Map<String, dynamic> roomData,
-  ) {
+  static createRoom(Map<String, dynamic> roomData, context) {
     print('createRoom');
     socket?.emit('createRoom', roomData);
     socket?.on(
         'createRoomSuccess',
         (data) => {
               print(data),
+              GeneralAppCubit.get(context).getAllRoomsData(),
+              ActiveRoomAdminModel.activeRoomAdminData = data[0],
+              ActiveRoomAdminModel.activeRoomData = data[1],
+              ActiveRoomAdminModel.adminToken = data[2],
+              print('audienceList:${ActiveRoomAdminModel.getRoomsAudienc()}'),
+              print(
+                  'BrodacsterList:${ActiveRoomAdminModel.getRoomsBrodCasters()}'),
+              navigatePushTo(
+                context: context,
+                navigateTo: RoomAdminViewScreen(),
+              ),
             });
     socket?.on(
         'errorMessage',
@@ -51,15 +79,38 @@ class SocketFunc {
             });
   }
 
-  static joinRoom(String roomName) {
+  static leaveRoom(BuildContext context) {
+    socket?.disconnect();
+    socket?.onDisconnect((data) => {
+          print(data),
+        });
+  }
+
+  static joinRoom(String roomName, BuildContext context) {
     socket?.emit('joinRoom', roomName);
     socket?.on(
         'joinRoomSuccess',
         (data) => {
               print(data),
+              ActiveRoomUserModel.activeRoomUserData = data[0],
+              ActiveRoomUserModel.activeRoomData = data[1],
+              ActiveRoomUserModel.userToken = data[2],
+              print('userPhoto:' + ActiveRoomUserModel.getUserPhoto()),
+              navigatePushTo(
+                context: context,
+                navigateTo: RoomUserViewScreen(),
+              ),
             });
     socket?.on(
         'errorMessage',
+        (data) => {
+              print(data),
+            });
+  }
+
+  static userJoined() {
+    socket?.on(
+        'userJoined',
         (data) => {
               print(data),
             });
@@ -69,7 +120,7 @@ class SocketFunc {
     socket?.on(
         'adminLeft',
         (data) => {
-              isAdminLeft = true,
+              print('adminLeft'),
             });
     socket?.on(
         'errorMessage',

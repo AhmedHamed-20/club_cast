@@ -1,5 +1,7 @@
 import 'package:club_cast/data_layer/bloc/room_cubit/room_cubit.dart';
 import 'package:club_cast/data_layer/bloc/room_cubit/room_states.dart';
+import 'package:club_cast/data_layer/sockets/sockets_io.dart';
+import 'package:club_cast/presentation_layer/models/activeRoomModelAdmin.dart';
 import 'package:club_cast/presentation_layer/widgets/model_sheet_room_contant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,15 +11,17 @@ class RoomAdminViewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List speakers = [1, 2, 3, 4, 5, 6];
-    List Listener = [1, 2, 3, 4, 5, 6];
+    List speakers = ActiveRoomAdminModel.getRoomsBrodCasters();
+    List listener = ActiveRoomAdminModel.getRoomsAudienc();
     return BlocConsumer<RoomCubit, RoomStates>(
       builder: (context, state) {
         return Scaffold(
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           appBar: AppBar(
             leading: MaterialButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
               child: Icon(
                 Icons.arrow_back_ios,
                 color: Theme.of(context).iconTheme.color,
@@ -29,14 +33,16 @@ class RoomAdminViewScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: MaterialButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    SocketFunc.leaveRoom(context);
+                  },
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15),
                       color: Theme.of(context).primaryColor,
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(12.0),
+                    child: const Padding(
+                      padding: EdgeInsets.all(12.0),
                       child: Text(
                         'Leave',
                         style: TextStyle(
@@ -54,7 +60,7 @@ class RoomAdminViewScreen extends StatelessWidget {
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
                 color: Theme.of(context).backgroundColor,
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(50),
                   topRight: Radius.circular(50),
                   bottomLeft: Radius.circular(30),
@@ -194,7 +200,7 @@ class RoomAdminViewScreen extends StatelessWidget {
                           child: GridView.builder(
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
-                            itemCount: Listener.length,
+                            itemCount: listener.length,
                             itemBuilder: (context, index) {
                               return InkWell(
                                 borderRadius: BorderRadius.circular(20),

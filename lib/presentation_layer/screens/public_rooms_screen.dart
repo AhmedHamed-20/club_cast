@@ -1,6 +1,8 @@
 import 'package:club_cast/data_layer/agora/rtc_engine.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
+import 'package:club_cast/data_layer/sockets/sockets_io.dart';
+import 'package:club_cast/presentation_layer/models/getAllRoomsModel.dart';
 import 'package:club_cast/presentation_layer/widgets/event_card_item.dart';
 import 'package:club_cast/presentation_layer/widgets/public_room_card_item.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,11 +13,6 @@ import '../models/getMyFollowingEvents.dart';
 
 class PublicRoomScreen extends StatelessWidget {
   PublicRoomScreen({Key? key}) : super(key: key);
-
-  List<int> speaker = [1, 2, 3];
-  List<int> audience = [1, 2, 3, 4, 5, 7];
-  String roomName = 'HunterRoom';
-  String category = 'Education';
 
   @override
   Widget build(BuildContext context) {
@@ -92,9 +89,29 @@ class PublicRoomScreen extends StatelessWidget {
                           child: ListView.builder(
                             physics: const NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
-                            itemBuilder: (context, index) => publicRoomItem(
-                                context, speaker, audience, roomName, category),
-                            itemCount: 10,
+                            itemBuilder: (context, index) => InkWell(
+                              onTap: () {
+                                SocketFunc.joinRoom(
+                                    GetAllRoomsModel.getRoomName(index),
+                                    context);
+                              },
+                              child: publicRoomItem(
+                                audience:
+                                    GetAllRoomsModel?.getRoomsAudienc(index)[0],
+                                category:
+                                    GetAllRoomsModel?.getRoomsGategory(index),
+                                context: context,
+                                roomName: GetAllRoomsModel?.getRoomName(index),
+                                speaker: GetAllRoomsModel?.getRoomsBrodcaster(
+                                    index)[0],
+                                adminData:
+                                    GetAllRoomsModel?.getRoomsUserPublishInform(
+                                        index),
+                                click: () {},
+                              ),
+                            ),
+                            itemCount:
+                                GetAllRoomsModel.getAllRooms?['data'].length,
                           ),
                         ),
                       ],

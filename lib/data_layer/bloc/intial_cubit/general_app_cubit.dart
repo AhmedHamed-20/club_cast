@@ -18,7 +18,6 @@ import 'package:club_cast/presentation_layer/models/user_model.dart';
 import 'package:club_cast/presentation_layer/screens/podcastLikesScreen.dart';
 import 'package:club_cast/presentation_layer/screens/podcast_screen.dart';
 import 'package:club_cast/presentation_layer/screens/public_rooms_screen.dart';
-import 'package:club_cast/presentation_layer/screens/user_screen/event_screen/event_screen.dart';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +28,7 @@ import 'package:path_provider/path_provider.dart' as path;
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../presentation_layer/models/followers_following_model.dart';
+import '../../../presentation_layer/models/getAllRoomsModel.dart';
 import '../../../presentation_layer/models/getMyFollowingPodcast.dart';
 import 'general_app_cubit_states.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
@@ -670,7 +670,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   }) {
     emit(UpdateUserLoadingState());
     isUpdateUserData = true;
-     DioHelper.patchData(
+    DioHelper.patchData(
       url: updateProfile,
       name: name1,
       email: email1,
@@ -700,12 +700,10 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
         print('/////////////////////////');
         isUpdateUserData = false;
         emit(UpdateUserErrorState());
+      } else {
+        isUpdateUserData = false;
+        emit(UpdateUserErrorState());
       }
-      else
-        {
-          isUpdateUserData = false;
-          emit(UpdateUserErrorState());
-        }
     });
   }
 
@@ -1094,5 +1092,21 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       print("error when updated event:${error.toString()}");
       emit(UpdateEventErrorState());
     });
+  }
+
+  Future getAllRoomsData() {
+    return DioHelper.getData(
+      url: getAllRooms,
+      token: {'Authorization': 'Bearer $token'},
+    ).then(
+      (value) {
+        GetAllRoomsModel.getAllRooms = Map<String, dynamic>.from(value.data);
+        emit(GetAllRoomDataGetSuccess());
+      },
+    ).catchError(
+      (onError) {
+        emit(GetAllRoomDataGetError());
+      },
+    );
   }
 }

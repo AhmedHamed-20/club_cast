@@ -19,8 +19,6 @@ import '../screens/user_screen/login_screen/login_screen.dart';
 class LayoutScreen extends StatelessWidget {
   LayoutScreen({Key? key}) : super(key: key);
 
-  var formKey = GlobalKey<FormState>();
-
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<GeneralAppCubit, GeneralAppStates>(
@@ -271,11 +269,23 @@ class LayoutScreen extends StatelessWidget {
             ),
             floatingActionButton: FloatingActionButton(
               onPressed: () {
-                modalBottomSheetItem(context);
-                SocketFunc.createRoom({
-                  'name': 'testhamed5',
-                  'category': 'ai',
-                  'status': 'public',
+                modalBottomSheetItem(context, () {
+                  if (formKey.currentState!.validate()) {
+                    print(cubit.roomNameController.text);
+                    print(cubit.selectedCategoryItem);
+                    print("isPublicRoom :${cubit.isPublicRoom}");
+                    print("isRecordRoom: ${cubit.isRecordRoom}");
+
+                    SocketFunc.isConnected
+                        ? const SizedBox()
+                        : SocketFunc.connectWithSocket(context);
+                    SocketFunc.createRoom({
+                      'name': cubit.roomNameController.text,
+                      'category': cubit.selectedCategoryItem,
+                      'status': cubit.isPublicRoom ? 'public' : 'private',
+                    }, context);
+                    SocketFunc.isAdminLeftSocket();
+                  }
                 });
               },
               elevation: 15,
@@ -290,3 +300,17 @@ class LayoutScreen extends StatelessWidget {
         });
   }
 }
+
+
+
+
+
+
+//  SocketFunc.isConnected
+//                     ? const SizedBox()
+//                     : SocketFunc.connectWithSocket();
+//                 SocketFunc.createRoom({
+//                   'name': 'testhamed8',
+//                   'category': 'ai',
+//                   'status': 'public',
+//                 }, context);

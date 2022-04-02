@@ -3,9 +3,9 @@ import 'package:club_cast/presentation_layer/components/component/component.dart
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-var formKey = GlobalKey<FormState>();
+import '../components/constant/constant.dart';
 
-modalBottomSheetItem(BuildContext context) {
+modalBottomSheetItem(BuildContext context, VoidCallback createClick) {
   showModalBottomSheet(
     backgroundColor: Theme.of(context).backgroundColor,
     context: context,
@@ -15,11 +15,11 @@ modalBottomSheetItem(BuildContext context) {
         top: Radius.circular(30),
       ),
     ),
-    builder: (context) => buildSheet(context),
+    builder: (context) => buildSheet(context, createClick),
   );
 }
 
-Widget buildSheet(BuildContext context) {
+Widget buildSheet(BuildContext context, VoidCallback createClick) {
   var cubit = GeneralAppCubit.get(context);
   return StatefulBuilder(
     builder: (BuildContext context, void Function(void Function()) setState) {
@@ -201,14 +201,7 @@ Widget buildSheet(BuildContext context) {
                   height: MediaQuery.of(context).size.height * 0.08,
                 ),
                 defaultButton(
-                  onPressed: () {
-                    if (formKey.currentState!.validate()) {
-                      print(cubit.roomNameController.text);
-                      print(cubit.selectedCategoryItem);
-                      print("isPublicRoom :${cubit.isPublicRoom}");
-                      print("isRecordRoom: ${cubit.isRecordRoom}");
-                    }
-                  },
+                  onPressed: createClick,
                   context: context,
                   text: 'Create',
                 )

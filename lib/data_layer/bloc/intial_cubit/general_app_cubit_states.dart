@@ -27,9 +27,7 @@ class UpdateUserSuccessState extends GeneralAppStates {
   UpdateUserSuccessState(this.userModel);
 }
 
-class UpdateUserErrorState extends GeneralAppStates {
-
-}
+class UpdateUserErrorState extends GeneralAppStates {}
 
 class UpdatePasswordLoadingState extends GeneralAppStates {}
 
@@ -203,3 +201,7 @@ class UpdateEventLoadingState extends GeneralAppStates {}
 class UpdateEventSuccessState extends GeneralAppStates {}
 
 class UpdateEventErrorState extends GeneralAppStates {}
+
+class GetAllRoomDataGetSuccess extends GeneralAppStates {}
+
+class GetAllRoomDataGetError extends GeneralAppStates {}
