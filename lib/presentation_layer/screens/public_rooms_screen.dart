@@ -89,26 +89,23 @@ class PublicRoomScreen extends StatelessWidget {
                           child: ListView.builder(
                             physics: const NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
-                            itemBuilder: (context, index) => InkWell(
-                              onTap: () {
+                            itemBuilder: (context, index) => publicRoomItem(
+                              audience:
+                                  GetAllRoomsModel?.getRoomsAudienc(index)[0],
+                              category:
+                                  GetAllRoomsModel?.getRoomsGategory(index),
+                              context: context,
+                              roomName: GetAllRoomsModel?.getRoomName(index),
+                              speaker: GetAllRoomsModel?.getRoomsBrodcaster(
+                                  index)[0],
+                              adminData:
+                                  GetAllRoomsModel?.getRoomsUserPublishInform(
+                                      index),
+                              click: () {
                                 SocketFunc.joinRoom(
                                     GetAllRoomsModel.getRoomName(index),
                                     context);
                               },
-                              child: publicRoomItem(
-                                audience:
-                                    GetAllRoomsModel?.getRoomsAudienc(index)[0],
-                                category:
-                                    GetAllRoomsModel?.getRoomsGategory(index),
-                                context: context,
-                                roomName: GetAllRoomsModel?.getRoomName(index),
-                                speaker: GetAllRoomsModel?.getRoomsBrodcaster(
-                                    index)[0],
-                                adminData:
-                                    GetAllRoomsModel?.getRoomsUserPublishInform(
-                                        index),
-                                click: () {},
-                              ),
                             ),
                             itemCount:
                                 GetAllRoomsModel.getAllRooms?['data'].length,

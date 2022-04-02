@@ -35,7 +35,7 @@ const String deleteEvent = "v1/events/";
 const String updateEventData = "v1/events/";
 const String getAllPodCastWithoutMe = baseUrl + 'v1/podcasts/notMe';
 const String getAllRooms = baseUrl + 'v1/rooms';
-
+const String getRoom = baseUrl + 'v1/rooms/';
 //////////////////modelData/////////////////
 ///
 

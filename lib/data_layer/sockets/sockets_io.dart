@@ -9,6 +9,7 @@ import 'package:flutter/widgets.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
 import '../../presentation_layer/components/constant/constant.dart';
+import '../bloc/room_cubit/room_cubit.dart';
 
 class SocketFunc {
   static Socket? socket;
@@ -71,6 +72,11 @@ class SocketFunc {
                 context: context,
                 navigateTo: RoomAdminViewScreen(),
               ),
+              GeneralAppCubit.get(context).roomNameController.clear(),
+              GeneralAppCubit.get(context).selectedCategoryItem = 'ai',
+              GeneralAppCubit.get(context).isPublicRoom = true,
+              GeneralAppCubit.get(context).isRecordRoom = false,
+              userJoined(context, ActiveRoomAdminModel.getRoomId()),
             });
     socket?.on(
         'errorMessage',
@@ -108,12 +114,12 @@ class SocketFunc {
             });
   }
 
-  static userJoined() {
+  static userJoined(BuildContext context, String roomId) {
+    print('userJoined');
     socket?.on(
         'userJoined',
-        (data) => {
-              print(data),
-            });
+        (data) =>
+            {print(data), RoomCubit.get(context).getRoomData(token, roomId)});
   }
 
   static isAdminLeftSocket() {

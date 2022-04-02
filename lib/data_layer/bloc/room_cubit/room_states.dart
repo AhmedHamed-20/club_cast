@@ -7,3 +7,7 @@ class ToggleMute extends RoomStates {}
 class GetAllRoomDataGetSuccess extends RoomStates {}
 
 class GetAllRoomDataGetError extends RoomStates {}
+
+class GetRoomDataGetSuccess extends RoomStates {}
+
+class GetRoomDataGetError extends RoomStates {}
