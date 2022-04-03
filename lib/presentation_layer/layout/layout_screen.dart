@@ -300,17 +300,3 @@ class LayoutScreen extends StatelessWidget {
         });
   }
 }
-
-
-
-
-
-
-//  SocketFunc.isConnected
-//                     ? const SizedBox()
-//                     : SocketFunc.connectWithSocket();
-//                 SocketFunc.createRoom({
-//                   'name': 'testhamed8',
-//                   'category': 'ai',
-//                   'status': 'public',
-//                 }, context);

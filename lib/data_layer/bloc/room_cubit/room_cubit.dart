@@ -48,14 +48,20 @@ class RoomCubit extends Cubit<RoomStates> {
         token: {'Authorization': 'Bearer $token'}).then((value) {
       //   print(value.data);
       ActiveRoomAdminModel.activeRoomData =
-          Map<String, dynamic>.from(value.data);
+          Map<String, dynamic>.from(value.data['data']['data']);
       ActiveRoomUserModel.activeRoomData =
-          Map<String, dynamic>.from(value.data);
+          Map<String, dynamic>.from(value.data['data']['data']);
+      speakers = ActiveRoomAdminModel.getRoomsBrodCasters();
+      listener = ActiveRoomAdminModel.getRoomsAudienc();
       print(ActiveRoomAdminModel.activeRoomData);
       emit(GetRoomDataGetSuccess());
     }).catchError((onError) {
       print(onError);
       emit(GetRoomDataGetError());
     });
+  }
+
+  changeState() {
+    emit(GetRoomDataGetSuccess());
   }
 }

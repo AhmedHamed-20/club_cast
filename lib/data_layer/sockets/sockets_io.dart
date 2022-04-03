@@ -77,6 +77,7 @@ class SocketFunc {
               GeneralAppCubit.get(context).isPublicRoom = true,
               GeneralAppCubit.get(context).isRecordRoom = false,
               userJoined(context, ActiveRoomAdminModel.getRoomId()),
+              userLeft(ActiveRoomAdminModel.getRoomId(), context)
             });
     socket?.on(
         'errorMessage',
@@ -101,7 +102,13 @@ class SocketFunc {
               ActiveRoomUserModel.activeRoomUserData = data[0],
               ActiveRoomUserModel.activeRoomData = data[1],
               ActiveRoomUserModel.userToken = data[2],
-              print('userPhoto:' + ActiveRoomUserModel.getUserPhoto()),
+              //  print('userPhoto:' + ActiveRoomUserModel.getUserPhoto()),
+              RoomCubit.get(context).listener = data[1]['audience'],
+              RoomCubit.get(context).speakers = data[1]['brodcasters'],
+              print(RoomCubit.get(context).listener),
+              isAdminLeftSocket(),
+              userJoined(context, ActiveRoomUserModel.getRoomId()),
+              userLeft(ActiveRoomUserModel.getRoomId(), context),
               navigatePushTo(
                 context: context,
                 navigateTo: RoomUserViewScreen(),
@@ -118,8 +125,13 @@ class SocketFunc {
     print('userJoined');
     socket?.on(
         'userJoined',
-        (data) =>
-            {print(data), RoomCubit.get(context).getRoomData(token, roomId)});
+        (data) => {
+              // print(data),
+              //   ActiveRoomAdminModel.audienc?.add(data),
+              RoomCubit.get(context).listener.add(data),
+              print(RoomCubit.get(context).listener),
+              RoomCubit.get(context).changeState(),
+            });
   }
 
   static isAdminLeftSocket() {
@@ -135,12 +147,30 @@ class SocketFunc {
             });
   }
 
-  static userLeft() {
-    socket?.on(
-        'userLeft',
-        (data) => {
-              print(data),
-            });
+  static userLeft(String roomId, BuildContext context) {
+    socket?.on('userLeft', (data) {
+      bool isFound = false;
+      for (int i = 0; i <= RoomCubit.get(context).listener.length; i++) {
+        if (data['id'] == RoomCubit.get(context).listener[i]['id']) {
+          RoomCubit.get(context).listener.removeAt(i);
+
+          RoomCubit.get(context).changeState();
+          isFound = true;
+          break;
+        }
+      }
+      if (isFound == false) {
+        for (int i = 0; i <= RoomCubit.get(context).speakers.length; i++) {
+          if (data['id'] == RoomCubit.get(context).speakers[i]['id']) {
+            RoomCubit.get(context).speakers[0].removeAt(i);
+
+            RoomCubit.get(context).changeState();
+            isFound = true;
+            break;
+          }
+        }
+      }
+    });
     socket?.on(
         'errorMessage',
         (data) => {

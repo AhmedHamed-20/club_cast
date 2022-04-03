@@ -12,8 +12,9 @@ class RoomUserViewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List speakers = ActiveRoomUserModel.getRoomsBrodCasters();
-    List Listener = ActiveRoomUserModel.getRoomsAudienc();
+    // List speakers = ActiveRoomUserModel.getRoomsBrodCasters();
+    // List Listener = ActiveRoomUserModel.getRoomsAudienc();
+    var cubit = RoomCubit.get(context);
     return BlocConsumer<RoomCubit, RoomStates>(
       builder: (context, state) {
         return Scaffold(
@@ -98,7 +99,7 @@ class RoomUserViewScreen extends StatelessWidget {
                               child: GridView.builder(
                                 shrinkWrap: true,
                                 physics: NeverScrollableScrollPhysics(),
-                                itemCount: speakers.length,
+                                itemCount: cubit.speakers.length,
                                 itemBuilder: (context, index) {
                                   return CircleAvatar(
                                     radius: 15,
@@ -135,7 +136,7 @@ class RoomUserViewScreen extends StatelessWidget {
                           child: GridView.builder(
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
-                            itemCount: Listener.length,
+                            itemCount: cubit.listener.length,
                             itemBuilder: (context, index) {
                               return InkWell(
                                 borderRadius: BorderRadius.circular(20),
@@ -168,6 +169,9 @@ class RoomUserViewScreen extends StatelessWidget {
                                 },
                                 child: CircleAvatar(
                                   radius: 15,
+                                  backgroundImage: NetworkImage(cubit
+                                      .listener[index]['photo']
+                                      .toString()),
                                 ),
                               );
                             },

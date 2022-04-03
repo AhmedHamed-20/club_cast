@@ -12,8 +12,8 @@ class RoomAdminViewScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var cubit = RoomCubit.get(context);
-    cubit.speakers = ActiveRoomAdminModel.getRoomsBrodCasters();
-    cubit.listener = ActiveRoomAdminModel.getRoomsAudienc();
+    // cubit.speakers = ActiveRoomAdminModel.getRoomsBrodCasters();
+    // cubit.listener = ActiveRoomAdminModel.getRoomsAudienc();
     return BlocConsumer<RoomCubit, RoomStates>(
       builder: (context, state) {
         return Scaffold(
@@ -98,7 +98,7 @@ class RoomAdminViewScreen extends StatelessWidget {
                               child: GridView.builder(
                                 shrinkWrap: true,
                                 physics: NeverScrollableScrollPhysics(),
-                                itemCount: cubit.speakers.length,
+                                itemCount: cubit.speakers[0].length,
                                 itemBuilder: (context, index) {
                                   return InkWell(
                                     onTap: () {
@@ -201,7 +201,7 @@ class RoomAdminViewScreen extends StatelessWidget {
                           child: GridView.builder(
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
-                            itemCount: cubit.listener.length,
+                            itemCount: cubit.listener[0].length,
                             itemBuilder: (context, index) {
                               return InkWell(
                                 borderRadius: BorderRadius.circular(20),
@@ -267,6 +267,9 @@ class RoomAdminViewScreen extends StatelessWidget {
                                 },
                                 child: CircleAvatar(
                                   radius: 15,
+                                  backgroundImage: NetworkImage(
+                                    cubit.listener[0][index]['photo'],
+                                  ),
                                 ),
                               );
                             },
