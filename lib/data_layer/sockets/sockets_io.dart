@@ -47,8 +47,8 @@ class SocketFunc {
       print('disconnect');
       isConnected = false;
 
-      navigatePushTo(context: context, navigateTo: LayoutScreen());
-
+      RoomCubit.get(context).listener = [];
+      RoomCubit.get(context).speakers = [];
       GeneralAppCubit.get(context).getAllRoomsData();
     });
     socket?.on('fromServer', (_) => print(_));
@@ -89,27 +89,36 @@ class SocketFunc {
 
   static leaveRoom(BuildContext context) {
     socket?.disconnect();
+
     socket?.onDisconnect((data) => {
           print(data),
         });
   }
 
   static joinRoom(String roomName, BuildContext context) {
+    print('here');
+
     socket?.emit('joinRoom', roomName);
     socket?.on(
         'joinRoomSuccess',
         (data) => {
-              print(data),
+              // print(data),
               ActiveRoomUserModel.activeRoomUserData = data[0],
               ActiveRoomUserModel.activeRoomData = data[1],
+
               ActiveRoomUserModel.userToken = data[2],
               //  print('userPhoto:' + ActiveRoomUserModel.getUserPhoto()),
-              RoomCubit.get(context).listener = data[1]['audience'],
-              RoomCubit.get(context).speakers = data[1]['brodcasters'],
+
+              RoomCubit?.get(context).listener.addAll(data[1]['audience']),
               print(RoomCubit.get(context).listener),
+              RoomCubit.get(context).speakers.add(data[1]['admin']),
+              RoomCubit.get(context).speakers.addAll(data[1]['brodcasters']),
+              print(RoomCubit.get(context).speakers),
+              // print(RoomCubit.get(context).listener),
               isAdminLeftSocket(),
               userJoined(context, ActiveRoomUserModel.getRoomId()),
               userLeft(ActiveRoomUserModel.getRoomId(), context),
+              isConnected = true,
               navigatePushTo(
                 context: context,
                 navigateTo: RoomUserViewScreen(),
@@ -151,19 +160,19 @@ class SocketFunc {
   static userLeft(String roomId, BuildContext context) {
     socket?.on('userLeft', (data) {
       bool isFound = false;
-      for (int i = 0; i <= RoomCubit.get(context).listener.length; i++) {
+      for (int i = 0; i < RoomCubit.get(context).listener.length; i++) {
         if (data['id'] == RoomCubit.get(context).listener[i]['id']) {
           RoomCubit.get(context).listener.removeAt(i);
-
+          print(RoomCubit.get(context).listener);
           RoomCubit.get(context).changeState();
           isFound = true;
           break;
         }
       }
       if (isFound == false) {
-        for (int i = 0; i <= RoomCubit.get(context).speakers.length; i++) {
+        for (int i = 0; i < RoomCubit.get(context).speakers.length; i++) {
           if (data['id'] == RoomCubit.get(context).speakers[i]['id']) {
-            RoomCubit.get(context).speakers[0].removeAt(i);
+            RoomCubit.get(context).speakers.removeAt(i);
 
             RoomCubit.get(context).changeState();
             isFound = true;

@@ -1,10 +1,16 @@
 import 'package:club_cast/data_layer/bloc/room_cubit/room_cubit.dart';
 import 'package:club_cast/data_layer/bloc/room_cubit/room_states.dart';
 import 'package:club_cast/data_layer/sockets/sockets_io.dart';
+import 'package:club_cast/presentation_layer/models/activeRoomModelUser.dart';
+import 'package:club_cast/presentation_layer/widgets/listenersWidget.dart';
 import 'package:club_cast/presentation_layer/widgets/model_sheet_room_contant.dart';
+import 'package:club_cast/presentation_layer/widgets/speakersWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+
+import '../components/component/component.dart';
+import '../layout/layout_screen.dart';
 
 class RoomUserViewScreen extends StatelessWidget {
   const RoomUserViewScreen({Key? key}) : super(key: key);
@@ -36,6 +42,8 @@ class RoomUserViewScreen extends StatelessWidget {
                 child: MaterialButton(
                   onPressed: () {
                     SocketFunc.leaveRoom(context);
+                    navigatePushANDRemoveRout(
+                        context: context, navigateTo: LayoutScreen());
                   },
                   child: Container(
                     decoration: BoxDecoration(
@@ -74,12 +82,12 @@ class RoomUserViewScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(12.0),
                           child: Text(
-                            'Graduation Project',
+                            ActiveRoomUserModel.getRoomName(),
                             style: Theme.of(context).textTheme.bodyText2,
                           ),
                         ),
@@ -92,31 +100,10 @@ class RoomUserViewScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: GridView.builder(
-                                shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(),
-                                itemCount: cubit.speakers.length,
-                                itemBuilder: (context, index) {
-                                  return CircleAvatar(
-                                    radius: 15,
-                                  );
-                                },
-                                gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 5,
-                                  crossAxisSpacing: 15,
-                                  mainAxisSpacing: 15,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                        speakersWiget(cubit: cubit),
                       ],
                     ),
-                    Divider(
+                    const Divider(
                       color: Colors.grey,
                       thickness: 2,
                     ),
@@ -129,61 +116,7 @@ class RoomUserViewScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: GridView.builder(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            itemCount: cubit.listener.length,
-                            itemBuilder: (context, index) {
-                              return InkWell(
-                                borderRadius: BorderRadius.circular(20),
-                                onTap: () {
-                                  showBottomSheet(
-                                    backgroundColor:
-                                        Theme.of(context).backgroundColor,
-                                    elevation: 25,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(25),
-                                    ),
-                                    context: context,
-                                    builder: (context) {
-                                      return WidgetFunc.bottomSheetContant(
-                                        context,
-                                        'AhmedHamed',
-                                        '',
-                                        MaterialButton(
-                                          onPressed: () {},
-                                          child: Text(
-                                            'Follow',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyText2,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  );
-                                },
-                                child: CircleAvatar(
-                                  radius: 15,
-                                  backgroundImage: NetworkImage(cubit
-                                      .listener[index]['photo']
-                                      .toString()),
-                                ),
-                              );
-                            },
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 5,
-                              crossAxisSpacing: 15,
-                              mainAxisSpacing: 15,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                    listenersWiget(cubit: cubit),
                   ],
                 ),
               ),

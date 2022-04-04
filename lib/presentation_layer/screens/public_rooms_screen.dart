@@ -117,6 +117,10 @@ class PublicRoomScreen extends StatelessWidget {
                                     GetAllRoomsModel?.getRoomsUserPublishInform(
                                         index),
                                 click: () {
+                                  if (SocketFunc.isConnected) {
+                                    SocketFunc.leaveRoom(context);
+                                  }
+
                                   SocketFunc.connectWithSocket(context);
                                   SocketFunc.joinRoom(
                                       GetAllRoomsModel.getRoomName(index),

@@ -6,6 +6,8 @@ import 'package:club_cast/presentation_layer/widgets/model_sheet_room_contant.da
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../components/component/component.dart';
+import '../layout/layout_screen.dart';
 import '../widgets/listenersWidget.dart';
 import '../widgets/speakersWidget.dart';
 
@@ -39,6 +41,8 @@ class RoomAdminViewScreen extends StatelessWidget {
                 child: MaterialButton(
                   onPressed: () {
                     SocketFunc.leaveRoom(context);
+                    navigatePushANDRemoveRout(
+                        context: context, navigateTo: LayoutScreen());
                   },
                   child: Container(
                     decoration: BoxDecoration(

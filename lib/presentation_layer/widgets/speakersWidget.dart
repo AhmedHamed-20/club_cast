@@ -69,7 +69,7 @@ Widget speakersWiget({
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   Expanded(
-                    flex: 2,
+                    flex: 3,
                     child: CircleAvatar(
                       radius: 35,
                       backgroundImage:
@@ -84,7 +84,7 @@ Widget speakersWiget({
                           .bodyText1
                           ?.copyWith(fontSize: 14),
                     ),
-                  )
+                  ),
                 ],
               ),
             );
