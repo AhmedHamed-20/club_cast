@@ -1,7 +1,6 @@
 import 'package:club_cast/data_layer/bloc/room_cubit/room_cubit.dart';
 import 'package:club_cast/data_layer/bloc/room_cubit/room_states.dart';
 import 'package:club_cast/data_layer/sockets/sockets_io.dart';
-import 'package:club_cast/presentation_layer/models/activeRoomModelUser.dart';
 import 'package:club_cast/presentation_layer/widgets/model_sheet_room_contant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -43,8 +42,8 @@ class RoomUserViewScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(15),
                       color: Theme.of(context).primaryColor,
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(12.0),
+                    child: const Padding(
+                      padding: EdgeInsets.all(12.0),
                       child: Text(
                         'Leave',
                         style: TextStyle(
@@ -62,7 +61,7 @@ class RoomUserViewScreen extends StatelessWidget {
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
                 color: Theme.of(context).backgroundColor,
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(50),
                   topRight: Radius.circular(50),
                   bottomLeft: Radius.circular(30),

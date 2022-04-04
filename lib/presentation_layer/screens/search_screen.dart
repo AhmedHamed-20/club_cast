@@ -133,7 +133,11 @@ class SearchScreen extends StatelessWidget {
                                           radius: 30,
                                           backgroundImage: NetworkImage(
                                             cubit.search!['data'][index]
-                                                ['photo'],
+                                                        ['photo'] ==
+                                                    null
+                                                ? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3-lQXGq-2WPJR5aE_l74q-mR61wDrZXUYhA&usqp=CAU'
+                                                : cubit.search!['data'][index]
+                                                    ['photo'],
                                           ),
                                         ),
                                         title: Text(

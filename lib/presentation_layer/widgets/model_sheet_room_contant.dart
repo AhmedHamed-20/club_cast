@@ -4,7 +4,7 @@ class WidgetFunc {
   static Widget bottomSheetContant(
     BuildContext context,
     String userName,
-    String AvaterUrl,
+    String avaterUrl,
     Widget Button,
   ) {
     return Container(
@@ -18,8 +18,9 @@ class WidgetFunc {
               children: [
                 CircleAvatar(
                   radius: 50,
+                  backgroundImage: NetworkImage(avaterUrl),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 30,
                 ),
                 Text(

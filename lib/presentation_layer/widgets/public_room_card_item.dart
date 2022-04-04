@@ -15,10 +15,13 @@ Widget publicRoomItem(
     onTap: click,
     child: SizedBox(
       child: Card(
-        color: Theme.of(context).scaffoldBackgroundColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(25),
+        ),
+        color: Theme.of(context).backgroundColor,
         elevation: 4,
         child: Padding(
-          padding: const EdgeInsets.all(7),
+          padding: const EdgeInsets.all(12),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

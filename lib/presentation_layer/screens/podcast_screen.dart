@@ -147,8 +147,8 @@ class PodCastScreen extends StatelessWidget {
                                   GetMyFollowingPodCastsModel.getPodcastName(
                                       index),
                                   GetMyFollowingPodCastsModel
-                                          .getPodcastUserPublishInform(index)[0]
-                                      ['photo'],
+                                      ?.getPodcastUserPublishInform(
+                                          index)[0]?['photo'],
                                   context),
                               gettime:
                                   GetMyFollowingPodCastsModel.getPodCastAudio(

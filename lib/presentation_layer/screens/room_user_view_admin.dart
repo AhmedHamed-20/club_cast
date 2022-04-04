@@ -6,6 +6,9 @@ import 'package:club_cast/presentation_layer/widgets/model_sheet_room_contant.da
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../widgets/listenersWidget.dart';
+import '../widgets/speakersWidget.dart';
+
 class RoomAdminViewScreen extends StatelessWidget {
   const RoomAdminViewScreen({Key? key}) : super(key: key);
 
@@ -79,7 +82,7 @@ class RoomAdminViewScreen extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.all(12.0),
                           child: Text(
-                            'Graduation Project',
+                            ActiveRoomAdminModel.getRoomName(),
                             style: Theme.of(context).textTheme.bodyText2,
                           ),
                         ),
@@ -92,93 +95,8 @@ class RoomAdminViewScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: GridView.builder(
-                                shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(),
-                                itemCount: cubit.speakers[0].length,
-                                itemBuilder: (context, index) {
-                                  return InkWell(
-                                    onTap: () {
-                                      showBottomSheet(
-                                        backgroundColor:
-                                            Theme.of(context).backgroundColor,
-                                        elevation: 25,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(25),
-                                        ),
-                                        context: context,
-                                        builder: (context) {
-                                          return WidgetFunc.bottomSheetContant(
-                                            context,
-                                            'AhmedHamed',
-                                            '',
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Card(
-                                                  elevation: 3,
-                                                  color: Theme.of(context)
-                                                      .backgroundColor,
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            15),
-                                                  ),
-                                                  child: MaterialButton(
-                                                    onPressed: () {},
-                                                    child: Text(
-                                                      'Follow',
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .bodyText2,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Card(
-                                                  elevation: 3,
-                                                  color: Theme.of(context)
-                                                      .backgroundColor,
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            15),
-                                                  ),
-                                                  child: MaterialButton(
-                                                    onPressed: () {},
-                                                    child: Text(
-                                                      'Make Him Listener',
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .bodyText2,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          );
-                                        },
-                                      );
-                                    },
-                                    child: CircleAvatar(
-                                      radius: 15,
-                                    ),
-                                  );
-                                },
-                                gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 5,
-                                  crossAxisSpacing: 15,
-                                  mainAxisSpacing: 15,
-                                ),
-                              ),
-                            ),
-                          ],
+                        speakersWiget(
+                          cubit: cubit,
                         ),
                       ],
                     ),
@@ -195,94 +113,9 @@ class RoomAdminViewScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: GridView.builder(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            itemCount: cubit.listener[0].length,
-                            itemBuilder: (context, index) {
-                              return InkWell(
-                                borderRadius: BorderRadius.circular(20),
-                                onTap: () {
-                                  showBottomSheet(
-                                    backgroundColor:
-                                        Theme.of(context).backgroundColor,
-                                    elevation: 25,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(25),
-                                    ),
-                                    context: context,
-                                    builder: (context) {
-                                      return WidgetFunc.bottomSheetContant(
-                                        context,
-                                        'AhmedHamed',
-                                        '',
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Card(
-                                              elevation: 3,
-                                              color: Theme.of(context)
-                                                  .backgroundColor,
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(15),
-                                              ),
-                                              child: MaterialButton(
-                                                onPressed: () {},
-                                                child: Text(
-                                                  'Follow',
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .bodyText2,
-                                                ),
-                                              ),
-                                            ),
-                                            Card(
-                                              elevation: 3,
-                                              color: Theme.of(context)
-                                                  .backgroundColor,
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(15),
-                                              ),
-                                              child: MaterialButton(
-                                                onPressed: () {},
-                                                child: Text(
-                                                  'Make Him Speaker',
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .bodyText2,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    },
-                                  );
-                                },
-                                child: CircleAvatar(
-                                  radius: 15,
-                                  backgroundImage: NetworkImage(
-                                    cubit.listener[0][index]['photo'],
-                                  ),
-                                ),
-                              );
-                            },
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 5,
-                              crossAxisSpacing: 15,
-                              mainAxisSpacing: 15,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                    listenersWiget(
+                      cubit: cubit,
+                    )
                   ],
                 ),
               ),
