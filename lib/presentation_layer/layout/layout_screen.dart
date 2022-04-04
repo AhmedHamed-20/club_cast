@@ -270,22 +270,20 @@ class LayoutScreen extends StatelessWidget {
             floatingActionButton: FloatingActionButton(
               onPressed: () {
                 modalBottomSheetItem(context, () {
-                  if (formKey.currentState!.validate()) {
-                    print(cubit.roomNameController.text);
-                    print(cubit.selectedCategoryItem);
-                    print("isPublicRoom :${cubit.isPublicRoom}");
-                    print("isRecordRoom: ${cubit.isRecordRoom}");
+                  print(cubit.roomNameController.text);
+                  print(cubit.selectedCategoryItem);
+                  print("isPublicRoom :${cubit.isPublicRoom}");
+                  print("isRecordRoom: ${cubit.isRecordRoom}");
 
-                    SocketFunc.isConnected
-                        ? const SizedBox()
-                        : SocketFunc.connectWithSocket(context);
-                    SocketFunc.createRoom({
-                      'name': cubit.roomNameController.text,
-                      'category': cubit.selectedCategoryItem,
-                      'status': cubit.isPublicRoom ? 'public' : 'private',
-                    }, context);
-                    SocketFunc.isAdminLeftSocket();
-                  }
+                  SocketFunc.isConnected
+                      ? const SizedBox()
+                      : SocketFunc.connectWithSocket(context);
+                  SocketFunc.createRoom({
+                    'name': cubit.roomNameController.text,
+                    'category': cubit.selectedCategoryItem,
+                    'status': cubit.isPublicRoom ? 'public' : 'private',
+                  }, context);
+                  SocketFunc.isAdminLeftSocket();
                 });
               },
               elevation: 15,

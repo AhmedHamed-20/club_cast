@@ -61,7 +61,6 @@ class RoomAdminViewScreen extends StatelessWidget {
           ),
           body: SingleChildScrollView(
             child: Container(
-              width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
                 color: Theme.of(context).backgroundColor,
                 borderRadius: const BorderRadius.only(
@@ -77,17 +76,17 @@ class RoomAdminViewScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.all(12.0),
+                          padding: const EdgeInsets.only(bottom: 12),
                           child: Text(
                             ActiveRoomAdminModel.getRoomName(),
                             style: Theme.of(context).textTheme.bodyText2,
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.all(12.0),
+                          padding: const EdgeInsets.only(bottom: 12.0),
                           child: Center(
                             child: Text(
                               'Speakers',
@@ -100,7 +99,7 @@ class RoomAdminViewScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    Divider(
+                    const Divider(
                       color: Colors.grey,
                       thickness: 2,
                     ),

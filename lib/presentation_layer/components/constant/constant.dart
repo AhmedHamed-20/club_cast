@@ -39,4 +39,4 @@ const String getRoom = baseUrl + 'v1/rooms/';
 //////////////////modelData/////////////////
 ///
 
-var formKey = GlobalKey<FormState>();
+GlobalKey formKeyBottomSheat = GlobalKey<FormState>();

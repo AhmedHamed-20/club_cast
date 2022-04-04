@@ -65,18 +65,29 @@ Widget listenersWiget({
                   },
                 );
               },
-              child: CircleAvatar(
-                radius: 15,
-                backgroundImage: NetworkImage(
-                  cubit.listener[index]['photo'],
-                ),
+              child: Column(
+                children: [
+                  Expanded(
+                    flex: 3,
+                    child: CircleAvatar(
+                      radius: 35,
+                      backgroundImage: NetworkImage(
+                        cubit.listener[index]['photo'],
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Text(
+                      cubit.listener[index]['name'],
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                  ),
+                ],
               ),
             );
           },
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 5,
-            crossAxisSpacing: 15,
-            mainAxisSpacing: 15,
+          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+            maxCrossAxisExtent: 100,
           ),
         ),
       ),

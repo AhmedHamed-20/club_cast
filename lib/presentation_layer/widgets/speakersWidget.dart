@@ -1,6 +1,7 @@
 import 'package:club_cast/presentation_layer/widgets/model_sheet_room_contant.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 Widget speakersWiget({
   required cubit,
@@ -64,17 +65,32 @@ Widget speakersWiget({
                   },
                 );
               },
-              child: CircleAvatar(
-                radius: 15,
-                backgroundImage: NetworkImage(cubit.speakers[index]['photo']),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: CircleAvatar(
+                      radius: 35,
+                      backgroundImage:
+                          NetworkImage(cubit.speakers[index]['photo']),
+                    ),
+                  ),
+                  Expanded(
+                    child: Text(
+                      cubit.speakers[index]['name'],
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyText1
+                          ?.copyWith(fontSize: 14),
+                    ),
+                  )
+                ],
               ),
             );
           },
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 5,
-            crossAxisSpacing: 15,
-            mainAxisSpacing: 15,
-          ),
+          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+              maxCrossAxisExtent: 100),
         ),
       ),
     ],

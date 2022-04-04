@@ -32,7 +32,6 @@ Widget buildSheet(BuildContext context, VoidCallback createClick) {
             horizontal: 20,
           ),
           child: Form(
-            key: formKey,
             child: Column(
               children: [
                 Text(

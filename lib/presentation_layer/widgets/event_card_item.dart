@@ -32,7 +32,7 @@ Widget eventCardItem({
           ),
         ),
         elevation: 4,
-        color: Theme.of(context).scaffoldBackgroundColor,
+        color: Theme.of(context).backgroundColor,
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: Column(
