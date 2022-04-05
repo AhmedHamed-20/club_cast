@@ -80,7 +80,7 @@ class SocketFunc {
               GeneralAppCubit.get(context).isPublicRoom = true,
               GeneralAppCubit.get(context).isRecordRoom = false,
               userJoined(context, ActiveRoomAdminModel.getRoomId()),
-              listenOnUsersAskedForTalk(),
+              listenOnUsersAskedForTalk(context),
               userLeft(ActiveRoomAdminModel.getRoomId(), context)
             });
     socket?.on(
@@ -115,6 +115,13 @@ class SocketFunc {
               //  print('userPhoto:' + ActiveRoomUserModel.getUserPhoto()),
 
               RoomCubit?.get(context).listener.addAll(data[1]['audience']),
+              RoomCubit?.get(context).listener.forEach(
+                (e) {
+                  if (e['askedToTalk'] != true) {
+                    e['askedToTalk'] = false;
+                  }
+                },
+              ),
               print(RoomCubit.get(context).listener),
               RoomCubit.get(context).speakers.add(data[1]['admin']),
               RoomCubit.get(context).speakers.addAll(data[1]['brodcasters']),
@@ -123,7 +130,7 @@ class SocketFunc {
               isAdminLeftSocket(),
               userJoined(context, ActiveRoomUserModel.getRoomId()),
               userLeft(ActiveRoomUserModel.getRoomId(), context),
-              listenOnUsersAskedForTalk(),
+              listenOnUsersAskedForTalk(context),
               isConnected = true,
               navigatePushTo(
                 context: context,
@@ -147,6 +154,13 @@ class SocketFunc {
               // print(data),
               //   ActiveRoomAdminModel.audienc?.add(data),
               RoomCubit.get(context).listener.add(data),
+              RoomCubit?.get(context).listener.forEach(
+                (e) {
+                  if (e['askedToTalk'] != true) {
+                    e['askedToTalk'] = false;
+                  }
+                },
+              ),
               print(RoomCubit.get(context).listener),
               RoomCubit.get(context).changeState(),
             });
@@ -209,12 +223,25 @@ class SocketFunc {
     });
   }
 
-  static listenOnUsersAskedForTalk() {
-    socket?.on(
-        'userAskedForPerms',
-        (data) => {
-              print(data),
-            });
+  static listenOnUsersAskedForTalk(BuildContext context) {
+    socket?.on('userAskedForPerms', (data) {
+      print(data);
+      //   RoomCubit.get(context).askedToTalk.add(data),
+      for (int i = 0; i < RoomCubit.get(context).listener.length; i++) {
+        if (data['id'] == RoomCubit.get(context).listener[i]['_id'] ||
+            data['id'] == RoomCubit.get(context).listener[i]['id']) {
+          RoomCubit.get(context).listener[i]['askedToTalk'] =
+              !RoomCubit.get(context).listener[i]['askedToTalk'];
+          print(RoomCubit.get(context).listener);
+          RoomCubit.get(context).changeState();
+
+          break;
+        }
+      }
+
+      RoomCubit.get(context).changeState();
+      print(RoomCubit.get(context).askedToTalk);
+    });
     socket?.on(
         'errorMessage',
         (data) => {

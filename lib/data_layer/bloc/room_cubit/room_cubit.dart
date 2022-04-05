@@ -17,6 +17,7 @@ class RoomCubit extends Cubit<RoomStates> {
   static bool muted = false;
   List speakers = [];
   List listener = [];
+  List askedToTalk = [];
 /////////Func/////////////////////
 
   void onToggleMute() {

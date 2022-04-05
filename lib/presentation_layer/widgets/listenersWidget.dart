@@ -1,4 +1,6 @@
+import 'package:club_cast/data_layer/bloc/room_cubit/room_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 import 'model_sheet_room_contant.dart';
 
@@ -69,11 +71,31 @@ Widget listenersWiget({
                 children: [
                   Expanded(
                     flex: 3,
-                    child: CircleAvatar(
-                      radius: 35,
-                      backgroundImage: NetworkImage(
-                        cubit.listener[index]['photo'],
-                      ),
+                    child: Stack(
+                      children: [
+                        CircleAvatar(
+                          radius: 35,
+                          backgroundImage: NetworkImage(
+                            cubit.listener[index]['photo'],
+                          ),
+                        ),
+                        RoomCubit.get(context).listener[index]['askedToTalk']
+                            ? Positioned(
+                                right: 0,
+                                child: CircleAvatar(
+                                  backgroundColor: Colors.white,
+                                  radius: 15,
+                                  child: Center(
+                                    child: Icon(
+                                      MdiIcons.handBackLeft,
+                                      color: Theme.of(context).primaryColor,
+                                      size: 22,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : const SizedBox()
+                      ],
                     ),
                   ),
                   Expanded(
