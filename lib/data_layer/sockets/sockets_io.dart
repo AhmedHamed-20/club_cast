@@ -60,6 +60,7 @@ class SocketFunc {
     socket?.on(
         'createRoomSuccess',
         (data) => {
+              isConnected = true,
               print(data),
               GeneralAppCubit.get(context).getAllRoomsData(),
               ActiveRoomAdminModel.activeRoomAdminData = data[0],
@@ -68,6 +69,7 @@ class SocketFunc {
               print('audienceList:${ActiveRoomAdminModel.getRoomsAudienc()}'),
               print(
                   'BrodacsterList:${ActiveRoomAdminModel.getRoomsBrodCasters()}'),
+              Navigator.pop(context),
               navigatePushTo(
                 context: context,
                 navigateTo: RoomAdminViewScreen(),
@@ -84,6 +86,8 @@ class SocketFunc {
         'errorMessage',
         (data) => {
               print(data),
+              showToast(
+                  message: data.toString(), toastState: ToastState.WARNING)
             });
   }
 
@@ -113,7 +117,7 @@ class SocketFunc {
               print(RoomCubit.get(context).listener),
               RoomCubit.get(context).speakers.add(data[1]['admin']),
               RoomCubit.get(context).speakers.addAll(data[1]['brodcasters']),
-              print(RoomCubit.get(context).speakers),
+              //print(RoomCubit.get(context).speakers),
               // print(RoomCubit.get(context).listener),
               isAdminLeftSocket(),
               userJoined(context, ActiveRoomUserModel.getRoomId()),
@@ -128,6 +132,8 @@ class SocketFunc {
         'errorMessage',
         (data) => {
               print(data),
+              showToast(
+                  message: data.toString(), toastState: ToastState.WARNING)
             });
   }
 
@@ -161,7 +167,9 @@ class SocketFunc {
     socket?.on('userLeft', (data) {
       bool isFound = false;
       for (int i = 0; i < RoomCubit.get(context).listener.length; i++) {
-        if (data['id'] == RoomCubit.get(context).listener[i]['id']) {
+        //    print(data['id']);
+        if (data['id'] == RoomCubit.get(context).listener[i]['_id'] ||
+            data['id'] == RoomCubit.get(context).listener[i]['id']) {
           RoomCubit.get(context).listener.removeAt(i);
           print(RoomCubit.get(context).listener);
           RoomCubit.get(context).changeState();
@@ -171,7 +179,8 @@ class SocketFunc {
       }
       if (isFound == false) {
         for (int i = 0; i < RoomCubit.get(context).speakers.length; i++) {
-          if (data['id'] == RoomCubit.get(context).speakers[i]['id']) {
+          if (data['id'] == RoomCubit.get(context).speakers[i]['_id'] ||
+              data['id'] == RoomCubit.get(context).speakers[i]['id']) {
             RoomCubit.get(context).speakers.removeAt(i);
 
             RoomCubit.get(context).changeState();

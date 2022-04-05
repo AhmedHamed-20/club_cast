@@ -87,7 +87,7 @@ class RoomUserViewScreen extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.all(12.0),
                           child: Text(
-                            ActiveRoomUserModel.getRoomName(),
+                            ActiveRoomUserModel.getRoomName().toString(),
                             style: Theme.of(context).textTheme.bodyText2,
                           ),
                         ),

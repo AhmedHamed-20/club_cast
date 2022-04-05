@@ -2,7 +2,12 @@ import 'package:club_cast/data_layer/agora/rtc_engine.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
 import 'package:club_cast/data_layer/sockets/sockets_io.dart';
+import 'package:club_cast/presentation_layer/components/component/component.dart';
+import 'package:club_cast/presentation_layer/models/activeRoomModelAdmin.dart';
+import 'package:club_cast/presentation_layer/models/activeRoomModelUser.dart';
 import 'package:club_cast/presentation_layer/models/getAllRoomsModel.dart';
+import 'package:club_cast/presentation_layer/screens/room_user_view_admin.dart';
+import 'package:club_cast/presentation_layer/screens/room_user_view_screen.dart';
 import 'package:club_cast/presentation_layer/widgets/event_card_item.dart';
 import 'package:club_cast/presentation_layer/widgets/public_room_card_item.dart';
 import 'package:flutter/cupertino.dart';
@@ -117,14 +122,31 @@ class PublicRoomScreen extends StatelessWidget {
                                     GetAllRoomsModel?.getRoomsUserPublishInform(
                                         index),
                                 click: () {
-                                  if (SocketFunc.isConnected) {
+                                  if (SocketFunc.isConnected &&
+                                      GetAllRoomsModel?.getRoomName(index) ==
+                                          ActiveRoomAdminModel.getRoomName()) {
+                                    navigatePushTo(
+                                        context: context,
+                                        navigateTo: RoomAdminViewScreen());
+                                  } else if (SocketFunc.isConnected &&
+                                      GetAllRoomsModel?.getRoomName(index) ==
+                                          ActiveRoomUserModel?.getRoomName()
+                                              .toString()) {
+                                    navigatePushTo(
+                                        context: context,
+                                        navigateTo: RoomUserViewScreen());
+                                  } else if (SocketFunc.isConnected) {
                                     SocketFunc.leaveRoom(context);
+                                    SocketFunc.connectWithSocket(context);
+                                    SocketFunc.joinRoom(
+                                        GetAllRoomsModel.getRoomName(index),
+                                        context);
+                                  } else {
+                                    SocketFunc.connectWithSocket(context);
+                                    SocketFunc.joinRoom(
+                                        GetAllRoomsModel.getRoomName(index),
+                                        context);
                                   }
-
-                                  SocketFunc.connectWithSocket(context);
-                                  SocketFunc.joinRoom(
-                                      GetAllRoomsModel.getRoomName(index),
-                                      context);
                                 },
                               ),
                               itemCount:

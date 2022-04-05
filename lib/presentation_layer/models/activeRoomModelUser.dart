@@ -39,7 +39,7 @@ class ActiveRoomUserModel {
     return userPhoto = activeRoomUserData!['photo'];
   }
 
-  static String getRoomName() {
-    return roomName = activeRoomUserData!['roomName'];
+  static String? getRoomName() {
+    return roomName = activeRoomUserData?['roomName'];
   }
 }

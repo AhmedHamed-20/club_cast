@@ -17,7 +17,7 @@ Widget listenersWiget({
               borderRadius: BorderRadius.circular(20),
               onTap: () {
                 showBottomSheet(
-                  backgroundColor: Theme.of(context).backgroundColor,
+                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                   elevation: 25,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(25),
