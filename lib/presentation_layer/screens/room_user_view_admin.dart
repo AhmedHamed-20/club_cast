@@ -41,18 +41,26 @@ class RoomAdminViewScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: MaterialButton(
                   onPressed: () {
-                    alertDialog(
+                    showDialog(
                         context: context,
-                        title: 'Are you sure',
-                        content: Text('if leave the room will be removed'),
-                        yesFunction: () {
-                          SocketFunc.adminEndTheRoom();
-                          SocketFunc.leaveRoom(context);
-                          navigatePushANDRemoveRout(
-                              context: context, navigateTo: LayoutScreen());
-                        },
-                        noFunction: () {
-                          Navigator.of(context).pop();
+                        builder: (context) {
+                          return alertDialog(
+                              context: context,
+                              title: 'Are you sure',
+                              content: Text(
+                                'if leave the room will be removed',
+                                style: Theme.of(context).textTheme.bodyText1,
+                              ),
+                              yesFunction: () {
+                                SocketFunc.adminEndTheRoom();
+                                SocketFunc.leaveRoom(context);
+                                navigatePushANDRemoveRout(
+                                    context: context,
+                                    navigateTo: LayoutScreen());
+                              },
+                              noFunction: () {
+                                Navigator.of(context).pop();
+                              });
                         });
                   },
                   child: Container(

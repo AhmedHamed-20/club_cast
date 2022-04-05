@@ -196,6 +196,7 @@ class SocketFunc {
       isConnected = false;
       iamSpeaker = false;
       isAdminLeft = true;
+      leaveRoom(context);
       navigatePushANDRemoveRout(context: context, navigateTo: LayoutScreen());
       showToast(message: 'Admin left the room', toastState: ToastState.WARNING);
     });
