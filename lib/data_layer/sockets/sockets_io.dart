@@ -311,7 +311,12 @@ class SocketFunc {
               .speakers
               .add(RoomCubit.get(context).listener[i]);
           RoomCubit.get(context).listener.removeAt(i);
-          RoomCubit.get(context).speakers[i]['_id'] == GetUserModel.getUserID()
+          print(RoomCubit.get(context).speakers[i]['_id']);
+          print(GetUserModel.getUserID());
+          RoomCubit.get(context)
+                          .speakers[RoomCubit.get(context).speakers.length - 1]
+                      ['_id'] ==
+                  GetUserModel.getUserID()
               ? iamSpeaker = true
               : const SizedBox();
           RoomCubit.get(context).changeState();
@@ -357,8 +362,13 @@ class SocketFunc {
               .listener
               .add(RoomCubit.get(context).speakers[i]);
           RoomCubit.get(context).speakers.removeAt(i);
-          RoomCubit.get(context).listener[i]['askedToTalk'] = false;
-          RoomCubit.get(context).listener[i]['_id'] == GetUserModel.getUserID()
+          RoomCubit.get(context)
+                  .listener[RoomCubit.get(context).listener.length - 1]
+              ['askedToTalk'] = false;
+          RoomCubit.get(context)
+                          .listener[RoomCubit.get(context).listener.length - 1]
+                      ['_id'] ==
+                  GetUserModel.getUserID()
               ? iamSpeaker = false
               : const SizedBox();
 
