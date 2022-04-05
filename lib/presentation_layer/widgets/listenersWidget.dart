@@ -79,6 +79,7 @@ Widget listenersWiget({
                                                     message: "User didn't ask",
                                                     toastState:
                                                         ToastState.WARNING);
+                                            Navigator.of(context).pop();
                                           },
                                           child: Text(
                                             'Make Him Speaker',

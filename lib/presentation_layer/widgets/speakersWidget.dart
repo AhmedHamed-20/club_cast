@@ -69,6 +69,7 @@ Widget speakersWiget({
                                                 .adminReturnUserBackToAudienc(
                                                     RoomCubit.get(context)
                                                         .speakers[index]);
+                                            Navigator.of(context).pop();
                                           },
                                           child: Text(
                                             'Make Him Listener',
