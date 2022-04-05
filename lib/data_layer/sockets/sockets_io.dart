@@ -81,7 +81,7 @@ class SocketFunc {
               userJoined(context, ActiveRoomAdminModel.getRoomId()),
               listenOnUsersAskedForTalk(context),
               userLeft(ActiveRoomAdminModel.getRoomId(), context),
-              userchangedToBrodCaster(),
+              userchangedToBrodCaster(context),
             });
     socket?.on(
         'errorMessage',
@@ -131,7 +131,7 @@ class SocketFunc {
               userJoined(context, ActiveRoomUserModel.getRoomId()),
               userLeft(ActiveRoomUserModel.getRoomId(), context),
               listenOnUsersAskedForTalk(context),
-              userchangedToBrodCaster(),
+              userchangedToBrodCaster(context),
               isConnected = true,
               navigatePushTo(
                 context: context,
@@ -298,12 +298,20 @@ class SocketFunc {
             });
   }
 
-  static userchangedToBrodCaster() {
-    socket?.on(
-        'userChangedToBrodcaster',
-        (data) => {
-              print(data),
-            });
+  static userchangedToBrodCaster(BuildContext context) {
+    socket?.on('userChangedToBrodcaster', (data) {
+      for (int i = 0; i < RoomCubit.get(context).listener.length; i++) {
+        if (data['id'] == RoomCubit.get(context).listener[i]['_id']) {
+          RoomCubit.get(context)
+              .speakers
+              .add(RoomCubit.get(context).listener[i]);
+          RoomCubit.get(context).listener.removeAt(i);
+          RoomCubit.get(context).changeState();
+
+          break;
+        }
+      }
+    });
     socket?.on(
         'errorMessage',
         (data) => {
@@ -336,17 +344,6 @@ class SocketFunc {
   static userchangedToAudienc(BuildContext context) {
     socket?.on('userChangedToAudience', (data) {
       //  print(data);
-      for (int i = 0; i < RoomCubit.get(context).listener.length; i++) {
-        if (data['id'] == RoomCubit.get(context).listener[i]['_id']) {
-          RoomCubit.get(context)
-              .speakers
-              .add(RoomCubit.get(context).listener[i]);
-          RoomCubit.get(context).listener.removeAt(i);
-          RoomCubit.get(context).changeState();
-
-          break;
-        }
-      }
     });
     socket?.on(
         'errorMessage',
