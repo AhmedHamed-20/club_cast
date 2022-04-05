@@ -3,6 +3,7 @@ import 'package:club_cast/presentation_layer/components/component/component.dart
 import 'package:club_cast/presentation_layer/layout/layout_screen.dart';
 import 'package:club_cast/presentation_layer/models/activeRoomModelAdmin.dart';
 import 'package:club_cast/presentation_layer/models/activeRoomModelUser.dart';
+import 'package:club_cast/presentation_layer/models/user_model.dart';
 import 'package:club_cast/presentation_layer/screens/room_user_view_admin.dart';
 import 'package:club_cast/presentation_layer/screens/room_user_view_screen.dart';
 import 'package:flutter/widgets.dart';
@@ -310,7 +311,9 @@ class SocketFunc {
               .speakers
               .add(RoomCubit.get(context).listener[i]);
           RoomCubit.get(context).listener.removeAt(i);
-          iamSpeaker = true;
+          RoomCubit.get(context).speakers[i]['_id'] == GetUserModel.getUserID()
+              ? iamSpeaker = true
+              : const SizedBox();
           RoomCubit.get(context).changeState();
 
           break;
@@ -355,7 +358,10 @@ class SocketFunc {
               .add(RoomCubit.get(context).speakers[i]);
           RoomCubit.get(context).speakers.removeAt(i);
           RoomCubit.get(context).listener[i]['askedToTalk'] = false;
-          iamSpeaker = false;
+          RoomCubit.get(context).listener[i]['_id'] == GetUserModel.getUserID()
+              ? iamSpeaker = false
+              : const SizedBox();
+
           RoomCubit.get(context).changeState();
 
           break;
