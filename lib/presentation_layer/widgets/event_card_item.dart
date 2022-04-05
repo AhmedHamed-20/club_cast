@@ -23,7 +23,7 @@ Widget eventCardItem({
       // width: MediaQuery.of(context).size.width * 0.93,
       width: MediaQuery.of(context).size.width,
       // height: MediaQuery.of(context).size.height * 0.3,
-      height: MediaQuery.of(context).size.height,
+
       child: Card(
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
@@ -54,8 +54,6 @@ Widget eventCardItem({
                           style: Theme.of(context).textTheme.bodyText2,
                         ),
                       ),
-                      width: MediaQuery.of(context).size.width * 0.35,
-                      height: MediaQuery.of(context).size.height * 0.05,
                     ),
                     GetUserModel.getUserID() != userWhoCreateEventId
                         ? const SizedBox()

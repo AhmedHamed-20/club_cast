@@ -56,11 +56,10 @@ class PublicRoomScreen extends StatelessWidget {
                                             .bodyText1,
                                       ),
                                     ),
-                                    SizedBox(
-                                      width: double.infinity,
+                                    Container(
                                       height:
                                           MediaQuery.of(context).size.height *
-                                              0.277,
+                                              0.25,
                                       child: ListView.builder(
                                         physics: const BouncingScrollPhysics(),
                                         scrollDirection: Axis.horizontal,

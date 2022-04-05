@@ -123,7 +123,10 @@ class RoomUserViewScreen extends StatelessWidget {
             ),
           ),
           floatingActionButton: FloatingActionButton(
-            onPressed: () {},
+            onPressed: () {
+              SocketFunc.askToTalk();
+              // print('ddd');
+            },
             child: Icon(
               MdiIcons.handBackLeft,
             ),

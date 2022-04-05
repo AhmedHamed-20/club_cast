@@ -80,6 +80,7 @@ class SocketFunc {
               GeneralAppCubit.get(context).isPublicRoom = true,
               GeneralAppCubit.get(context).isRecordRoom = false,
               userJoined(context, ActiveRoomAdminModel.getRoomId()),
+              listenOnUsersAskedForTalk(),
               userLeft(ActiveRoomAdminModel.getRoomId(), context)
             });
     socket?.on(
@@ -122,6 +123,7 @@ class SocketFunc {
               isAdminLeftSocket(),
               userJoined(context, ActiveRoomUserModel.getRoomId()),
               userLeft(ActiveRoomUserModel.getRoomId(), context),
+              listenOnUsersAskedForTalk(),
               isConnected = true,
               navigatePushTo(
                 context: context,
@@ -198,16 +200,13 @@ class SocketFunc {
   }
 
   static askToTalk() {
+    print('object');
     socket?.emit(
-        'askForPerms',
-        (data) => {
-              print(data),
-            });
-    socket?.on(
-        'errorMessage',
-        (data) => {
-              print(data),
-            });
+      'askForPerms',
+    );
+    socket?.on('errorMessage', (data) {
+      print(data);
+    });
   }
 
   static listenOnUsersAskedForTalk() {
