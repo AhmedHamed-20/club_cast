@@ -79,6 +79,7 @@ class SocketFunc {
               GeneralAppCubit.get(context).isPublicRoom = true,
               GeneralAppCubit.get(context).isRecordRoom = false,
               userJoined(context, ActiveRoomAdminModel.getRoomId()),
+              userchangedToAudienc(context),
               listenOnUsersAskedForTalk(context),
               userLeft(ActiveRoomAdminModel.getRoomId(), context),
               userchangedToBrodCaster(context),
@@ -132,6 +133,7 @@ class SocketFunc {
               userLeft(ActiveRoomUserModel.getRoomId(), context),
               listenOnUsersAskedForTalk(context),
               userchangedToBrodCaster(context),
+              userchangedToAudienc(context),
               isConnected = true,
               navigatePushTo(
                 context: context,
@@ -343,7 +345,17 @@ class SocketFunc {
 
   static userchangedToAudienc(BuildContext context) {
     socket?.on('userChangedToAudience', (data) {
-      //  print(data);
+      for (int i = 0; i < RoomCubit.get(context).speakers.length; i++) {
+        if (data['id'] == RoomCubit.get(context).speakers[i]['_id']) {
+          RoomCubit.get(context)
+              .listener
+              .add(RoomCubit.get(context).speakers[i]);
+          RoomCubit.get(context).speakers.removeAt(i);
+          RoomCubit.get(context).changeState();
+
+          break;
+        }
+      }
     });
     socket?.on(
         'errorMessage',
