@@ -2,6 +2,7 @@ import 'package:club_cast/data_layer/bloc/room_cubit/room_cubit.dart';
 import 'package:club_cast/data_layer/bloc/room_cubit/room_states.dart';
 import 'package:club_cast/data_layer/sockets/sockets_io.dart';
 import 'package:club_cast/presentation_layer/models/activeRoomModelAdmin.dart';
+import 'package:club_cast/presentation_layer/widgets/alertDialog.dart';
 import 'package:club_cast/presentation_layer/widgets/model_sheet_room_contant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -40,9 +41,19 @@ class RoomAdminViewScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: MaterialButton(
                   onPressed: () {
-                    SocketFunc.leaveRoom(context);
-                    navigatePushANDRemoveRout(
-                        context: context, navigateTo: LayoutScreen());
+                    alertDialog(
+                        context: context,
+                        title: 'Are you sure',
+                        content: Text('if leave the room will be removed'),
+                        yesFunction: () {
+                          SocketFunc.adminEndTheRoom();
+                          SocketFunc.leaveRoom(context);
+                          navigatePushANDRemoveRout(
+                              context: context, navigateTo: LayoutScreen());
+                        },
+                        noFunction: () {
+                          Navigator.of(context).pop();
+                        });
                   },
                   child: Container(
                     decoration: BoxDecoration(

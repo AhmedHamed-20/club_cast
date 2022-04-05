@@ -137,6 +137,7 @@ class SocketFunc {
               listenOnUsersAskedForTalk(context),
               userchangedToBrodCaster(context),
               userchangedToAudienc(context),
+              adminLeft(context),
               isConnected = true,
               navigatePushTo(
                 context: context,
@@ -186,12 +187,18 @@ class SocketFunc {
             });
   }
 
-  static adminLeft() {
-    socket?.on(
-        'adminLeft',
-        (data) => {
-              print('adminLeft'),
-            });
+  static adminLeft(BuildContext context) {
+    socket?.on('roomEnded', (data) {
+      print('roomEnded');
+
+      RoomCubit.get(context).listener = [];
+      RoomCubit.get(context).speakers = [];
+      isConnected = false;
+      iamSpeaker = false;
+      isAdminLeft = true;
+      navigatePushANDRemoveRout(context: context, navigateTo: LayoutScreen());
+      showToast(message: 'Admin left the room', toastState: ToastState.WARNING);
+    });
     socket?.on(
         'errorMessage',
         (data) => {
