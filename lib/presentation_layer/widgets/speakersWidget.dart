@@ -1,3 +1,4 @@
+import 'package:club_cast/data_layer/sockets/sockets_io.dart';
 import 'package:club_cast/presentation_layer/widgets/model_sheet_room_contant.dart';
 
 import 'package:flutter/material.dart';
@@ -63,7 +64,12 @@ Widget speakersWiget({
                                               BorderRadius.circular(15),
                                         ),
                                         child: MaterialButton(
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            SocketFunc
+                                                .adminReturnUserBackToAudienc(
+                                                    RoomCubit.get(context)
+                                                        .speakers[index]);
+                                          },
                                           child: Text(
                                             'Make Him Listener',
                                             style: Theme.of(context)

@@ -15,6 +15,7 @@ class SocketFunc {
   static Socket? socket;
   static bool isAdminLeft = false;
   static bool isConnected = false;
+  static bool iamSpeaker = false;
   static void connectWithSocket(BuildContext context) {
     print(token);
 
@@ -24,6 +25,7 @@ class SocketFunc {
         'auth': {'token': '$token'},
         'autoConnect': true,
         'forceNew': true,
+        'transports': ['websocket'],
         'timestampRequests': true,
       },
     );
@@ -308,7 +310,9 @@ class SocketFunc {
               .speakers
               .add(RoomCubit.get(context).listener[i]);
           RoomCubit.get(context).listener.removeAt(i);
+          Navigator.of(context).pop();
           RoomCubit.get(context).changeState();
+          iamSpeaker = true;
 
           break;
         }
@@ -351,7 +355,9 @@ class SocketFunc {
               .listener
               .add(RoomCubit.get(context).speakers[i]);
           RoomCubit.get(context).speakers.removeAt(i);
+          Navigator.of(context).pop();
           RoomCubit.get(context).changeState();
+          iamSpeaker = false;
 
           break;
         }

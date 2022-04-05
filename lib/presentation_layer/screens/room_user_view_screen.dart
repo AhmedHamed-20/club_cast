@@ -127,14 +127,18 @@ class RoomUserViewScreen extends StatelessWidget {
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
-              SocketFunc.askToTalk();
+              SocketFunc.iamSpeaker
+                  ? SocketFunc.userWantToReturnAudience()
+                  : SocketFunc.askToTalk();
               showToast(
                   message: 'You asked to talk,wait until admin accept',
                   toastState: ToastState.SUCCESS);
               // print('ddd');
             },
             child: Icon(
-              MdiIcons.handBackLeft,
+              SocketFunc.iamSpeaker
+                  ? MdiIcons.arrowDown
+                  : MdiIcons.handBackLeft,
             ),
             backgroundColor: Theme.of(context).primaryColor,
           ),
