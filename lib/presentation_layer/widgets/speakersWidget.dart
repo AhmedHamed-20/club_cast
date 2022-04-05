@@ -20,37 +20,25 @@ Widget speakersWiget({
           itemBuilder: (context, index) {
             return InkWell(
               onTap: () {
-                showBottomSheet(
-                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                  elevation: 25,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                  context: context,
-                  builder: (context) {
-                    return WidgetFunc.bottomSheetContant(
-                      context,
-                      cubit.speakers[index]['name'],
-                      cubit.speakers[index]['photo'],
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Card(
-                            elevation: 3,
-                            color: Theme.of(context).backgroundColor,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            child: MaterialButton(
-                              onPressed: () {},
-                              child: Text(
-                                'Follow',
-                                style: Theme.of(context).textTheme.bodyText2,
-                              ),
-                            ),
-                          ),
-                          isAdmin
-                              ? Card(
+                GetUserModel.getUserID() !=
+                        RoomCubit.get(context).speakers[index]['_id']
+                    ? showBottomSheet(
+                        backgroundColor:
+                            Theme.of(context).scaffoldBackgroundColor,
+                        elevation: 25,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        context: context,
+                        builder: (context) {
+                          return WidgetFunc.bottomSheetContant(
+                            context,
+                            cubit.speakers[index]['name'],
+                            cubit.speakers[index]['photo'],
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Card(
                                   elevation: 3,
                                   color: Theme.of(context).backgroundColor,
                                   shape: RoundedRectangleBorder(
@@ -59,18 +47,38 @@ Widget speakersWiget({
                                   child: MaterialButton(
                                     onPressed: () {},
                                     child: Text(
-                                      'Make Him Listener',
+                                      'Follow',
                                       style:
                                           Theme.of(context).textTheme.bodyText2,
                                     ),
                                   ),
-                                )
-                              : SizedBox(),
-                        ],
-                      ),
-                    );
-                  },
-                );
+                                ),
+                                isAdmin
+                                    ? Card(
+                                        elevation: 3,
+                                        color:
+                                            Theme.of(context).backgroundColor,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                        ),
+                                        child: MaterialButton(
+                                          onPressed: () {},
+                                          child: Text(
+                                            'Make Him Listener',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyText2,
+                                          ),
+                                        ),
+                                      )
+                                    : SizedBox(),
+                              ],
+                            ),
+                          );
+                        },
+                      )
+                    : const SizedBox();
               },
               child: Column(
                 mainAxisSize: MainAxisSize.max,

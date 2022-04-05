@@ -23,7 +23,6 @@ class SocketFunc {
       <String, dynamic>{
         'auth': {'token': '$token'},
         'autoConnect': true,
-        'transports': ['websocket'],
         'forceNew': true,
         'timestampRequests': true,
       },
@@ -81,7 +80,8 @@ class SocketFunc {
               GeneralAppCubit.get(context).isRecordRoom = false,
               userJoined(context, ActiveRoomAdminModel.getRoomId()),
               listenOnUsersAskedForTalk(context),
-              userLeft(ActiveRoomAdminModel.getRoomId(), context)
+              userLeft(ActiveRoomAdminModel.getRoomId(), context),
+              userchangedToBrodCaster(),
             });
     socket?.on(
         'errorMessage',
@@ -131,6 +131,7 @@ class SocketFunc {
               userJoined(context, ActiveRoomUserModel.getRoomId()),
               userLeft(ActiveRoomUserModel.getRoomId(), context),
               listenOnUsersAskedForTalk(context),
+              userchangedToBrodCaster(),
               isConnected = true,
               navigatePushTo(
                 context: context,
@@ -167,11 +168,36 @@ class SocketFunc {
   }
 
   static isAdminLeftSocket() {
+    /////lw le net 2t3
     socket?.on(
         'adminLeft',
         (data) => {
               print('adminLeft'),
             });
+    socket?.on(
+        'errorMessage',
+        (data) => {
+              print(data),
+            });
+  }
+
+  static adminLeft() {
+    socket?.on(
+        'adminLeft',
+        (data) => {
+              print('adminLeft'),
+            });
+    socket?.on(
+        'errorMessage',
+        (data) => {
+              print(data),
+            });
+  }
+
+  static adminEndTheRoom() {
+    socket?.emit(
+      'endRoom',
+    );
     socket?.on(
         'errorMessage',
         (data) => {
@@ -307,12 +333,21 @@ class SocketFunc {
             });
   }
 
-  static userchangedToAudienc() {
-    socket?.on(
-        'userChangedToAudience',
-        (data) => {
-              print(data),
-            });
+  static userchangedToAudienc(BuildContext context) {
+    socket?.on('userChangedToAudience', (data) {
+      //  print(data);
+      for (int i = 0; i < RoomCubit.get(context).listener.length; i++) {
+        if (data['id'] == RoomCubit.get(context).listener[i]['_id']) {
+          RoomCubit.get(context)
+              .speakers
+              .add(RoomCubit.get(context).listener[i]);
+          RoomCubit.get(context).listener.removeAt(i);
+          RoomCubit.get(context).changeState();
+
+          break;
+        }
+      }
+    });
     socket?.on(
         'errorMessage',
         (data) => {

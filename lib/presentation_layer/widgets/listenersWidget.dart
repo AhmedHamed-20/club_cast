@@ -1,4 +1,6 @@
 import 'package:club_cast/data_layer/bloc/room_cubit/room_cubit.dart';
+import 'package:club_cast/data_layer/sockets/sockets_io.dart';
+import 'package:club_cast/presentation_layer/components/component/component.dart';
 import 'package:club_cast/presentation_layer/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -65,7 +67,19 @@ Widget listenersWiget({
                                               BorderRadius.circular(15),
                                         ),
                                         child: MaterialButton(
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            RoomCubit.get(context)
+                                                        .listener[index]
+                                                    ['askedToTalk']
+                                                ? SocketFunc
+                                                    .adminGivePermissionForUserToTalk(
+                                                        RoomCubit.get(context)
+                                                            .listener[index])
+                                                : showToast(
+                                                    message: "User didn't ask",
+                                                    toastState:
+                                                        ToastState.WARNING);
+                                          },
                                           child: Text(
                                             'Make Him Speaker',
                                             style: Theme.of(context)
