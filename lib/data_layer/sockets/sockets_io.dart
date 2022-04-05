@@ -310,9 +310,8 @@ class SocketFunc {
               .speakers
               .add(RoomCubit.get(context).listener[i]);
           RoomCubit.get(context).listener.removeAt(i);
-
-          RoomCubit.get(context).changeState();
           iamSpeaker = true;
+          RoomCubit.get(context).changeState();
 
           break;
         }
@@ -355,9 +354,9 @@ class SocketFunc {
               .listener
               .add(RoomCubit.get(context).speakers[i]);
           RoomCubit.get(context).speakers.removeAt(i);
-
-          RoomCubit.get(context).changeState();
+          RoomCubit.get(context).listener[i]['askedToTalk'] = false;
           iamSpeaker = false;
+          RoomCubit.get(context).changeState();
 
           break;
         }
