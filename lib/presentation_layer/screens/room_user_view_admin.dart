@@ -100,6 +100,7 @@ class RoomAdminViewScreen extends StatelessWidget {
                         ),
                         speakersWiget(
                           cubit: cubit,
+                          isAdmin: true,
                         ),
                       ],
                     ),
@@ -118,6 +119,7 @@ class RoomAdminViewScreen extends StatelessWidget {
                     ),
                     listenersWiget(
                       cubit: cubit,
+                      isAdmin: true,
                     )
                   ],
                 ),

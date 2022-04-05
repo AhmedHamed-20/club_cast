@@ -1,4 +1,5 @@
 import 'package:club_cast/data_layer/bloc/room_cubit/room_cubit.dart';
+import 'package:club_cast/presentation_layer/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
@@ -6,6 +7,7 @@ import 'model_sheet_room_contant.dart';
 
 Widget listenersWiget({
   required cubit,
+  required bool isAdmin,
 }) {
   return Row(
     children: [
@@ -18,54 +20,67 @@ Widget listenersWiget({
             return InkWell(
               borderRadius: BorderRadius.circular(20),
               onTap: () {
-                showBottomSheet(
-                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                  elevation: 25,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                  context: context,
-                  builder: (context) {
-                    return WidgetFunc.bottomSheetContant(
-                      context,
-                      cubit.listener[index]['name'],
-                      cubit.listener[index]['photo'],
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Card(
-                            elevation: 3,
-                            color: Theme.of(context).backgroundColor,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
+                print(GetUserModel.getUserID());
+                print(RoomCubit.get(context).listener[index]['_id']);
+                GetUserModel.getUserID() !=
+                        RoomCubit.get(context).listener[index]['_id']
+                    ? showBottomSheet(
+                        backgroundColor:
+                            Theme.of(context).scaffoldBackgroundColor,
+                        elevation: 25,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25),
+                        ),
+                        context: context,
+                        builder: (context) {
+                          return WidgetFunc.bottomSheetContant(
+                            context,
+                            cubit.listener[index]['name'],
+                            cubit.listener[index]['photo'],
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Card(
+                                  elevation: 3,
+                                  color: Theme.of(context).backgroundColor,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  child: MaterialButton(
+                                    onPressed: () {},
+                                    child: Text(
+                                      'Follow',
+                                      style:
+                                          Theme.of(context).textTheme.bodyText2,
+                                    ),
+                                  ),
+                                ),
+                                isAdmin
+                                    ? Card(
+                                        elevation: 3,
+                                        color:
+                                            Theme.of(context).backgroundColor,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                        ),
+                                        child: MaterialButton(
+                                          onPressed: () {},
+                                          child: Text(
+                                            'Make Him Speaker',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyText2,
+                                          ),
+                                        ),
+                                      )
+                                    : SizedBox(),
+                              ],
                             ),
-                            child: MaterialButton(
-                              onPressed: () {},
-                              child: Text(
-                                'Follow',
-                                style: Theme.of(context).textTheme.bodyText2,
-                              ),
-                            ),
-                          ),
-                          Card(
-                            elevation: 3,
-                            color: Theme.of(context).backgroundColor,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            child: MaterialButton(
-                              onPressed: () {},
-                              child: Text(
-                                'Make Him Speaker',
-                                style: Theme.of(context).textTheme.bodyText2,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                );
+                          );
+                        },
+                      )
+                    : const SizedBox();
               },
               child: Column(
                 children: [
@@ -79,7 +94,8 @@ Widget listenersWiget({
                             cubit.listener[index]['photo'],
                           ),
                         ),
-                        RoomCubit.get(context).listener[index]['askedToTalk']
+                        RoomCubit.get(context).listener[index]['askedToTalk'] &&
+                                isAdmin
                             ? Positioned(
                                 right: 0,
                                 child: CircleAvatar(

@@ -100,7 +100,7 @@ class RoomUserViewScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                        speakersWiget(cubit: cubit),
+                        speakersWiget(cubit: cubit, isAdmin: false),
                       ],
                     ),
                     const Divider(
@@ -116,7 +116,10 @@ class RoomUserViewScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    listenersWiget(cubit: cubit),
+                    listenersWiget(
+                      cubit: cubit,
+                      isAdmin: false,
+                    ),
                   ],
                 ),
               ),
@@ -125,6 +128,9 @@ class RoomUserViewScreen extends StatelessWidget {
           floatingActionButton: FloatingActionButton(
             onPressed: () {
               SocketFunc.askToTalk();
+              showToast(
+                  message: 'You asked to talk,wait until admin accept',
+                  toastState: ToastState.SUCCESS);
               // print('ddd');
             },
             child: Icon(
