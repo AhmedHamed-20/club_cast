@@ -6,6 +6,7 @@ import '../../presentation_layer/components/constant/constant.dart';
 class AgoraRtc {
   static ClientRole? role;
   static RtcEngine? engine;
+  static bool muted = false;
 
   static Future<void> initAgoraRtcEngine(String appID, ClientRole role) async {
     engine = await RtcEngine.create(appID);
@@ -21,5 +22,26 @@ class AgoraRtc {
 
     // await _engine.enableWebSdkInteroperability(true);
     await engine?.joinChannel(null, channelName, null, 0);
+  }
+
+  static Future toChangeRole(
+      {required String tokenAgora, required ClientRole role}) async {
+    engine?.renewToken(tokenAgora).then((value) async {
+      await engine?.setClientRole(role);
+    }).catchError((onError) {
+      print('dddddddddddddddddddddddddddd' + onError);
+    });
+  }
+
+  static void eventsAgora() {
+    engine?.setEventHandler(RtcEngineEventHandler(
+      userJoined: (uid, elapsed) {},
+    ));
+  }
+
+  static void onToggleMute() {
+    muted = !muted;
+
+    engine?.muteLocalAudioStream(muted);
   }
 }
