@@ -59,15 +59,14 @@ class MyApp extends StatelessWidget {
           create: (context) => LoginCubit(),
         ),
         BlocProvider(
-          create: (context) => GeneralAppCubit()
-            ..getMyFollowingPodcast(token)
-            ..getUserData(token: token)
-            ..getAllCategory()
-            ..getDark(isDark!)
-            ..getMyEvents()
-            ..getMyFollowingEvents()
-            ..getAllRoomsData(),
-        ),
+            create: (context) => GeneralAppCubit()
+              ..getAllRoomsData()
+              ..getMyFollowingPodcast(token)
+              ..getUserData(token: token)
+              ..getAllCategory()
+              ..getDark(isDark!)
+              ..getMyEvents()
+              ..getMyFollowingEvents()),
       ],
       child: BlocConsumer<GeneralAppCubit, GeneralAppStates>(
         builder: (context, state) {

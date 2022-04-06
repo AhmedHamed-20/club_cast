@@ -23,7 +23,8 @@ class AgoraRtc {
     await initAgoraRtcEngine('6179379dd4f7462f893ab53fd084d11a', role);
 
     // await _engine.enableWebSdkInteroperability(true);
-    await engine?.joinChannel(token, channelName, null, 0);
+    await engine?.joinChannel(null, channelName, null, 0);
+    eventsAgora();
   }
 
   static Future toChangeRole(

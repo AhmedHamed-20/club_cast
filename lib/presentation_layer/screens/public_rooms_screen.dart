@@ -110,15 +110,15 @@ class PublicRoomScreen extends StatelessWidget {
                               shrinkWrap: true,
                               itemBuilder: (context, index) => publicRoomItem(
                                 audience:
-                                    GetAllRoomsModel?.getRoomsAudienc(index)[0],
+                                    GetAllRoomsModel.getRoomsAudienc(index)[0],
                                 category:
                                     GetAllRoomsModel?.getRoomsGategory(index),
                                 context: context,
                                 roomName: GetAllRoomsModel?.getRoomName(index),
-                                speaker: GetAllRoomsModel?.getRoomsBrodcaster(
-                                    index)[0],
+                                speaker: GetAllRoomsModel.getRoomsBrodcaster(
+                                    index)?[0],
                                 adminData:
-                                    GetAllRoomsModel?.getRoomsUserPublishInform(
+                                    GetAllRoomsModel.getRoomsUserPublishInform(
                                         index),
                                 click: () {
                                   if (SocketFunc.isConnected &&
@@ -149,7 +149,7 @@ class PublicRoomScreen extends StatelessWidget {
                                 },
                               ),
                               itemCount:
-                                  GetAllRoomsModel.getAllRooms?['data'].length,
+                                  GetAllRoomsModel.getAllRooms['data']?.length,
                             ),
                           ),
                         ],

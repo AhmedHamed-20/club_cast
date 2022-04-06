@@ -1094,8 +1094,8 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     });
   }
 
-  Future getAllRoomsData() {
-    return DioHelper.getData(
+  Future getAllRoomsData() async {
+    return await DioHelper.getData(
       url: getAllRooms,
       token: {'Authorization': 'Bearer $token'},
     ).then(
