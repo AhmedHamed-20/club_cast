@@ -16,12 +16,15 @@ class AgoraRtc {
     await engine?.setClientRole(role);
   }
 
-  static Future<void> JoinChannel(
-      String appId, ClientRole role, String channelName) async {
+  static Future<void> joinChannel(
+      {required String appId,
+      required ClientRole role,
+      required String channelName,
+      required String token}) async {
     await initAgoraRtcEngine(appId, role);
 
     // await _engine.enableWebSdkInteroperability(true);
-    await engine?.joinChannel(null, channelName, null, 0);
+    await engine?.joinChannel(token, channelName, null, 0);
   }
 
   static Future toChangeRole(
@@ -36,9 +39,7 @@ class AgoraRtc {
   static void eventsAgora() {
     engine?.setEventHandler(
       RtcEngineEventHandler(
-          userJoined: (uid, elapsed) {
-            
-          },
+          userJoined: (uid, elapsed) {},
           joinChannelSuccess: (channelName, uId, el) {},
           remoteAudioStateChanged: (uId, state, reason, el) {}),
     );
