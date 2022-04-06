@@ -68,6 +68,10 @@ class SocketFunc {
               ActiveRoomAdminModel.activeRoomAdminData = data[0],
               ActiveRoomAdminModel.activeRoomData = data[1],
               ActiveRoomAdminModel.adminToken = data[2],
+              RoomCubit?.get(context).speakers.forEach((e) {
+                e['agoraId'] = 0;
+                e['isMuted'] = false;
+              }),
               print('audienceList:${ActiveRoomAdminModel.getRoomsAudienc()}'),
               print(
                   'BrodacsterList:${ActiveRoomAdminModel.getRoomsBrodCasters()}'),
@@ -123,6 +127,8 @@ class SocketFunc {
                 (e) {
                   if (e['askedToTalk'] != true) {
                     e['askedToTalk'] = false;
+                    e['agoraId'] = 0;
+                    e['isMuted'] = false;
                   }
                 },
               ),
@@ -165,6 +171,8 @@ class SocketFunc {
                 (e) {
                   if (e['askedToTalk'] != true) {
                     e['askedToTalk'] = false;
+                    e['agoraId'] = 0;
+                    e['isMuted'] = false;
                   }
                 },
               ),

@@ -34,14 +34,18 @@ class AgoraRtc {
   }
 
   static void eventsAgora() {
-    engine?.setEventHandler(RtcEngineEventHandler(
-      userJoined: (uid, elapsed) {},
-    ));
+    engine?.setEventHandler(
+      RtcEngineEventHandler(
+          userJoined: (uid, elapsed) {
+            
+          },
+          joinChannelSuccess: (channelName, uId, el) {},
+          remoteAudioStateChanged: (uId, state, reason, el) {}),
+    );
   }
 
   static void onToggleMute() {
     muted = !muted;
-
     engine?.muteLocalAudioStream(muted);
   }
 }
