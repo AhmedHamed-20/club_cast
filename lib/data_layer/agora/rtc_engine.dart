@@ -17,11 +17,10 @@ class AgoraRtc {
   }
 
   static Future<void> joinChannel(
-      {required String appId,
-      required ClientRole role,
+      {required ClientRole role,
       required String channelName,
       required String token}) async {
-    await initAgoraRtcEngine(appId, role);
+    await initAgoraRtcEngine('6179379dd4f7462f893ab53fd084d11a', role);
 
     // await _engine.enableWebSdkInteroperability(true);
     await engine?.joinChannel(token, channelName, null, 0);

@@ -1,3 +1,5 @@
+import 'package:agora_rtc_engine/rtc_engine.dart';
+import 'package:club_cast/data_layer/agora/rtc_engine.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
 import 'package:club_cast/presentation_layer/layout/layout_screen.dart';
@@ -72,6 +74,12 @@ class SocketFunc {
                 e['agoraId'] = 0;
                 e['isMuted'] = false;
               }),
+              AgoraRtc.joinChannel(
+                  channelName:
+                      GeneralAppCubit.get(context).roomNameController.text,
+                  role: ClientRole.Broadcaster,
+                  token: data[2]),
+              AgoraRtc.eventsAgora(),
               print('audienceList:${ActiveRoomAdminModel.getRoomsAudienc()}'),
               print(
                   'BrodacsterList:${ActiveRoomAdminModel.getRoomsBrodCasters()}'),
@@ -137,6 +145,11 @@ class SocketFunc {
               RoomCubit.get(context).speakers.addAll(data[1]['brodcasters']),
               //print(RoomCubit.get(context).speakers),
               // print(RoomCubit.get(context).listener),
+              AgoraRtc.joinChannel(
+                  channelName: ActiveRoomUserModel.getRoomName().toString(),
+                  role: ClientRole.Audience,
+                  token: data[2]),
+              AgoraRtc.eventsAgora(),
               isAdminLeftSocket(),
               userJoined(context, ActiveRoomUserModel.getRoomId()),
               userLeft(ActiveRoomUserModel.getRoomId(), context),
