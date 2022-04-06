@@ -190,16 +190,6 @@ class SocketFunc {
   static adminLeft(BuildContext context) {
     socket?.on('roomEnded', (data) {
       print('roomEnded');
-      if (!isAdminLeft) {
-        RoomCubit.get(context).listener = [];
-        RoomCubit.get(context).speakers = [];
-        isConnected = false;
-        ;
-        isAdminLeft = true;
-        leaveRoom(context);
-        navigatePushANDRemoveRout(context: context, navigateTo: LayoutScreen());
-        showToast(message: 'Room time ended', toastState: ToastState.WARNING);
-      }
 
       RoomCubit.get(context).listener = [];
       RoomCubit.get(context).speakers = [];
@@ -209,6 +199,16 @@ class SocketFunc {
       leaveRoom(context);
       navigatePushANDRemoveRout(context: context, navigateTo: LayoutScreen());
       showToast(message: 'Admin left the room', toastState: ToastState.WARNING);
+      if (isAdminLeft == false) {
+        RoomCubit.get(context).listener = [];
+        RoomCubit.get(context).speakers = [];
+        isConnected = false;
+
+        isAdminLeft = true;
+        leaveRoom(context);
+        navigatePushANDRemoveRout(context: context, navigateTo: LayoutScreen());
+        showToast(message: 'Room time ended', toastState: ToastState.WARNING);
+      }
     });
     socket?.on(
         'errorMessage',
