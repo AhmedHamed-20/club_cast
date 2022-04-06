@@ -110,7 +110,7 @@ class SocketFunc {
 
   static leaveRoom(BuildContext context) {
     socket?.disconnect();
-
+    AgoraRtc.leave();
     socket?.onDisconnect((data) => {
           print(data),
         });

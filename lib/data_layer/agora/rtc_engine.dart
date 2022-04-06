@@ -39,7 +39,9 @@ class AgoraRtc {
     engine?.setEventHandler(
       RtcEngineEventHandler(
           userJoined: (uid, elapsed) {},
-          joinChannelSuccess: (channelName, uId, el) {},
+          joinChannelSuccess: (channelName, uId, el) {
+            print('weAreLive');
+          },
           remoteAudioStateChanged: (uId, state, reason, el) {}),
     );
   }
@@ -47,5 +49,10 @@ class AgoraRtc {
   static void onToggleMute() {
     muted = !muted;
     engine?.muteLocalAudioStream(muted);
+  }
+
+  static void leave() {
+    engine?.leaveChannel();
+    engine?.destroy();
   }
 }
