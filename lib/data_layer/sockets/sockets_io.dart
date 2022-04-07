@@ -71,24 +71,26 @@ class SocketFunc {
               ActiveRoomAdminModel.activeRoomData = data[1],
               ActiveRoomAdminModel.adminToken = data[2],
               RoomCubit?.get(context).speakers.forEach((e) {
-                e['agoraId'] = 0;
                 e['isMuted'] = false;
               }),
 
               print('name' +
                   GeneralAppCubit.get(context).roomNameController.text),
               AgoraRtc.joinChannelagora(
-                  channelName:
-                      GeneralAppCubit.get(context).roomNameController.text,
-                  role: ClientRole.Broadcaster,
-                  token: data[2],
-                  context: context),
+                channelName:
+                    GeneralAppCubit.get(context).roomNameController.text,
+                role: ClientRole.Broadcaster,
+                token: data[2],
+                context: context,
+                uid: data[0]['uid'],
+              ),
               //  print('toekn' + data[2]),
               //  AgoraRtc.eventsAgora(),
               print(GeneralAppCubit.get(context).roomNameController.text),
               print('audienceList:${ActiveRoomAdminModel.getRoomsAudienc()}'),
               print(
                   'BrodacsterList:${ActiveRoomAdminModel.getRoomsBrodCasters()}'),
+              print(data),
               Navigator.pop(context),
               navigatePushTo(
                 context: context,
@@ -141,7 +143,7 @@ class SocketFunc {
                 (e) {
                   if (e['askedToTalk'] != true) {
                     e['askedToTalk'] = false;
-                    e['agoraId'] = 0;
+
                     e['isMuted'] = false;
                   }
                 },
@@ -158,6 +160,7 @@ class SocketFunc {
                 role: ClientRole.Audience,
                 token: data[2],
                 context: context,
+                uid: data[0]['uid'],
               ),
 
               isAdminLeftSocket(),
@@ -194,7 +197,7 @@ class SocketFunc {
                 (e) {
                   if (e['askedToTalk'] != true) {
                     e['askedToTalk'] = false;
-                    e['agoraId'] = 0;
+
                     e['isMuted'] = false;
                   }
                 },

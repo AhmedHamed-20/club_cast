@@ -12,7 +12,7 @@ class AgoraRtc {
 
   static Future<void> initAgoraRtcEngine(String appID, ClientRole role) async {
     print('initAgora role ${role}');
-    engine = await RtcEngine.create('448e147938e04c23a2b56677daa303c8');
+    engine = await RtcEngine.create('b29cc6ee03d642a6bf54c2f5906b9702');
     await engine?.disableVideo();
     await engine?.enableAudio();
     await engine?.setChannelProfile(ChannelProfile.LiveBroadcasting);
@@ -20,11 +20,13 @@ class AgoraRtc {
     await engine?.setClientRole(role);
   }
 
-  static Future<void> joinChannelagora(
-      {required ClientRole role,
-      required String channelName,
-      required String token,
-      required BuildContext context}) async {
+  static Future<void> joinChannelagora({
+    required ClientRole role,
+    required String channelName,
+    required String token,
+    required BuildContext context,
+    required uid,
+  }) async {
     print('join');
     print(role);
     print(channelName);
@@ -32,7 +34,7 @@ class AgoraRtc {
 
     // await _engine.enableWebSdkInteroperability(true);
     await initAgoraRtcEngine('b29cc6ee03d642a6bf54c2f5906b9702', role);
-    await engine?.joinChannel(token, channelName, null, 0).then((value) {
+    await engine?.joinChannel(token, channelName, null, uid).then((value) {
       print('successssssssssss');
     });
     eventsAgora(context);
@@ -54,15 +56,13 @@ class AgoraRtc {
           userJoined: (uid, elapsed) {
             print('adel');
             print(uid);
-            RoomCubit.get(context)
-                    .listener[RoomCubit.get(context).listener.length - 1]
-                ['agoraId'] = uid;
+
             print(RoomCubit.get(context).listener);
           },
           joinChannelSuccess: (channelName, uId, el) {
             print('weAreLive');
             print(uId);
-            RoomCubit.get(context).speakers[0]['agoraId'] = uId;
+
             print(RoomCubit.get(context).speakers);
           },
           remoteAudioStateChanged: (uId, state, reason, el) {}),
