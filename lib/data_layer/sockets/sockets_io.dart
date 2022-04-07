@@ -120,6 +120,8 @@ class SocketFunc {
   static leaveRoom(BuildContext context) {
     socket?.disconnect();
     AgoraRtc.leave();
+    AgoraRtc.muted = false;
+    iamSpeaker = false;
     socket?.onDisconnect((data) => {
           print(data),
         });
