@@ -150,7 +150,7 @@ class PublicRoomScreen extends StatelessWidget {
                                 },
                               ),
                               itemCount:
-                                  GetAllRoomsModel.getAllRooms['data']?.length,
+                                  GetAllRoomsModel.getAllRooms?['data'].length,
                             ),
                           ),
                         ],

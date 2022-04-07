@@ -110,19 +110,21 @@ Widget speakersWiget({
                       ),
                     ],
                   ),
-                  RoomCubit.get(context).speakers[index]['isMuted']
-                      ? Positioned(
-                          top: 0,
-                          child: CircleAvatar(
-                            backgroundColor: Theme.of(context).primaryColor,
-                            radius: 15,
-                            child: const Icon(
-                              Icons.mic_off,
-                              size: 19,
-                            ),
-                          ),
-                        )
-                      : const SizedBox(),
+                  RoomCubit.get(context).speakers == []
+                      ? const SizedBox()
+                      : RoomCubit.get(context).speakers[index]?['isMuted']
+                          ? Positioned(
+                              top: 0,
+                              child: CircleAvatar(
+                                backgroundColor: Theme.of(context).primaryColor,
+                                radius: 15,
+                                child: const Icon(
+                                  Icons.mic_off,
+                                  size: 19,
+                                ),
+                              ),
+                            )
+                          : const SizedBox(),
                 ],
               ),
             );

@@ -134,13 +134,11 @@ class SocketFunc {
     socket?.on(
         'joinRoomSuccess',
         (data) => {
-              // print(data),
-              ActiveRoomUserModel.activeRoomUserData = data[0],
-              ActiveRoomUserModel.activeRoomData = data[1],
-
-              ActiveRoomUserModel.userToken = data[2],
-              //  print('userPhoto:' + ActiveRoomUserModel.getUserPhoto()),
-
+              RoomCubit.get(context).speakers.add(data[1]['admin']),
+              RoomCubit.get(context).speakers.addAll(data[1]['brodcasters']),
+              RoomCubit?.get(context).speakers.forEach((e) {
+                e['isMuted'] = false;
+              }),
               RoomCubit?.get(context).listener.addAll(data[1]['audience']),
               RoomCubit?.get(context).listener.forEach(
                 (e) {
@@ -151,9 +149,15 @@ class SocketFunc {
                   }
                 },
               ),
+              // print(data),
+              ActiveRoomUserModel.activeRoomUserData = data[0],
+              ActiveRoomUserModel.activeRoomData = data[1],
+
+              ActiveRoomUserModel.userToken = data[2],
+              //  print('userPhoto:' + ActiveRoomUserModel.getUserPhoto()),
+
               print(RoomCubit.get(context).listener),
-              RoomCubit.get(context).speakers.add(data[1]['admin']),
-              RoomCubit.get(context).speakers.addAll(data[1]['brodcasters']),
+
               //print(RoomCubit.get(context).speakers),
               // print(RoomCubit.get(context).listener),
               // AgoraRtc.initAgoraRtcEngine(
