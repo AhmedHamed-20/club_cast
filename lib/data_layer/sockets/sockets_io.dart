@@ -144,7 +144,7 @@ class SocketFunc {
                 (e) {
                   if (e['askedToTalk'] != true) {
                     e['askedToTalk'] = false;
-
+                    e['isSpeaker'] = false;
                     e['isMuted'] = false;
                   }
                 },
@@ -170,6 +170,8 @@ class SocketFunc {
               listenOnUsersAskedForTalk(context),
               userchangedToBrodCaster(context),
               userchangedToAudienc(context),
+              brodcasterToken(),
+              audienceToken(),
               adminLeft(context),
               isConnected = true,
               navigatePushTo(
@@ -318,6 +320,7 @@ class SocketFunc {
           RoomCubit.get(context).listener[i]['askedToTalk'] =
               !RoomCubit.get(context).listener[i]['askedToTalk'];
           print(RoomCubit.get(context).listener);
+
           RoomCubit.get(context).changeState();
 
           break;
@@ -347,7 +350,9 @@ class SocketFunc {
     socket?.on(
         'brodcasterToken',
         (data) => {
-              print(data),
+              //  print('brodToken' + data),
+              AgoraRtc.toChangeRole(
+                  tokenAgora: data, role: ClientRole.Broadcaster),
             });
 
     socket?.on(
@@ -365,6 +370,9 @@ class SocketFunc {
               .speakers
               .add(RoomCubit.get(context).listener[i]);
           RoomCubit.get(context).listener.removeAt(i);
+          RoomCubit.get(context)
+                  .speakers[RoomCubit.get(context).speakers.length - 1]
+              ['isSpeaker'] = true;
           print(RoomCubit.get(context).speakers[i]['_id']);
           print(GetUserModel.getUserID());
           RoomCubit.get(context)
@@ -400,6 +408,8 @@ class SocketFunc {
         'audienceToken',
         (data) => {
               print(data),
+              AgoraRtc.toChangeRole(
+                  tokenAgora: data, role: ClientRole.Audience),
             });
     socket?.on(
         'errorMessage',
@@ -419,6 +429,9 @@ class SocketFunc {
           RoomCubit.get(context)
                   .listener[RoomCubit.get(context).listener.length - 1]
               ['askedToTalk'] = false;
+          RoomCubit.get(context)
+                  .listener[RoomCubit.get(context).listener.length - 1]
+              ['isSpeaker'] = false;
           RoomCubit.get(context)
                           .listener[RoomCubit.get(context).listener.length - 1]
                       ['_id'] ==

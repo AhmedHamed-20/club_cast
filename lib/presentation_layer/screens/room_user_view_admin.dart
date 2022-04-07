@@ -21,6 +21,7 @@ class RoomAdminViewScreen extends StatelessWidget {
     var cubit = RoomCubit.get(context);
     // cubit.speakers = ActiveRoomAdminModel.getRoomsBrodCasters();
     // cubit.listener = ActiveRoomAdminModel.getRoomsAudienc();
+
     return BlocConsumer<RoomCubit, RoomStates>(
       builder: (context, state) {
         return Scaffold(

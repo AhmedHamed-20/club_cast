@@ -1,3 +1,4 @@
+import 'package:club_cast/data_layer/agora/rtc_engine.dart';
 import 'package:club_cast/data_layer/bloc/room_cubit/room_cubit.dart';
 import 'package:club_cast/data_layer/bloc/room_cubit/room_states.dart';
 import 'package:club_cast/data_layer/sockets/sockets_io.dart';
@@ -125,22 +126,52 @@ class RoomUserViewScreen extends StatelessWidget {
               ),
             ),
           ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
+          floatingActionButton: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              CircleAvatar(
+                radius: 25,
+                backgroundColor: Theme.of(context).primaryColor,
+                child: IconButton(
+                  onPressed: () {
+                    SocketFunc.iamSpeaker
+                        ? SocketFunc.userWantToReturnAudience()
+                        : SocketFunc.askToTalk();
+                    showToast(
+                        message: 'You asked to talk,wait until admin accept',
+                        toastState: ToastState.SUCCESS);
+                    // print('ddd');
+                  },
+                  icon: Icon(
+                    SocketFunc.iamSpeaker
+                        ? MdiIcons.arrowDown
+                        : MdiIcons.handBackLeft,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
               SocketFunc.iamSpeaker
-                  ? SocketFunc.userWantToReturnAudience()
-                  : SocketFunc.askToTalk();
-              showToast(
-                  message: 'You asked to talk,wait until admin accept',
-                  toastState: ToastState.SUCCESS);
-              // print('ddd');
-            },
-            child: Icon(
-              SocketFunc.iamSpeaker
-                  ? MdiIcons.arrowDown
-                  : MdiIcons.handBackLeft,
-            ),
-            backgroundColor: Theme.of(context).primaryColor,
+                  ? CircleAvatar(
+                      radius: 25,
+                      backgroundColor: Theme.of(context).primaryColor,
+                      child: IconButton(
+                        onPressed: () {
+                          for (int i = 0; i < cubit.speakers.length; i++) {
+                            if (ActiveRoomUserModel.getUserId() ==
+                                cubit.speakers[i]['_id']) {
+                              AgoraRtc.onToggleMute(i, context);
+                            }
+                          }
+                        },
+                        icon: Icon(
+                          AgoraRtc.muted ? Icons.mic_off : Icons.mic_none,
+                        ),
+                      ),
+                    )
+                  : const SizedBox(),
+            ],
           ),
         );
       },
