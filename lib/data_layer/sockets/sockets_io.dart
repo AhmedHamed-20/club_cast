@@ -81,7 +81,8 @@ class SocketFunc {
                   channelName:
                       GeneralAppCubit.get(context).roomNameController.text,
                   role: ClientRole.Broadcaster,
-                  token: data[2]),
+                  token: data[2],
+                  context: context),
               //  print('toekn' + data[2]),
               //  AgoraRtc.eventsAgora(),
               print(GeneralAppCubit.get(context).roomNameController.text),
@@ -153,10 +154,12 @@ class SocketFunc {
               // AgoraRtc.initAgoraRtcEngine(
               //     '448e147938e04c23a2b56677daa303c8', ClientRole.Broadcaster),
               AgoraRtc.joinChannelagora(
-                  channelName: ActiveRoomUserModel.getRoomName().toString(),
-                  role: ClientRole.Audience,
-                  token: data[2]),
-              AgoraRtc.eventsAgora(),
+                channelName: ActiveRoomUserModel.getRoomName().toString(),
+                role: ClientRole.Audience,
+                token: data[2],
+                context: context,
+              ),
+
               isAdminLeftSocket(),
               userJoined(context, ActiveRoomUserModel.getRoomId()),
               userLeft(ActiveRoomUserModel.getRoomId(), context),

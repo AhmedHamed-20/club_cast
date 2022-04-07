@@ -1,4 +1,6 @@
 import 'package:agora_rtc_engine/rtc_engine.dart';
+import 'package:club_cast/data_layer/bloc/room_cubit/room_cubit.dart';
+import 'package:flutter/widgets.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
 import '../../presentation_layer/components/constant/constant.dart';
@@ -21,7 +23,8 @@ class AgoraRtc {
   static Future<void> joinChannelagora(
       {required ClientRole role,
       required String channelName,
-      required String token}) async {
+      required String token,
+      required BuildContext context}) async {
     print('join');
     print(role);
     print(channelName);
@@ -32,7 +35,7 @@ class AgoraRtc {
     await engine?.joinChannel(token, channelName, null, 0).then((value) {
       print('successssssssssss');
     });
-    eventsAgora();
+    eventsAgora(context);
   }
 
   static Future toChangeRole(
@@ -44,16 +47,23 @@ class AgoraRtc {
     });
   }
 
-  static void eventsAgora() {
+  static void eventsAgora(BuildContext context) {
     print('events');
     engine?.setEventHandler(
       RtcEngineEventHandler(
           userJoined: (uid, elapsed) {
+            print('adel');
             print(uid);
+            RoomCubit.get(context)
+                    .listener[RoomCubit.get(context).listener.length - 1]
+                ['agoraId'] = uid;
+            print(RoomCubit.get(context).listener);
           },
           joinChannelSuccess: (channelName, uId, el) {
             print('weAreLive');
-            print(uId);
+
+            RoomCubit.get(context).speakers[0]['agoraId'] = uId;
+            print(RoomCubit.get(context).speakers);
           },
           remoteAudioStateChanged: (uId, state, reason, el) {}),
     );
