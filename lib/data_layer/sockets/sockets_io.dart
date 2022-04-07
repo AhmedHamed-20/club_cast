@@ -73,6 +73,7 @@ class SocketFunc {
               RoomCubit.get(context).speakers = [data[0]],
               RoomCubit?.get(context).speakers.forEach((e) {
                 e['isMuted'] = false;
+                e['isTalking'] = false;
               }),
 
               print('name' +
@@ -146,6 +147,7 @@ class SocketFunc {
                     e['askedToTalk'] = false;
                     e['isSpeaker'] = false;
                     e['isMuted'] = false;
+                    e['isTalking'] = false;
                   }
                 },
               ),
@@ -206,9 +208,9 @@ class SocketFunc {
                 (e) {
                   if (e['askedToTalk'] != true) {
                     e['askedToTalk'] = false;
-
-                    e['isMuted'] = false;
                   }
+                  e['isTalking'] = false;
+                  e['isMuted'] = false;
                 },
               ),
               print(RoomCubit.get(context).listener),

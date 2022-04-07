@@ -18,6 +18,7 @@ class AgoraRtc {
     await engine?.setChannelProfile(ChannelProfile.LiveBroadcasting);
 
     await engine?.setClientRole(role);
+    engine?.enableAudioVolumeIndication(250, 3, true);
   }
 
   static Future<void> joinChannelagora({
@@ -52,7 +53,15 @@ class AgoraRtc {
   static void eventsAgora(BuildContext context) {
     print('events');
     engine?.setEventHandler(
-      RtcEngineEventHandler(userJoined: (uid, elapsed) {
+      RtcEngineEventHandler(activeSpeaker: (uid) {
+        for (int i = 0; i < RoomCubit.get(context).speakers.length; i++) {
+          if (RoomCubit.get(context).speakers[i]['uid'] == uid) {
+            RoomCubit.get(context).speakers[i]['isTalking'] = true;
+            break;
+          }
+        }
+        RoomCubit.get(context).changeState();
+      }, userJoined: (uid, elapsed) {
         print('adel');
         print(uid);
 

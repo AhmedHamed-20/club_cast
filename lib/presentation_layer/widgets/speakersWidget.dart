@@ -89,26 +89,50 @@ Widget speakersWiget({
               },
               child: Stack(
                 children: [
-                  Column(
-                    children: [
-                      Expanded(
-                        flex: 3,
-                        child: CircleAvatar(
-                          radius: 35,
-                          backgroundImage:
-                              NetworkImage(cubit.speakers[index]['photo']),
+                  Center(
+                    child: Column(
+                      children: [
+                        // Expanded(
+                        //   flex: 5,
+                        //   child: CircleAvatar(
+                        //     radius: 35,
+                        //     backgroundImage:
+                        //         NetworkImage(cubit.speakers[index]['photo']),
+                        //   ),
+                        // ),
+                        Expanded(
+                          flex: 3,
+                          child: Container(
+                            width: 70,
+                            height: 70,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50),
+                              border: Border.all(
+                                color: Theme.of(context)
+                                    .primaryColor
+                                    .withOpacity(0.6),
+                                width: 4.0,
+                              ),
+                              image: DecorationImage(
+                                image: NetworkImage(
+                                  cubit.speakers[index]['photo'],
+                                ),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        child: Text(
-                          cubit.speakers[index]['name'],
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyText1
-                              ?.copyWith(fontSize: 14),
+                        Expanded(
+                          child: Text(
+                            cubit.speakers[index]['name'],
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyText1
+                                ?.copyWith(fontSize: 14),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                   RoomCubit.get(context).speakers == []
                       ? const SizedBox()
