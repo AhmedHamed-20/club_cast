@@ -1,3 +1,4 @@
+import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/data_layer/sockets/sockets_io.dart';
 import 'package:club_cast/presentation_layer/components/constant/constant.dart';
@@ -12,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:marquee/marquee.dart';
+import '../../data_layer/agora/rtc_engine.dart';
 import '../../data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
 import '../components/component/component.dart';
 import '../screens/user_screen/login_screen/login_screen.dart';
@@ -270,6 +272,9 @@ class LayoutScreen extends StatelessWidget {
             floatingActionButton: FloatingActionButton(
               onPressed: () {
                 modalBottomSheetItem(context, () {
+                  AgoraRtc.initAgoraRtcEngine(
+                      '448e147938e04c23a2b56677daa303c8',
+                      ClientRole.Broadcaster);
                   print(cubit.roomNameController.text);
                   print(cubit.selectedCategoryItem);
                   print("isPublicRoom :${cubit.isPublicRoom}");
