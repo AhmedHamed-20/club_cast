@@ -1,3 +1,4 @@
+import 'package:club_cast/data_layer/agora/rtc_engine.dart';
 import 'package:club_cast/data_layer/bloc/room_cubit/room_cubit.dart';
 import 'package:club_cast/data_layer/bloc/room_cubit/room_states.dart';
 import 'package:club_cast/data_layer/sockets/sockets_io.dart';
@@ -23,6 +24,20 @@ class RoomAdminViewScreen extends StatelessWidget {
     return BlocConsumer<RoomCubit, RoomStates>(
       builder: (context, state) {
         return Scaffold(
+          floatingActionButton: CircleAvatar(
+            radius: 25,
+            backgroundColor: Theme.of(context).primaryColor,
+            child: Center(
+              child: IconButton(
+                icon: Icon(
+                  cubit.speakers[0]['isMuted'] ? Icons.mic_off : Icons.mic_none,
+                ),
+                onPressed: () {
+                  AgoraRtc.onToggleMute(0, context);
+                },
+              ),
+            ),
+          ),
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           appBar: AppBar(
             leading: MaterialButton(

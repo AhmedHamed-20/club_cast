@@ -69,9 +69,12 @@ class AgoraRtc {
     );
   }
 
-  static void onToggleMute() {
+  static void onToggleMute(index, BuildContext context) {
     muted = !muted;
+
     engine?.muteLocalAudioStream(muted);
+    RoomCubit.get(context).speakers[index]['isMuted'] = muted;
+    RoomCubit.get(context).changeState();
   }
 
   static void leave() {

@@ -70,6 +70,7 @@ class SocketFunc {
               ActiveRoomAdminModel.activeRoomAdminData = data[0],
               ActiveRoomAdminModel.activeRoomData = data[1],
               ActiveRoomAdminModel.adminToken = data[2],
+              RoomCubit.get(context).speakers = [data[0]],
               RoomCubit?.get(context).speakers.forEach((e) {
                 e['isMuted'] = false;
               }),
@@ -97,7 +98,7 @@ class SocketFunc {
                 navigateTo: RoomAdminViewScreen(),
               ),
               GeneralAppCubit.get(context).roomNameController.clear(),
-              RoomCubit.get(context).speakers = [data[0]],
+
               GeneralAppCubit.get(context).selectedCategoryItem = 'ai',
               GeneralAppCubit.get(context).isPublicRoom = true,
               GeneralAppCubit.get(context).isRecordRoom = false,
