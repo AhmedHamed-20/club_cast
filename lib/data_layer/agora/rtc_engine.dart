@@ -59,6 +59,16 @@ class AgoraRtc {
 
             print(RoomCubit.get(context).listener);
           },
+          userMuteAudio: (uid, muted) {
+            print('mutedAgora');
+            for (int i = 0; i < RoomCubit.get(context).speakers.length; i++) {
+              if (RoomCubit.get(context).speakers[i]['uid'] == uid) {
+                RoomCubit.get(context).speakers[i]['isMuted'] = muted;
+                break;
+              }
+            }
+            RoomCubit.get(context).changeState();
+          },
           joinChannelSuccess: (channelName, uId, el) {
             print('weAreLive');
             print(uId);

@@ -87,26 +87,42 @@ Widget speakersWiget({
                       )
                     : const SizedBox();
               },
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
+              child: Stack(
                 children: [
-                  Expanded(
-                    flex: 3,
-                    child: CircleAvatar(
-                      radius: 35,
-                      backgroundImage:
-                          NetworkImage(cubit.speakers[index]['photo']),
-                    ),
+                  Column(
+                    children: [
+                      Expanded(
+                        flex: 3,
+                        child: CircleAvatar(
+                          radius: 35,
+                          backgroundImage:
+                              NetworkImage(cubit.speakers[index]['photo']),
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          cubit.speakers[index]['name'],
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyText1
+                              ?.copyWith(fontSize: 14),
+                        ),
+                      ),
+                    ],
                   ),
-                  Expanded(
-                    child: Text(
-                      cubit.speakers[index]['name'],
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyText1
-                          ?.copyWith(fontSize: 14),
-                    ),
-                  ),
+                  RoomCubit.get(context).speakers[index]['isMuted']
+                      ? Positioned(
+                          top: 0,
+                          child: CircleAvatar(
+                            backgroundColor: Theme.of(context).primaryColor,
+                            radius: 15,
+                            child: const Icon(
+                              Icons.mic_off,
+                              size: 19,
+                            ),
+                          ),
+                        )
+                      : const SizedBox(),
                 ],
               ),
             );
