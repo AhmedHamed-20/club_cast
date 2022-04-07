@@ -128,6 +128,7 @@ class LoginCubit extends Cubit<LoginStates> {
         (value) {
           GeneralAppCubit.get(context).getMyEvents();
           GeneralAppCubit.get(context).getMyFollowingEvents();
+          GeneralAppCubit.get(context).getAllRoomsData();
           getMyFollowingPodcast(token).then((value) {
             navigatePushANDRemoveRout(
                 context: context, navigateTo: LayoutScreen());
@@ -217,6 +218,7 @@ class LoginCubit extends Cubit<LoginStates> {
 
       getUserData(token: token).then((value) {
         GeneralAppCubit.get(context).getMyEvents();
+        GeneralAppCubit.get(context).getAllRoomsData();
         GeneralAppCubit.get(context).getMyFollowingEvents();
         getMyFollowingPodcast(token).then((value) {
           navigatePushANDRemoveRout(

@@ -61,7 +61,7 @@ class AgoraRtc {
           },
           joinChannelSuccess: (channelName, uId, el) {
             print('weAreLive');
-
+            print(uId);
             RoomCubit.get(context).speakers[0]['agoraId'] = uId;
             print(RoomCubit.get(context).speakers);
           },

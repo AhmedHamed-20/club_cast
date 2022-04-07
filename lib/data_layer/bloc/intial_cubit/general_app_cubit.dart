@@ -1095,6 +1095,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   }
 
   Future getAllRoomsData() async {
+    CachHelper.getData(key: 'token');
     return await DioHelper.getData(
       url: getAllRooms,
       token: {'Authorization': 'Bearer $token'},
