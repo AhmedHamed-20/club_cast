@@ -28,8 +28,10 @@ class AgoraRtc {
     print(token);
 
     // await _engine.enableWebSdkInteroperability(true);
-    await initAgoraRtcEngine('448e147938e04c23a2b56677daa303c8', role);
-    await engine?.joinChannel(token, channelName, null, 0);
+    await initAgoraRtcEngine('b29cc6ee03d642a6bf54c2f5906b9702', role);
+    await engine?.joinChannel(token, channelName, null, 0).then((value) {
+      print('successssssssssss');
+    });
     eventsAgora();
   }
 
@@ -51,6 +53,7 @@ class AgoraRtc {
           },
           joinChannelSuccess: (channelName, uId, el) {
             print('weAreLive');
+            print(uId);
           },
           remoteAudioStateChanged: (uId, state, reason, el) {}),
     );
