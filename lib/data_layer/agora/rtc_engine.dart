@@ -9,13 +9,13 @@ class AgoraRtc {
   static bool muted = false;
 
   static Future<void> initAgoraRtcEngine(String appID, ClientRole role) async {
-    print('initAgora' + appID);
+    print('initAgora role ${role}');
     engine = await RtcEngine.create('448e147938e04c23a2b56677daa303c8');
     await engine?.disableVideo();
     await engine?.enableAudio();
     await engine?.setChannelProfile(ChannelProfile.LiveBroadcasting);
+
     await engine?.setClientRole(role);
-    await engine?.joinChannel(null, 'hamed', null, 0);
   }
 
   static Future<void> joinChannelagora(
@@ -28,7 +28,8 @@ class AgoraRtc {
     print(token);
 
     // await _engine.enableWebSdkInteroperability(true);
-    await engine?.joinChannel(null, channelName, null, 0);
+    await initAgoraRtcEngine('448e147938e04c23a2b56677daa303c8', role);
+    await engine?.joinChannel(token, channelName, null, 0);
     eventsAgora();
   }
 

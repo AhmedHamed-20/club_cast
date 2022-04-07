@@ -77,11 +77,11 @@ class SocketFunc {
 
               print('name' +
                   GeneralAppCubit.get(context).roomNameController.text),
-              // AgoraRtc.joinChannelagora(
-              //     channelName:
-              //         GeneralAppCubit.get(context).roomNameController.text,
-              //     role: ClientRole.Broadcaster,
-              //     token: data[2]),
+              AgoraRtc.joinChannelagora(
+                  channelName:
+                      GeneralAppCubit.get(context).roomNameController.text,
+                  role: ClientRole.Broadcaster,
+                  token: data[2]),
               //  print('toekn' + data[2]),
               //  AgoraRtc.eventsAgora(),
               print(GeneralAppCubit.get(context).roomNameController.text),
@@ -150,8 +150,8 @@ class SocketFunc {
               RoomCubit.get(context).speakers.addAll(data[1]['brodcasters']),
               //print(RoomCubit.get(context).speakers),
               // print(RoomCubit.get(context).listener),
-              AgoraRtc.initAgoraRtcEngine(
-                  '448e147938e04c23a2b56677daa303c8', ClientRole.Broadcaster),
+              // AgoraRtc.initAgoraRtcEngine(
+              //     '448e147938e04c23a2b56677daa303c8', ClientRole.Broadcaster),
               AgoraRtc.joinChannelagora(
                   channelName: ActiveRoomUserModel.getRoomName().toString(),
                   role: ClientRole.Audience,

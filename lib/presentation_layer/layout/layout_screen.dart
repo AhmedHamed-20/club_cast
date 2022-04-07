@@ -272,9 +272,6 @@ class LayoutScreen extends StatelessWidget {
             floatingActionButton: FloatingActionButton(
               onPressed: () {
                 modalBottomSheetItem(context, () {
-                  AgoraRtc.initAgoraRtcEngine(
-                      '448e147938e04c23a2b56677daa303c8',
-                      ClientRole.Broadcaster);
                   print(cubit.roomNameController.text);
                   print(cubit.selectedCategoryItem);
                   print("isPublicRoom :${cubit.isPublicRoom}");
