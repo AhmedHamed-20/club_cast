@@ -100,18 +100,23 @@ Widget speakersWiget({
                         //         NetworkImage(cubit.speakers[index]['photo']),
                         //   ),
                         // ),
+
                         Expanded(
                           flex: 3,
                           child: Container(
-                            width: 70,
-                            height: 70,
+                            width: MediaQuery.of(context).size.width * 0.18,
+                            height: MediaQuery.of(context).size.width * 0.18,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(50),
                               border: Border.all(
                                 color: Theme.of(context)
                                     .primaryColor
                                     .withOpacity(0.6),
-                                width: 4.0,
+                                width: cubit.speakers == []
+                                    ? 0
+                                    : cubit.speakers[index]['isTalking']
+                                        ? 3.0
+                                        : 0,
                               ),
                               image: DecorationImage(
                                 image: NetworkImage(
@@ -134,9 +139,9 @@ Widget speakersWiget({
                       ],
                     ),
                   ),
-                  RoomCubit.get(context).speakers == []
+                  cubit.speakers == []
                       ? const SizedBox()
-                      : RoomCubit.get(context).speakers[index]?['isMuted']
+                      : cubit.speakers[index]?['isMuted']
                           ? Positioned(
                               top: 0,
                               child: CircleAvatar(

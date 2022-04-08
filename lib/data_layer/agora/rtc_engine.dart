@@ -57,6 +57,7 @@ class AgoraRtc {
         for (int i = 0; i < RoomCubit.get(context).speakers.length; i++) {
           if (RoomCubit.get(context).speakers[i]['uid'] == uid) {
             RoomCubit.get(context).speakers[i]['isTalking'] = true;
+
             break;
           }
         }
