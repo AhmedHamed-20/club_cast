@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:club_cast/data_layer/bloc/room_cubit/room_cubit.dart';
+import 'package:club_cast/presentation_layer/models/activeRoomModelUser.dart';
 import 'package:flutter/widgets.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 
@@ -20,7 +21,7 @@ class AgoraRtc {
     await engine?.setChannelProfile(ChannelProfile.LiveBroadcasting);
 
     await engine?.setClientRole(role);
-    engine?.enableAudioVolumeIndication(250, 5, true);
+    engine?.enableAudioVolumeIndication(250, 3, true);
   }
 
   static Future<void> joinChannelagora({
@@ -74,7 +75,11 @@ class AgoraRtc {
         list.forEach((elementAgora) {
           print(elementAgora.uid);
           RoomCubit.get(context).speakers.forEach((elementUser) {
-            if (elementAgora.uid == elementUser['uid']) {
+            if (elementAgora.uid == 0 &&
+                elementUser[ActiveRoomUserModel.getUserId()]) {
+              elementUser['isTalking'] = true;
+              RoomCubit.get(context).changeState();
+            } else if (elementAgora.uid == elementUser['uid']) {
               elementUser['isTalking'] = true;
               RoomCubit.get(context).changeState();
             } else {
