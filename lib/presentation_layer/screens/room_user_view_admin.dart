@@ -32,6 +32,7 @@ class RoomAdminViewScreen extends StatelessWidget {
               child: IconButton(
                 icon: Icon(
                   cubit.speakers[0]['isMuted'] ? Icons.mic_off : Icons.mic_none,
+                  color: Colors.white,
                 ),
                 onPressed: () {
                   AgoraRtc.onToggleMute(0, context);

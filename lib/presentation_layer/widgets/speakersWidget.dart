@@ -112,7 +112,7 @@ Widget speakersWiget({
                                 color: Theme.of(context)
                                     .primaryColor
                                     .withOpacity(0.6),
-                                width: cubit.speakers == []
+                                width: RoomCubit.get(context).speakers == []
                                     ? 0
                                     : cubit.speakers[index]?['isTalking']
                                         ? 3.0

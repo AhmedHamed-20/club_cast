@@ -78,7 +78,9 @@ class AgoraRtc {
             if (elementAgora.uid == 0 &&
                 (elementUser['_id'] == ActiveRoomUserModel.getUserId() ||
                     elementUser['_id'] == ActiveRoomAdminModel.getAdminId())) {
-              print(elementAgora.uid);
+              print(elementUser['_id']);
+              print('user' + ActiveRoomUserModel.getUserId());
+              print('admin' + ActiveRoomAdminModel.getAdminId());
               elementUser['isTalking'] = true;
               RoomCubit.get(context).changeState();
             } else if (elementAgora.uid == elementUser['uid']) {
