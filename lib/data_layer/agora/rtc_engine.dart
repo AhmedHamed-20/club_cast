@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:club_cast/data_layer/bloc/room_cubit/room_cubit.dart';
+import 'package:club_cast/presentation_layer/models/activeRoomModelAdmin.dart';
 import 'package:club_cast/presentation_layer/models/activeRoomModelUser.dart';
 import 'package:flutter/widgets.dart';
 import 'package:socket_io_client/socket_io_client.dart';
@@ -75,7 +76,8 @@ class AgoraRtc {
         list.forEach((elementAgora) {
           RoomCubit.get(context).speakers.forEach((elementUser) {
             if (elementAgora.uid == 0 &&
-                elementUser['_id'] == ActiveRoomUserModel.getUserId()) {
+                (elementUser['_id'] == ActiveRoomUserModel.getUserId() ||
+                    elementUser['_id'] == ActiveRoomAdminModel.getAdminId())) {
               print(elementAgora.uid);
               elementUser['isTalking'] = true;
               RoomCubit.get(context).changeState();
