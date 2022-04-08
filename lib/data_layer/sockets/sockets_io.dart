@@ -19,6 +19,7 @@ class SocketFunc {
   static bool isAdminLeft = false;
   static bool isConnected = false;
   static bool iamSpeaker = false;
+  static bool showReconnectButton = false;
   static void connectWithSocket(BuildContext context) {
     print(token);
 
@@ -61,7 +62,12 @@ class SocketFunc {
 
     socket?.on('disconnect', (_) {
       print('disconnect');
-
+      if (!isAdminLeft) {
+        showReconnectButton = true;
+        socket?.disconnect();
+        RoomCubit.get(context).changeState();
+        return;
+      }
       RoomCubit.get(context).listener = [];
       RoomCubit.get(context).speakers = [];
       ActiveRoomAdminModel.activeRoomAdminData = {};
@@ -71,6 +77,7 @@ class SocketFunc {
       ActiveRoomUserModel.activeRoomData = {};
       if (isConnected) {
         navigatePushANDRemoveRout(context: context, navigateTo: LayoutScreen());
+        socket?.disconnect();
         AgoraRtc.leave();
         isConnected = false;
       }
@@ -129,6 +136,7 @@ class SocketFunc {
               listenOnUsersAskedForTalk(context),
               userLeft(ActiveRoomAdminModel.getRoomId(), context),
               userchangedToBrodCaster(context),
+              adminReturnSuccess(context),
             });
     socket?.on(
         'errorMessage',
@@ -259,7 +267,26 @@ class SocketFunc {
             });
   }
 
-  static adminReturnBack() {}
+  static adminReturnBack() {
+    socket?.emit('adminRejoinRoom');
+  }
+
+  static adminReturnSuccess(BuildContext context) {
+    socket?.on('adminRejoinRoomSuccess', (data) {
+      print('reconnect');
+      ActiveRoomAdminModel.activeRoomAdminData = data[0];
+      ActiveRoomAdminModel.activeRoomData = data[1];
+
+      RoomCubit.get(context).speakers = [data[1]['brodcasters']];
+      RoomCubit.get(context).listener = [data[1]['audience']];
+      RoomCubit?.get(context).speakers.forEach((e) {
+        e['isMuted'] = false;
+        e['isTalking'] = false;
+      });
+      showReconnectButton = false;
+      RoomCubit.get(context).changeState();
+    });
+  }
 
   static adminLeft(BuildContext context) {
     socket?.on('roomEnded', (data) {

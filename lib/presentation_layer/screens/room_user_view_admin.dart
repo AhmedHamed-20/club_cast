@@ -29,15 +29,25 @@ class RoomAdminViewScreen extends StatelessWidget {
             radius: 25,
             backgroundColor: Theme.of(context).primaryColor,
             child: Center(
-              child: IconButton(
-                icon: Icon(
-                  cubit.speakers[0]['isMuted'] ? Icons.mic_off : Icons.mic_none,
-                  color: Colors.white,
-                ),
-                onPressed: () {
-                  AgoraRtc.onToggleMute(0, context);
-                },
-              ),
+              child: SocketFunc.showReconnectButton
+                  ? IconButton(
+                      onPressed: () {
+                        SocketFunc.connectWithSocket(context);
+                        SocketFunc.adminReturnBack();
+                      },
+                      icon: Icon(Icons.refresh),
+                    )
+                  : IconButton(
+                      icon: Icon(
+                        cubit.speakers[0]['isMuted']
+                            ? Icons.mic_off
+                            : Icons.mic_none,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        AgoraRtc.onToggleMute(0, context);
+                      },
+                    ),
             ),
           ),
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
