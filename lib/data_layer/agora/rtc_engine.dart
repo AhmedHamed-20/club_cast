@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:club_cast/data_layer/bloc/room_cubit/room_cubit.dart';
 import 'package:flutter/widgets.dart';
@@ -18,7 +20,7 @@ class AgoraRtc {
     await engine?.setChannelProfile(ChannelProfile.LiveBroadcasting);
 
     await engine?.setClientRole(role);
-    engine?.enableAudioVolumeIndication(250, 3, true);
+    engine?.enableAudioVolumeIndication(250, 5, true);
   }
 
   static Future<void> joinChannelagora({
@@ -54,14 +56,33 @@ class AgoraRtc {
     print('events');
     engine?.setEventHandler(
       RtcEngineEventHandler(activeSpeaker: (uid) {
-        for (int i = 0; i < RoomCubit.get(context).speakers.length; i++) {
-          if (RoomCubit.get(context).speakers[i]['uid'] == uid) {
-            RoomCubit.get(context).speakers[i]['isTalking'] = true;
+        print('klam');
 
-            break;
-          }
-        }
-        RoomCubit.get(context).changeState();
+        // for (int i = 0; i < RoomCubit.get(context).speakers.length; i++) {
+        //   if (RoomCubit.get(context).speakers[i]['uid'] == uid) {
+        //     RoomCubit.get(context).speakers[i]['isTalking'] = true;
+        //     RoomCubit.get(context).changeState();
+
+        //     //  RoomCubit.get(context).speakers[i]['isTalking'] = false;
+
+        //   }
+
+        //   //  RoomCubit.get(context).speakers[i]['isTalking'] = false;
+        //   //  RoomCubit.get(context).changeState();
+        // }
+      }, audioVolumeIndication: (list, aa) {
+        list.forEach((elementAgora) {
+          print(elementAgora.uid);
+          RoomCubit.get(context).speakers.forEach((elementUser) {
+            if (elementAgora.uid == elementUser['uid']) {
+              elementUser['isTalking'] = true;
+              RoomCubit.get(context).changeState();
+            } else {
+              elementUser['isTalking'] = false;
+              RoomCubit.get(context).changeState();
+            }
+          });
+        });
       }, userJoined: (uid, elapsed) {
         print('adel');
         print(uid);

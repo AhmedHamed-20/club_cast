@@ -139,6 +139,7 @@ class SocketFunc {
               RoomCubit.get(context).speakers.addAll(data[1]['brodcasters']),
               RoomCubit?.get(context).speakers.forEach((e) {
                 e['isMuted'] = false;
+                e['isTalking'] = false;
               }),
               RoomCubit?.get(context).listener.addAll(data[1]['audience']),
               RoomCubit?.get(context).listener.forEach(

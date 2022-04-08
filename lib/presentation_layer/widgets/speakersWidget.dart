@@ -114,7 +114,7 @@ Widget speakersWiget({
                                     .withOpacity(0.6),
                                 width: cubit.speakers == []
                                     ? 0
-                                    : cubit.speakers[index]['isTalking']
+                                    : cubit.speakers[index]?['isTalking']
                                         ? 3.0
                                         : 0,
                               ),
