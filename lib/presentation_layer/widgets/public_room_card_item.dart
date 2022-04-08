@@ -83,7 +83,7 @@ Widget publicRoomItem(
                   Column(
                     children: [
                       Text(
-                        '${speaker.length < 3 ? 1 : speaker.length}',
+                        '${speaker.isEmpty ? 1 : speaker.length}',
                         style: Theme.of(context).textTheme.bodyText1?.copyWith(
                             fontSize: 16, fontWeight: FontWeight.w600),
                       ),

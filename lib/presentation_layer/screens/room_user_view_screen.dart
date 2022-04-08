@@ -146,6 +146,7 @@ class RoomUserViewScreen extends StatelessWidget {
                     SocketFunc.iamSpeaker
                         ? MdiIcons.arrowDown
                         : MdiIcons.handBackLeft,
+                    color: Colors.white,
                   ),
                 ),
               ),
@@ -167,6 +168,7 @@ class RoomUserViewScreen extends StatelessWidget {
                         },
                         icon: Icon(
                           AgoraRtc.muted ? Icons.mic_off : Icons.mic_none,
+                          color: Colors.white,
                         ),
                       ),
                     )
