@@ -73,10 +73,10 @@ class AgoraRtc {
         // }
       }, audioVolumeIndication: (list, aa) {
         list.forEach((elementAgora) {
-          print(elementAgora.uid);
           RoomCubit.get(context).speakers.forEach((elementUser) {
             if (elementAgora.uid == 0 &&
-                elementUser[ActiveRoomUserModel.getUserId()]) {
+                elementUser['_id'] == ActiveRoomUserModel.getUserId()) {
+              print(elementAgora.uid);
               elementUser['isTalking'] = true;
               RoomCubit.get(context).changeState();
             } else if (elementAgora.uid == elementUser['uid']) {
