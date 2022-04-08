@@ -76,11 +76,10 @@ class AgoraRtc {
         list.forEach((elementAgora) {
           RoomCubit.get(context).speakers.forEach((elementUser) {
             if (elementAgora.uid == 0 &&
-                (elementUser['_id'] == ActiveRoomUserModel.getUserId() ||
-                    elementUser['_id'] == ActiveRoomAdminModel.getAdminId())) {
+                (elementUser['_id'] == ActiveRoomUserModel.getUserId())) {
               print(elementUser['_id']);
               print('user' + ActiveRoomUserModel.getUserId());
-              print('admin' + ActiveRoomAdminModel.getAdminId());
+
               elementUser['isTalking'] = true;
               RoomCubit.get(context).changeState();
             } else if (elementAgora.uid == elementUser['uid']) {
