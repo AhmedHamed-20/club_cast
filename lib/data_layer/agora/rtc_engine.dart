@@ -74,22 +74,31 @@ class AgoraRtc {
         // }
       }, audioVolumeIndication: (list, aa) {
         list.forEach((elementAgora) {
-          RoomCubit.get(context).speakers.forEach((elementUser) {
-            if (elementAgora.uid == 0 &&
-                (elementUser['_id'] == ActiveRoomUserModel.getUserId())) {
-              print(elementUser['_id']);
-              print('user' + ActiveRoomUserModel.getUserId());
+          RoomCubit.get(context).speakers.forEach(
+            (elementUser) {
+              if (elementAgora.volume > 5) {
+                if (elementAgora.uid == 0 &&
+                    (elementUser['_id'] == ActiveRoomUserModel.getUserId())) {
+                  print('first');
+                  //    print('user' + ActiveRoomUserModel.getUserId());
 
-              elementUser['isTalking'] = true;
-              RoomCubit.get(context).changeState();
-            } else if (elementAgora.uid == elementUser['uid']) {
-              elementUser['isTalking'] = true;
-              RoomCubit.get(context).changeState();
-            } else {
-              elementUser['isTalking'] = false;
-              RoomCubit.get(context).changeState();
-            }
-          });
+                  elementUser['isTalking'] = true;
+                  RoomCubit.get(context).changeState();
+                } else if (elementAgora.uid == elementUser['uid']) {
+                  elementUser['isTalking'] = true;
+                  print('sec');
+                  RoomCubit.get(context).changeState();
+                } else {
+                  elementUser['isTalking'] = false;
+                  print('third');
+                  RoomCubit.get(context).changeState();
+                }
+              } else {
+                elementUser['isTalking'] = false;
+                RoomCubit.get(context).changeState();
+              }
+            },
+          );
         });
       }, userJoined: (uid, elapsed) {
         print('adel');

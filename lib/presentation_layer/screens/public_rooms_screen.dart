@@ -111,7 +111,7 @@ class PublicRoomScreen extends StatelessWidget {
                               shrinkWrap: true,
                               itemBuilder: (context, index) => publicRoomItem(
                                 audience:
-                                    GetAllRoomsModel.getRoomsAudienc(index)[0],
+                                    GetAllRoomsModel?.getRoomsAudienc(index)[0],
                                 category:
                                     GetAllRoomsModel?.getRoomsGategory(index),
                                 context: context,
