@@ -26,14 +26,13 @@ class SocketFunc {
       'https://audiocomms-podcast-platform.herokuapp.com/',
       <String, dynamic>{
         'auth': {'token': '$token'},
-        'autoConnect': true,
+        'autoConnect': false,
         'forceNew': true,
         'transports': ['websocket'],
         'timestampRequests': true,
       },
-    );
+    ).connect();
 
-    //socket.connect();
     socket?.on(
         'error',
         (data) => {
@@ -47,12 +46,32 @@ class SocketFunc {
       socket?.emit('msg', 'test');
     });
     socket?.on('event', (data) => print(data));
+    socket?.on('reconnect', (data) {
+      print('reconnect');
+    });
+    socket?.on('reconnecting', (data) {
+      print('reconnecting');
+    });
+
+    socket?.on(' reconnect_attempt', (data) {
+      print(' reconnect_attempt');
+    });
+
     socket?.on('disconnect', (_) {
       print('disconnect');
-      isConnected = false;
 
       RoomCubit.get(context).listener = [];
       RoomCubit.get(context).speakers = [];
+      ActiveRoomAdminModel.activeRoomAdminData = {};
+      ActiveRoomAdminModel.activeRoomData = {};
+
+      ActiveRoomUserModel.activeRoomUserData = {};
+      ActiveRoomUserModel.activeRoomData = {};
+      if (isConnected) {
+        navigatePushANDRemoveRout(context: context, navigateTo: LayoutScreen());
+        AgoraRtc.leave();
+        isConnected = false;
+      }
       GeneralAppCubit.get(context).getAllRoomsData();
     });
     socket?.on('fromServer', (_) => print(_));
@@ -120,6 +139,7 @@ class SocketFunc {
 
   static leaveRoom(BuildContext context) {
     socket?.disconnect();
+    isConnected = false;
     AgoraRtc.leave();
     AgoraRtc.muted = false;
     iamSpeaker = false;
@@ -225,6 +245,10 @@ class SocketFunc {
         'adminLeft',
         (data) => {
               print('adminLeft'),
+              showToast(
+                  message:
+                      'Admin has no internet the room will be closed after 30 sec if admin not reconnected',
+                  toastState: ToastState.WARNING),
             });
     socket?.on(
         'errorMessage',
@@ -232,6 +256,8 @@ class SocketFunc {
               print(data),
             });
   }
+
+  static adminReturnBack() {}
 
   static adminLeft(BuildContext context) {
     socket?.on('roomEnded', (data) {

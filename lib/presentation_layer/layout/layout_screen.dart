@@ -272,6 +272,7 @@ class LayoutScreen extends StatelessWidget {
             floatingActionButton: FloatingActionButton(
               onPressed: () {
                 modalBottomSheetItem(context, () {
+                  cubit.micPerm();
                   print(cubit.roomNameController.text);
                   print(cubit.selectedCategoryItem);
                   print("isPublicRoom :${cubit.isPublicRoom}");

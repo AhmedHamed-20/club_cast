@@ -65,4 +65,8 @@ class RoomCubit extends Cubit<RoomStates> {
   changeState() {
     emit(GetRoomDataGetSuccess());
   }
+
+  changeState2() {
+    emit(GetRoomDataGetError());
+  }
 }

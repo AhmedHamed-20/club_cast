@@ -76,7 +76,7 @@ class AgoraRtc {
         list.forEach((elementAgora) {
           RoomCubit.get(context).speakers.forEach(
             (elementUser) {
-              if (elementAgora.volume > 5) {
+              if (elementAgora.volume > 3) {
                 if (elementAgora.uid == 0 &&
                     (elementUser['_id'] == ActiveRoomUserModel.getUserId())) {
                   print('first');
@@ -95,7 +95,7 @@ class AgoraRtc {
                 }
               } else {
                 elementUser['isTalking'] = false;
-                RoomCubit.get(context).changeState();
+                RoomCubit.get(context).changeState2();
               }
             },
           );

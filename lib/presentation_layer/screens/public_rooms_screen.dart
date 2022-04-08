@@ -14,6 +14,7 @@ import 'package:club_cast/presentation_layer/widgets/public_room_card_item.dart'
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../models/getMyFollowingEvents.dart';
 
@@ -122,9 +123,10 @@ class PublicRoomScreen extends StatelessWidget {
                                     GetAllRoomsModel.getRoomsUserPublishInform(
                                         index),
                                 click: () {
+                                  cubit.micPerm();
                                   if (SocketFunc.isConnected &&
                                       GetAllRoomsModel?.getRoomName(index) ==
-                                          ActiveRoomAdminModel.getRoomName()) {
+                                          ActiveRoomAdminModel?.getRoomName()) {
                                     navigatePushTo(
                                         context: context,
                                         navigateTo: RoomAdminViewScreen());

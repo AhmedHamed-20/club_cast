@@ -42,6 +42,6 @@ class ActiveRoomAdminModel {
   }
 
   static String getRoomName() {
-    return adminName = activeRoomAdminData!['roomName'];
+    return adminName = activeRoomAdminData!['roomName'].toString();
   }
 }

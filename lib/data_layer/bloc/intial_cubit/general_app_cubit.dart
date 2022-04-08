@@ -26,6 +26,7 @@ import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart' as path;
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../../presentation_layer/models/followers_following_model.dart';
 import '../../../presentation_layer/models/getAllRoomsModel.dart';
@@ -1109,5 +1110,11 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
         emit(GetAllRoomDataGetError());
       },
     );
+  }
+
+  void micPerm() async {
+    Map<Permission, PermissionStatus> statuses = await [
+      Permission.microphone,
+    ].request();
   }
 }
