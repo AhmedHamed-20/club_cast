@@ -8,7 +8,7 @@ class GetAllRoomsModel {
   static String? roomStatus;
   static String? category;
   static List getRoomsAudienc(int index) {
-    return audienc = [getAllRooms!['data'][index]['audience']];
+    return audienc = [getAllRooms?['data'][index]['audience']];
   }
 
   static List? getRoomsBrodcaster(int index) {

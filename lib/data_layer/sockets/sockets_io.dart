@@ -26,13 +26,15 @@ class SocketFunc {
       'https://audiocomms-podcast-platform.herokuapp.com/',
       <String, dynamic>{
         'auth': {'token': '$token'},
-        'autoConnect': false,
-        'forceNew': true,
         'transports': ['websocket'],
         'timestampRequests': true,
+        'reconnection': true,
+        'reconnectionDelay': 1000,
+        'reconnectionDelayMax': 5000,
+        'reconnectionAttempts': 5
       },
-    ).connect();
-
+    );
+    socket?.connect();
     socket?.on(
         'error',
         (data) => {
@@ -97,14 +99,14 @@ class SocketFunc {
 
               print('name' +
                   GeneralAppCubit.get(context).roomNameController.text),
-              AgoraRtc.joinChannelagora(
-                channelName:
-                    GeneralAppCubit.get(context).roomNameController.text,
-                role: ClientRole.Broadcaster,
-                token: data[2],
-                context: context,
-                uid: data[0]['uid'],
-              ),
+              // AgoraRtc.joinChannelagora(
+              //   channelName:
+              //       GeneralAppCubit.get(context).roomNameController.text,
+              //   role: ClientRole.Broadcaster,
+              //   token: data[2],
+              //   context: context,
+              //   uid: data[0]['uid'],
+              // ),
               //  print('toekn' + data[2]),
               //  AgoraRtc.eventsAgora(),
               print(GeneralAppCubit.get(context).roomNameController.text),
@@ -185,13 +187,13 @@ class SocketFunc {
               // print(RoomCubit.get(context).listener),
               // AgoraRtc.initAgoraRtcEngine(
               //     '448e147938e04c23a2b56677daa303c8', ClientRole.Broadcaster),
-              AgoraRtc.joinChannelagora(
-                channelName: ActiveRoomUserModel.getRoomName().toString(),
-                role: ClientRole.Audience,
-                token: data[2],
-                context: context,
-                uid: data[0]['uid'],
-              ),
+              // AgoraRtc.joinChannelagora(
+              //   channelName: ActiveRoomUserModel.getRoomName().toString(),
+              //   role: ClientRole.Audience,
+              //   token: data[2],
+              //   context: context,
+              //   uid: data[0]['uid'],
+              // ),
 
               isAdminLeftSocket(),
               userJoined(context, ActiveRoomUserModel.getRoomId()),
@@ -303,6 +305,7 @@ class SocketFunc {
 
   static userLeft(String roomId, BuildContext context) {
     socket?.on('userLeft', (data) {
+      print('userLeft');
       bool isFound = false;
       for (int i = 0; i < RoomCubit.get(context).listener.length; i++) {
         //    print(data['id']);

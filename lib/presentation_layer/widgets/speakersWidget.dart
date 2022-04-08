@@ -23,9 +23,8 @@ Widget speakersWiget({
               onTap: () {
                 GetUserModel.getUserID() !=
                         RoomCubit.get(context).speakers[index]['_id']
-                    ? showBottomSheet(
-                        backgroundColor:
-                            Theme.of(context).scaffoldBackgroundColor,
+                    ? showModalBottomSheet(
+                        backgroundColor: Theme.of(context).backgroundColor,
                         elevation: 25,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(25),
@@ -36,34 +35,22 @@ Widget speakersWiget({
                             context,
                             cubit.speakers[index]['name'],
                             cubit.speakers[index]['photo'],
-                            Row(
+                            Column(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Card(
-                                  elevation: 3,
-                                  color: Theme.of(context).backgroundColor,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  child: MaterialButton(
-                                    onPressed: () {},
-                                    child: Text(
-                                      'Follow',
-                                      style:
-                                          Theme.of(context).textTheme.bodyText2,
-                                    ),
-                                  ),
-                                ),
                                 isAdmin
                                     ? Card(
                                         elevation: 3,
-                                        color:
-                                            Theme.of(context).backgroundColor,
+                                        color: Theme.of(context).primaryColor,
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(15),
                                         ),
                                         child: MaterialButton(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                          ),
                                           onPressed: () {
                                             SocketFunc
                                                 .adminReturnUserBackToAudienc(
@@ -80,6 +67,25 @@ Widget speakersWiget({
                                         ),
                                       )
                                     : const SizedBox(),
+                                Card(
+                                  elevation: 3,
+                                  color:
+                                      Theme.of(context).scaffoldBackgroundColor,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  child: MaterialButton(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    onPressed: () {},
+                                    child: Text(
+                                      'View profile',
+                                      style:
+                                          Theme.of(context).textTheme.bodyText2,
+                                    ),
+                                  ),
+                                ),
                               ],
                             ),
                           );
