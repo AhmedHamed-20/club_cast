@@ -44,6 +44,11 @@ class SocketFunc {
       if (isAdminLeft == false && showReconnectButton == true) {
         if (socket!.connected) {
           adminReturnBack();
+          userJoined(context, ActiveRoomAdminModel.getRoomId());
+          userchangedToAudienc(context);
+          listenOnUsersAskedForTalk(context);
+          userLeft(ActiveRoomAdminModel.getRoomId(), context);
+          userchangedToBrodCaster(context);
           adminReturnSuccess(context);
         }
       }
@@ -108,16 +113,16 @@ class SocketFunc {
 
               print('name' +
                   GeneralAppCubit.get(context).roomNameController.text),
-              // AgoraRtc.joinChannelagora(
-              //   channelName:
-              //       GeneralAppCubit.get(context).roomNameController.text,
-              //   role: ClientRole.Broadcaster,
-              //   token: data[2],
-              //   context: context,
-              //   uid: data[0]['uid'],
-              // ),
-              //  print('toekn' + data[2]),
-              //  AgoraRtc.eventsAgora(),
+              AgoraRtc.joinChannelagora(
+                channelName:
+                    GeneralAppCubit.get(context).roomNameController.text,
+                role: ClientRole.Broadcaster,
+                token: data[2],
+                context: context,
+                uid: data[0]['uid'],
+              ),
+              print('toekn' + data[2]),
+              AgoraRtc.eventsAgora(context),
               print(GeneralAppCubit.get(context).roomNameController.text),
               print('audienceList:${ActiveRoomAdminModel.getRoomsAudienc()}'),
               print(
@@ -421,6 +426,7 @@ class SocketFunc {
   }
 
   static adminGivePermissionForUserToTalk(Map<String, dynamic> userMap) {
+    print(userMap);
     socket?.emit('givePermsTo', userMap);
     socket?.on(
         'errorMessage',
