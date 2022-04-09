@@ -100,6 +100,7 @@ class SocketFunc {
         'createRoomSuccess',
         (data) => {
               isConnected = true,
+              isAdminLeft = false,
               // print(data),
               GeneralAppCubit.get(context).getAllRoomsData(),
               ActiveRoomAdminModel.activeRoomAdminData = data[0],
@@ -113,16 +114,16 @@ class SocketFunc {
 
               print('name' +
                   GeneralAppCubit.get(context).roomNameController.text),
-              AgoraRtc.joinChannelagora(
-                channelName:
-                    GeneralAppCubit.get(context).roomNameController.text,
-                role: ClientRole.Broadcaster,
-                token: data[2],
-                context: context,
-                uid: data[0]['uid'],
-              ),
-              print('toekn' + data[2]),
-              AgoraRtc.eventsAgora(context),
+              // AgoraRtc.joinChannelagora(
+              //   channelName:
+              //       GeneralAppCubit.get(context).roomNameController.text,
+              //   role: ClientRole.Broadcaster,
+              //   token: data[2],
+              //   context: context,
+              //   uid: data[0]['uid'],
+              // ),
+              // print('toekn' + data[2]),
+              // AgoraRtc.eventsAgora(context),
               print(GeneralAppCubit.get(context).roomNameController.text),
               print('audienceList:${ActiveRoomAdminModel.getRoomsAudienc()}'),
               print(
@@ -172,6 +173,7 @@ class SocketFunc {
     socket?.on(
         'joinRoomSuccess',
         (data) => {
+              isAdminLeft = false,
               RoomCubit.get(context).speakers.add(data[1]['admin']),
               RoomCubit.get(context).speakers.addAll(data[1]['brodcasters']),
               RoomCubit?.get(context).speakers.forEach((e) {

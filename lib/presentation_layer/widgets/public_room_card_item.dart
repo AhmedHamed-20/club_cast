@@ -50,7 +50,7 @@ Widget publicRoomItem(
                 ),
               ),
               SizedBox(
-                height: MediaQuery.of(context).size.height * 0.01,
+                height: 5,
               ),
               Row(
                 children: [
@@ -77,9 +77,6 @@ Widget publicRoomItem(
                       itemCount: speaker.length < 3 ? 1 : 3,
                     ),
                   ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.03,
-                  ),
                   Column(
                     children: [
                       Text(
@@ -91,8 +88,8 @@ Widget publicRoomItem(
                           style: Theme.of(context).textTheme.bodyText1),
                     ],
                   ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.02,
+                  const SizedBox(
+                    width: 5,
                   ),
                   Column(
                     children: [

@@ -30,6 +30,7 @@ class LayoutScreen extends StatelessWidget {
           return Scaffold(
             bottomSheet: cubit.isPlaying || cubit.isPausedInHome
                 ? Container(
+                    height: MediaQuery.of(context).size.height * 0.08,
                     decoration: BoxDecoration(
                       borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(25),
@@ -43,26 +44,24 @@ class LayoutScreen extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Container(
-                            width: 50,
-                            height: 50,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              image: DecorationImage(
-                                image: NetworkImage(
-                                    cubit.activepodcastPhotUrl.toString()),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
+                          CircleAvatar(
+                            radius: 25,
+                            backgroundImage: NetworkImage(
+                                cubit.activepodcastPhotUrl.toString()),
                           ),
-                          Container(
-                            width: MediaQuery.of(context).size.width * 0.28,
-                            height: 25,
-                            child: Marquee(
-                              style: Theme.of(context).textTheme.bodyText1,
-                              text: cubit.activePodcastname.toString(),
-                              scrollAxis: Axis.horizontal,
-                              blankSpace: 5,
+                          const SizedBox(
+                            width: 2,
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Container(
+                              width: MediaQuery.of(context).size.width * 0.28,
+                              child: Marquee(
+                                style: Theme.of(context).textTheme.bodyText1,
+                                text: cubit.activePodcastname.toString(),
+                                scrollAxis: Axis.horizontal,
+                                blankSpace: 5,
+                              ),
                             ),
                           ),
                           Row(
