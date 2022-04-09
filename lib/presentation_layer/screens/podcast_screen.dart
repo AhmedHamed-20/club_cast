@@ -135,7 +135,7 @@ class PodCastScreen extends StatelessWidget {
                                   GetMyFollowingPodCastsModel.getPodcastLikes(
                                           index)
                                       .toString()),
-                              removePodCast: SizedBox(),
+                              removePodCast: const SizedBox(),
                               playingWidget: PlayingCardWidget.playingButton(
                                   index,
                                   cubit,

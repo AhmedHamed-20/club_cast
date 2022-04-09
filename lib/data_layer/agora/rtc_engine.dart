@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:club_cast/data_layer/bloc/room_cubit/room_cubit.dart';
@@ -6,14 +7,14 @@ import 'package:club_cast/presentation_layer/models/activeRoomModelAdmin.dart';
 import 'package:club_cast/presentation_layer/models/activeRoomModelUser.dart';
 import 'package:flutter/widgets.dart';
 import 'package:socket_io_client/socket_io_client.dart';
-
+import 'package:path_provider/path_provider.dart' as path;
 import '../../presentation_layer/components/constant/constant.dart';
 
 class AgoraRtc {
   static ClientRole? role;
   static RtcEngine? engine;
   static bool muted = false;
-
+  static String? recordingPath;
   static Future<void> initAgoraRtcEngine(String appID, ClientRole role) async {
     print('initAgora role ${role}');
     engine = await RtcEngine.create('b29cc6ee03d642a6bf54c2f5906b9702');
@@ -136,5 +137,21 @@ class AgoraRtc {
   static void leave() {
     engine?.leaveChannel();
     engine?.destroy();
+  }
+
+  static Future<List<Directory>?> getRecordeingPath() {
+    return path.getExternalStorageDirectories(
+        type: path.StorageDirectory.documents);
+  }
+
+  static recording(String roomName) async {
+    final dirList = await getRecordeingPath();
+    final path = dirList![0].path;
+    final file = File('$path/$roomName');
+    recordingPath = file.path;
+    engine?.startAudioRecordingWithConfig(AudioRecordingConfiguration(
+      '${file.path}.mp3',
+      recordingQuality: AudioRecordingQuality.Low,
+    ));
   }
 }

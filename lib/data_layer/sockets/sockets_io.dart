@@ -10,7 +10,6 @@ import 'package:club_cast/presentation_layer/screens/room_user_view_admin.dart';
 import 'package:club_cast/presentation_layer/screens/room_user_view_screen.dart';
 import 'package:flutter/widgets.dart';
 import 'package:socket_io_client/socket_io_client.dart';
-
 import '../../presentation_layer/components/constant/constant.dart';
 import '../bloc/room_cubit/room_cubit.dart';
 
@@ -310,8 +309,9 @@ class SocketFunc {
 
   static adminReturnSuccess(BuildContext context) {
     socket?.on('adminReJoinedRoomSuccess', (data) {
+      print(data);
       AgoraRtc.joinChannelagora(
-          channelName: data[1]['roomName'],
+          channelName: data[0]['roomName'],
           context: context,
           role: ClientRole.Broadcaster,
           token: data[2],
@@ -338,6 +338,7 @@ class SocketFunc {
         },
       );
       showReconnectButton = false;
+      print(RoomCubit?.get(context).listener);
       RoomCubit.get(context).changeState();
     });
   }
@@ -391,8 +392,7 @@ class SocketFunc {
       bool isFound = false;
       for (int i = 0; i < RoomCubit.get(context).listener.length; i++) {
         //    print(data['id']);
-        if (data['id'] == RoomCubit.get(context).listener[i]['_id'] ||
-            data['id'] == RoomCubit.get(context).listener[i]['id']) {
+        if (data['_id'] == RoomCubit.get(context).listener[i]['_id']) {
           RoomCubit.get(context).listener.removeAt(i);
           print(RoomCubit.get(context).listener);
           RoomCubit.get(context).changeState();
@@ -402,8 +402,7 @@ class SocketFunc {
       }
       if (isFound == false) {
         for (int i = 0; i < RoomCubit.get(context).speakers.length; i++) {
-          if (data['id'] == RoomCubit.get(context).speakers[i]['_id'] ||
-              data['id'] == RoomCubit.get(context).speakers[i]['id']) {
+          if (data['_id'] == RoomCubit.get(context).speakers[i]['_id']) {
             RoomCubit.get(context).speakers.removeAt(i);
 
             RoomCubit.get(context).changeState();
@@ -435,8 +434,7 @@ class SocketFunc {
       print(data);
       //   RoomCubit.get(context).askedToTalk.add(data),
       for (int i = 0; i < RoomCubit.get(context).listener.length; i++) {
-        if (data['id'] == RoomCubit.get(context).listener[i]['_id'] ||
-            data['id'] == RoomCubit.get(context).listener[i]['id']) {
+        if (data['_id'] == RoomCubit.get(context).listener[i]['_id']) {
           RoomCubit.get(context).listener[i]['askedToTalk'] =
               !RoomCubit.get(context).listener[i]['askedToTalk'];
           print(RoomCubit.get(context).listener);
@@ -486,7 +484,7 @@ class SocketFunc {
   static userchangedToBrodCaster(BuildContext context) {
     socket?.on('userChangedToBrodcaster', (data) {
       for (int i = 0; i < RoomCubit.get(context).listener.length; i++) {
-        if (data['id'] == RoomCubit.get(context).listener[i]['_id']) {
+        if (data['_id'] == RoomCubit.get(context).listener[i]['_id']) {
           RoomCubit.get(context)
               .speakers
               .add(RoomCubit.get(context).listener[i]);
@@ -542,7 +540,7 @@ class SocketFunc {
   static userchangedToAudienc(BuildContext context) {
     socket?.on('userChangedToAudience', (data) {
       for (int i = 0; i < RoomCubit.get(context).speakers.length; i++) {
-        if (data['id'] == RoomCubit.get(context).speakers[i]['_id']) {
+        if (data['_id'] == RoomCubit.get(context).speakers[i]['_id']) {
           RoomCubit.get(context)
               .listener
               .add(RoomCubit.get(context).speakers[i]);
