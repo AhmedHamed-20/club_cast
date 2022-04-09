@@ -70,8 +70,13 @@ class SocketFunc {
       print('disconnect');
       print(data);
       if (isAdminLeft == false && currentUserRoleinRoom == true) {
+        showToast(
+            message:
+                "No internet found,if you still offline for 1 min the room will be closed",
+            toastState: ToastState.ERROR);
         showReconnectButton = true;
         socket?.disconnect();
+        AgoraRtc.leave();
         RoomCubit.get(context).changeState();
         return;
       }
@@ -84,6 +89,7 @@ class SocketFunc {
       ActiveRoomUserModel.activeRoomUserData = {};
       ActiveRoomUserModel.activeRoomData = {};
       if (isConnected && pressedJoinRoom == false) {
+        showToast(message: "No internet found", toastState: ToastState.ERROR);
         navigatePushANDRemoveRout(context: context, navigateTo: LayoutScreen());
         socket?.disconnect();
         activeRoomName = '';
@@ -276,7 +282,7 @@ class SocketFunc {
               print('adminLeft'),
               showToast(
                   message:
-                      'Admin has no internet the room will be closed after 30 sec if admin not reconnected',
+                      'Admin has no internet the room will be closed after 1 min if admin not reconnected',
                   toastState: ToastState.WARNING),
             });
     socket?.on(
@@ -304,6 +310,12 @@ class SocketFunc {
 
   static adminReturnSuccess(BuildContext context) {
     socket?.on('adminReJoinedRoomSuccess', (data) {
+      AgoraRtc.joinChannelagora(
+          channelName: data[1]['roomName'],
+          context: context,
+          role: ClientRole.Broadcaster,
+          token: data[2],
+          uid: data[0]['uid']);
       print('reconnect');
       print(data);
       ActiveRoomAdminModel.activeRoomAdminData = data[0];
