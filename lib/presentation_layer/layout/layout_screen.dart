@@ -135,10 +135,6 @@ class LayoutScreen extends StatelessWidget {
                     ),
                   )
                 : const SizedBox(),
-            floatingActionButtonLocation:
-                cubit.isPlaying || cubit.isPausedInHome
-                    ? FloatingActionButtonLocation.centerTop
-                    : FloatingActionButtonLocation.centerDocked,
             appBar: AppBar(
               backgroundColor: Colors.transparent,
               elevation: 0,
@@ -255,8 +251,8 @@ class LayoutScreen extends StatelessWidget {
               ],
             ),
             bottomNavigationBar: BottomNavigationBar(
-              selectedLabelStyle:
-                  TextStyle(color: Theme.of(context).primaryColor),
+              showSelectedLabels: false,
+              showUnselectedLabels: false,
               items: cubit.bottomNavBarItem,
               backgroundColor: Theme.of(context).backgroundColor,
               selectedItemColor: Theme.of(context).primaryColor,
