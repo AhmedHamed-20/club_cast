@@ -55,7 +55,7 @@ Widget eventCardItem({
                         ),
                       ),
                     ),
-                    GetUserModel.getUserID() != userWhoCreateEventId
+                    GetUserModel?.getUserID() != userWhoCreateEventId
                         ? const SizedBox()
                         : IconButton(
                             splashRadius: 20,

@@ -28,11 +28,6 @@ class SocketFunc {
       <String, dynamic>{
         'auth': {'token': '$token'},
         'transports': ['websocket'],
-        'timestampRequests': true,
-        'reconnection': true,
-        'reconnectionDelay': 1000,
-        'reconnectionDelayMax': 5000,
-        'reconnectionAttempts': 5
       },
     );
     socket?.connect();
@@ -46,6 +41,12 @@ class SocketFunc {
     socket?.on('connect', (_) {
       print('connect');
       isConnected = true;
+      if (isAdminLeft == false && showReconnectButton == true) {
+        if (socket!.connected) {
+          adminReturnBack();
+          adminReturnSuccess(context);
+        }
+      }
       socket?.emit('msg', 'test');
     });
     socket?.on('event', (data) => print(data));
@@ -60,9 +61,10 @@ class SocketFunc {
       print(' reconnect_attempt');
     });
 
-    socket?.on('disconnect', (_) {
+    socket?.on('disconnect', (data) {
       print('disconnect');
-      if (!isAdminLeft) {
+      print(data);
+      if (isAdminLeft == false) {
         showReconnectButton = true;
         socket?.disconnect();
         RoomCubit.get(context).changeState();
@@ -268,21 +270,37 @@ class SocketFunc {
   }
 
   static adminReturnBack() {
-    socket?.emit('adminRejoinRoom');
+    print('sending');
+    socket?.emit('adminReJoinRoom');
+    socket?.on('errorMessage', (data) {
+      print('error');
+      print(data);
+    });
   }
 
   static adminReturnSuccess(BuildContext context) {
-    socket?.on('adminRejoinRoomSuccess', (data) {
+    socket?.on('adminReJoinedRoomSuccess', (data) {
       print('reconnect');
+      print(data);
       ActiveRoomAdminModel.activeRoomAdminData = data[0];
       ActiveRoomAdminModel.activeRoomData = data[1];
-
-      RoomCubit.get(context).speakers = [data[1]['brodcasters']];
-      RoomCubit.get(context).listener = [data[1]['audience']];
+      RoomCubit.get(context).speakers = [];
+      RoomCubit.get(context).listener = [];
+      RoomCubit.get(context).speakers = [data[0]];
+      RoomCubit.get(context).speakers.addAll(data[1]['brodcasters']);
+      RoomCubit.get(context).listener.addAll(data[1]['audience']);
       RoomCubit?.get(context).speakers.forEach((e) {
         e['isMuted'] = false;
         e['isTalking'] = false;
       });
+      RoomCubit?.get(context).listener.forEach(
+        (e) {
+          e['askedToTalk'] = false;
+          e['isSpeaker'] = false;
+          e['isMuted'] = false;
+          e['isTalking'] = false;
+        },
+      );
       showReconnectButton = false;
       RoomCubit.get(context).changeState();
     });

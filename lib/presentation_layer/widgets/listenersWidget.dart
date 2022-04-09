@@ -1,10 +1,14 @@
+import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/data_layer/bloc/room_cubit/room_cubit.dart';
 import 'package:club_cast/data_layer/sockets/sockets_io.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
 import 'package:club_cast/presentation_layer/models/user_model.dart';
+import 'package:club_cast/presentation_layer/screens/user_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
+import '../components/constant/constant.dart';
+import '../screens/profile_detailes_screen.dart';
 import 'model_sheet_room_contant.dart';
 
 Widget listenersWiget({
@@ -88,7 +92,21 @@ Widget listenersWiget({
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(15),
                                     ),
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      GeneralAppCubit.get(context).getUserById(
+                                          profileId: cubit.listener[index]
+                                              ['_id']);
+
+                                      GeneralAppCubit.get(context)
+                                          .getUserPodcast(token,
+                                              cubit.listener[index]['_id'])
+                                          .then((value) {
+                                        navigatePushTo(
+                                            context: context,
+                                            navigateTo: ProfileDetailsScreen(
+                                                cubit.listener[index]['_id']));
+                                      });
+                                    },
                                     child: Text(
                                       'View profile',
                                       style:

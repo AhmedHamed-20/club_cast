@@ -32,8 +32,10 @@ class RoomAdminViewScreen extends StatelessWidget {
               child: SocketFunc.showReconnectButton
                   ? IconButton(
                       onPressed: () {
+                        print(
+                            'iam connect  state: ${SocketFunc.socket!.connected}');
                         SocketFunc.connectWithSocket(context);
-                        SocketFunc.adminReturnBack();
+                        // SocketFunc.adminReturnBack();
                       },
                       icon: Icon(Icons.refresh),
                     )

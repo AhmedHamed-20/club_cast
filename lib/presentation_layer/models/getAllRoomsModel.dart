@@ -1,6 +1,6 @@
 class GetAllRoomsModel {
   static Map<String, dynamic>? getAllRooms;
-  static List? audienc;
+  static List? audienc = [];
   static List? brodcasters;
   static List? creditBy;
   static String? roomid;
