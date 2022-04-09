@@ -18,6 +18,7 @@ import 'package:club_cast/presentation_layer/models/user_model.dart';
 import 'package:club_cast/presentation_layer/screens/podcastLikesScreen.dart';
 import 'package:club_cast/presentation_layer/screens/podcast_screen.dart';
 import 'package:club_cast/presentation_layer/screens/public_rooms_screen.dart';
+import 'package:club_cast/presentation_layer/widgets/modelsheetcreate_room.dart';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -77,6 +78,10 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       label: 'home',
     ),
     BottomNavigationBarItem(
+      icon: Icon(Icons.add),
+      label: '',
+    ),
+    BottomNavigationBarItem(
       icon: Icon(Icons.headphones),
       label: 'podCast',
     ),
@@ -84,6 +89,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
 
   List<Widget> screen = [
     PublicRoomScreen(),
+    Container(),
     const PodCastScreen(),
   ];
   getDark(bool isDARK) {

@@ -4,6 +4,7 @@ import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
 import 'package:club_cast/data_layer/sockets/sockets_io.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
+import 'package:club_cast/presentation_layer/components/constant/constant.dart';
 import 'package:club_cast/presentation_layer/models/activeRoomModelAdmin.dart';
 import 'package:club_cast/presentation_layer/models/activeRoomModelUser.dart';
 import 'package:club_cast/presentation_layer/models/getAllRoomsModel.dart';
@@ -112,7 +113,7 @@ class PublicRoomScreen extends StatelessWidget {
                               shrinkWrap: true,
                               itemBuilder: (context, index) => publicRoomItem(
                                 audience:
-                                    GetAllRoomsModel?.getRoomsAudienc(index)[0],
+                                    GetAllRoomsModel.getRoomsAudienc(index)?[0],
                                 category:
                                     GetAllRoomsModel?.getRoomsGategory(index),
                                 context: context,
@@ -123,22 +124,24 @@ class PublicRoomScreen extends StatelessWidget {
                                     GetAllRoomsModel.getRoomsUserPublishInform(
                                         index),
                                 click: () {
+                                  pressedJoinRoom = true;
                                   cubit.micPerm();
-                                  if (SocketFunc.isConnected &&
+                                  if ((SocketFunc.isConnected &&
+                                          currentUserRoleinRoom) &&
                                       GetAllRoomsModel?.getRoomName(index) ==
-                                          ActiveRoomAdminModel?.getRoomName()) {
+                                          activeRoomName) {
                                     navigatePushTo(
                                         context: context,
                                         navigateTo: RoomAdminViewScreen());
                                   } else if (SocketFunc.isConnected &&
                                       GetAllRoomsModel?.getRoomName(index) ==
-                                          ActiveRoomUserModel?.getRoomName()
-                                              .toString()) {
+                                          activeRoomName) {
                                     navigatePushTo(
                                         context: context,
                                         navigateTo: RoomUserViewScreen());
                                   } else if (SocketFunc.isConnected) {
                                     SocketFunc.leaveRoom(context);
+
                                     SocketFunc.connectWithSocket(context);
                                     SocketFunc.joinRoom(
                                         GetAllRoomsModel.getRoomName(index),

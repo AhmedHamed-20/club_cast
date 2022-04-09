@@ -1,14 +1,14 @@
 class GetAllRoomsModel {
   static Map<String, dynamic>? getAllRooms;
-  static List? audienc = [];
+  static List? audienc;
   static List? brodcasters;
   static List? creditBy;
   static String? roomid;
   static String? name;
   static String? roomStatus;
   static String? category;
-  static List getRoomsAudienc(int index) {
-    return audienc = [getAllRooms?['data'][index]['audience']];
+  static List? getRoomsAudienc(int index) {
+    return audienc = [getAllRooms!['data'][index]['audience']];
   }
 
   static List? getRoomsBrodcaster(int index) {

@@ -143,7 +143,11 @@ class LayoutScreen extends StatelessWidget {
               backgroundColor: Colors.transparent,
               elevation: 0,
               title: Text(
-                cubit.bottomNavIndex == 0 ? 'Rooms' : 'Podcasts',
+                cubit.bottomNavIndex == 0
+                    ? 'Rooms'
+                    : cubit.bottomNavIndex == 1
+                        ? 'Create room'
+                        : 'Podcasts',
                 style: Theme.of(context)
                     .textTheme
                     .bodyText1
@@ -172,10 +176,9 @@ class LayoutScreen extends StatelessWidget {
                     navigatePushTo(
                         context: context, navigateTo: UserProfileScreen());
                   },
-
                   child: Center(
                     child: GetUserModel.getUserPhoto() == null
-                        ? CircularProgressIndicator(
+                        ? const CircularProgressIndicator(
                             strokeWidth: 1,
                           )
                         : Container(
@@ -191,11 +194,6 @@ class LayoutScreen extends StatelessWidget {
                             ),
                           ),
                   ),
-                  // userProfileImage(
-                  //   size: 23,
-                  //   // UserLoginModel.getUserPhoto()
-                  //   image: 'assets/images/Adel.png',
-                  // ),
                 ),
                 const SizedBox(
                   width: 10,
@@ -265,35 +263,28 @@ class LayoutScreen extends StatelessWidget {
               unselectedItemColor: Theme.of(context).iconTheme.color,
               currentIndex: cubit.bottomNavIndex,
               onTap: (index) {
+                if (index == 1) {
+                  modalBottomSheetItem(context, () {
+                    cubit.micPerm();
+                    print(cubit.roomNameController.text);
+                    print(cubit.selectedCategoryItem);
+                    print("isPublicRoom :${cubit.isPublicRoom}");
+                    print("isRecordRoom: ${cubit.isRecordRoom}");
+
+                    SocketFunc.isConnected
+                        ? const SizedBox()
+                        : SocketFunc.connectWithSocket(context);
+                    SocketFunc.createRoom({
+                      'name': cubit.roomNameController.text,
+                      'category': cubit.selectedCategoryItem,
+                      'status': cubit.isPublicRoom ? 'public' : 'private',
+                    }, context);
+                    SocketFunc.isAdminLeftSocket();
+                  });
+                  return;
+                }
                 cubit.changeBottomNAvIndex(index);
               },
-            ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                modalBottomSheetItem(context, () {
-                  cubit.micPerm();
-                  print(cubit.roomNameController.text);
-                  print(cubit.selectedCategoryItem);
-                  print("isPublicRoom :${cubit.isPublicRoom}");
-                  print("isRecordRoom: ${cubit.isRecordRoom}");
-
-                  SocketFunc.isConnected
-                      ? const SizedBox()
-                      : SocketFunc.connectWithSocket(context);
-                  SocketFunc.createRoom({
-                    'name': cubit.roomNameController.text,
-                    'category': cubit.selectedCategoryItem,
-                    'status': cubit.isPublicRoom ? 'public' : 'private',
-                  }, context);
-                  SocketFunc.isAdminLeftSocket();
-                });
-              },
-              elevation: 15,
-              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-              child: Icon(
-                Icons.add,
-                color: Theme.of(context).iconTheme.color,
-              ),
             ),
             body: cubit.screen[cubit.bottomNavIndex],
           );

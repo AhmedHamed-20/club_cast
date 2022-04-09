@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 
 /////// end Points ////////////
 var token;
-
+String activeRoomName = '';
+bool currentUserRoleinRoom = false;
+bool pressedJoinRoom = false;
 UserLoginModel? ahmedModel;
 const String baseUrl = "https://audiocomms-podcast-platform.herokuapp.com/api/";
 const String login = "v1/users/login";

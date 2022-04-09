@@ -43,7 +43,7 @@ class SocketFunc {
       isConnected = true;
       if (isAdminLeft == false && showReconnectButton == true) {
         if (socket!.connected) {
-          adminReturnBack();
+          adminReturnBack(context);
           userJoined(context, ActiveRoomAdminModel.getRoomId());
           userchangedToAudienc(context);
           listenOnUsersAskedForTalk(context);
@@ -69,7 +69,7 @@ class SocketFunc {
     socket?.on('disconnect', (data) {
       print('disconnect');
       print(data);
-      if (isAdminLeft == false) {
+      if (isAdminLeft == false && currentUserRoleinRoom == true) {
         showReconnectButton = true;
         socket?.disconnect();
         RoomCubit.get(context).changeState();
@@ -79,12 +79,15 @@ class SocketFunc {
       RoomCubit.get(context).speakers = [];
       ActiveRoomAdminModel.activeRoomAdminData = {};
       ActiveRoomAdminModel.activeRoomData = {};
-
+      activeRoomName = '';
+      currentUserRoleinRoom = false;
       ActiveRoomUserModel.activeRoomUserData = {};
       ActiveRoomUserModel.activeRoomData = {};
-      if (isConnected) {
+      if (isConnected && pressedJoinRoom == false) {
         navigatePushANDRemoveRout(context: context, navigateTo: LayoutScreen());
         socket?.disconnect();
+        activeRoomName = '';
+        currentUserRoleinRoom = false;
         AgoraRtc.leave();
         isConnected = false;
       }
@@ -105,25 +108,26 @@ class SocketFunc {
               GeneralAppCubit.get(context).getAllRoomsData(),
               ActiveRoomAdminModel.activeRoomAdminData = data[0],
               ActiveRoomAdminModel.activeRoomData = data[1],
+              currentUserRoleinRoom = true,
               ActiveRoomAdminModel.adminToken = data[2],
               RoomCubit.get(context).speakers = [data[0]],
               RoomCubit?.get(context).speakers.forEach((e) {
                 e['isMuted'] = false;
                 e['isTalking'] = false;
               }),
-
+              activeRoomName = ActiveRoomAdminModel.getRoomName(),
               print('name' +
                   GeneralAppCubit.get(context).roomNameController.text),
-              // AgoraRtc.joinChannelagora(
-              //   channelName:
-              //       GeneralAppCubit.get(context).roomNameController.text,
-              //   role: ClientRole.Broadcaster,
-              //   token: data[2],
-              //   context: context,
-              //   uid: data[0]['uid'],
-              // ),
-              // print('toekn' + data[2]),
-              // AgoraRtc.eventsAgora(context),
+              AgoraRtc.joinChannelagora(
+                channelName:
+                    GeneralAppCubit.get(context).roomNameController.text,
+                role: ClientRole.Broadcaster,
+                token: data[2],
+                context: context,
+                uid: data[0]['uid'],
+              ),
+              print('toekn' + data[2]),
+              AgoraRtc.eventsAgora(context),
               print(GeneralAppCubit.get(context).roomNameController.text),
               print('audienceList:${ActiveRoomAdminModel.getRoomsAudienc()}'),
               print(
@@ -156,10 +160,14 @@ class SocketFunc {
   }
 
   static leaveRoom(BuildContext context) {
+    RoomCubit.get(context).speakers = [];
+    RoomCubit.get(context).listener = [];
+    AgoraRtc.leave();
     socket?.disconnect();
     isConnected = false;
-    AgoraRtc.leave();
+
     AgoraRtc.muted = false;
+    activeRoomName = '';
     iamSpeaker = false;
     socket?.onDisconnect((data) => {
           print(data),
@@ -173,9 +181,12 @@ class SocketFunc {
     socket?.on(
         'joinRoomSuccess',
         (data) => {
+              pressedJoinRoom = false,
+              currentUserRoleinRoom = false,
               isAdminLeft = false,
-              RoomCubit.get(context).speakers.add(data[1]['admin']),
-              RoomCubit.get(context).speakers.addAll(data[1]['brodcasters']),
+              RoomCubit?.get(context).speakers.add(data[1]['admin']),
+
+              RoomCubit?.get(context).speakers.addAll(data[1]['brodcasters']),
               RoomCubit?.get(context).speakers.forEach((e) {
                 e['isMuted'] = false;
                 e['isTalking'] = false;
@@ -197,21 +208,20 @@ class SocketFunc {
 
               ActiveRoomUserModel.userToken = data[2],
               //  print('userPhoto:' + ActiveRoomUserModel.getUserPhoto()),
-
+              activeRoomName = ActiveRoomUserModel.getRoomName().toString(),
               print(RoomCubit.get(context).listener),
 
               //print(RoomCubit.get(context).speakers),
               // print(RoomCubit.get(context).listener),
-              // AgoraRtc.initAgoraRtcEngine(
-              //     '448e147938e04c23a2b56677daa303c8', ClientRole.Broadcaster),
-              // AgoraRtc.joinChannelagora(
-              //   channelName: ActiveRoomUserModel.getRoomName().toString(),
-              //   role: ClientRole.Audience,
-              //   token: data[2],
-              //   context: context,
-              //   uid: data[0]['uid'],
-              // ),
 
+              AgoraRtc.joinChannelagora(
+                channelName: ActiveRoomUserModel.getRoomName().toString(),
+                role: ClientRole.Audience,
+                token: data[2],
+                context: context,
+                uid: data[0]['uid'],
+              ),
+              AgoraRtc.eventsAgora(context),
               isAdminLeftSocket(),
               userJoined(context, ActiveRoomUserModel.getRoomId()),
               userLeft(ActiveRoomUserModel.getRoomId(), context),
@@ -276,10 +286,17 @@ class SocketFunc {
             });
   }
 
-  static adminReturnBack() {
+  static adminReturnBack(BuildContext context) {
     print('sending');
     socket?.emit('adminReJoinRoom');
     socket?.on('errorMessage', (data) {
+      activeRoomName = '';
+      RoomCubit.get(context).speakers = [];
+      RoomCubit.get(context).listener = [];
+      isAdminLeft = true;
+      isConnected = false;
+      currentUserRoleinRoom = false;
+      navigatePushANDRemoveRout(context: context, navigateTo: LayoutScreen());
       print('error');
       print(data);
     });
@@ -316,10 +333,11 @@ class SocketFunc {
   static adminLeft(BuildContext context) {
     socket?.on('roomEnded', (data) {
       print('roomEnded');
-
+      activeRoomName = '';
       RoomCubit.get(context).listener = [];
       RoomCubit.get(context).speakers = [];
       isConnected = false;
+
       iamSpeaker = false;
       isAdminLeft = true;
       leaveRoom(context);
