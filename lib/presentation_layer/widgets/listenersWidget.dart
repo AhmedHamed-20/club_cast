@@ -101,6 +101,7 @@ Widget listenersWiget({
                                           .getUserPodcast(token,
                                               cubit.listener[index]['_id'])
                                           .then((value) {
+                                        Navigator.of(context).pop();
                                         navigatePushTo(
                                             context: context,
                                             navigateTo: ProfileDetailsScreen(

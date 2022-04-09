@@ -4,8 +4,12 @@ import 'package:club_cast/presentation_layer/widgets/model_sheet_room_contant.da
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
+import '../../data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import '../../data_layer/bloc/room_cubit/room_cubit.dart';
+import '../components/component/component.dart';
+import '../components/constant/constant.dart';
 import '../models/user_model.dart';
+import '../screens/profile_detailes_screen.dart';
 
 Widget speakersWiget({
   required cubit,
@@ -78,7 +82,22 @@ Widget speakersWiget({
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(15),
                                     ),
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      GeneralAppCubit.get(context).getUserById(
+                                          profileId: cubit.speakers[index]
+                                              ['_id']);
+
+                                      GeneralAppCubit.get(context)
+                                          .getUserPodcast(token,
+                                              cubit.speakers[index]['_id'])
+                                          .then((value) {
+                                        Navigator.of(context).pop();
+                                        navigatePushTo(
+                                            context: context,
+                                            navigateTo: ProfileDetailsScreen(
+                                                cubit.speakers[index]['_id']));
+                                      });
+                                    },
                                     child: Text(
                                       'View profile',
                                       style:
