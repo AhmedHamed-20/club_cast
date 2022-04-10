@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:agora_rtc_engine/rtc_engine.dart';
+import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/data_layer/bloc/room_cubit/room_cubit.dart';
 import 'package:club_cast/presentation_layer/models/activeRoomModelAdmin.dart';
 import 'package:club_cast/presentation_layer/models/activeRoomModelUser.dart';
@@ -62,32 +63,35 @@ class AgoraRtc {
       RtcEngineEventHandler(activeSpeaker: (uid) {
         print('klam');
       }, audioVolumeIndication: (list, aa) {
+        print(list);
         list.forEach((elementAgora) {
-          RoomCubit.get(context).speakers.forEach(
-            (elementUser) {
-              if (elementAgora.volume > 3) {
-                if (elementAgora.uid == 0 &&
-                    (elementUser['_id'] == ActiveRoomUserModel.getUserId())) {
-                  print('first');
-                  //    print('user' + ActiveRoomUserModel.getUserId());
+          if (isIamInRoomScreen) {
+            RoomCubit.get(context).speakers.forEach(
+              (elementUser) {
+                if (elementAgora.volume > 3) {
+                  if (elementAgora.uid == 0 &&
+                      (elementUser['_id'] == ActiveRoomUserModel.getUserId())) {
+                    print('first');
+                    //    print('user' + ActiveRoomUserModel.getUserId());
 
-                  elementUser['isTalking'] = true;
-                  RoomCubit.get(context).changeState();
-                } else if (elementAgora.uid == elementUser['uid']) {
-                  elementUser['isTalking'] = true;
-                  print('sec');
-                  RoomCubit.get(context).changeState();
+                    elementUser['isTalking'] = true;
+                    RoomCubit.get(context).changeState();
+                  } else if (elementAgora.uid == elementUser['uid']) {
+                    elementUser['isTalking'] = true;
+                    print('sec');
+                    RoomCubit.get(context).changeState();
+                  } else {
+                    elementUser['isTalking'] = false;
+                    print('third');
+                    RoomCubit.get(context).changeState();
+                  }
                 } else {
                   elementUser['isTalking'] = false;
-                  print('third');
-                  RoomCubit.get(context).changeState();
+                  RoomCubit.get(context).changeState2();
                 }
-              } else {
-                elementUser['isTalking'] = false;
-                RoomCubit.get(context).changeState2();
-              }
-            },
-          );
+              },
+            );
+          }
         });
       }, userJoined: (uid, elapsed) {
         print('adel');
@@ -119,7 +123,9 @@ class AgoraRtc {
 
     engine?.muteLocalAudioStream(muted);
     RoomCubit.get(context).speakers[index]['isMuted'] = muted;
+
     RoomCubit.get(context).changeState();
+    GeneralAppCubit.get(context).changeState();
   }
 
   static Future leave() async {

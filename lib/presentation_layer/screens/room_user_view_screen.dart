@@ -11,6 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 import '../components/component/component.dart';
+import '../components/constant/constant.dart';
 import '../layout/layout_screen.dart';
 
 class RoomUserViewScreen extends StatelessWidget {
@@ -18,167 +19,176 @@ class RoomUserViewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    isIamInRoomScreen = true;
     // List speakers = ActiveRoomUserModel.getRoomsBrodCasters();
     // List Listener = ActiveRoomUserModel.getRoomsAudienc();
     var cubit = RoomCubit.get(context);
     return BlocConsumer<RoomCubit, RoomStates>(
       builder: (context, state) {
-        return Scaffold(
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          appBar: AppBar(
-            leading: MaterialButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Icon(
-                Icons.arrow_back_ios,
-                color: Theme.of(context).iconTheme.color,
+        return WillPopScope(
+          onWillPop: () async {
+            isIamInRoomScreen = false;
+            Navigator.of(context).pop();
+            return false;
+          },
+          child: Scaffold(
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            appBar: AppBar(
+              leading: MaterialButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  isIamInRoomScreen = false;
+                },
+                child: Icon(
+                  Icons.arrow_back_ios,
+                  color: Theme.of(context).iconTheme.color,
+                ),
               ),
-            ),
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            actions: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: MaterialButton(
-                  onPressed: () {
-                    SocketFunc.isConnected = false;
-                    SocketFunc.leaveRoom(context);
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              actions: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: MaterialButton(
+                    onPressed: () {
+                      SocketFunc.isConnected = false;
+                      SocketFunc.leaveRoom(context);
 
-                    navigatePushANDRemoveRout(
-                        context: context, navigateTo: LayoutScreen());
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      color: Theme.of(context).primaryColor,
-                    ),
-                    child: const Padding(
-                      padding: EdgeInsets.all(12.0),
-                      child: Text(
-                        'Leave',
-                        style: TextStyle(
-                          color: Colors.white,
+                      navigatePushANDRemoveRout(
+                          context: context, navigateTo: LayoutScreen());
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(15),
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      child: const Padding(
+                        padding: EdgeInsets.all(12.0),
+                        child: Text(
+                          'Leave',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),
                   ),
+                )
+              ],
+            ),
+            body: SingleChildScrollView(
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).backgroundColor,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(50),
+                    topRight: Radius.circular(50),
+                    bottomLeft: Radius.circular(30),
+                    bottomRight: Radius.circular(30),
+                  ),
                 ),
-              )
-            ],
-          ),
-          body: SingleChildScrollView(
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                color: Theme.of(context).backgroundColor,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(50),
-                  topRight: Radius.circular(50),
-                  bottomLeft: Radius.circular(30),
-                  bottomRight: Radius.circular(30),
-                ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(13.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Text(
-                            ActiveRoomUserModel.getRoomName().toString(),
-                            style: Theme.of(context).textTheme.bodyText2,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(13.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(12.0),
                             child: Text(
-                              'Speakers',
-                              style: Theme.of(context).textTheme.bodyText1,
+                              ActiveRoomUserModel.getRoomName().toString(),
+                              style: Theme.of(context).textTheme.bodyText2,
                             ),
                           ),
-                        ),
-                        speakersWiget(cubit: cubit, isAdmin: false),
-                      ],
-                    ),
-                    const Divider(
-                      color: Colors.grey,
-                      thickness: 2,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Center(
-                        child: Text(
-                          'Listeners',
-                          style: Theme.of(context).textTheme.bodyText1,
+                          Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Center(
+                              child: Text(
+                                'Speakers',
+                                style: Theme.of(context).textTheme.bodyText1,
+                              ),
+                            ),
+                          ),
+                          speakersWiget(cubit: cubit, isAdmin: false),
+                        ],
+                      ),
+                      const Divider(
+                        color: Colors.grey,
+                        thickness: 2,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Center(
+                          child: Text(
+                            'Listeners',
+                            style: Theme.of(context).textTheme.bodyText1,
+                          ),
                         ),
                       ),
-                    ),
-                    listenersWiget(
-                      cubit: cubit,
-                      isAdmin: false,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          floatingActionButton: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              CircleAvatar(
-                radius: 25,
-                backgroundColor: Theme.of(context).primaryColor,
-                child: IconButton(
-                  onPressed: () {
-                    SocketFunc.iamSpeaker
-                        ? SocketFunc.userWantToReturnAudience()
-                        : SocketFunc.askToTalk();
-                    SocketFunc.iamSpeaker
-                        ? const SizedBox()
-                        : showToast(
-                            message:
-                                'You asked to talk,wait until admin accept',
-                            toastState: ToastState.SUCCESS);
-                    // print('ddd');
-                  },
-                  icon: Icon(
-                    SocketFunc.iamSpeaker
-                        ? MdiIcons.arrowDown
-                        : MdiIcons.handBackLeft,
-                    color: Colors.white,
+                      listenersWiget(
+                        cubit: cubit,
+                        isAdmin: false,
+                      ),
+                    ],
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 10,
-              ),
-              SocketFunc.iamSpeaker
-                  ? CircleAvatar(
-                      radius: 25,
-                      backgroundColor: Theme.of(context).primaryColor,
-                      child: IconButton(
-                        onPressed: () {
-                          for (int i = 0; i < cubit.speakers.length; i++) {
-                            if (ActiveRoomUserModel.getUserId() ==
-                                cubit.speakers[i]['_id']) {
-                              AgoraRtc.onToggleMute(i, context);
+            ),
+            floatingActionButton: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                CircleAvatar(
+                  radius: 25,
+                  backgroundColor: Theme.of(context).primaryColor,
+                  child: IconButton(
+                    onPressed: () {
+                      SocketFunc.iamSpeaker
+                          ? SocketFunc.userWantToReturnAudience(context)
+                          : SocketFunc.askToTalk();
+                      SocketFunc.iamSpeaker
+                          ? const SizedBox()
+                          : showToast(
+                              message:
+                                  'You asked to talk,wait until admin accept',
+                              toastState: ToastState.SUCCESS);
+                      // print('ddd');
+                    },
+                    icon: Icon(
+                      SocketFunc.iamSpeaker
+                          ? MdiIcons.arrowDown
+                          : MdiIcons.handBackLeft,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                SocketFunc.iamSpeaker
+                    ? CircleAvatar(
+                        radius: 25,
+                        backgroundColor: Theme.of(context).primaryColor,
+                        child: IconButton(
+                          onPressed: () {
+                            for (int i = 0; i < cubit.speakers.length; i++) {
+                              if (ActiveRoomUserModel.getUserId() ==
+                                  cubit.speakers[i]['_id']) {
+                                AgoraRtc.onToggleMute(i, context);
+                              }
                             }
-                          }
-                        },
-                        icon: Icon(
-                          AgoraRtc.muted ? Icons.mic_off : Icons.mic_none,
-                          color: Colors.white,
+                          },
+                          icon: Icon(
+                            AgoraRtc.muted ? Icons.mic_off : Icons.mic_none,
+                            color: Colors.white,
+                          ),
                         ),
-                      ),
-                    )
-                  : const SizedBox(),
-            ],
+                      )
+                    : const SizedBox(),
+              ],
+            ),
           ),
         );
       },

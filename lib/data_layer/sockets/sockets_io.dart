@@ -122,6 +122,7 @@ class SocketFunc {
                   : const SizedBox(),
               isConnected = true,
               isAdminLeft = false,
+              iamSpeaker = true,
               // print(data),
               GeneralAppCubit.get(context).getAllRoomsData(),
               ActiveRoomAdminModel.activeRoomAdminData = data[0],
@@ -263,6 +264,7 @@ class SocketFunc {
               audienceToken(),
               adminLeft(context),
               isConnected = true,
+              GeneralAppCubit.get(context).changeState(),
               navigatePushTo(
                 context: context,
                 navigateTo: RoomUserViewScreen(),
@@ -481,7 +483,7 @@ class SocketFunc {
           break;
         }
       }
-
+      GeneralAppCubit.get(context).changeState();
       RoomCubit.get(context).changeState();
       print(RoomCubit.get(context).askedToTalk);
     });
@@ -537,6 +539,7 @@ class SocketFunc {
               ? iamSpeaker = true
               : const SizedBox();
           print(RoomCubit.get(context).speakers);
+          GeneralAppCubit.get(context).changeState();
           RoomCubit.get(context).changeState();
 
           break;
@@ -550,8 +553,9 @@ class SocketFunc {
             });
   }
 
-  static userWantToReturnAudience() {
+  static userWantToReturnAudience(context) {
     socket?.emit('weHaveToGoBack');
+    GeneralAppCubit.get(context).changeState();
     socket?.on(
         'errorMessage',
         (data) => {
@@ -594,7 +598,7 @@ class SocketFunc {
                   GetUserModel.getUserID()
               ? iamSpeaker = false
               : const SizedBox();
-
+          GeneralAppCubit.get(context).changeState();
           RoomCubit.get(context).changeState();
 
           break;

@@ -1,5 +1,6 @@
 import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
+import 'package:club_cast/data_layer/bloc/room_cubit/room_cubit.dart';
 import 'package:club_cast/data_layer/sockets/sockets_io.dart';
 import 'package:club_cast/presentation_layer/components/constant/constant.dart';
 import 'package:club_cast/data_layer/cash/cash.dart';
@@ -16,6 +17,7 @@ import 'package:marquee/marquee.dart';
 import '../../data_layer/agora/rtc_engine.dart';
 import '../../data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
 import '../components/component/component.dart';
+import '../models/activeRoomModelUser.dart';
 import '../screens/user_screen/login_screen/login_screen.dart';
 
 class LayoutScreen extends StatelessWidget {
@@ -28,112 +30,182 @@ class LayoutScreen extends StatelessWidget {
         builder: (BuildContext context, Object? state) {
           var cubit = GeneralAppCubit.get(context);
           return Scaffold(
-            bottomSheet: cubit.isPlaying || cubit.isPausedInHome
-                ? Container(
-                    height: MediaQuery.of(context).size.height * 0.08,
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(25),
-                        topRight: Radius.circular(25),
-                      ),
-                      color: Theme.of(context).primaryColor,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                          left: 12.0, right: 12, top: 10, bottom: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          CircleAvatar(
-                            radius: 25,
-                            backgroundImage: NetworkImage(
-                                cubit.activepodcastPhotUrl.toString()),
+            bottomSheet: cubit.isPlaying ||
+                    cubit.isPausedInHome ||
+                    SocketFunc.isConnected
+                ? SocketFunc.isConnected
+                    ? Container(
+                        height: MediaQuery.of(context).size.height * 0.08,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).primaryColor,
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(25),
+                            topRight: Radius.circular(25),
                           ),
-                          const SizedBox(
-                            width: 2,
-                          ),
-                          Expanded(
-                            flex: 2,
-                            child: Container(
-                              width: MediaQuery.of(context).size.width * 0.28,
-                              child: Marquee(
-                                style: Theme.of(context).textTheme.bodyText1,
-                                text: cubit.activePodcastname.toString(),
-                                scrollAxis: Axis.horizontal,
-                                blankSpace: 5,
-                              ),
-                            ),
-                          ),
-                          Row(
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 12, right: 12),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              IconButton(
-                                onPressed: () {
-                                  cubit.isPlaying
-                                      ? cubit.assetsAudioPlayer
-                                          .seekBy(Duration(seconds: -10))
-                                      : SizedBox();
-                                },
-                                icon: Icon(
-                                  Icons.replay_10,
-                                  color: Theme.of(context).iconTheme.color,
+                              Row(
+                                children: [
+                                  Text('Active room: ',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyText2),
+                                  Text(
+                                    activeRoomName,
+                                    style:
+                                        Theme.of(context).textTheme.bodyText1,
+                                  ),
+                                ],
+                              ),
+                              SocketFunc.iamSpeaker
+                                  ? IconButton(
+                                      icon: Icon(
+                                        AgoraRtc.muted
+                                            ? Icons.mic_off
+                                            : Icons.mic_none,
+                                        color: Colors.white,
+                                      ),
+                                      onPressed: () {
+                                        currentUserRoleinRoom == false
+                                            ? {
+                                                for (int i = 0;
+                                                    i <
+                                                        RoomCubit.get(context)
+                                                            .speakers
+                                                            .length;
+                                                    i++)
+                                                  {
+                                                    if (ActiveRoomUserModel
+                                                            .getUserId() ==
+                                                        RoomCubit.get(context)
+                                                            .speakers[i]['_id'])
+                                                      {
+                                                        AgoraRtc.onToggleMute(
+                                                            i, context),
+                                                      },
+                                                  },
+                                              }
+                                            : AgoraRtc.onToggleMute(0, context);
+                                      },
+                                    )
+                                  : const SizedBox(),
+                            ],
+                          ),
+                        ),
+                      )
+                    : Container(
+                        height: MediaQuery.of(context).size.height * 0.08,
+                        decoration: BoxDecoration(
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(25),
+                            topRight: Radius.circular(25),
+                          ),
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: 12.0, right: 12, top: 10, bottom: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              CircleAvatar(
+                                radius: 25,
+                                backgroundImage: NetworkImage(
+                                    cubit.activepodcastPhotUrl.toString()),
+                              ),
+                              const SizedBox(
+                                width: 2,
+                              ),
+                              Expanded(
+                                flex: 2,
+                                child: Container(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.28,
+                                  child: Marquee(
+                                    style:
+                                        Theme.of(context).textTheme.bodyText1,
+                                    text: cubit.activePodcastname.toString(),
+                                    scrollAxis: Axis.horizontal,
+                                    blankSpace: 5,
+                                  ),
                                 ),
                               ),
-                              IconButton(
-                                onPressed: () {
-                                  cubit.isPlaying
-                                      ? cubit.assetsAudioPlayer
-                                          .pause()
+                              Row(
+                                children: [
+                                  IconButton(
+                                    onPressed: () {
+                                      cubit.isPlaying
+                                          ? cubit.assetsAudioPlayer
+                                              .seekBy(Duration(seconds: -10))
+                                          : SizedBox();
+                                    },
+                                    icon: Icon(
+                                      Icons.replay_10,
+                                      color: Theme.of(context).iconTheme.color,
+                                    ),
+                                  ),
+                                  IconButton(
+                                    onPressed: () {
+                                      cubit.isPlaying
+                                          ? cubit.assetsAudioPlayer
+                                              .pause()
+                                              .then((value) {
+                                              cubit.isPlaying = false;
+                                              cubit.isPausedInHome = true;
+                                              cubit.changeState();
+                                            })
+                                          : cubit.assetsAudioPlayer
+                                              .play()
+                                              .then((value) {
+                                              cubit.isPlaying = true;
+                                              cubit.isPausedInHome = false;
+                                              cubit.changeState();
+                                            });
+                                    },
+                                    icon: Icon(
+                                      cubit.isPlaying
+                                          ? Icons.pause_circle_outline_outlined
+                                          : Icons.play_circle_outline_outlined,
+                                      color: Theme.of(context).iconTheme.color,
+                                    ),
+                                  ),
+                                  IconButton(
+                                    onPressed: () {
+                                      cubit.assetsAudioPlayer
+                                          .stop()
                                           .then((value) {
-                                          cubit.isPlaying = false;
-                                          cubit.isPausedInHome = true;
-                                          cubit.changeState();
-                                        })
-                                      : cubit.assetsAudioPlayer
-                                          .play()
-                                          .then((value) {
-                                          cubit.isPlaying = true;
-                                          cubit.isPausedInHome = false;
-                                          cubit.changeState();
-                                        });
-                                },
-                                icon: Icon(
-                                  cubit.isPlaying
-                                      ? Icons.pause_circle_outline_outlined
-                                      : Icons.play_circle_outline_outlined,
-                                  color: Theme.of(context).iconTheme.color,
-                                ),
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  cubit.assetsAudioPlayer.stop().then((value) {
-                                    cubit.isPlaying = false;
-                                    cubit.isPausedInHome = false;
-                                    cubit.changeState();
-                                  });
-                                },
-                                icon: Icon(
-                                  Icons.stop_circle_outlined,
-                                  color: Theme.of(context).iconTheme.color,
-                                ),
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  cubit.isPlaying
-                                      ? cubit.assetsAudioPlayer
-                                          .seekBy(Duration(seconds: 10))
-                                      : SizedBox();
-                                },
-                                icon: Icon(
-                                  Icons.forward_10,
-                                  color: Theme.of(context).iconTheme.color,
-                                ),
+                                        cubit.isPlaying = false;
+                                        cubit.isPausedInHome = false;
+                                        cubit.changeState();
+                                      });
+                                    },
+                                    icon: Icon(
+                                      Icons.stop_circle_outlined,
+                                      color: Theme.of(context).iconTheme.color,
+                                    ),
+                                  ),
+                                  IconButton(
+                                    onPressed: () {
+                                      cubit.isPlaying
+                                          ? cubit.assetsAudioPlayer
+                                              .seekBy(Duration(seconds: 10))
+                                          : SizedBox();
+                                    },
+                                    icon: Icon(
+                                      Icons.forward_10,
+                                      color: Theme.of(context).iconTheme.color,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
-                        ],
-                      ),
-                    ),
-                  )
+                        ),
+                      )
                 : const SizedBox(),
             appBar: AppBar(
               backgroundColor: Colors.transparent,

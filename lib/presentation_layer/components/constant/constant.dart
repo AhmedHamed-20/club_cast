@@ -6,6 +6,7 @@ var token;
 String activeRoomName = '';
 bool currentUserRoleinRoom = false;
 bool pressedJoinRoom = false;
+bool isIamInRoomScreen = true;
 UserLoginModel? ahmedModel;
 const String baseUrl = "https://audiocomms-podcast-platform.herokuapp.com/api/";
 const String login = "v1/users/login";

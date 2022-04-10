@@ -2,6 +2,7 @@ import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:club_cast/data_layer/agora/rtc_engine.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
+import 'package:club_cast/data_layer/bloc/room_cubit/room_cubit.dart';
 import 'package:club_cast/data_layer/sockets/sockets_io.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
 import 'package:club_cast/presentation_layer/components/constant/constant.dart';
@@ -124,6 +125,8 @@ class PublicRoomScreen extends StatelessWidget {
                                     GetAllRoomsModel.getRoomsUserPublishInform(
                                         index),
                                 click: () {
+                                  RoomCubit.get(context).changeState();
+
                                   pressedJoinRoom = true;
                                   cubit.micPerm();
                                   if ((SocketFunc.isConnected &&
