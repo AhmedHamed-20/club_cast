@@ -54,12 +54,14 @@ class DioHelper {
     String? name,
     String? email,
     String? bio,
+    File? photo,
     String? token,
   }) async {
     return response = (await dio?.patch(url!,
         data: {
           'name': name,
           'email': email,
+          'photo':photo,
           'bio': bio,
         },
         options: Options(headers: {

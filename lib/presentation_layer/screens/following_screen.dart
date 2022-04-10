@@ -1,5 +1,6 @@
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
+import 'package:club_cast/presentation_layer/components/constant/constant.dart';
 import 'package:club_cast/presentation_layer/models/followers_following_model.dart';
 import 'package:club_cast/presentation_layer/screens/profile_detailes_screen.dart';
 import 'package:club_cast/presentation_layer/screens/user_profile_screen.dart';
@@ -87,7 +88,35 @@ class FollowingScreen extends StatelessWidget {
                               ),
                             );
                           },
-                        )
+                        ),
+                        cubit.noDataFollowing
+                            ? const SizedBox()
+                            : InkWell(
+                          borderRadius: BorderRadius.circular(40),
+                          onTap: () {
+                            cubit.isPageUserFollowing?cubit.paginationFollowing(
+                              token,
+                              'v1/users/${cubit.userId!.data!.id}/following',
+                            ):
+                            cubit.paginationFollowing(
+                              token,
+                              myFollowing,
+                            );
+                          },
+                          child: CircleAvatar(
+                            backgroundColor:
+                            Theme.of(context).backgroundColor,
+                            radius: 30,
+                            child: cubit.loadFollowing
+                                ? CircularProgressIndicator(
+                              color: Theme.of(context).primaryColor,
+                            )
+                                : Icon(
+                              Icons.arrow_downward,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),
