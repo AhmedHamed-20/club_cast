@@ -83,6 +83,7 @@ class RoomAdminViewScreen extends StatelessWidget {
                               yesFunction: () {
                                 SocketFunc.adminEndTheRoom();
                                 SocketFunc.leaveRoom(context);
+                                AgoraRtc.stopRecording();
                                 navigatePushANDRemoveRout(
                                     context: context,
                                     navigateTo: LayoutScreen());

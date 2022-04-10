@@ -43,12 +43,14 @@ class SocketFunc {
       if (isAdminLeft == false && showReconnectButton == true) {
         if (socket!.connected) {
           adminReturnBack(context);
+          AgoraRtc.recording(ActiveRoomAdminModel.getRoomName());
           userJoined(context, ActiveRoomAdminModel.getRoomId());
           userchangedToAudienc(context);
           listenOnUsersAskedForTalk(context);
           userLeft(ActiveRoomAdminModel.getRoomId(), context);
           userchangedToBrodCaster(context);
           adminReturnSuccess(context);
+          GeneralAppCubit.get(context).getAllRoomsData();
         }
       }
       socket?.emit('msg', 'test');
@@ -76,6 +78,7 @@ class SocketFunc {
         showReconnectButton = true;
         socket?.disconnect();
         AgoraRtc.leave();
+        AgoraRtc.stopRecording();
         RoomCubit.get(context).changeState();
         return;
       }
@@ -87,7 +90,8 @@ class SocketFunc {
       currentUserRoleinRoom = false;
       ActiveRoomUserModel.activeRoomUserData = {};
       ActiveRoomUserModel.activeRoomData = {};
-      if (isConnected && pressedJoinRoom == false) {
+      if (isConnected &&
+          (pressedJoinRoom == false && currentUserRoleinRoom == false)) {
         showToast(message: "No internet found", toastState: ToastState.ERROR);
         navigatePushANDRemoveRout(context: context, navigateTo: LayoutScreen());
         socket?.disconnect();
@@ -107,6 +111,9 @@ class SocketFunc {
     socket?.on(
         'createRoomSuccess',
         (data) => {
+              GeneralAppCubit.get(context).isRecordRoom
+                  ? AgoraRtc.recording(data[0]['roomName'])
+                  : const SizedBox(),
               isConnected = true,
               isAdminLeft = false,
               // print(data),
@@ -168,12 +175,13 @@ class SocketFunc {
     RoomCubit.get(context).speakers = [];
     RoomCubit.get(context).listener = [];
     AgoraRtc.leave();
-    socket?.disconnect();
-    isConnected = false;
 
     AgoraRtc.muted = false;
     activeRoomName = '';
     iamSpeaker = false;
+    socket?.disconnect();
+    isConnected = false;
+
     socket?.onDisconnect((data) => {
           print(data),
         });

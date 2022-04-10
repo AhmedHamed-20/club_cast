@@ -149,9 +149,17 @@ class AgoraRtc {
     final path = dirList![0].path;
     final file = File('$path/$roomName');
     recordingPath = file.path;
-    engine?.startAudioRecordingWithConfig(AudioRecordingConfiguration(
-      '${file.path}.mp3',
-      recordingQuality: AudioRecordingQuality.Low,
-    ));
+    engine
+        ?.startAudioRecordingWithConfig(AudioRecordingConfiguration(
+      '${file.path}.AAC',
+      recordingQuality: AudioRecordingQuality.Medium,
+    ))
+        .then((value) {
+      print('recording');
+    });
+  }
+
+  static stopRecording() {
+    engine?.stopAudioRecording();
   }
 }

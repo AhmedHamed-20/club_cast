@@ -270,11 +270,14 @@ class LayoutScreen extends StatelessWidget {
                     SocketFunc.isConnected
                         ? const SizedBox()
                         : SocketFunc.connectWithSocket(context);
-                    SocketFunc.createRoom({
-                      'name': cubit.roomNameController.text,
-                      'category': cubit.selectedCategoryItem,
-                      'status': cubit.isPublicRoom ? 'public' : 'private',
-                    }, context);
+                    SocketFunc.createRoom(
+                      {
+                        'name': cubit.roomNameController.text,
+                        'category': cubit.selectedCategoryItem,
+                        'status': cubit.isPublicRoom ? 'public' : 'private',
+                      },
+                      context,
+                    );
                     SocketFunc.isAdminLeftSocket();
                   });
                   return;
