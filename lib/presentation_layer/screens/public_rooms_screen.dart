@@ -140,12 +140,19 @@ class PublicRoomScreen extends StatelessWidget {
                                         context: context,
                                         navigateTo: RoomUserViewScreen());
                                   } else if (SocketFunc.isConnected) {
-                                    SocketFunc.leaveRoom(context);
+                                    if (currentUserRoleinRoom) {
+                                      showToast(
+                                          message:
+                                              "You can't join room if you are admin of a room,leave first ):",
+                                          toastState: ToastState.ERROR);
+                                    } else {
+                                      SocketFunc.leaveRoom(context);
 
-                                    SocketFunc.connectWithSocket(context);
-                                    SocketFunc.joinRoom(
-                                        GetAllRoomsModel.getRoomName(index),
-                                        context);
+                                      SocketFunc.connectWithSocket(context);
+                                      SocketFunc.joinRoom(
+                                          GetAllRoomsModel.getRoomName(index),
+                                          context);
+                                    }
                                   } else {
                                     SocketFunc.connectWithSocket(context);
                                     SocketFunc.joinRoom(

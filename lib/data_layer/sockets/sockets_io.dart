@@ -201,9 +201,17 @@ class SocketFunc {
     socket?.on(
         'joinRoomSuccess',
         (data) => {
+              if (currentUserRoleinRoom)
+                {
+                  isAdminLeft = true,
+                }
+              else
+                {
+                  isAdminLeft = false,
+                },
               pressedJoinRoom = false,
               currentUserRoleinRoom = false,
-              isAdminLeft = false,
+
               RoomCubit?.get(context).speakers.add(data[1]['admin']),
 
               RoomCubit?.get(context).speakers.addAll(data[1]['brodcasters']),
