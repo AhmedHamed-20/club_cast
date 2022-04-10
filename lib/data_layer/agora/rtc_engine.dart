@@ -122,9 +122,9 @@ class AgoraRtc {
     RoomCubit.get(context).changeState();
   }
 
-  static void leave() {
+  static Future leave() async {
     engine?.leaveChannel();
-    engine?.destroy();
+    return await engine?.destroy();
   }
 
   static Future<List<Directory>?> getRecordeingPath() {

@@ -50,7 +50,7 @@ class SocketFunc {
           listenOnUsersAskedForTalk(context);
           userLeft(ActiveRoomAdminModel.getRoomId(), context);
           userchangedToBrodCaster(context);
-
+          adminLeft(context);
           GeneralAppCubit.get(context).getAllRoomsData();
         }
       }
@@ -166,6 +166,7 @@ class SocketFunc {
               userchangedToAudienc(context),
               listenOnUsersAskedForTalk(context),
               userLeft(ActiveRoomAdminModel.getRoomId(), context),
+              adminLeft(context),
               userchangedToBrodCaster(context),
               adminReturnSuccess(context),
             });
@@ -181,7 +182,9 @@ class SocketFunc {
   static leaveRoom(BuildContext context) {
     RoomCubit.get(context).speakers = [];
     RoomCubit.get(context).listener = [];
-    AgoraRtc.leave();
+    if (currentUserRoleinRoom == false) {
+      AgoraRtc.leave();
+    }
 
     AgoraRtc.muted = false;
     activeRoomName = '';
@@ -378,7 +381,10 @@ class SocketFunc {
 
       iamSpeaker = false;
       isAdminLeft = true;
-      leaveRoom(context);
+      print('adminleft');
+      AgoraRtc.leave().then((value) {
+        leaveRoom(context);
+      });
       navigatePushANDRemoveRout(context: context, navigateTo: LayoutScreen());
       showToast(message: 'Admin left the room', toastState: ToastState.WARNING);
       if (isAdminLeft == false) {
@@ -387,7 +393,10 @@ class SocketFunc {
         isConnected = false;
 
         isAdminLeft = true;
-        leaveRoom(context);
+        AgoraRtc.leave().then((val) {
+          leaveRoom(context);
+        });
+
         navigatePushANDRemoveRout(context: context, navigateTo: LayoutScreen());
         showToast(message: 'Room time ended', toastState: ToastState.WARNING);
       }
@@ -400,13 +409,16 @@ class SocketFunc {
   }
 
   static adminEndTheRoom() {
+    print('letfTheRoom');
     socket?.emit(
       'endRoom',
     );
+
     isAdminLeft = true;
     socket?.on(
         'errorMessage',
         (data) => {
+              print('error'),
               print(data),
             });
   }

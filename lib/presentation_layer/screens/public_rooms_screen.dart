@@ -147,7 +147,6 @@ class PublicRoomScreen extends StatelessWidget {
                                           toastState: ToastState.ERROR);
                                     } else {
                                       SocketFunc.leaveRoom(context);
-
                                       SocketFunc.connectWithSocket(context);
                                       SocketFunc.joinRoom(
                                           GetAllRoomsModel.getRoomName(index),
