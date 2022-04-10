@@ -15,6 +15,7 @@ class AgoraRtc {
   static RtcEngine? engine;
   static bool muted = false;
   static String? recordingPath;
+  static File? recordingFile;
   static Future<void> initAgoraRtcEngine(String appID, ClientRole role) async {
     print('initAgora role ${role}');
     engine = await RtcEngine.create('b29cc6ee03d642a6bf54c2f5906b9702');
@@ -131,11 +132,15 @@ class AgoraRtc {
         type: path.StorageDirectory.documents);
   }
 
+  static Future<List<Directory>?> getDownload() {
+    return path.getExternalCacheDirectories();
+  }
+
   static recording(String roomName) async {
-    final dirList = await getRecordeingPath();
+    final dirList = await getDownload();
     final path = dirList![0].path;
-    final file = File('$path/$roomName');
-    recordingPath = file.path;
+    final file = File('/storage/emulated/0/Download/$roomName');
+    recordingFile = file;
     engine
         ?.startAudioRecordingWithConfig(AudioRecordingConfiguration(
       '${file.path}.AAC',
@@ -143,6 +148,8 @@ class AgoraRtc {
     ))
         .then((value) {
       print('recording');
+      recordingPath = file.path;
+      print(recordingPath);
     });
   }
 

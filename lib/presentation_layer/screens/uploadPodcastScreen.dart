@@ -1,3 +1,4 @@
+import 'package:club_cast/data_layer/agora/rtc_engine.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
@@ -16,7 +17,10 @@ class UploadPodCastScreen extends StatelessWidget {
     TextEditingController nameController = TextEditingController();
     return BlocConsumer<GeneralAppCubit, GeneralAppStates>(
         builder: (context, state) {
+          print('iam in upload');
+
           var cubit = GeneralAppCubit.get(context);
+          //   print(cubit.podcastFile!.path);
           return WillPopScope(
             onWillPop: () async {
               cubit.previewIsplaying
@@ -74,7 +78,7 @@ class UploadPodCastScreen extends StatelessWidget {
                           color: Theme.of(context).iconTheme.color,
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 25,
                       ),
                       Row(
@@ -102,7 +106,7 @@ class UploadPodCastScreen extends StatelessWidget {
                         height: 25,
                       ),
                       cubit.podcastFile == null
-                          ? SizedBox()
+                          ? const SizedBox()
                           : ListTile(
                               title: Text(
                                 cubit.podcastFile!.path.split('/').last,
@@ -112,7 +116,8 @@ class UploadPodCastScreen extends StatelessWidget {
                                 onPressed: () {
                                   cubit.previewIsplaying
                                       ? cubit.pausePreview()
-                                      : cubit.playPreviewPodcast();
+                                      : cubit.playPreviewPodcast(
+                                          cubit.podcastFile!.path);
                                 },
                                 icon: Icon(
                                   cubit.previewIsplaying
@@ -165,7 +170,8 @@ class UploadPodCastScreen extends StatelessWidget {
                                         cubit.uploadPodCast(
                                             token,
                                             nameController.text,
-                                            cubit.selectedCategoryItem);
+                                            cubit.selectedCategoryItem,
+                                            cubit.podcastFile!.path);
                                       },
                                       context: context,
                                       text: 'Upload')

@@ -43,13 +43,14 @@ class SocketFunc {
       if (isAdminLeft == false && showReconnectButton == true) {
         if (socket!.connected) {
           adminReturnBack(context);
-          AgoraRtc.recording(ActiveRoomAdminModel.getRoomName());
+          adminReturnSuccess(context);
           userJoined(context, ActiveRoomAdminModel.getRoomId());
+
           userchangedToAudienc(context);
           listenOnUsersAskedForTalk(context);
           userLeft(ActiveRoomAdminModel.getRoomId(), context);
           userchangedToBrodCaster(context);
-          adminReturnSuccess(context);
+
           GeneralAppCubit.get(context).getAllRoomsData();
         }
       }
@@ -77,8 +78,9 @@ class SocketFunc {
             toastState: ToastState.ERROR);
         showReconnectButton = true;
         socket?.disconnect();
-        AgoraRtc.leave();
         AgoraRtc.stopRecording();
+        AgoraRtc.leave();
+
         RoomCubit.get(context).changeState();
         return;
       }
@@ -160,6 +162,7 @@ class SocketFunc {
               GeneralAppCubit.get(context).isPublicRoom = true,
               GeneralAppCubit.get(context).isRecordRoom = false,
               userJoined(context, ActiveRoomAdminModel.getRoomId()),
+
               userchangedToAudienc(context),
               listenOnUsersAskedForTalk(context),
               userLeft(ActiveRoomAdminModel.getRoomId(), context),
@@ -330,10 +333,12 @@ class SocketFunc {
           uid: data[0]['uid']);
       print('reconnect');
       print(data);
+      AgoraRtc.recording(ActiveRoomAdminModel.getRoomName() + '2');
       ActiveRoomAdminModel.activeRoomAdminData = data[0];
       ActiveRoomAdminModel.activeRoomData = data[1];
       RoomCubit.get(context).speakers = [];
       RoomCubit.get(context).listener = [];
+
       RoomCubit.get(context).speakers = [data[0]];
       RoomCubit.get(context).speakers.addAll(data[1]['brodcasters']);
       RoomCubit.get(context).listener.addAll(data[1]['audience']);

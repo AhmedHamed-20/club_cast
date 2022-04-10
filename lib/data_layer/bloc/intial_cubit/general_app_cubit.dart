@@ -445,8 +445,8 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     }
   }
 
-  playPreviewPodcast() {
-    assetsAudioPlayer.open(Audio.file(podcastFile!.path)).then((value) {
+  playPreviewPodcast(String filePath) {
+    assetsAudioPlayer.open(Audio.file(filePath)).then((value) {
       previewIsplaying = true;
       emit(PreviewPlaying());
     }).catchError((onError) {
@@ -482,7 +482,8 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   bool isLoadPodCast = false;
   bool isUploading = false;
   double? uploadProgress;
-  void uploadPodCast(String token, String podCastName, String category) async {
+  void uploadPodCast(String token, String podCastName, String category,
+      String filePath) async {
     isLoadPodCast = true;
     emit(PodcastUploadedLoading());
     await DioHelper.dio!
@@ -498,7 +499,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       //cloudName
       //apiKey
 
-      String podcastname = podcastFile!.path.split('/').last;
+      String podcastname = filePath.split('/').last;
       var cloudname = value.data['cloudName'];
       var timestamp = value.data['timestamp'];
       var signature = value.data['signature'];
@@ -511,7 +512,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
         ),
         data: FormData.fromMap({
           'file': await MultipartFile.fromFile(
-            podcastFile!.path,
+            filePath,
             filename: podcastname,
             contentType: MediaType('audio', 'mp3'),
           ),
