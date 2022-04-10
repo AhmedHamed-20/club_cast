@@ -28,7 +28,7 @@ class ActiveRoomUserModel {
   }
 
   static String getUserId() {
-    return userId = activeRoomUserData!['id'];
+    return userId = activeRoomUserData!['_id'];
   }
 
   static String getUserName() {

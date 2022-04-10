@@ -42,7 +42,9 @@ class RoomUserViewScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: MaterialButton(
                   onPressed: () {
+                    SocketFunc.isConnected = false;
                     SocketFunc.leaveRoom(context);
+
                     navigatePushANDRemoveRout(
                         context: context, navigateTo: LayoutScreen());
                   },

@@ -60,19 +60,6 @@ class AgoraRtc {
     engine?.setEventHandler(
       RtcEngineEventHandler(activeSpeaker: (uid) {
         print('klam');
-
-        // for (int i = 0; i < RoomCubit.get(context).speakers.length; i++) {
-        //   if (RoomCubit.get(context).speakers[i]['uid'] == uid) {
-        //     RoomCubit.get(context).speakers[i]['isTalking'] = true;
-        //     RoomCubit.get(context).changeState();
-
-        //     //  RoomCubit.get(context).speakers[i]['isTalking'] = false;
-
-        //   }
-
-        //   //  RoomCubit.get(context).speakers[i]['isTalking'] = false;
-        //   //  RoomCubit.get(context).changeState();
-        // }
       }, audioVolumeIndication: (list, aa) {
         list.forEach((elementAgora) {
           RoomCubit.get(context).speakers.forEach(

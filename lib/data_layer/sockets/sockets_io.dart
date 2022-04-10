@@ -87,11 +87,14 @@ class SocketFunc {
       ActiveRoomAdminModel.activeRoomAdminData = {};
       ActiveRoomAdminModel.activeRoomData = {};
       activeRoomName = '';
-      currentUserRoleinRoom = false;
+
       ActiveRoomUserModel.activeRoomUserData = {};
       ActiveRoomUserModel.activeRoomData = {};
       if (isConnected &&
           (pressedJoinRoom == false && currentUserRoleinRoom == false)) {
+        print(isConnected);
+        print(pressedJoinRoom);
+        print('role${currentUserRoleinRoom}');
         showToast(message: "No internet found", toastState: ToastState.ERROR);
         navigatePushANDRemoveRout(context: context, navigateTo: LayoutScreen());
         socket?.disconnect();
@@ -100,6 +103,7 @@ class SocketFunc {
         AgoraRtc.leave();
         isConnected = false;
       }
+      currentUserRoleinRoom = false;
       GeneralAppCubit.get(context).getAllRoomsData();
     });
     socket?.on('fromServer', (_) => print(_));
@@ -308,7 +312,7 @@ class SocketFunc {
       RoomCubit.get(context).listener = [];
       isAdminLeft = true;
       isConnected = false;
-      currentUserRoleinRoom = false;
+      currentUserRoleinRoom = true;
       navigatePushANDRemoveRout(context: context, navigateTo: LayoutScreen());
       print('error');
       print(data);
@@ -500,14 +504,14 @@ class SocketFunc {
           RoomCubit.get(context)
                   .speakers[RoomCubit.get(context).speakers.length - 1]
               ['isSpeaker'] = true;
-          print(RoomCubit.get(context).speakers[i]['_id']);
-          print(GetUserModel.getUserID());
+
           RoomCubit.get(context)
                           .speakers[RoomCubit.get(context).speakers.length - 1]
                       ['_id'] ==
                   GetUserModel.getUserID()
               ? iamSpeaker = true
               : const SizedBox();
+          print(RoomCubit.get(context).speakers);
           RoomCubit.get(context).changeState();
 
           break;
