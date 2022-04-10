@@ -12,6 +12,7 @@ import 'package:club_cast/presentation_layer/screens/followers_screen.dart';
 import 'package:club_cast/presentation_layer/screens/following_screen.dart';
 import 'package:club_cast/presentation_layer/screens/uploadPodcastScreen.dart';
 import 'package:club_cast/presentation_layer/screens/user_screen/event_screen/event_screen.dart';
+import 'package:club_cast/presentation_layer/screens/user_screen/login_screen/login_screen.dart';
 import 'package:club_cast/presentation_layer/widgets/alertDialog.dart';
 import 'package:club_cast/presentation_layer/widgets/playingCardWidget.dart';
 import 'package:club_cast/presentation_layer/widgets/pos_cast_card_item.dart';
@@ -50,6 +51,51 @@ class UserProfileScreen extends StatelessWidget {
           },
           child: Scaffold(
             appBar: AppBar(
+              actions: [
+                IconButton(
+                  splashRadius: 30,
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return alertDialog(
+                              context: context,
+                              title: 'Are You Sure',
+                              content: Text(
+                                'Logout?',
+                                style: Theme.of(context).textTheme.bodyText1,
+                              ),
+                              yesFunction: () {
+                                CachHelper.deleteData(
+                                  'token',
+                                ).then((value) {
+                                  if (value) {
+                                    cubit.assetsAudioPlayer.stop();
+                                    navigatePushANDRemoveRout(
+                                        context: context,
+                                        navigateTo: LoginScreen());
+                                  }
+                                }).then((value) {
+                                  cubit.isPlaying = false;
+                                  cubit.isPausedInHome = false;
+                                  GeneralAppCubit.get(context).search = null;
+                                  cubit.currentOlayingDurathion = null;
+                                  cubit.activePodCastId = null;
+                                  cubit.currentPostionDurationInsec = 0;
+                                });
+                              },
+                              noFunction: () {
+                                Navigator.of(context).pop();
+                              });
+                        });
+                  },
+                  icon: Icon(
+                    Icons.logout,
+                    size: 30,
+                    color: Theme.of(context).iconTheme.color,
+                  ),
+                ),
+              ],
               elevation: 0.0,
               leading: IconButton(
                 onPressed: () {
