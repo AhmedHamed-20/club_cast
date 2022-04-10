@@ -205,3 +205,15 @@ class UpdateEventErrorState extends GeneralAppStates {}
 class GetAllRoomDataGetSuccess extends GeneralAppStates {}
 
 class GetAllRoomDataGetError extends GeneralAppStates {}
+
+class PaginationFollowersLoadingState extends GeneralAppStates {}
+
+class PaginationFollowersSuccessState extends GeneralAppStates {}
+
+class PaginationFollowersErrorState extends GeneralAppStates {}
+
+class PaginationFollowingLoadingState extends GeneralAppStates {}
+
+class PaginationFollowingSuccessState extends GeneralAppStates {}
+
+class PaginationFollowingErrorState extends GeneralAppStates {}

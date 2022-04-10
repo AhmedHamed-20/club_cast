@@ -866,6 +866,8 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       'Authorization': 'Bearer ${token}',
     }).then((value) {
       Followers.followersModel = Map<String, dynamic>.from(value.data);
+      noDataFollowers=false;
+      isPageUserFollowers=false;
       emit(GetMyFollowersSuccessState());
       followerLoad = false;
     }).catchError((onError) {
@@ -884,6 +886,8 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       'Authorization': 'Bearer ${token}',
     }).then((value) {
       Following.followingModel = Map<String, dynamic>.from(value.data);
+      noDataFollowing=false;
+      isPageUserFollowing=false;
       emit(GetMyFollowingUsersSuccessState());
       followingLoad = false;
     }).catchError((onError) {
@@ -904,6 +908,8 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       },
     ).then((value) {
       Followers.followersModel = Map<String, dynamic>.from(value.data);
+      isPageUserFollowers=true;
+      noDataFollowers=false;
       emit(UserFollowersSuccessState());
       followerLoad = false;
     }).catchError((error) {
@@ -924,6 +930,9 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       },
     ).then((value) {
       Following.followingModel = Map<String, dynamic>.from(value.data);
+      isPageUserFollowing=true;
+      pageFollowing = 2;
+      noDataFollowing=false;
       emit(UserFollowingSuccessState());
       followingLoad = false;
     }).catchError((error) {
@@ -954,9 +963,9 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
 
     print(CachHelper.getData(key: 'token'));
     print(profileAvatar!.path);
-    await DioHelper.uploadImage(
+    await DioHelper.patchData(
             url: updateProfile,
-            image: profileAvatar,
+            photo: profileAvatar,
             token: CachHelper.getData(key: 'token'))
         .then((value) {
       print(value.data);
@@ -1123,5 +1132,75 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     Map<Permission, PermissionStatus> statuses = await [
       Permission.microphone,
     ].request();
+  }
+
+  bool isPageUserFollowers=false;
+  bool noDataFollowers=false;
+  bool loadFollowers=false;
+  int pageFollowers = 2;
+  void paginationFollowers(
+      String token,
+      String urlType,
+      )
+  {
+    loadFollowers = true;
+    emit(PaginationFollowersLoadingState());
+    DioHelper.getData(
+        url: urlType + '?page=${pageFollowers}',
+        token: {'Authorization': 'Bearer ${token}'}).then((value) {
+      if (value.data['results'] == 0) {
+        pageFollowers = pageFollowers;
+        noDataFollowers = true;
+        emit(PaginationFollowersSuccessState());
+        showToast(message: 'End Of Data(:', toastState: ToastState.SUCCESS);
+        loadFollowers = false;
+      } else {
+        pageFollowers++;
+        Followers.followersModel?['data']
+            .addAll(value.data['data']);
+
+        loadFollowers = false;
+        emit(PaginationFollowersSuccessState());
+      }
+    }).onError((error, stackTrace) {
+      print(error);
+      loadFollowers = false;
+      emit(PaginationFollowersErrorState());
+    });
+  }
+
+
+  bool isPageUserFollowing=false;
+  bool noDataFollowing=false;
+  bool loadFollowing=false;
+  bool isLowResult=false;
+  int pageFollowing = 2;
+  void paginationFollowing(
+      String token,
+      String urlType,
+      ) {
+    loadFollowing = true;
+    emit(PaginationFollowingLoadingState());
+    DioHelper.getData(
+        url: urlType + '?page=${pageFollowing}',
+        token: {'Authorization': 'Bearer $token'}).then((value) {
+      if (value.data['results'] == 0) {
+        pageFollowing = pageFollowing;
+        noDataFollowing = true;
+        emit(PaginationFollowingSuccessState());
+        showToast(message: 'End Of Data(:', toastState: ToastState.SUCCESS);
+        loadFollowing = false;
+      } else {
+        pageFollowing++;
+        Following.followingModel?['data']
+            .addAll(value.data['data']);
+        loadFollowing = false;
+        emit(PaginationFollowingSuccessState());
+      }
+    }).onError((error, stackTrace) {
+      print(error);
+      loadFollowing = false;
+      emit(PaginationFollowingErrorState());
+    });
   }
 }
