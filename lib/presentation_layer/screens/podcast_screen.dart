@@ -1,4 +1,5 @@
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
+import 'package:club_cast/data_layer/bloc/room_cubit/room_cubit.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
 import 'package:club_cast/presentation_layer/components/constant/constant.dart';
 import 'package:club_cast/presentation_layer/models/getMyFollowingPodcast.dart';
@@ -15,18 +16,21 @@ import '../../data_layer/cash/cash.dart';
 import '../widgets/playingCardWidget.dart';
 
 class PodCastScreen extends StatelessWidget {
-  const PodCastScreen({Key? key}) : super(key: key);
+  PodCastScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var cubit = GeneralAppCubit?.get(context);
+    var cubit = GeneralAppCubit.get(context);
     String token = CachHelper.getData(key: 'token');
     String? currentId;
+    currentId = cubit.activePodCastId;
     return BlocConsumer<GeneralAppCubit, GeneralAppStates>(
-      listener: (BuildContext context, state) {},
-      builder: (BuildContext context, Object? state) {
-        currentId = cubit.activePodCastId;
-        print(currentId);
+      listener: (context, state) {},
+      builder: (context, state) {
+        print('podcast');
+        print(RoomCubit.get(context).speakers);
+
+        //     print(currentId);
         return Padding(
           padding: cubit.isPlaying || cubit.isPausedInHome
               ? const EdgeInsets.only(

@@ -7,6 +7,7 @@ import 'package:club_cast/data_layer/bloc/room_cubit/room_cubit.dart';
 import 'package:club_cast/presentation_layer/models/activeRoomModelAdmin.dart';
 import 'package:club_cast/presentation_layer/models/activeRoomModelUser.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import 'package:path_provider/path_provider.dart' as path;
 import '../../presentation_layer/components/constant/constant.dart';
@@ -60,61 +61,70 @@ class AgoraRtc {
   static void eventsAgora(BuildContext context) {
     print('events');
     engine?.setEventHandler(
-      RtcEngineEventHandler(activeSpeaker: (uid) {
-        print('klam');
-      }, audioVolumeIndication: (list, aa) {
-        print(list);
-        list.forEach((elementAgora) {
+      RtcEngineEventHandler(
+        activeSpeaker: (uid) {
+          print('klam');
+        },
+        audioVolumeIndication: (list, aa) {
+          var myBloc = RoomCubit();
+          print(list);
           if (isIamInRoomScreen) {
-            RoomCubit.get(context).speakers.forEach(
-              (elementUser) {
-                if (elementAgora.volume > 3) {
-                  if (elementAgora.uid == 0 &&
-                      (elementUser['_id'] == ActiveRoomUserModel.getUserId())) {
-                    print('first');
-                    //    print('user' + ActiveRoomUserModel.getUserId());
+            print(list);
+            list.forEach((elementAgora) {
+              print(myBloc.speakers);
+              myBloc.speakers.forEach(
+                (elementUser) {
+                  if (elementAgora.volume > 3) {
+                    if (elementAgora.uid == 0 &&
+                        (elementUser['_id'] ==
+                            ActiveRoomUserModel.getUserId())) {
+                      print('first');
+                      //    print('user' + ActiveRoomUserModel.getUserId());
 
-                    elementUser['isTalking'] = true;
-                    RoomCubit.get(context).changeState();
-                  } else if (elementAgora.uid == elementUser['uid']) {
-                    elementUser['isTalking'] = true;
-                    print('sec');
-                    RoomCubit.get(context).changeState();
+                      elementUser['isTalking'] = true;
+                      RoomCubit.get(context).changeState();
+                    } else if (elementAgora.uid == elementUser['uid']) {
+                      elementUser['isTalking'] = true;
+                      print('sec');
+                      RoomCubit.get(context).changeState();
+                    } else {
+                      elementUser['isTalking'] = false;
+                      print('third');
+                      RoomCubit.get(context).changeState();
+                    }
                   } else {
                     elementUser['isTalking'] = false;
-                    print('third');
                     RoomCubit.get(context).changeState();
+                    //   RoomCubit.get(context).changeState2();
                   }
-                } else {
-                  elementUser['isTalking'] = false;
-                  RoomCubit.get(context).changeState2();
-                }
-              },
-            );
+                },
+              );
+            });
           }
-        });
-      }, userJoined: (uid, elapsed) {
-        print('adel');
-        print(uid);
+        },
+        userJoined: (uid, elapsed) {
+          print('adel');
+          print(uid);
 
-        print(RoomCubit.get(context).listener);
-      }, userMuteAudio: (uid, muted) {
-        print('mutedAgora');
-        for (int i = 0; i < RoomCubit.get(context).speakers.length; i++) {
-          if (RoomCubit.get(context).speakers[i]['uid'] == uid) {
-            RoomCubit.get(context).speakers[i]['isMuted'] = muted;
-            break;
+          print(RoomCubit.get(context).listener);
+        },
+        userMuteAudio: (uid, muted) {
+          print('mutedAgora');
+          for (int i = 0; i < RoomCubit.get(context).speakers.length; i++) {
+            if (RoomCubit.get(context).speakers[i]['uid'] == uid) {
+              RoomCubit.get(context).speakers[i]['isMuted'] = muted;
+              break;
+            }
           }
-        }
-        RoomCubit.get(context).changeState();
-      }, joinChannelSuccess: (channelName, uId, el) {
-        print('weAreLive');
-        print(uId);
+          RoomCubit.get(context).changeState();
+        },
+        joinChannelSuccess: (channelName, uId, el) {
+          print('weAreLive');
+          print(uId);
 
-        print(RoomCubit.get(context).speakers);
-      }, remoteAudioStateChanged: (uId, state, reason, el) {
-        print('muted ${state}');
-      }),
+          print(RoomCubit.get(context).speakers);
+        },
+      ),
     );
   }
 

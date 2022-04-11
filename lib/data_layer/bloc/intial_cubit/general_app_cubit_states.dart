@@ -217,3 +217,5 @@ class PaginationFollowingLoadingState extends GeneralAppStates {}
 class PaginationFollowingSuccessState extends GeneralAppStates {}
 
 class PaginationFollowingErrorState extends GeneralAppStates {}
+
+class ChangeState extends GeneralAppStates {}

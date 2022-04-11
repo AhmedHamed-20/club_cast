@@ -84,8 +84,9 @@ class SocketFunc {
         RoomCubit.get(context).changeState();
         return;
       }
-      RoomCubit.get(context).listener = [];
-      RoomCubit.get(context).speakers = [];
+      var myCubit = RoomCubit();
+      myCubit.listener = [];
+      myCubit.speakers = [];
       ActiveRoomAdminModel.activeRoomAdminData = {};
       ActiveRoomAdminModel.activeRoomData = {};
       activeRoomName = '';
@@ -106,7 +107,8 @@ class SocketFunc {
         isConnected = false;
       }
       currentUserRoleinRoom = false;
-      GeneralAppCubit.get(context).getAllRoomsData();
+      var generalCubit = GeneralAppCubit();
+      generalCubit.getAllRoomsData();
     });
     socket?.on('fromServer', (_) => print(_));
   }
@@ -216,15 +218,15 @@ class SocketFunc {
               pressedJoinRoom = false,
               currentUserRoleinRoom = false,
 
-              RoomCubit?.get(context).speakers.add(data[1]['admin']),
+              RoomCubit.get(context).speakers.add(data[1]['admin']),
 
-              RoomCubit?.get(context).speakers.addAll(data[1]['brodcasters']),
-              RoomCubit?.get(context).speakers.forEach((e) {
+              RoomCubit.get(context).speakers.addAll(data[1]['brodcasters']),
+              RoomCubit.get(context).speakers.forEach((e) {
                 e['isMuted'] = false;
                 e['isTalking'] = false;
               }),
-              RoomCubit?.get(context).listener.addAll(data[1]['audience']),
-              RoomCubit?.get(context).listener.forEach(
+              RoomCubit.get(context).listener.addAll(data[1]['audience']),
+              RoomCubit.get(context).listener.forEach(
                 (e) {
                   if (e['askedToTalk'] != true) {
                     e['askedToTalk'] = false;
@@ -471,9 +473,10 @@ class SocketFunc {
   static listenOnUsersAskedForTalk(BuildContext context) {
     socket?.on('userAskedForPerms', (data) {
       print(data);
+      var cubit = RoomCubit.get(context);
       //   RoomCubit.get(context).askedToTalk.add(data),
-      for (int i = 0; i < RoomCubit.get(context).listener.length; i++) {
-        if (data['_id'] == RoomCubit.get(context).listener[i]['_id']) {
+      for (int i = 0; i < cubit.listener.length; i++) {
+        if (data['_id'] == cubit.listener[i]['_id']) {
           RoomCubit.get(context).listener[i]['askedToTalk'] =
               !RoomCubit.get(context).listener[i]['askedToTalk'];
           print(RoomCubit.get(context).listener);

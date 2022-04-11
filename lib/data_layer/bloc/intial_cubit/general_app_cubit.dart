@@ -90,7 +90,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   List<Widget> screen = [
     PublicRoomScreen(),
     Container(),
-    const PodCastScreen(),
+    PodCastScreen(),
   ];
   getDark(bool isDARK) {
     print(isDARK);
@@ -122,7 +122,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   }
 
   void changeState() {
-    emit(ChangePlayingState());
+    emit(ChangeState());
   }
 
   void getAllCategory() {
@@ -866,8 +866,8 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       'Authorization': 'Bearer ${token}',
     }).then((value) {
       Followers.followersModel = Map<String, dynamic>.from(value.data);
-      noDataFollowers=false;
-      isPageUserFollowers=false;
+      noDataFollowers = false;
+      isPageUserFollowers = false;
       emit(GetMyFollowersSuccessState());
       followerLoad = false;
     }).catchError((onError) {
@@ -886,8 +886,8 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       'Authorization': 'Bearer ${token}',
     }).then((value) {
       Following.followingModel = Map<String, dynamic>.from(value.data);
-      noDataFollowing=false;
-      isPageUserFollowing=false;
+      noDataFollowing = false;
+      isPageUserFollowing = false;
       emit(GetMyFollowingUsersSuccessState());
       followingLoad = false;
     }).catchError((onError) {
@@ -908,8 +908,8 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       },
     ).then((value) {
       Followers.followersModel = Map<String, dynamic>.from(value.data);
-      isPageUserFollowers=true;
-      noDataFollowers=false;
+      isPageUserFollowers = true;
+      noDataFollowers = false;
       emit(UserFollowersSuccessState());
       followerLoad = false;
     }).catchError((error) {
@@ -930,9 +930,9 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       },
     ).then((value) {
       Following.followingModel = Map<String, dynamic>.from(value.data);
-      isPageUserFollowing=true;
+      isPageUserFollowing = true;
       pageFollowing = 2;
-      noDataFollowing=false;
+      noDataFollowing = false;
       emit(UserFollowingSuccessState());
       followingLoad = false;
     }).catchError((error) {
@@ -1134,15 +1134,14 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     ].request();
   }
 
-  bool isPageUserFollowers=false;
-  bool noDataFollowers=false;
-  bool loadFollowers=false;
+  bool isPageUserFollowers = false;
+  bool noDataFollowers = false;
+  bool loadFollowers = false;
   int pageFollowers = 2;
   void paginationFollowers(
-      String token,
-      String urlType,
-      )
-  {
+    String token,
+    String urlType,
+  ) {
     loadFollowers = true;
     emit(PaginationFollowersLoadingState());
     DioHelper.getData(
@@ -1156,8 +1155,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
         loadFollowers = false;
       } else {
         pageFollowers++;
-        Followers.followersModel?['data']
-            .addAll(value.data['data']);
+        Followers.followersModel?['data'].addAll(value.data['data']);
 
         loadFollowers = false;
         emit(PaginationFollowersSuccessState());
@@ -1169,16 +1167,15 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     });
   }
 
-
-  bool isPageUserFollowing=false;
-  bool noDataFollowing=false;
-  bool loadFollowing=false;
-  bool isLowResult=false;
+  bool isPageUserFollowing = false;
+  bool noDataFollowing = false;
+  bool loadFollowing = false;
+  bool isLowResult = false;
   int pageFollowing = 2;
   void paginationFollowing(
-      String token,
-      String urlType,
-      ) {
+    String token,
+    String urlType,
+  ) {
     loadFollowing = true;
     emit(PaginationFollowingLoadingState());
     DioHelper.getData(
@@ -1192,8 +1189,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
         loadFollowing = false;
       } else {
         pageFollowing++;
-        Following.followingModel?['data']
-            .addAll(value.data['data']);
+        Following.followingModel?['data'].addAll(value.data['data']);
         loadFollowing = false;
         emit(PaginationFollowingSuccessState());
       }

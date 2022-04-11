@@ -26,8 +26,8 @@ class PublicRoomScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<GeneralAppCubit, GeneralAppStates>(
-      listener: (BuildContext context, state) {},
-      builder: (BuildContext context, Object? state) {
+      listener: (context, state) {},
+      builder: (context, state) {
         var cubit = GeneralAppCubit?.get(context);
         refresh() {
           cubit.getMyEvents();
@@ -125,7 +125,7 @@ class PublicRoomScreen extends StatelessWidget {
                                     GetAllRoomsModel.getRoomsUserPublishInform(
                                         index),
                                 click: () {
-                                  RoomCubit.get(context).changeState();
+                                  //   RoomCubit.get(context).changeState();
 
                                   pressedJoinRoom = true;
                                   cubit.micPerm();

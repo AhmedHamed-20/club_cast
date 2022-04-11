@@ -15,7 +15,7 @@ import '../components/constant/constant.dart';
 import '../layout/layout_screen.dart';
 
 class RoomUserViewScreen extends StatelessWidget {
-  const RoomUserViewScreen({Key? key}) : super(key: key);
+  RoomUserViewScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -36,8 +36,8 @@ class RoomUserViewScreen extends StatelessWidget {
             appBar: AppBar(
               leading: MaterialButton(
                 onPressed: () {
-                  Navigator.of(context).pop();
                   isIamInRoomScreen = false;
+                  Navigator.of(context).pop();
                 },
                 child: Icon(
                   Icons.arrow_back_ios,
@@ -53,7 +53,6 @@ class RoomUserViewScreen extends StatelessWidget {
                     onPressed: () {
                       SocketFunc.isConnected = false;
                       SocketFunc.leaveRoom(context);
-
                       navigatePushANDRemoveRout(
                           context: context, navigateTo: LayoutScreen());
                     },

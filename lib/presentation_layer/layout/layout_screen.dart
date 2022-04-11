@@ -26,8 +26,8 @@ class LayoutScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<GeneralAppCubit, GeneralAppStates>(
-        listener: (BuildContext context, state) {},
-        builder: (BuildContext context, Object? state) {
+        listener: (context, state) {},
+        builder: (context, state) {
           var cubit = GeneralAppCubit.get(context);
           return Scaffold(
             bottomSheet: cubit.isPlaying ||
