@@ -28,6 +28,7 @@ class LayoutScreen extends StatelessWidget {
     return BlocConsumer<GeneralAppCubit, GeneralAppStates>(
         listener: (context, state) {},
         builder: (context, state) {
+          var roomCubit = RoomCubit();
           var cubit = GeneralAppCubit.get(context);
           return Scaffold(
             bottomSheet: cubit.isPlaying ||
@@ -306,6 +307,8 @@ class LayoutScreen extends StatelessWidget {
                         'status': cubit.isPublicRoom ? 'public' : 'private',
                       },
                       context,
+                      roomCubit,
+                      cubit,
                     );
                     SocketFunc.isAdminLeftSocket();
                   });

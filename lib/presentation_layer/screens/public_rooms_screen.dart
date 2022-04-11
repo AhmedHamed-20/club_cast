@@ -29,6 +29,7 @@ class PublicRoomScreen extends StatelessWidget {
       listener: (context, state) {},
       builder: (context, state) {
         var cubit = GeneralAppCubit?.get(context);
+        var roomCubit = RoomCubit.get(context);
         refresh() {
           cubit.getMyEvents();
           return cubit.getAllRoomsData();
@@ -153,13 +154,17 @@ class PublicRoomScreen extends StatelessWidget {
                                       SocketFunc.connectWithSocket(context);
                                       SocketFunc.joinRoom(
                                           GetAllRoomsModel.getRoomName(index),
-                                          context);
+                                          context,
+                                          roomCubit,
+                                          cubit);
                                     }
                                   } else {
                                     SocketFunc.connectWithSocket(context);
                                     SocketFunc.joinRoom(
                                         GetAllRoomsModel.getRoomName(index),
-                                        context);
+                                        context,
+                                        roomCubit,
+                                        cubit);
                                   }
                                 },
                               ),
