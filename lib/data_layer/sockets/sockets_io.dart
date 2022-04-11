@@ -12,6 +12,7 @@ import 'package:flutter/widgets.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import '../../presentation_layer/components/constant/constant.dart';
 import '../bloc/room_cubit/room_cubit.dart';
+import '../notification/local_notification.dart';
 
 class SocketFunc {
   static Socket? socket;
@@ -264,6 +265,11 @@ class SocketFunc {
                 context: context,
                 navigateTo: RoomUserViewScreen(),
               ),
+              NotificationService.showNotification(
+                'Active room',
+                activeRoomName,
+                'sadsad',
+              ),
               isAdminLeftSocket(),
               userJoined(context, ActiveRoomUserModel.getRoomId()),
               userLeft(ActiveRoomUserModel.getRoomId(), context),
@@ -274,7 +280,7 @@ class SocketFunc {
               audienceToken(),
               adminLeft(context),
               isConnected = true,
-              //    GeneralAppCubit.get(context).changeState(),
+              generalAppCubit.changeState(),
             });
     socket?.on(
         'errorMessage',

@@ -16,10 +16,11 @@ import 'data_layer/bloc/bloc_observer/bloc_observer.dart';
 import 'data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'data_layer/bloc/login_cubit/login_cubit.dart';
 import 'data_layer/bloc/room_cubit/room_cubit.dart';
+import 'data_layer/notification/local_notification.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  NotificationService().init();
   DioHelper.init();
   await CachHelper.init();
   Bloc.observer = MyBlocObserver();

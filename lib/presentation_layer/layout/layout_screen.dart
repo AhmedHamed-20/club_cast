@@ -28,7 +28,7 @@ class LayoutScreen extends StatelessWidget {
     return BlocConsumer<GeneralAppCubit, GeneralAppStates>(
         listener: (context, state) {},
         builder: (context, state) {
-          var roomCubit = RoomCubit();
+          var roomCubit = RoomCubit.get(context);
           var cubit = GeneralAppCubit.get(context);
           return Scaffold(
             bottomSheet: cubit.isPlaying ||
