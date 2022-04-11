@@ -111,7 +111,7 @@ class SearchScreen extends StatelessWidget {
                                       cubit.getUserById(
                                           profileId: cubit.search!['data']
                                                   [index]['_id']
-                                              .toString());
+                                              .toString(),token: token);
                                       if (cubit.search!['data'][index]['_id']
                                               .toString() ==
                                           GetUserModel.getUserID()) {

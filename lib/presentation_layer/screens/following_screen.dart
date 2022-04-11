@@ -58,7 +58,7 @@ class FollowingScreen extends StatelessWidget {
                                 cubit.getUserPodcast(
                                     token, Following.getUserID(index));
                                 cubit.getUserById(
-                                    profileId: Following.getUserID(index));
+                                    profileId: Following.getUserID(index),token: token);
                                 if (Following.getUserID(index) ==
                                     GetUserModel.getUserID()) {
                                   navigatePushTo(

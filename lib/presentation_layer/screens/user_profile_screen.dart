@@ -35,7 +35,7 @@ class UserProfileScreen extends StatelessWidget {
     return BlocConsumer<GeneralAppCubit, GeneralAppStates>(
       listener: (context, index) {},
       builder: (context, index) {
-        // String token = CachHelper.getData(key: 'token');
+        String token = CachHelper.getData(key: 'token');
         refresh() {
           cubit.getUserData(token: token);
           return cubit.getMyPodCast(token);

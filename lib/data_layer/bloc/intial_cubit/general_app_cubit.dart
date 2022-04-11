@@ -773,6 +773,8 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
 
   Future getUserById({
     required String profileId,
+    required String token,
+
     Map<String, dynamic>? save,
   }) async {
     isLoadingprofile = true;
@@ -795,6 +797,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
 
   Future followUser({
     required String userProfileId,
+    required String token,
   }) async {
     emit(FollowUserLoadingState());
     return await DioHelper.postData(
@@ -813,6 +816,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
 
   Future unFollowUser({
     required String userProfileId,
+    required String token,
   }) async {
     emit(UnFollowUserLoadingState());
     return await DioHelper.deleteData(
@@ -898,6 +902,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
 
   void userFollowers({
     required String userProfileId,
+    required String token,
   }) {
     emit(UserFollowersLoadingState());
     followerLoad = true;
@@ -920,6 +925,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
 
   void userFollowing({
     required String userProfileId,
+    required String token,
   }) {
     emit(UserFollowingLoadingState());
     followingLoad = true;
@@ -963,9 +969,9 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
 
     print(CachHelper.getData(key: 'token'));
     print(profileAvatar!.path);
-    await DioHelper.patchData(
+    await DioHelper.uploadImage(
             url: updateProfile,
-            photo: profileAvatar,
+            image: profileAvatar,
             token: CachHelper.getData(key: 'token'))
         .then((value) {
       print(value.data);
@@ -975,8 +981,11 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       isUploadPhoto = false;
       emit(UserUpdateAvatarSuccessState());
     }).catchError((error) {
+      print(profileAvatar);
+      print('ffffffffffffffff');
       print("error when set user avatar :${error.toString()}");
       emit(UserUpdateAvatarErrorState());
+      isUploadPhoto = false;
     });
   }
 
