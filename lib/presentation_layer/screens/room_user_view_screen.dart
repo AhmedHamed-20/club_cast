@@ -1,6 +1,7 @@
 import 'package:club_cast/data_layer/agora/rtc_engine.dart';
 import 'package:club_cast/data_layer/bloc/room_cubit/room_cubit.dart';
 import 'package:club_cast/data_layer/bloc/room_cubit/room_states.dart';
+import 'package:club_cast/data_layer/notification/local_notification.dart';
 import 'package:club_cast/data_layer/sockets/sockets_io.dart';
 import 'package:club_cast/presentation_layer/models/activeRoomModelUser.dart';
 import 'package:club_cast/presentation_layer/widgets/listenersWidget.dart';
@@ -55,6 +56,7 @@ class RoomUserViewScreen extends StatelessWidget {
                       SocketFunc.leaveRoom(context);
                       navigatePushANDRemoveRout(
                           context: context, navigateTo: LayoutScreen());
+                      NotificationService.notification.cancelAll();
                     },
                     child: Container(
                       decoration: BoxDecoration(

@@ -152,6 +152,8 @@ class PublicRoomScreen extends StatelessWidget {
                                               "You can't join room if you are admin of a room,leave first ):",
                                           toastState: ToastState.ERROR);
                                     } else {
+                                      NotificationService.notification
+                                          .cancelAll();
                                       SocketFunc.leaveRoom(context);
                                       SocketFunc.connectWithSocket(context);
                                       SocketFunc.joinRoom(

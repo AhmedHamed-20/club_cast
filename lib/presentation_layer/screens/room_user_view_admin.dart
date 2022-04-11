@@ -2,6 +2,7 @@ import 'package:club_cast/data_layer/agora/rtc_engine.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/data_layer/bloc/room_cubit/room_cubit.dart';
 import 'package:club_cast/data_layer/bloc/room_cubit/room_states.dart';
+import 'package:club_cast/data_layer/notification/local_notification.dart';
 import 'package:club_cast/data_layer/sockets/sockets_io.dart';
 import 'package:club_cast/presentation_layer/models/activeRoomModelAdmin.dart';
 import 'package:club_cast/presentation_layer/screens/uploadPodcastScreen.dart';
@@ -98,6 +99,7 @@ class RoomAdminViewScreen extends StatelessWidget {
                                   // navigatePushANDRemoveRout(
                                   //     context: context,
                                   //     navigateTo: LayoutScreen());
+                                  NotificationService.notification.cancelAll();
                                 },
                                 noFunction: () {
                                   Navigator.of(context).pop();

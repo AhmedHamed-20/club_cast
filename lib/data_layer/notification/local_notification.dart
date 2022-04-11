@@ -22,7 +22,8 @@ class NotificationService {
       requestBadgePermission: false,
       requestAlertPermission: false,
     );
-
+    final AndroidNotificationChannel androidNotificationChannel =
+        AndroidNotificationChannel('0', 'hamed', showBadge: false);
     final InitializationSettings initializationSettings =
         InitializationSettings(
             android: initializationSettingsAndroid,
@@ -35,9 +36,12 @@ class NotificationService {
   static Future notificationDetails() async {
     return const NotificationDetails(
       android: AndroidNotificationDetails(
-        'channel Id',
+        'channel Id 4',
         'channel name',
-        importance: Importance.max,
+        onlyAlertOnce: true,
+        colorized: true,
+        playSound: false,
+        ongoing: true,
       ),
       iOS: IOSNotificationDetails(),
     );

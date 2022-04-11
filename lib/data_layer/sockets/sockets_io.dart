@@ -163,7 +163,8 @@ class SocketFunc {
                 navigateTo: RoomAdminViewScreen(),
               ),
               GeneralAppCubit.get(context).roomNameController.clear(),
-
+              NotificationService.showNotification(
+                  'Active room', activeRoomName, 'asd'),
               GeneralAppCubit.get(context).selectedCategoryItem = 'ai',
               GeneralAppCubit.get(context).isPublicRoom = true,
               GeneralAppCubit.get(context).isRecordRoom = false,

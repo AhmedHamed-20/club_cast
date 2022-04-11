@@ -23,13 +23,14 @@ class PodCastScreen extends StatelessWidget {
     var cubit = GeneralAppCubit.get(context);
     String token = CachHelper.getData(key: 'token');
     String? currentId;
-    currentId = cubit.activePodCastId;
+
+    print(currentId);
     return BlocConsumer<GeneralAppCubit, GeneralAppStates>(
       listener: (context, state) {},
       builder: (context, state) {
         print('podcast');
         print(RoomCubit.get(context).speakers);
-
+        currentId = cubit.activePodCastId;
         //     print(currentId);
         return Padding(
           padding: cubit.isPlaying || cubit.isPausedInHome
@@ -164,7 +165,8 @@ class PodCastScreen extends StatelessWidget {
                                 cubit.getUserById(
                                     profileId: GetMyFollowingPodCastsModel
                                         .getPodcastUserPublishInform(
-                                            index)[0]['_id'],token: token);
+                                            index)[0]['_id'],
+                                    token: token);
                                 cubit.getUserPodcast(
                                     token,
                                     GetMyFollowingPodCastsModel
