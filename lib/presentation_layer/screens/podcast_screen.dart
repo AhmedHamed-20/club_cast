@@ -164,7 +164,7 @@ class PodCastScreen extends StatelessWidget {
                                 cubit.getUserById(
                                     profileId: GetMyFollowingPodCastsModel
                                         .getPodcastUserPublishInform(
-                                            index)[0]['_id']);
+                                            index)[0]['_id'],token: token);
                                 cubit.getUserPodcast(
                                     token,
                                     GetMyFollowingPodCastsModel

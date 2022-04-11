@@ -85,7 +85,7 @@ Widget speakersWiget({
                                     onPressed: () {
                                       GeneralAppCubit.get(context).getUserById(
                                           profileId: cubit.speakers[index]
-                                              ['_id']);
+                                              ['_id'],token: token);
 
                                       GeneralAppCubit.get(context)
                                           .getUserPodcast(token,

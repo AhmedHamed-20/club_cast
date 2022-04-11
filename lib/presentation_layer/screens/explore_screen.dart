@@ -1,5 +1,6 @@
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
+import 'package:club_cast/data_layer/cash/cash.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
 import 'package:club_cast/presentation_layer/models/explore_podcasts_model.dart';
 import 'package:club_cast/presentation_layer/models/get_all_podcst.dart';
@@ -28,6 +29,7 @@ class ExploreScreen extends StatelessWidget {
 
     return BlocConsumer<GeneralAppCubit, GeneralAppStates>(
         builder: (context, state) {
+          String token = CachHelper.getData(key: 'token');
           cubit.isExplore = true;
           return WillPopScope(
             onWillPop: () async {
@@ -169,7 +171,8 @@ class ExploreScreen extends StatelessWidget {
                                           cubit.getUserById(
                                               profileId: GetExplorePodCastModel
                                                   .getPodcastUserPublishInform(
-                                                      index)[0]['_id']);
+                                                      index)[0]['_id'],
+                                          token: token);
                                           cubit.getMyPodCast(
                                             token,
                                           );
@@ -180,7 +183,8 @@ class ExploreScreen extends StatelessWidget {
                                           cubit.getUserById(
                                               profileId: GetExplorePodCastModel
                                                   .getPodcastUserPublishInform(
-                                                      index)[0]['_id']);
+                                                      index)[0]['_id'],
+                                          token: token);
                                           cubit.getUserPodcast(
                                               token,
                                               GetExplorePodCastModel

@@ -31,7 +31,7 @@ class EditUserProfileScreen extends StatelessWidget {
   IconData suffix2 = Icons.visibility_outlined;
   bool isUpdatePhoto = false;
 
-  var token = CachHelper.getData(key: 'token');
+  // var token = CachHelper.getData(key: 'token');
   @override
   Widget build(BuildContext context) {
     userNameController?.text = GetUserModel.getUserName();
@@ -40,7 +40,7 @@ class EditUserProfileScreen extends StatelessWidget {
     return BlocConsumer<GeneralAppCubit, GeneralAppStates>(
       listener: (context, state) {},
       builder: (context, state) {
-        //   String token = CachHelper.getData(key: 'token');
+          String token = CachHelper.getData(key: 'token');
         var cubit = GeneralAppCubit.get(context);
         return WillPopScope(
           onWillPop: () async {
@@ -293,6 +293,7 @@ class EditUserProfileScreen extends StatelessWidget {
   Widget modalSheet(BuildContext context) {
     return StatefulBuilder(
       builder: (BuildContext context, void Function(void Function()) setState) {
+        String token = CachHelper.getData(key: 'token');
         return SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.only(

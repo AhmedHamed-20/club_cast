@@ -30,6 +30,7 @@ class LayoutScreen extends StatelessWidget {
         builder: (context, state) {
           var roomCubit = RoomCubit.get(context);
           var cubit = GeneralAppCubit.get(context);
+          String token = CachHelper.getData(key: 'token');
           return Scaffold(
             bottomSheet: cubit.isPlaying ||
                     cubit.isPausedInHome ||
