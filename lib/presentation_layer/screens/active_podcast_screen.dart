@@ -5,6 +5,7 @@ import 'package:club_cast/data_layer/sockets/sockets_io.dart';
 import 'package:club_cast/presentation_layer/components/constant/constant.dart';
 import 'package:club_cast/presentation_layer/models/getMyFollowingPodcast.dart';
 import 'package:club_cast/presentation_layer/models/get_all_podcst.dart';
+import 'package:club_cast/presentation_layer/screens/profile_detailes_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -63,24 +64,23 @@ class ActivePodCastScreen extends StatelessWidget {
               Column(
                 children: [
                   Center(
-                    child: Container(
-                      width: 200,
-                      height: 200,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        image: DecorationImage(
-                          image: NetworkImage(userPhoto),
-                          fit: BoxFit.cover,
+                    child: GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                        width: 200,
+                        height: 200,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          image: DecorationImage(
+                            image: NetworkImage(userPhoto),
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                     ),
                   ),
                   const SizedBox(
                     height: 10,
-                  ),
-                  Text(
-                    userName,
-                    style: Theme.of(context).textTheme.bodyText1,
                   ),
                 ],
               ),

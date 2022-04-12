@@ -29,6 +29,7 @@ class RoomAdminViewScreen extends StatelessWidget {
 
     return BlocConsumer<RoomCubit, RoomStates>(
       builder: (context, state) {
+        print(GeneralAppCubit.get(context).isPublicRoom);
         return WillPopScope(
           onWillPop: () async {
             isIamInRoomScreen = false;
@@ -80,6 +81,15 @@ class RoomAdminViewScreen extends StatelessWidget {
               ),
               backgroundColor: Colors.transparent,
               elevation: 0,
+              title: GeneralAppCubit.get(context).isPublicRoom
+                  ? const SizedBox()
+                  : SelectableText(
+                      ActiveRoomAdminModel.getRoomId(),
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyText1
+                          ?.copyWith(fontSize: 13),
+                    ),
               actions: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -126,7 +136,7 @@ class RoomAdminViewScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                )
+                ),
               ],
             ),
             body: SingleChildScrollView(

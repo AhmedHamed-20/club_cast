@@ -1,3 +1,4 @@
+import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:bloc/bloc.dart';
 import 'package:club_cast/data_layer/bloc/room_cubit/room_states.dart';
 import 'package:club_cast/data_layer/dio/dio_setup.dart';
@@ -18,6 +19,7 @@ class RoomCubit extends Cubit<RoomStates> {
   List speakers = [];
   List listener = [];
   List askedToTalk = [];
+
 /////////Func/////////////////////
 
   void onToggleMute() {
@@ -48,13 +50,26 @@ class RoomCubit extends Cubit<RoomStates> {
         url: getRoom + roomId,
         token: {'Authorization': 'Bearer $token'}).then((value) {
       //   print(value.data);
-      ActiveRoomAdminModel.activeRoomData =
-          Map<String, dynamic>.from(value.data['data']['data']);
-      ActiveRoomUserModel.activeRoomData =
-          Map<String, dynamic>.from(value.data['data']['data']);
-      speakers = ActiveRoomAdminModel.getRoomsBrodCasters();
-      listener = ActiveRoomAdminModel.getRoomsAudienc();
-      print(ActiveRoomAdminModel.activeRoomData);
+
+      speakers.add(value['data']['admin']);
+
+      speakers.addAll(value['data']['brodcasters']);
+      speakers.forEach((e) {
+        e['isMuted'] = false;
+        e['isTalking'] = false;
+      });
+      listener.addAll(value['data']['audience']);
+      listener.forEach(
+        (e) {
+          if (e['askedToTalk'] != true) {
+            e['askedToTalk'] = false;
+            e['isSpeaker'] = false;
+            e['isMuted'] = false;
+            e['isTalking'] = false;
+          }
+        },
+      );
+      activeRoomName = value['data']['name'];
       emit(GetRoomDataGetSuccess());
     }).catchError((onError) {
       print(onError);

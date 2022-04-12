@@ -85,7 +85,8 @@ Widget speakersWiget({
                                     onPressed: () {
                                       GeneralAppCubit.get(context).getUserById(
                                           profileId: cubit.speakers[index]
-                                              ['_id'],token: token);
+                                              ['_id'],
+                                          token: token);
 
                                       GeneralAppCubit.get(context)
                                           .getUserPodcast(token,
@@ -175,6 +176,7 @@ Widget speakersWiget({
                                 child: const Icon(
                                   Icons.mic_off,
                                   size: 19,
+                                  color: Colors.white,
                                 ),
                               ),
                             )

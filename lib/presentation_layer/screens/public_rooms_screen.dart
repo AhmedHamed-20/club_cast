@@ -16,11 +16,13 @@ import 'package:club_cast/presentation_layer/widgets/event_card_item.dart';
 import 'package:club_cast/presentation_layer/widgets/public_room_card_item.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../models/getMyFollowingEvents.dart';
+import '../widgets/multi_use_dialog.dart';
 
 class PublicRoomScreen extends StatelessWidget {
   PublicRoomScreen({Key? key}) : super(key: key);
@@ -104,9 +106,70 @@ class PublicRoomScreen extends StatelessWidget {
                           Padding(
                             padding:
                                 const EdgeInsetsDirectional.only(start: 12.0),
-                            child: Text(
-                              'JOINING ROOM ~~~~~~',
-                              style: Theme.of(context).textTheme.bodyText1,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'JOINING ROOM ~~~~~~',
+                                  style: Theme.of(context).textTheme.bodyText1,
+                                ),
+                                MaterialButton(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  onPressed: () {
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return multiAlerDialog(
+                                            title: 'Join private room',
+                                            context: context,
+                                            content: defaultTextFormField(
+                                              context: context,
+                                              controller: privateRoomController,
+                                              labelText: 'Enter room id',
+                                              labelStyle: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyText1,
+                                              keyboardType: TextInputType.text,
+                                            ),
+                                            actions: MaterialButton(
+                                              onPressed: () {
+                                                RoomCubit.get(context)
+                                                    .getRoomData(
+                                                        token,
+                                                        privateRoomController
+                                                            .text)
+                                                    .then((value) {
+                                                  SocketFunc.joinRoom(
+                                                      activeRoomName,
+                                                      context,
+                                                      roomCubit,
+                                                      cubit);
+                                                });
+                                              },
+                                              child: Text(
+                                                'Enter',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1,
+                                              ),
+                                            ),
+                                          );
+                                        });
+                                  },
+                                  child: Text(
+                                    'Join private room',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        ?.copyWith(
+                                          fontSize: 17,
+                                          color: Theme.of(context).primaryColor,
+                                        ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                           Padding(

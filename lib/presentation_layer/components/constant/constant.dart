@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 /////// end Points ////////////
 var token;
 String activeRoomName = '';
+TextEditingController privateRoomController = TextEditingController();
 bool currentUserRoleinRoom = false;
 bool pressedJoinRoom = false;
 bool isIamInRoomScreen = true;
+String? privateRoomId;
 UserLoginModel? ahmedModel;
 const String baseUrl = "https://audiocomms-podcast-platform.herokuapp.com/api/";
 const String login = "v1/users/login";

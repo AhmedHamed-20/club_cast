@@ -159,7 +159,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       activePodCastId = activePodCastIdnow;
       activePodcastname = name;
       activepodcastPhotUrl = iconurl;
-      print('nowwwww' + activePodCastId!);
+
       isPlaying = true;
       pressedPause = false;
       emit(ChangePlayingState());
@@ -774,7 +774,6 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   Future getUserById({
     required String profileId,
     required String token,
-
     Map<String, dynamic>? save,
   }) async {
     isLoadingprofile = true;

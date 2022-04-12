@@ -170,9 +170,7 @@ class SocketFunc {
               GeneralAppCubit.get(context).roomNameController.clear(),
               NotificationService.showNotification(
                   'Active room', activeRoomName, 'asd'),
-              GeneralAppCubit.get(context).selectedCategoryItem = 'ai',
-              GeneralAppCubit.get(context).isPublicRoom = true,
-              GeneralAppCubit.get(context).isRecordRoom = false,
+
               userJoined(context, ActiveRoomAdminModel.getRoomId(), cubit,
                   generalAppCubit),
 
@@ -183,6 +181,9 @@ class SocketFunc {
               adminLeft(context, cubit, generalAppCubit),
               userchangedToBrodCaster(context, cubit, generalAppCubit),
               adminReturnSuccess(context, cubit, generalAppCubit),
+              GeneralAppCubit.get(context).selectedCategoryItem = 'ai',
+              // GeneralAppCubit.get(context).isPublicRoom = true,
+              GeneralAppCubit.get(context).isRecordRoom = false,
             });
     socket?.on(
         'errorMessage',
@@ -229,39 +230,40 @@ class SocketFunc {
                 },
               pressedJoinRoom = false,
               currentUserRoleinRoom = false,
+              if (generalAppCubit.isPublicRoom)
+                {
+                  cubit.speakers.add(data[1]['admin']),
 
-              cubit.speakers.add(data[1]['admin']),
-
-              cubit.speakers.addAll(data[1]['brodcasters']),
-              cubit.speakers.forEach((e) {
-                e['isMuted'] = false;
-                e['isTalking'] = false;
-              }),
-              cubit.listener.addAll(data[1]['audience']),
-              cubit.listener.forEach(
-                (e) {
-                  if (e['askedToTalk'] != true) {
-                    e['askedToTalk'] = false;
-                    e['isSpeaker'] = false;
+                  cubit.speakers.addAll(data[1]['brodcasters']),
+                  cubit.speakers.forEach((e) {
                     e['isMuted'] = false;
                     e['isTalking'] = false;
-                  }
+                  }),
+                  cubit.listener.addAll(data[1]['audience']),
+                  cubit.listener.forEach(
+                    (e) {
+                      if (e['askedToTalk'] != true) {
+                        e['askedToTalk'] = false;
+                        e['isSpeaker'] = false;
+                        e['isMuted'] = false;
+                        e['isTalking'] = false;
+                      }
+                    },
+                  ),
+                  // print(data),
+                  ActiveRoomUserModel.activeRoomUserData = data[0],
+                  ActiveRoomUserModel.activeRoomData = data[1],
+
+                  ActiveRoomUserModel.userToken = data[2],
+                  //  print('userPhoto:' + ActiveRoomUserModel.getUserPhoto()),
+                  activeRoomName = ActiveRoomUserModel.getRoomName().toString(),
+                  print(RoomCubit.get(context).listener),
+
+                  //print(RoomCubit.get(context).speakers),
+                  // print(RoomCubit.get(context).listener),
                 },
-              ),
-              // print(data),
-              ActiveRoomUserModel.activeRoomUserData = data[0],
-              ActiveRoomUserModel.activeRoomData = data[1],
-
-              ActiveRoomUserModel.userToken = data[2],
-              //  print('userPhoto:' + ActiveRoomUserModel.getUserPhoto()),
-              activeRoomName = ActiveRoomUserModel.getRoomName().toString(),
-              print(RoomCubit.get(context).listener),
-
-              //print(RoomCubit.get(context).speakers),
-              // print(RoomCubit.get(context).listener),
-
               AgoraRtc.joinChannelagora(
-                channelName: ActiveRoomUserModel.getRoomName().toString(),
+                channelName: data[0]['roomName'],
                 role: ClientRole.Audience,
                 token: data[2],
                 context: context,
@@ -279,9 +281,19 @@ class SocketFunc {
                 'sadsad',
               ),
               isAdminLeftSocket(),
-              userJoined(context, ActiveRoomUserModel.getRoomId(), cubit,
+              userJoined(
+                  context,
+                  generalAppCubit.isPublicRoom
+                      ? ActiveRoomUserModel.getRoomId()
+                      : privateRoomController.text,
+                  cubit,
                   generalAppCubit),
-              userLeft(ActiveRoomUserModel.getRoomId(), context, cubit,
+              userLeft(
+                  generalAppCubit.isPublicRoom
+                      ? ActiveRoomUserModel.getRoomId()
+                      : privateRoomController.text,
+                  context,
+                  cubit,
                   generalAppCubit),
               listenOnUsersAskedForTalk(context, cubit, generalAppCubit),
               userchangedToBrodCaster(context, cubit, generalAppCubit),
