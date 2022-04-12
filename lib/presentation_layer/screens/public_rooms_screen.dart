@@ -247,14 +247,10 @@ class PublicRoomScreen extends StatelessWidget {
                             itemCount:
                                 GetAllRoomsModel.getAllRooms?['data'].length,
                           ),
-
-                       
-
                         ),
                       ],
                     ),
                   ),
-
                 ),
               )
             : Center(
