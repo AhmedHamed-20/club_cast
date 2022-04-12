@@ -9,6 +9,7 @@ import 'package:club_cast/presentation_layer/screens/room_user_view_admin.dart';
 import 'package:club_cast/presentation_layer/screens/room_user_view_screen.dart';
 import 'package:club_cast/presentation_layer/screens/search_screen.dart';
 import 'package:club_cast/presentation_layer/screens/user_profile_screen.dart';
+import 'package:club_cast/presentation_layer/screens/user_screen/event_screen/get_all_my_following_events.dart';
 import 'package:club_cast/presentation_layer/widgets/alertDialog.dart';
 import 'package:club_cast/presentation_layer/widgets/modelsheetcreate_room.dart';
 import 'package:flutter/cupertino.dart';
@@ -71,7 +72,7 @@ class LayoutScreen extends StatelessWidget {
                                       style:
                                           Theme.of(context).textTheme.bodyText2,
                                     ),
-                                    Container(
+                                    SizedBox(
                                       width: MediaQuery.of(context).size.width *
                                           0.3,
                                       child: Text(
@@ -261,6 +262,31 @@ class LayoutScreen extends StatelessWidget {
                     color: Theme.of(context).iconTheme.color,
                   ),
                 ),
+                IconButton(
+                  splashRadius: 30,
+                  onPressed: () {
+                    navigatePushTo(
+                      context: context,
+                      navigateTo: GetAllMyFollowingScreen(),
+                    );
+                  },
+                  icon: Icon(
+                    Icons.add_alert_outlined,
+                    size: 30,
+                    color: Theme.of(context).iconTheme.color,
+                  ),
+                ),
+                IconButton(
+                  splashRadius: 25,
+                  onPressed: () {
+                    cubit.toggleDark();
+                  },
+                  icon: Icon(
+                    cubit.isDark! ? Icons.light_mode : Icons.dark_mode,
+                    size: 30,
+                    color: Theme.of(context).iconTheme.color,
+                  ),
+                ),
                 const SizedBox(
                   width: 15,
                 ),
@@ -269,7 +295,8 @@ class LayoutScreen extends StatelessWidget {
                     cubit.getMyPodCast(token);
                     cubit.getUserData(token: token);
                     navigatePushTo(
-                        context: context, navigateTo: UserProfileScreen());
+                        context: context,
+                        navigateTo: const UserProfileScreen());
                   },
                   child: Center(
                     child: GetUserModel.getUserPhoto() == null
@@ -277,10 +304,10 @@ class LayoutScreen extends StatelessWidget {
                             strokeWidth: 1,
                           )
                         : Container(
-                            width: 45,
-                            height: 45,
+                            width: 42,
+                            height: 42,
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
+                              borderRadius: BorderRadius.circular(17),
                               image: DecorationImage(
                                 image:
                                     NetworkImage(GetUserModel.getUserPhoto()!),
@@ -291,18 +318,7 @@ class LayoutScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(
-                  width: 10,
-                ),
-                IconButton(
-                  splashRadius: 30,
-                  onPressed: () {
-                    cubit.toggleDark();
-                  },
-                  icon: Icon(
-                    cubit.isDark! ? Icons.light_mode : Icons.dark_mode,
-                    size: 30,
-                    color: Theme.of(context).iconTheme.color,
-                  ),
+                  width: 15,
                 ),
               ],
             ),

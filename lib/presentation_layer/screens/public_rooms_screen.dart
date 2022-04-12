@@ -47,204 +47,178 @@ class PublicRoomScreen extends StatelessWidget {
                 child: SingleChildScrollView(
                   physics: const AlwaysScrollableScrollPhysics(),
                   child: Padding(
-                      padding: const EdgeInsetsDirectional.only(top: 40.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          GetMyFollowingEvents.allEvent().isNotEmpty
-                              ? Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsetsDirectional.only(
-                                          start: 12.0),
-                                      child: Text(
-                                        'UPCOMING EVENTS ~~~~~~',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1,
-                                      ),
+                    padding: const EdgeInsetsDirectional.only(top: 40.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        GetMyFollowingEvents.allEvent().isNotEmpty
+                            ? Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsetsDirectional.only(
+                                        start: 12.0),
+                                    child: Text(
+                                      'UPCOMING EVENTS ~~~~~~',
+                                      style:
+                                          Theme.of(context).textTheme.bodyText1,
                                     ),
-                                    Container(
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.25,
-                                      child: ListView.builder(
-                                        physics: const BouncingScrollPhysics(),
-                                        scrollDirection: Axis.horizontal,
-                                        itemBuilder: (context, index) =>
-                                            eventCardItem(
-                                          context: context,
-                                          index: index,
-                                          userWhoCreateEventId:
-                                              GetMyFollowingEvents
-                                                  .userWhoCreateEvent(
-                                                      index)["_id"],
-                                          userName: GetMyFollowingEvents
-                                              .userWhoCreateEvent(
-                                                  index)["name"],
-                                          userUrl: GetMyFollowingEvents
-                                              .userWhoCreateEvent(
-                                                  index)['photo'],
-                                          eventDescription: GetMyFollowingEvents
-                                              .eventDescription(index),
-                                          eventName:
-                                              GetMyFollowingEvents.eventName(
-                                                  index),
-                                          eventDate:
-                                              GetMyFollowingEvents.eventDate(
-                                                  index),
-                                        ),
-                                        itemCount:
-                                            GetMyFollowingEvents.allEvent()
-                                                .length,
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              : const SizedBox(),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                              left: 12.0,
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'JOINING ROOM ~~~~~~',
-                                  style: Theme.of(context).textTheme.bodyText1,
-                                ),
-                                MaterialButton(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15),
                                   ),
-                                  onPressed: () {
-                                    showDialog(
-                                        context: context,
-                                        builder: (context) {
-                                          return multiAlerDialog(
-                                            title: 'Join private room',
+                                  SizedBox(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.27,
+                                    child: eventCardItem(
+                                      context: context,
+                                      index: 0,
+                                      userWhoCreateEventId: GetMyFollowingEvents
+                                          .userWhoCreateEvent(0)["_id"],
+                                      userName: GetMyFollowingEvents
+                                          .userWhoCreateEvent(0)["name"],
+                                      userUrl: GetMyFollowingEvents
+                                          .userWhoCreateEvent(0)['photo'],
+                                      eventDescription:
+                                          GetMyFollowingEvents.eventDescription(
+                                              0),
+                                      eventName:
+                                          GetMyFollowingEvents.eventName(0),
+                                      eventDate:
+                                          GetMyFollowingEvents.eventDate(0),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : const SizedBox(),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            left: 12.0,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'JOINING ROOM ~~~~~~',
+                                style: Theme.of(context).textTheme.bodyText1,
+                              ),
+                              MaterialButton(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                onPressed: () {
+                                  showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return multiAlerDialog(
+                                          title: 'Join private room',
+                                          context: context,
+                                          content: defaultTextFormField(
                                             context: context,
-                                            content: defaultTextFormField(
-                                              context: context,
-                                              controller: privateRoomController,
-                                              labelText: 'Enter room id',
-                                              labelStyle: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyText1,
-                                              keyboardType: TextInputType.text,
-                                            ),
-                                            actions: MaterialButton(
-                                              onPressed: () {
-                                                RoomCubit.get(context)
-                                                    .getRoomData(
-                                                        token,
-                                                        privateRoomController
-                                                            .text)
-                                                    .then((value) {
-                                                  SocketFunc.connectWithSocket(
-                                                      context,
-                                                      roomCubit,
-                                                      GeneralAppCubit.get(
-                                                          context));
-                                                  isPrivateRoom = true;
-                                                  SocketFunc.joinRoom(
-                                                    activeRoomName,
+                                            controller: privateRoomController,
+                                            labelText: 'Enter room id',
+                                            labelStyle: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1,
+                                            keyboardType: TextInputType.text,
+                                          ),
+                                          actions: MaterialButton(
+                                            onPressed: () {
+                                              RoomCubit.get(context)
+                                                  .getRoomData(
+                                                      token,
+                                                      privateRoomController
+                                                          .text)
+                                                  .then((value) {
+                                                SocketFunc.connectWithSocket(
                                                     context,
                                                     roomCubit,
-                                                    cubit,
-                                                  );
-                                                });
-                                              },
-                                              child: Text(
-                                                'Enter',
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyText1,
-                                              ),
+                                                    GeneralAppCubit.get(
+                                                        context));
+                                                isPrivateRoom = true;
+                                                SocketFunc.joinRoom(
+                                                  activeRoomName,
+                                                  context,
+                                                  roomCubit,
+                                                  cubit,
+                                                );
+                                              });
+                                            },
+                                            child: Text(
+                                              'Enter',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyText1,
                                             ),
-                                          );
-                                        });
-                                  },
-                                  child: Text(
-                                    'Join private room',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyText1
-                                        ?.copyWith(
-                                          fontSize: 15,
-                                          color: Theme.of(context).primaryColor,
-                                        ),
-                                  ),
+                                          ),
+                                        );
+                                      });
+                                },
+                                child: Text(
+                                  'Join private room',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1
+                                      ?.copyWith(
+                                        fontSize: 15,
+                                        color: Theme.of(context).primaryColor,
+                                      ),
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-                          Padding(
-                            padding: const EdgeInsetsDirectional.only(
-                                start: 10, end: 10, top: 20),
-                            child: ListView.builder(
-                              physics: const NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemBuilder: (context, index) => publicRoomItem(
-                                audience:
-                                    GetAllRoomsModel.getRoomsAudienc(index)?[0],
-                                category:
-                                    GetAllRoomsModel?.getRoomsGategory(index),
-                                context: context,
-                                roomName: GetAllRoomsModel?.getRoomName(index),
-                                speaker: GetAllRoomsModel.getRoomsBrodcaster(
-                                    index)?[0],
-                                adminData:
-                                    GetAllRoomsModel.getRoomsUserPublishInform(
-                                        index),
-                                click: () {
-                                  //   RoomCubit.get(context).changeState();
-                                  if (cubit.isPlaying) {
-                                    showToast(
-                                        message:
-                                            "you can't enter room if you playing a podcast,leave first(:",
-                                        toastState: ToastState.WARNING);
-                                  } else {
-                                    pressedJoinRoom = true;
-                                    cubit.micPerm();
-                                    if ((SocketFunc.isConnected &&
-                                            currentUserRoleinRoom) &&
-                                        GetAllRoomsModel?.getRoomName(index) ==
-                                            activeRoomName) {
-                                      navigatePushTo(
-                                          context: context,
-                                          navigateTo: RoomAdminViewScreen());
-                                    } else if (SocketFunc.isConnected &&
-                                        GetAllRoomsModel?.getRoomName(index) ==
-                                            activeRoomName) {
-                                      navigatePushTo(
-                                          context: context,
-                                          navigateTo: RoomUserViewScreen());
-                                    } else if (SocketFunc.isConnected) {
-                                      if (currentUserRoleinRoom) {
-                                        showToast(
-                                            message:
-                                                "You can't join room if you are admin of a room,leave first ):",
-                                            toastState: ToastState.ERROR);
-                                      } else {
-                                        NotificationService.notification
-                                            .cancelAll();
-                                        SocketFunc.leaveRoom(
-                                            context,
-                                            RoomCubit.get(context),
-                                            GeneralAppCubit.get(context));
-                                        SocketFunc.connectWithSocket(
-                                            context,
-                                            RoomCubit.get(context),
-                                            GeneralAppCubit.get(context));
-                                        SocketFunc.joinRoom(
-                                            GetAllRoomsModel.getRoomName(index),
-                                            context,
-                                            roomCubit,
-                                            cubit);
-                                      }
+                        ),
+                        Padding(
+                          padding: const EdgeInsetsDirectional.only(
+                              start: 10, end: 10, top: 20),
+                          child: ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) => publicRoomItem(
+                              audience:
+                                  GetAllRoomsModel.getRoomsAudienc(index)?[0],
+                              category:
+                                  GetAllRoomsModel?.getRoomsGategory(index),
+                              context: context,
+                              roomName: GetAllRoomsModel?.getRoomName(index),
+                              speaker: GetAllRoomsModel.getRoomsBrodcaster(
+                                  index)?[0],
+                              adminData:
+                                  GetAllRoomsModel.getRoomsUserPublishInform(
+                                      index),
+                              click: () {
+                                //   RoomCubit.get(context).changeState();
+                                if (cubit.isPlaying) {
+                                  showToast(
+                                      message:
+                                          "you can't enter room if you playing a podcast,leave first(:",
+                                      toastState: ToastState.WARNING);
+                                } else {
+                                  pressedJoinRoom = true;
+                                  cubit.micPerm();
+                                  if ((SocketFunc.isConnected &&
+                                          currentUserRoleinRoom) &&
+                                      GetAllRoomsModel?.getRoomName(index) ==
+                                          activeRoomName) {
+                                    navigatePushTo(
+                                        context: context,
+                                        navigateTo: RoomAdminViewScreen());
+                                  } else if (SocketFunc.isConnected &&
+                                      GetAllRoomsModel?.getRoomName(index) ==
+                                          activeRoomName) {
+                                    navigatePushTo(
+                                        context: context,
+                                        navigateTo: RoomUserViewScreen());
+                                  } else if (SocketFunc.isConnected) {
+                                    if (currentUserRoleinRoom) {
+                                      showToast(
+                                          message:
+                                              "You can't join room if you are admin of a room,leave first ):",
+                                          toastState: ToastState.ERROR);
                                     } else {
+                                      NotificationService.notification
+                                          .cancelAll();
+                                      SocketFunc.leaveRoom(
+                                          context,
+                                          RoomCubit.get(context),
+                                          GeneralAppCubit.get(context));
                                       SocketFunc.connectWithSocket(
                                           context,
                                           RoomCubit.get(context),
@@ -255,15 +229,27 @@ class PublicRoomScreen extends StatelessWidget {
                                           roomCubit,
                                           cubit);
                                     }
+                                  } else {
+                                    SocketFunc.connectWithSocket(
+                                        context,
+                                        RoomCubit.get(context),
+                                        GeneralAppCubit.get(context));
+                                    SocketFunc.joinRoom(
+                                        GetAllRoomsModel.getRoomName(index),
+                                        context,
+                                        roomCubit,
+                                        cubit);
                                   }
-                                },
-                              ),
-                              itemCount:
-                                  GetAllRoomsModel.getAllRooms?['data'].length,
+                                }
+                              },
                             ),
+                            itemCount:
+                                GetAllRoomsModel.getAllRooms?['data'].length,
                           ),
-                        ],
-                      )),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               )
             : Center(
