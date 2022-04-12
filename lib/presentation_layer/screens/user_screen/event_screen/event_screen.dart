@@ -77,7 +77,7 @@ class EventScreen extends StatelessWidget {
                                   itemCount: GetMyEvents.allEvent().length,
                                 ),
                               ),
-                              Divider(),
+                              const Divider(),
                             ],
                           )
                         : SizedBox(
