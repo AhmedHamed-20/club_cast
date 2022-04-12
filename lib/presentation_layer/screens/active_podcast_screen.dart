@@ -1,11 +1,14 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
+import 'package:club_cast/data_layer/sockets/sockets_io.dart';
 import 'package:club_cast/presentation_layer/components/constant/constant.dart';
 import 'package:club_cast/presentation_layer/models/getMyFollowingPodcast.dart';
 import 'package:club_cast/presentation_layer/models/get_all_podcst.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../components/component/component.dart';
 
 class ActivePodCastScreen extends StatelessWidget {
   int? index;
@@ -176,23 +179,32 @@ class ActivePodCastScreen extends StatelessWidget {
                                       borderRadius: BorderRadius.circular(15),
                                     ),
                                     onPressed: () {
-                                      String podCastUrl = podcastUrl;
-                                      cubit.isPlaying &&
-                                              podCastId == cubit.activePodCastId
-                                          ? cubit.assetsAudioPlayer
-                                              .pause()
-                                              .then((value) {
-                                              cubit.isPlaying = false;
-                                              cubit.pressedPause = true;
-                                              cubit.activePodCastId = podCastId;
-                                              cubit.changeState();
-                                            })
-                                          : cubit.playingPodcast(
-                                              podCastUrl,
-                                              podcastName,
-                                              userPhoto,
-                                              podCastId,
-                                              context);
+                                      if (SocketFunc.isConnected) {
+                                        showToast(
+                                            message:
+                                                "you can't play podcast if you in a room,leave first(:",
+                                            toastState: ToastState.WARNING);
+                                      } else {
+                                        String podCastUrl = podcastUrl;
+                                        cubit.isPlaying &&
+                                                podCastId ==
+                                                    cubit.activePodCastId
+                                            ? cubit.assetsAudioPlayer
+                                                .pause()
+                                                .then((value) {
+                                                cubit.isPlaying = false;
+                                                cubit.pressedPause = true;
+                                                cubit.activePodCastId =
+                                                    podCastId;
+                                                cubit.changeState();
+                                              })
+                                            : cubit.playingPodcast(
+                                                podCastUrl,
+                                                podcastName,
+                                                userPhoto,
+                                                podCastId,
+                                                context);
+                                      }
                                     },
                                     child: Icon(
                                       cubit.isPlaying &&

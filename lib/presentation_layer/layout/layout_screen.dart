@@ -316,32 +316,40 @@ class LayoutScreen extends StatelessWidget {
               currentIndex: cubit.bottomNavIndex,
               onTap: (index) {
                 if (index == 1) {
-                  modalBottomSheetItem(context, () {
-                    cubit.micPerm();
-                    print(cubit.roomNameController.text);
-                    print(cubit.selectedCategoryItem);
-                    print("isPublicRoom :${cubit.isPublicRoom}");
-                    print("isRecordRoom: ${cubit.isRecordRoom}");
+                  if (cubit.isPlaying) {
+                    showToast(
+                        message:
+                            "you can't create room if you playing a podcast,leave first(:",
+                        toastState: ToastState.WARNING);
+                    return;
+                  } else {
+                    modalBottomSheetItem(context, () {
+                      cubit.micPerm();
+                      print(cubit.roomNameController.text);
+                      print(cubit.selectedCategoryItem);
+                      print("isPublicRoom :${cubit.isPublicRoom}");
+                      print("isRecordRoom: ${cubit.isRecordRoom}");
 
-                    SocketFunc.isConnected
-                        ? const SizedBox()
-                        : SocketFunc.connectWithSocket(
-                            context,
-                            RoomCubit.get(context),
-                            GeneralAppCubit.get(context));
-                    SocketFunc.createRoom(
-                      {
-                        'name': cubit.roomNameController.text,
-                        'category': cubit.selectedCategoryItem,
-                        'status': cubit.isPublicRoom ? 'public' : 'private',
-                      },
-                      context,
-                      roomCubit,
-                      cubit,
-                    );
-                    SocketFunc.isAdminLeftSocket();
-                  });
-                  return;
+                      SocketFunc.isConnected
+                          ? const SizedBox()
+                          : SocketFunc.connectWithSocket(
+                              context,
+                              RoomCubit.get(context),
+                              GeneralAppCubit.get(context));
+                      SocketFunc.createRoom(
+                        {
+                          'name': cubit.roomNameController.text,
+                          'category': cubit.selectedCategoryItem,
+                          'status': cubit.isPublicRoom ? 'public' : 'private',
+                        },
+                        context,
+                        roomCubit,
+                        cubit,
+                      );
+                      SocketFunc.isAdminLeftSocket();
+                    });
+                    return;
+                  }
                 }
                 cubit.changeBottomNAvIndex(index);
               },

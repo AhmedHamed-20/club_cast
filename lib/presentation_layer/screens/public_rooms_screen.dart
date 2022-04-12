@@ -129,35 +129,51 @@ class PublicRoomScreen extends StatelessWidget {
                                         index),
                                 click: () {
                                   //   RoomCubit.get(context).changeState();
-
-                                  pressedJoinRoom = true;
-                                  cubit.micPerm();
-                                  if ((SocketFunc.isConnected &&
-                                          currentUserRoleinRoom) &&
-                                      GetAllRoomsModel?.getRoomName(index) ==
-                                          activeRoomName) {
-                                    navigatePushTo(
-                                        context: context,
-                                        navigateTo: RoomAdminViewScreen());
-                                  } else if (SocketFunc.isConnected &&
-                                      GetAllRoomsModel?.getRoomName(index) ==
-                                          activeRoomName) {
-                                    navigatePushTo(
-                                        context: context,
-                                        navigateTo: RoomUserViewScreen());
-                                  } else if (SocketFunc.isConnected) {
-                                    if (currentUserRoleinRoom) {
-                                      showToast(
-                                          message:
-                                              "You can't join room if you are admin of a room,leave first ):",
-                                          toastState: ToastState.ERROR);
+                                  if (cubit.isPlaying) {
+                                    showToast(
+                                        message:
+                                            "you can't enter room if you playing a podcast,leave first(:",
+                                        toastState: ToastState.WARNING);
+                                  } else {
+                                    pressedJoinRoom = true;
+                                    cubit.micPerm();
+                                    if ((SocketFunc.isConnected &&
+                                            currentUserRoleinRoom) &&
+                                        GetAllRoomsModel?.getRoomName(index) ==
+                                            activeRoomName) {
+                                      navigatePushTo(
+                                          context: context,
+                                          navigateTo: RoomAdminViewScreen());
+                                    } else if (SocketFunc.isConnected &&
+                                        GetAllRoomsModel?.getRoomName(index) ==
+                                            activeRoomName) {
+                                      navigatePushTo(
+                                          context: context,
+                                          navigateTo: RoomUserViewScreen());
+                                    } else if (SocketFunc.isConnected) {
+                                      if (currentUserRoleinRoom) {
+                                        showToast(
+                                            message:
+                                                "You can't join room if you are admin of a room,leave first ):",
+                                            toastState: ToastState.ERROR);
+                                      } else {
+                                        NotificationService.notification
+                                            .cancelAll();
+                                        SocketFunc.leaveRoom(
+                                            context,
+                                            RoomCubit.get(context),
+                                            GeneralAppCubit.get(context));
+                                        SocketFunc.connectWithSocket(
+                                            context,
+                                            RoomCubit.get(context),
+                                            GeneralAppCubit.get(context));
+                                        SocketFunc.joinRoom(
+                                            GetAllRoomsModel.getRoomName(index),
+                                            context,
+                                            roomCubit,
+                                            cubit);
+                                      }
                                     } else {
-                                      NotificationService.notification
-                                          .cancelAll();
-                                      SocketFunc.leaveRoom(
-                                          context,
-                                          RoomCubit.get(context),
-                                          GeneralAppCubit.get(context));
                                       SocketFunc.connectWithSocket(
                                           context,
                                           RoomCubit.get(context),
@@ -168,16 +184,6 @@ class PublicRoomScreen extends StatelessWidget {
                                           roomCubit,
                                           cubit);
                                     }
-                                  } else {
-                                    SocketFunc.connectWithSocket(
-                                        context,
-                                        RoomCubit.get(context),
-                                        GeneralAppCubit.get(context));
-                                    SocketFunc.joinRoom(
-                                        GetAllRoomsModel.getRoomName(index),
-                                        context,
-                                        roomCubit,
-                                        cubit);
                                   }
                                 },
                               ),
