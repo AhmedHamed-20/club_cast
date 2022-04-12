@@ -25,7 +25,7 @@ import '../models/getMyFollowingEvents.dart';
 import '../widgets/multi_use_dialog.dart';
 
 class PublicRoomScreen extends StatelessWidget {
-  PublicRoomScreen({Key? key}) : super(key: key);
+  const PublicRoomScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -147,7 +147,7 @@ class PublicRoomScreen extends StatelessWidget {
                                                       roomCubit,
                                                       GeneralAppCubit.get(
                                                           context));
-
+                                                  isPrivateRoom = true;
                                                   SocketFunc.joinRoom(
                                                     activeRoomName,
                                                     context,

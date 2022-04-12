@@ -147,6 +147,7 @@ class SocketFunc {
               print('name' +
                   GeneralAppCubit.get(context).roomNameController.text),
               AgoraRtc.joinChannelagora(
+                appId: data[1]['APP_ID'],
                 channelName:
                     GeneralAppCubit.get(context).roomNameController.text,
                 role: ClientRole.Broadcaster,
@@ -220,7 +221,11 @@ class SocketFunc {
     socket?.on(
         'joinRoomSuccess',
         (data) => {
-              Navigator.of(context).pop(),
+              print(data),
+              if (isPrivateRoom == true)
+                {
+                  Navigator.of(context).pop(),
+                },
               if (currentUserRoleinRoom)
                 {
                   isAdminLeft = true,
@@ -263,6 +268,7 @@ class SocketFunc {
               // print(RoomCubit.get(context).listener),
 
               AgoraRtc.joinChannelagora(
+                appId: data[1]['APP_ID'],
                 channelName: data[0]['roomName'],
                 role: ClientRole.Audience,
                 token: data[2],
@@ -304,6 +310,7 @@ class SocketFunc {
               adminLeft(context, cubit, generalAppCubit),
               isConnected = true,
               generalAppCubit.changeState(),
+              isPrivateRoom = false,
             });
     socket?.on(
         'errorMessage',
@@ -376,6 +383,7 @@ class SocketFunc {
     socket?.on('adminReJoinedRoomSuccess', (data) {
       print(data);
       AgoraRtc.joinChannelagora(
+        appId: data[1]['APP_ID'],
         channelName: data[0]['roomName'],
         context: context,
         role: ClientRole.Broadcaster,

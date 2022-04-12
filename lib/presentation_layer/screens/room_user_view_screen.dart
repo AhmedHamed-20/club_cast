@@ -17,7 +17,7 @@ import '../components/constant/constant.dart';
 import '../layout/layout_screen.dart';
 
 class RoomUserViewScreen extends StatelessWidget {
-  RoomUserViewScreen({Key? key}) : super(key: key);
+  const RoomUserViewScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -160,6 +160,8 @@ Widget speakersWiget({
                                 .textTheme
                                 .bodyText1
                                 ?.copyWith(fontSize: 14),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
                           ),
                         ),
                       ],

@@ -36,6 +36,7 @@ class AgoraRtc {
     required String channelName,
     required String token,
     required BuildContext context,
+    required String appId,
     required uid,
     required cubit,
   }) async {
@@ -45,7 +46,7 @@ class AgoraRtc {
     print(token);
 
     // await _engine.enableWebSdkInteroperability(true);
-    await initAgoraRtcEngine('b29cc6ee03d642a6bf54c2f5906b9702', role);
+    await initAgoraRtcEngine(appId, role);
     await engine?.joinChannel(token, channelName, null, uid).then((value) {
       print('successssssssssss');
     });

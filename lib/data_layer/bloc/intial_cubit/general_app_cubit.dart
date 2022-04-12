@@ -32,6 +32,7 @@ import 'package:permission_handler/permission_handler.dart';
 import '../../../presentation_layer/models/followers_following_model.dart';
 import '../../../presentation_layer/models/getAllRoomsModel.dart';
 import '../../../presentation_layer/models/getMyFollowingPodcast.dart';
+import '../../../presentation_layer/models/searchRoomsModel.dart';
 import 'general_app_cubit_states.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 
@@ -1206,5 +1207,26 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       loadFollowing = false;
       emit(PaginationFollowingErrorState());
     });
+  }
+
+  Future searchRooms(String roomName, String token) {
+    return DioHelper.getData(
+      url: searchAboutRoom + roomName,
+      token: {'Authorization': 'Bearer ${token}'},
+    ).then((value) {
+      if (value.data['data'].isNotEmpty) {
+        print('searchValue${value.data["data"]}');
+        SearchRoomsModel.searchRoomsModel =
+            Map<String, dynamic>.from(value.data);
+        emit(SearchRoomsSuccess());
+      } else {
+        return;
+      }
+    }).catchError(
+      (onError) {
+        print(onError);
+        emit(SearchRoomsError());
+      },
+    );
   }
 }

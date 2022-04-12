@@ -7,6 +7,7 @@ String activeRoomName = '';
 TextEditingController privateRoomController = TextEditingController();
 bool currentUserRoleinRoom = false;
 bool pressedJoinRoom = false;
+bool isPrivateRoom = false;
 bool isIamInRoomScreen = true;
 String? privateRoomId;
 UserLoginModel? ahmedModel;
@@ -14,7 +15,7 @@ const String baseUrl = "https://audiocomms-podcast-platform.herokuapp.com/api/";
 const String login = "v1/users/login";
 const String signup = "v1/users/signup";
 const String forgotPassword = "v1/users/forgotPassword";
-const String AllCategory = "/v1/categories/";
+const String AllCategory = "v1/categories/";
 const String profile = "v1/users/me";
 const String updateProfile = "v1/users/updateMe";
 const String update_Password = "v1/users/updateMyPassword";
@@ -41,6 +42,7 @@ const String updateEventData = "v1/events/";
 const String getAllPodCastWithoutMe = baseUrl + 'v1/podcasts/notMe';
 const String getAllRooms = baseUrl + 'v1/rooms';
 const String getRoom = baseUrl + 'v1/rooms/';
+const String searchAboutRoom = baseUrl + 'v1/rooms/search?s=';
 //////////////////modelData/////////////////
 ///
 
