@@ -105,6 +105,9 @@ class PodCastScreen extends StatelessWidget {
                                         .getPodcastUserPublishInform(
                                             index)[0]['photo'],
                                     index: index,
+                                    userId: GetMyFollowingPodCastsModel
+                                        .getPodcastUserPublishInform(
+                                            index)[0]['_id'],
                                   ));
                             },
                             child: podACastItem(

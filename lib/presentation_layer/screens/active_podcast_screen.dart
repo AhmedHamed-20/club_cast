@@ -5,6 +5,7 @@ import 'package:club_cast/data_layer/sockets/sockets_io.dart';
 import 'package:club_cast/presentation_layer/components/constant/constant.dart';
 import 'package:club_cast/presentation_layer/models/getMyFollowingPodcast.dart';
 import 'package:club_cast/presentation_layer/models/get_all_podcst.dart';
+import 'package:club_cast/presentation_layer/models/user_model.dart';
 import 'package:club_cast/presentation_layer/screens/profile_detailes_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,14 +20,17 @@ class ActivePodCastScreen extends StatelessWidget {
   String podCastId;
   String podcastUrl;
   String podcastName;
-  ActivePodCastScreen(
-      {this.index,
-      required this.duration,
-      required this.podCastId,
-      required this.podcastName,
-      required this.podcastUrl,
-      required this.userName,
-      required this.userPhoto});
+  String userId;
+  ActivePodCastScreen({
+    this.index,
+    required this.duration,
+    required this.podCastId,
+    required this.podcastName,
+    required this.podcastUrl,
+    required this.userName,
+    required this.userPhoto,
+    required this.userId,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +69,24 @@ class ActivePodCastScreen extends StatelessWidget {
                 children: [
                   Center(
                     child: GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        if (GetUserModel.getUserID() == userId) {
+                          cubit.getUserData(token: token);
+                          cubit.getMyPodCast(token);
+                          navigatePushTo(
+                              context: context,
+                              navigateTo: ProfileDetailsScreen(userId));
+                        }
+
+                        cubit.getUserById(
+                          profileId: userId,
+                          token: token,
+                        );
+                        cubit.getUserPodcast(token, userId);
+                        navigatePushTo(
+                            context: context,
+                            navigateTo: ProfileDetailsScreen(userId));
+                      },
                       child: Container(
                         width: 200,
                         height: 200,

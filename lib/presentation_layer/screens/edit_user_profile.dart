@@ -40,7 +40,7 @@ class EditUserProfileScreen extends StatelessWidget {
     return BlocConsumer<GeneralAppCubit, GeneralAppStates>(
       listener: (context, state) {},
       builder: (context, state) {
-          String token = CachHelper.getData(key: 'token');
+        String token = CachHelper.getData(key: 'token');
         var cubit = GeneralAppCubit.get(context);
         return WillPopScope(
           onWillPop: () async {
@@ -240,42 +240,6 @@ class EditUserProfileScreen extends StatelessWidget {
                       const SizedBox(
                         height: 20.0,
                       ),
-                      Container(
-                        width: 322.0,
-                        height: 45.0,
-                        child: MaterialButton(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5.0),
-                          ),
-                          onPressed: () {
-                            CachHelper.deleteData(
-                              'token',
-                            ).then((value) {
-                              if (value) {
-                                cubit.assetsAudioPlayer.stop();
-                                navigatePushANDRemoveRout(
-                                    context: context,
-                                    navigateTo: LoginScreen());
-                              }
-                            }).then((value) {
-                              cubit.isPlaying = false;
-                              cubit.isPausedInHome = false;
-                              GeneralAppCubit.get(context).search = null;
-                              cubit.currentOlayingDurathion = null;
-                              cubit.activePodCastId = null;
-                              cubit.currentPostionDurationInsec = 0;
-                            });
-                          },
-                          child: const Text(
-                            'LogOut',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20.0,
-                            ),
-                          ),
-                          color: Theme.of(context).primaryColor,
-                        ),
-                      ),
                       const SizedBox(
                         height: 20.0,
                       ),
@@ -428,12 +392,19 @@ class EditUserProfileScreen extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                        GeneralAppCubit.get(context).updatePassword(
+                        GeneralAppCubit.get(context)
+                            .updatePassword(
                           password_Current: currentPasswordController.text,
                           password_New: newPasswordController.text,
                           password_Confirm: confirmPasswordController.text,
                           token: token,
-                        );
+                        )
+                            .then((value) {
+                          Navigator.of(context).pop();
+                          currentPasswordController.clear();
+                          newPasswordController.clear();
+                          confirmPasswordController.clear();
+                        });
                       },
                       child: const Text(
                         'Change',

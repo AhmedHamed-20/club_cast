@@ -56,6 +56,10 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   int pageExplore = 2;
   bool noDataExplore = false;
   bool loadExplore = false;
+  bool noDateRooms = false;
+  bool loadRooms = false;
+
+  int pageRooms = 2;
   // bool isDark = false;
   bool isPlaying = false;
   bool isMyfollowingScreen = false;
@@ -716,14 +720,14 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     });
   }
 
-  void updatePassword({
+  Future updatePassword({
     required String password_Current,
     required String password_New,
     required String password_Confirm,
     required String token,
-  }) {
+  }) async {
     emit(UpdatePasswordLoadingState());
-    DioHelper.patchPassword(
+    return await DioHelper.patchPassword(
       url: update_Password,
       passwordCurrent: password_Current,
       passwordNew: password_New,
@@ -775,7 +779,6 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   Future getUserById({
     required String profileId,
     required String token,
-    Map<String, dynamic>? save,
   }) async {
     isLoadingprofile = true;
     emit(GetUserByIdLoadingState());
@@ -1128,6 +1131,8 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     ).then(
       (value) {
         GetAllRoomsModel.getAllRooms = Map<String, dynamic>.from(value.data);
+        pageRooms = 2;
+        noDateRooms = false;
         emit(GetAllRoomDataGetSuccess());
       },
     ).catchError(
@@ -1228,5 +1233,33 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
         emit(SearchRoomsError());
       },
     );
+  }
+
+  void paginationRooms(
+    String token,
+  ) {
+    loadRooms = true;
+    emit(PaginationFollowingLoadingState());
+    DioHelper.getData(
+        url: getAllRooms + '?page=${pageRooms}',
+        token: {'Authorization': 'Bearer $token'}).then((value) {
+      if (value.data['results'] == 0) {
+        pageRooms = pageRooms;
+        noDateRooms = true;
+        emit(PaginationRoomsSuccessState());
+        showToast(message: 'End Of Data(:', toastState: ToastState.SUCCESS);
+        loadRooms = false;
+      } else {
+        pageRooms++;
+        GetAllRoomsModel.getAllRooms!
+            .addAll(Map<String, dynamic>.from(value.data['data']));
+        loadRooms = false;
+        emit(PaginationRoomsSuccessState());
+      }
+    }).onError((error, stackTrace) {
+      print(error);
+      loadRooms = false;
+      emit(PaginationRoomsErrorState());
+    });
   }
 }

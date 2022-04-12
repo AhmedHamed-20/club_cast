@@ -27,7 +27,7 @@ class ProfileDetailsScreen extends StatelessWidget {
         String token = CachHelper.getData(key: 'token');
         var cubit = GeneralAppCubit.get(context);
         refresh() {
-          cubit.getUserById(profileId: userId,token: token);
+          cubit.getUserById(profileId: userId, token: token);
           return cubit.getUserPodcast(token, userId);
         }
 
@@ -139,7 +139,8 @@ class ProfileDetailsScreen extends StatelessWidget {
                             InkWell(
                               onTap: () {
                                 cubit.userFollowers(
-                                    userProfileId: '${cubit.userId?.data?.id}',token: token);
+                                    userProfileId: '${cubit.userId?.data?.id}',
+                                    token: token);
                                 navigatePushTo(
                                     context: context,
                                     navigateTo: FollowersScreen());
@@ -155,7 +156,8 @@ class ProfileDetailsScreen extends StatelessWidget {
                             InkWell(
                               onTap: () {
                                 cubit.userFollowing(
-                                    userProfileId: '${cubit.userId?.data?.id}',token: token);
+                                    userProfileId: '${cubit.userId?.data?.id}',
+                                    token: token);
                                 navigatePushTo(
                                     context: context,
                                     navigateTo: FollowingScreen());
@@ -182,14 +184,15 @@ class ProfileDetailsScreen extends StatelessWidget {
                                     cubit
                                         .unFollowUser(
                                             userProfileId:
-                                                '${cubit.userId?.data?.id}',token: token)
+                                                '${cubit.userId?.data?.id}',
+                                            token: token)
                                         .then((value) {
                                       cubit.getMyFollowingPodcast(token);
                                       cubit
                                           .getUserById(
                                               profileId:
                                                   '${cubit.userId?.data?.id}',
-                                      token: token)
+                                              token: token)
                                           .then((value) {
                                         cubit.isLoadingprofile = false;
                                       });
@@ -216,14 +219,15 @@ class ProfileDetailsScreen extends StatelessWidget {
                                     cubit
                                         .followUser(
                                             userProfileId:
-                                                '${cubit.userId?.data?.id}',token: token)
+                                                '${cubit.userId?.data?.id}',
+                                            token: token)
                                         .then((value) {
                                       cubit.getMyFollowingPodcast(token);
                                       cubit
                                           .getUserById(
                                               profileId:
                                                   '${cubit.userId?.data?.id}',
-                                      token: token)
+                                              token: token)
                                           .then((value) {
                                         cubit.isLoadingprofile = false;
                                       });
@@ -305,6 +309,9 @@ class ProfileDetailsScreen extends StatelessWidget {
                                                       .getPodcastUserPublishInform(
                                                           index)[0]['photo'],
                                                   index: index,
+                                                  userId: GetAllPodCastModel
+                                                      .getPodcastUserPublishInform(
+                                                          index)[0]['_id'],
                                                 ));
                                           },
                                           child: podACastItem(

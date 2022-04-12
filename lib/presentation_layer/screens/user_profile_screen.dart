@@ -19,6 +19,7 @@ import 'package:club_cast/presentation_layer/widgets/pos_cast_card_item.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 import '../components/constant/constant.dart';
 
@@ -172,6 +173,7 @@ class UserProfileScreen extends StatelessWidget {
                                             .textTheme
                                             .bodyText1!
                                             .copyWith(color: Colors.grey),
+                                        textAlign: TextAlign.center,
                                       ),
                               ],
                             ),
@@ -327,6 +329,9 @@ class UserProfileScreen extends StatelessWidget {
                                                   .getPodcastUserPublishInform(
                                                       index)[0]['photo'],
                                               index: index,
+                                              userId: GetMyPodCastModel
+                                                  .getPodcastUserPublishInform(
+                                                      index)[0]['_id'],
                                             ),
                                           );
                                         },
