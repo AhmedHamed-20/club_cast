@@ -220,6 +220,7 @@ class SocketFunc {
     socket?.on(
         'joinRoomSuccess',
         (data) => {
+              Navigator.of(context).pop(),
               if (currentUserRoleinRoom)
                 {
                   isAdminLeft = true,
@@ -230,38 +231,37 @@ class SocketFunc {
                 },
               pressedJoinRoom = false,
               currentUserRoleinRoom = false,
-              if (generalAppCubit.isPublicRoom)
-                {
-                  cubit.speakers.add(data[1]['admin']),
 
-                  cubit.speakers.addAll(data[1]['brodcasters']),
-                  cubit.speakers.forEach((e) {
+              cubit.speakers.add(data[1]['admin']),
+
+              cubit.speakers.addAll(data[1]['brodcasters']),
+              cubit.speakers.forEach((e) {
+                e['isMuted'] = false;
+                e['isTalking'] = false;
+              }),
+              cubit.listener.addAll(data[1]['audience']),
+              cubit.listener.forEach(
+                (e) {
+                  if (e['askedToTalk'] != true) {
+                    e['askedToTalk'] = false;
+                    e['isSpeaker'] = false;
                     e['isMuted'] = false;
                     e['isTalking'] = false;
-                  }),
-                  cubit.listener.addAll(data[1]['audience']),
-                  cubit.listener.forEach(
-                    (e) {
-                      if (e['askedToTalk'] != true) {
-                        e['askedToTalk'] = false;
-                        e['isSpeaker'] = false;
-                        e['isMuted'] = false;
-                        e['isTalking'] = false;
-                      }
-                    },
-                  ),
-                  // print(data),
-                  ActiveRoomUserModel.activeRoomUserData = data[0],
-                  ActiveRoomUserModel.activeRoomData = data[1],
-
-                  ActiveRoomUserModel.userToken = data[2],
-                  //  print('userPhoto:' + ActiveRoomUserModel.getUserPhoto()),
-                  activeRoomName = ActiveRoomUserModel.getRoomName().toString(),
-                  print(RoomCubit.get(context).listener),
-
-                  //print(RoomCubit.get(context).speakers),
-                  // print(RoomCubit.get(context).listener),
+                  }
                 },
+              ),
+              // print(data),
+              ActiveRoomUserModel.activeRoomUserData = data[0],
+              ActiveRoomUserModel.activeRoomData = data[1],
+
+              ActiveRoomUserModel.userToken = data[2],
+              //  print('userPhoto:' + ActiveRoomUserModel.getUserPhoto()),
+              activeRoomName = ActiveRoomUserModel.getRoomName().toString(),
+              print(cubit.listener),
+
+              //print(RoomCubit.get(context).speakers),
+              // print(RoomCubit.get(context).listener),
+
               AgoraRtc.joinChannelagora(
                 channelName: data[0]['roomName'],
                 role: ClientRole.Audience,
@@ -271,6 +271,7 @@ class SocketFunc {
                 cubit: cubit,
               ),
               AgoraRtc.eventsAgora(context, cubit),
+              privateRoomController.clear(),
               navigatePushTo(
                 context: context,
                 navigateTo: RoomUserViewScreen(),

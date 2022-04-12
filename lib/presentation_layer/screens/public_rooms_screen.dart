@@ -104,8 +104,9 @@ class PublicRoomScreen extends StatelessWidget {
                                 )
                               : const SizedBox(),
                           Padding(
-                            padding:
-                                const EdgeInsetsDirectional.only(start: 12.0),
+                            padding: const EdgeInsets.only(
+                              left: 12.0,
+                            ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -141,11 +142,18 @@ class PublicRoomScreen extends StatelessWidget {
                                                         privateRoomController
                                                             .text)
                                                     .then((value) {
-                                                  SocketFunc.joinRoom(
-                                                      activeRoomName,
+                                                  SocketFunc.connectWithSocket(
                                                       context,
                                                       roomCubit,
-                                                      cubit);
+                                                      GeneralAppCubit.get(
+                                                          context));
+
+                                                  SocketFunc.joinRoom(
+                                                    activeRoomName,
+                                                    context,
+                                                    roomCubit,
+                                                    cubit,
+                                                  );
                                                 });
                                               },
                                               child: Text(
@@ -164,7 +172,7 @@ class PublicRoomScreen extends StatelessWidget {
                                         .textTheme
                                         .bodyText1
                                         ?.copyWith(
-                                          fontSize: 17,
+                                          fontSize: 15,
                                           color: Theme.of(context).primaryColor,
                                         ),
                                   ),

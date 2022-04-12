@@ -49,27 +49,23 @@ class RoomCubit extends Cubit<RoomStates> {
     return DioHelper.getData(
         url: getRoom + roomId,
         token: {'Authorization': 'Bearer $token'}).then((value) {
-      //   print(value.data);
+      print(value.data);
 
-      speakers.add(value['data']['admin']);
+      // speakers = [value.data['data']['admin']];
 
-      speakers.addAll(value['data']['brodcasters']);
-      speakers.forEach((e) {
-        e['isMuted'] = false;
-        e['isTalking'] = false;
-      });
-      listener.addAll(value['data']['audience']);
-      listener.forEach(
-        (e) {
-          if (e['askedToTalk'] != true) {
-            e['askedToTalk'] = false;
-            e['isSpeaker'] = false;
-            e['isMuted'] = false;
-            e['isTalking'] = false;
-          }
-        },
-      );
-      activeRoomName = value['data']['name'];
+      // speakers.addAll(value.data['data']['brodcasters']);
+      // speakers.forEach((e) {
+      //   e['isMuted'] = false;
+      //   e['isTalking'] = false;
+      // });
+      // listener.addAll([value.data['data']['audience']]);
+      // listener.forEach((e) {
+      //   e['askedToTalk'] = false;
+      //   e['isSpeaker'] = false;
+      //   e['isMuted'] = false;
+      //   e['isTalking'] = false;
+      // });
+      activeRoomName = value.data['data']['name'];
       emit(GetRoomDataGetSuccess());
     }).catchError((onError) {
       print(onError);
