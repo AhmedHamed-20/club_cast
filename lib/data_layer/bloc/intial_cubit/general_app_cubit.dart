@@ -60,6 +60,10 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   bool loadRooms = false;
 
   int pageRooms = 2;
+  bool noDataEvent = false;
+  bool loadEvent = false;
+
+  int pageEvent = 2;
   // bool isDark = false;
   bool isPlaying = false;
   bool isMyfollowingScreen = false;

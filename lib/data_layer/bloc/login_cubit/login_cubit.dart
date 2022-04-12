@@ -27,8 +27,8 @@ class LoginCubit extends Cubit<LoginStates> {
   static LoginCubit get(context) => BlocProvider.of(context);
   ////////////variable//////////////
 
-  bool loginObSecure = true;
-  bool signUpObSecure = true;
+  bool loginObSecure = false;
+  bool signUpObSecure = false;
   bool isLoadProfile = false;
   Widget suffix = const Icon(
     Icons.visibility_off,

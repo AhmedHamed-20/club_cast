@@ -82,8 +82,8 @@ Widget eventCardItem({
                                 )))
                 ],
               ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.04,
+              const SizedBox(
+                width: 10,
               ),
               Expanded(
                 child: Column(
@@ -110,26 +110,31 @@ Widget eventCardItem({
                     const SizedBox(
                       height: 10,
                     ),
-                    Text(
-                      eventDescription,
-                      maxLines: 4,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.grey,
-                          ),
+                    Expanded(
+                      flex: 2,
+                      child: Text(
+                        eventDescription,
+                        maxLines: 4,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.grey,
+                            ),
+                      ),
                     ),
                     const Spacer(),
-                    Text(
-                      //DateFormat.yMMMd().format(DateTime.parse(eventDate))
-                      formatDateToPrinto(date: eventDate),
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                            fontSize: 14,
-                            color: Theme.of(context).primaryColor,
-                          ),
+                    Expanded(
+                      child: Text(
+                        //DateFormat.yMMMd().format(DateTime.parse(eventDate))
+                        formatDateToPrinto(date: eventDate),
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                              fontSize: 14,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                      ),
                     ),
                   ],
                 ),
