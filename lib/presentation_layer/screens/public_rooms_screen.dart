@@ -248,6 +248,36 @@ class PublicRoomScreen extends StatelessWidget {
                                 GetAllRoomsModel.getAllRooms?['data'].length,
                           ),
                         ),
+                        cubit.noDateRooms
+                            ? const SizedBox()
+                            : InkWell(
+                                borderRadius: BorderRadius.circular(40),
+                                onTap: () {
+                                  cubit.paginationRooms(
+                                    token,
+                                  );
+                                },
+                                child: Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: CircleAvatar(
+                                      backgroundColor:
+                                          Theme.of(context).backgroundColor,
+                                      radius: 30,
+                                      child: cubit.loadRooms
+                                          ? CircularProgressIndicator(
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                            )
+                                          : Icon(
+                                              Icons.arrow_downward,
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                            ),
+                                    ),
+                                  ),
+                                ),
+                              ),
                       ],
                     ),
                   ),
