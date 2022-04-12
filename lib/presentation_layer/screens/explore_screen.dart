@@ -101,6 +101,9 @@ class ExploreScreen extends StatelessWidget {
                                                 .getPodcastUserPublishInform(
                                                     index)[0]['photo'],
                                             index: index,
+                                            userId: GetExplorePodCastModel
+                                                .getPodcastUserPublishInform(
+                                                    index)[0]['_id'],
                                           ));
                                     },
                                     child: podACastItem(
@@ -172,7 +175,7 @@ class ExploreScreen extends StatelessWidget {
                                               profileId: GetExplorePodCastModel
                                                   .getPodcastUserPublishInform(
                                                       index)[0]['_id'],
-                                          token: token);
+                                              token: token);
                                           cubit.getMyPodCast(
                                             token,
                                           );
@@ -184,7 +187,7 @@ class ExploreScreen extends StatelessWidget {
                                               profileId: GetExplorePodCastModel
                                                   .getPodcastUserPublishInform(
                                                       index)[0]['_id'],
-                                          token: token);
+                                              token: token);
                                           cubit.getUserPodcast(
                                               token,
                                               GetExplorePodCastModel

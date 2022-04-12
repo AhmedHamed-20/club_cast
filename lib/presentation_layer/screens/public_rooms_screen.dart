@@ -36,6 +36,7 @@ class PublicRoomScreen extends StatelessWidget {
         var roomCubit = RoomCubit.get(context);
         refresh() {
           cubit.getMyEvents();
+
           return cubit.getAllRoomsData();
         }
 
@@ -246,10 +247,14 @@ class PublicRoomScreen extends StatelessWidget {
                             itemCount:
                                 GetAllRoomsModel.getAllRooms?['data'].length,
                           ),
+
+                       
+
                         ),
                       ],
                     ),
                   ),
+
                 ),
               )
             : Center(

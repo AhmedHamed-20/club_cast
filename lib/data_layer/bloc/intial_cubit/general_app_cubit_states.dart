@@ -223,3 +223,7 @@ class ChangeState extends GeneralAppStates {}
 class SearchRoomsSuccess extends GeneralAppStates {}
 
 class SearchRoomsError extends GeneralAppStates {}
+
+class PaginationRoomsSuccessState extends GeneralAppStates {}
+
+class PaginationRoomsErrorState extends GeneralAppStates {}
