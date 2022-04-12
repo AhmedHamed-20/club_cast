@@ -154,8 +154,14 @@ class PublicRoomScreen extends StatelessWidget {
                                     } else {
                                       NotificationService.notification
                                           .cancelAll();
-                                      SocketFunc.leaveRoom(context);
-                                      SocketFunc.connectWithSocket(context);
+                                      SocketFunc.leaveRoom(
+                                          context,
+                                          RoomCubit.get(context),
+                                          GeneralAppCubit.get(context));
+                                      SocketFunc.connectWithSocket(
+                                          context,
+                                          RoomCubit.get(context),
+                                          GeneralAppCubit.get(context));
                                       SocketFunc.joinRoom(
                                           GetAllRoomsModel.getRoomName(index),
                                           context,
@@ -163,7 +169,10 @@ class PublicRoomScreen extends StatelessWidget {
                                           cubit);
                                     }
                                   } else {
-                                    SocketFunc.connectWithSocket(context);
+                                    SocketFunc.connectWithSocket(
+                                        context,
+                                        RoomCubit.get(context),
+                                        GeneralAppCubit.get(context));
                                     SocketFunc.joinRoom(
                                         GetAllRoomsModel.getRoomName(index),
                                         context,

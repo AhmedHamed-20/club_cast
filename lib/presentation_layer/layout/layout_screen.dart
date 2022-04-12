@@ -5,6 +5,8 @@ import 'package:club_cast/data_layer/sockets/sockets_io.dart';
 import 'package:club_cast/presentation_layer/components/constant/constant.dart';
 import 'package:club_cast/data_layer/cash/cash.dart';
 import 'package:club_cast/presentation_layer/models/user_model.dart';
+import 'package:club_cast/presentation_layer/screens/room_user_view_admin.dart';
+import 'package:club_cast/presentation_layer/screens/room_user_view_screen.dart';
 import 'package:club_cast/presentation_layer/screens/search_screen.dart';
 import 'package:club_cast/presentation_layer/screens/user_profile_screen.dart';
 import 'package:club_cast/presentation_layer/widgets/alertDialog.dart';
@@ -36,66 +38,89 @@ class LayoutScreen extends StatelessWidget {
                     cubit.isPausedInHome ||
                     SocketFunc.isConnected
                 ? SocketFunc.isConnected
-                    ? Container(
-                        height: MediaQuery.of(context).size.height * 0.08,
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).primaryColor,
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(25),
-                            topRight: Radius.circular(25),
+                    ? GestureDetector(
+                        onTap: () {
+                          if (currentUserRoleinRoom) {
+                            navigatePushTo(
+                                context: context,
+                                navigateTo: RoomAdminViewScreen());
+                          } else {
+                            navigatePushTo(
+                                context: context,
+                                navigateTo: RoomUserViewScreen());
+                          }
+                        },
+                        child: Container(
+                          height: MediaQuery.of(context).size.height * 0.08,
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).primaryColor,
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(25),
+                              topRight: Radius.circular(25),
+                            ),
                           ),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 12, right: 12),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  Text('Active room: ',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyText2),
-                                  Text(
-                                    activeRoomName,
-                                    style:
-                                        Theme.of(context).textTheme.bodyText1,
-                                  ),
-                                ],
-                              ),
-                              SocketFunc.iamSpeaker
-                                  ? IconButton(
-                                      icon: Icon(
-                                        AgoraRtc.muted
-                                            ? Icons.mic_off
-                                            : Icons.mic_none,
-                                        color: Colors.white,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 12, right: 12),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Text(
+                                      'Active room: ',
+                                      style:
+                                          Theme.of(context).textTheme.bodyText2,
+                                    ),
+                                    Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.3,
+                                      child: Text(
+                                        activeRoomName,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
                                       ),
-                                      onPressed: () {
-                                        currentUserRoleinRoom == false
-                                            ? {
-                                                for (int i = 0;
-                                                    i <
-                                                        RoomCubit.get(context)
-                                                            .speakers
-                                                            .length;
-                                                    i++)
-                                                  {
-                                                    if (ActiveRoomUserModel
-                                                            .getUserId() ==
-                                                        RoomCubit.get(context)
-                                                            .speakers[i]['_id'])
-                                                      {
-                                                        AgoraRtc.onToggleMute(
-                                                            i, context),
-                                                      },
-                                                  },
-                                              }
-                                            : AgoraRtc.onToggleMute(0, context);
-                                      },
-                                    )
-                                  : const SizedBox(),
-                            ],
+                                    ),
+                                  ],
+                                ),
+                                SocketFunc.iamSpeaker
+                                    ? IconButton(
+                                        icon: Icon(
+                                          AgoraRtc.muted
+                                              ? Icons.mic_off
+                                              : Icons.mic_none,
+                                          color: Colors.white,
+                                        ),
+                                        onPressed: () {
+                                          currentUserRoleinRoom == false
+                                              ? {
+                                                  for (int i = 0;
+                                                      i <
+                                                          RoomCubit.get(context)
+                                                              .speakers
+                                                              .length;
+                                                      i++)
+                                                    {
+                                                      if (ActiveRoomUserModel
+                                                              .getUserId() ==
+                                                          RoomCubit.get(context)
+                                                                  .speakers[i]
+                                                              ['_id'])
+                                                        {
+                                                          AgoraRtc.onToggleMute(
+                                                              i, context),
+                                                        },
+                                                    },
+                                                }
+                                              : AgoraRtc.onToggleMute(
+                                                  0, context);
+                                        },
+                                      )
+                                    : const SizedBox(),
+                              ],
+                            ),
                           ),
                         ),
                       )
@@ -300,7 +325,10 @@ class LayoutScreen extends StatelessWidget {
 
                     SocketFunc.isConnected
                         ? const SizedBox()
-                        : SocketFunc.connectWithSocket(context);
+                        : SocketFunc.connectWithSocket(
+                            context,
+                            RoomCubit.get(context),
+                            GeneralAppCubit.get(context));
                     SocketFunc.createRoom(
                       {
                         'name': cubit.roomNameController.text,

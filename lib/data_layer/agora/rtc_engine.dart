@@ -6,6 +6,8 @@ import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/data_layer/bloc/room_cubit/room_cubit.dart';
 import 'package:club_cast/presentation_layer/models/activeRoomModelAdmin.dart';
 import 'package:club_cast/presentation_layer/models/activeRoomModelUser.dart';
+import 'package:club_cast/presentation_layer/models/get_userId_model.dart';
+import 'package:club_cast/presentation_layer/models/user_model.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:socket_io_client/socket_io_client.dart';
@@ -70,16 +72,14 @@ class AgoraRtc {
           //    var myBloc = RoomCubit();
           print(list);
           if (isIamInRoomScreen) {
-            print(list);
             list.forEach((elementAgora) {
-              print(cubit.speakers);
               cubit.speakers.forEach(
                 (elementUser) {
                   if (elementAgora.volume > 3) {
+                    print('elementUser:' + elementUser['_id']);
+                    print('activeUser:' + GetUserModel.getUserID());
                     if (elementAgora.uid == 0 &&
-                        (elementUser['_id'] ==
-                            ActiveRoomUserModel.getUserId())) {
-                      print('first');
+                        (elementUser['_id'] == GetUserModel.getUserID())) {
                       //    print('user' + ActiveRoomUserModel.getUserId());
 
                       elementUser['isTalking'] = true;

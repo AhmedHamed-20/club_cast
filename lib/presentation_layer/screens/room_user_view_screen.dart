@@ -1,4 +1,5 @@
 import 'package:club_cast/data_layer/agora/rtc_engine.dart';
+import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/data_layer/bloc/room_cubit/room_cubit.dart';
 import 'package:club_cast/data_layer/bloc/room_cubit/room_states.dart';
 import 'package:club_cast/data_layer/notification/local_notification.dart';
@@ -53,7 +54,8 @@ class RoomUserViewScreen extends StatelessWidget {
                   child: MaterialButton(
                     onPressed: () {
                       SocketFunc.isConnected = false;
-                      SocketFunc.leaveRoom(context);
+                      SocketFunc.leaveRoom(context, RoomCubit.get(context),
+                          GeneralAppCubit.get(context));
                       navigatePushANDRemoveRout(
                           context: context, navigateTo: LayoutScreen());
                       NotificationService.notification.cancelAll();
@@ -102,6 +104,8 @@ class RoomUserViewScreen extends StatelessWidget {
                             child: Text(
                               ActiveRoomUserModel.getRoomName().toString(),
                               style: Theme.of(context).textTheme.bodyText2,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
                           Padding(
@@ -147,7 +151,8 @@ class RoomUserViewScreen extends StatelessWidget {
                   child: IconButton(
                     onPressed: () {
                       SocketFunc.iamSpeaker
-                          ? SocketFunc.userWantToReturnAudience(context)
+                          ? SocketFunc.userWantToReturnAudience(
+                              context, GeneralAppCubit.get(context))
                           : SocketFunc.askToTalk();
                       SocketFunc.iamSpeaker
                           ? const SizedBox()

@@ -45,7 +45,10 @@ class RoomAdminViewScreen extends StatelessWidget {
                         onPressed: () {
                           print(
                               'iam connect  state: ${SocketFunc.socket!.connected}');
-                          SocketFunc.connectWithSocket(context);
+                          SocketFunc.connectWithSocket(
+                              context,
+                              RoomCubit.get(context),
+                              GeneralAppCubit.get(context));
                           // SocketFunc.adminReturnBack();
                         },
                         icon: Icon(Icons.refresh),
@@ -94,11 +97,12 @@ class RoomAdminViewScreen extends StatelessWidget {
                                 ),
                                 yesFunction: () {
                                   SocketFunc.adminEndTheRoom();
-
-                                  AgoraRtc.stopRecording();
-                                  // navigatePushANDRemoveRout(
-                                  //     context: context,
-                                  //     navigateTo: LayoutScreen());
+                                  GeneralAppCubit.get(context).isRecordRoom
+                                      ? AgoraRtc.stopRecording()
+                                      : const SizedBox();
+                                  navigatePushANDRemoveRout(
+                                      context: context,
+                                      navigateTo: LayoutScreen());
                                   NotificationService.notification.cancelAll();
                                 },
                                 noFunction: () {
@@ -149,6 +153,8 @@ class RoomAdminViewScreen extends StatelessWidget {
                             child: Text(
                               ActiveRoomAdminModel.getRoomName(),
                               style: Theme.of(context).textTheme.bodyText2,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
                           Padding(
