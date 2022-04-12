@@ -20,98 +20,55 @@ Widget eventCardItem({
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: SizedBox(
-      // width: MediaQuery.of(context).size.width * 0.93,
-      width: MediaQuery.of(context).size.width,
-      // height: MediaQuery.of(context).size.height * 0.3,
-
+      width: MediaQuery.of(context).size.width * 0.95,
       child: Card(
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(50),
-            bottomRight: Radius.circular(50),
-          ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(25),
         ),
         elevation: 4,
         color: Theme.of(context).backgroundColor,
         child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
+          padding: const EdgeInsets.all(20.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ListTile(
-                leading: CircleAvatar(
-                  radius: 30,
-                  backgroundImage: NetworkImage(userUrl),
-                ),
-                title: Row(
-                  children: [
-                    SizedBox(
-                      child: Padding(
-                        padding: const EdgeInsetsDirectional.only(top: 10),
-                        child: Text(
-                          eventName,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context).textTheme.bodyText2,
-                        ),
-                      ),
-                    ),
-                    GetUserModel?.getUserID() != userWhoCreateEventId
-                        ? const SizedBox()
-                        : IconButton(
-                            splashRadius: 20,
-                            onPressed: () {
-                              cubit.deleteEventById(
-                                eventId: GetMyEvents.eventId(index),
-                                eventName: GetMyEvents.eventName(index),
-                              );
-                              cubit.getMyEvents();
-                            },
-                            icon: const Icon(
-                              Icons.clear,
-                              color: Colors.redAccent,
-                            ),
-                          ),
-                  ],
-                ),
-                subtitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('from ${userName}',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyText1
-                            ?.copyWith(fontSize: 13, color: Colors.grey)),
-                    const SizedBox(
-                      height: 2,
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.5,
-                      height: MediaQuery.of(context).size.height * 0.07,
-                      child: Text(
-                        eventDescription,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.grey,
-                            ),
-                      ),
-                    ),
-                  ],
-                ),
-                horizontalTitleGap: 30,
-              ),
-              Row(
+              Column(
                 children: [
-                  Padding(
-                      padding: const EdgeInsetsDirectional.only(end: 37.0),
-                      child: GetUserModel.getUserID() != userWhoCreateEventId
-                          ? const SizedBox()
-                          : (EventScreen.eventIndex != index
+                  CircleAvatar(
+                    radius: 30,
+                    backgroundImage: NetworkImage(userUrl),
+                  ),
+                  const Spacer(),
+                  GetUserModel.getUserID() != userWhoCreateEventId
+                      ? const SizedBox()
+                      : (EventScreen.eventIndex != index
+                          ? defaultTextButton(
+                              onPressed: () {
+                                appearEventDataToUpdate(
+                                    context: context, index: index);
+                              },
+                              child: Text(
+                                'Update',
+                                style: TextStyle(
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ),
+                            )
+                          : (EventScreen.isUpdate
                               ? defaultTextButton(
+                                  onPressed: () {
+                                    EventScreen.isUpdate = false;
+                                    EventScreen.clearCrime(context: context);
+                                  },
+                                  child: const Text(
+                                    'Cancel\nUpdate',
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                )
+                              : defaultTextButton(
                                   onPressed: () {
                                     appearEventDataToUpdate(
                                         context: context, index: index);
@@ -122,46 +79,77 @@ Widget eventCardItem({
                                       color: Theme.of(context).primaryColor,
                                     ),
                                   ),
-                                )
-                              : (EventScreen.isUpdate
-                                  ? defaultTextButton(
-                                      onPressed: () {
-                                        EventScreen.isUpdate = false;
-                                        EventScreen.clearCrime(
-                                            context: context);
-                                      },
-                                      child: const Text(
-                                        'Cancel\nUpdate',
-                                        style: TextStyle(
-                                          color: Colors.red,
-                                          fontSize: 12,
-                                        ),
-                                      ),
-                                    )
-                                  : defaultTextButton(
-                                      onPressed: () {
-                                        appearEventDataToUpdate(
-                                            context: context, index: index);
-                                      },
-                                      child: Text(
-                                        'Update',
-                                        style: TextStyle(
-                                          color: Theme.of(context).primaryColor,
-                                        ),
-                                      ),
-                                    )))),
-                  Text(
-                    //DateFormat.yMMMd().format(DateTime.parse(eventDate))
-                    formatDateToPrinto(date: eventDate),
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                          fontSize: 14,
-                          color: Theme.of(context).primaryColor,
-                        ),
-                  ),
+                                )))
                 ],
-              )
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.04,
+              ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      eventName,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.bodyText2,
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      'from ${userName}',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyText1
+                          ?.copyWith(fontSize: 13, color: Colors.grey),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      eventDescription,
+                      maxLines: 4,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.grey,
+                          ),
+                    ),
+                    const Spacer(),
+                    Text(
+                      //DateFormat.yMMMd().format(DateTime.parse(eventDate))
+                      formatDateToPrinto(date: eventDate),
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                            fontSize: 14,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                    ),
+                  ],
+                ),
+              ),
+              GetUserModel?.getUserID() != userWhoCreateEventId
+                  ? const SizedBox()
+                  : IconButton(
+                      splashRadius: 25,
+                      onPressed: () {
+                        cubit.deleteEventById(
+                          eventId: GetMyEvents.eventId(index),
+                          eventName: GetMyEvents.eventName(index),
+                        );
+                        cubit.getMyEvents();
+                      },
+                      icon: const Icon(
+                        Icons.clear,
+                        color: Colors.redAccent,
+                      ),
+                    ),
             ],
           ),
         ),
@@ -191,6 +179,8 @@ void appearEventDataToUpdate({
   // print(DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
   //     .parse("2022-03-29T21:20:21.000Z"));
 }
+
+///////////////////////////////////////
 
 String formatDateToPrinto({
   required String date,
