@@ -43,6 +43,7 @@ const String getAllPodCastWithoutMe = baseUrl + 'v1/podcasts/notMe';
 const String getAllRooms = baseUrl + 'v1/rooms';
 const String getRoom = baseUrl + 'v1/rooms/';
 const String searchAboutRoom = baseUrl + 'v1/rooms/search?s=';
+const String updateAvatar = "v1/users/updateMyPhoto";
 //////////////////modelData/////////////////
 ///
 

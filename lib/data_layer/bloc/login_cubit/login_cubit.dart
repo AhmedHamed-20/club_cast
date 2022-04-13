@@ -86,7 +86,7 @@ class LoginCubit extends Cubit<LoginStates> {
     print(CachHelper.getData(key: 'token'));
     print(profileAvatar!.path);
     return await DioHelper.uploadImage(
-            url: updateProfile,
+            url: updateAvatar,
             image: profileAvatar,
             token: CachHelper.getData(key: 'token'))
         .then((value) {
