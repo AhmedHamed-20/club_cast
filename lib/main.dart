@@ -66,8 +66,8 @@ class MyApp extends StatelessWidget {
               ..getUserData(token: token)
               ..getAllCategory()
               ..getDark(isDark!)
-              ..getMyEvents()
-              ..getMyFollowingEvents()),
+              ..getMyEvents(token)
+              ..getMyFollowingEvents(token)),
       ],
       child: BlocConsumer<GeneralAppCubit, GeneralAppStates>(
         builder: (context, state) {

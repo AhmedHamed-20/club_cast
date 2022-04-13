@@ -35,7 +35,7 @@ class PublicRoomScreen extends StatelessWidget {
         var cubit = GeneralAppCubit?.get(context);
         var roomCubit = RoomCubit.get(context);
         refresh() {
-          cubit.getMyEvents();
+          cubit.getMyEvents(token);
 
           return cubit.getAllRoomsData();
         }

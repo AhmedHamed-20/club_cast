@@ -16,7 +16,7 @@ class GetAllMyFollowingScreen extends StatelessWidget {
       builder: (BuildContext context, Object? state) {
         var cubit = GeneralAppCubit?.get(context);
         refresh() {
-          cubit.getMyFollowingEvents();
+          cubit.getMyFollowingEvents(token);
           return cubit.getAllRoomsData();
         }
 

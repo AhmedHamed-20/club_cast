@@ -1,5 +1,6 @@
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
+import 'package:club_cast/presentation_layer/components/constant/constant.dart';
 import 'package:club_cast/presentation_layer/models/get_my_events.dart';
 import 'package:club_cast/presentation_layer/models/user_model.dart';
 import 'package:club_cast/presentation_layer/screens/user_screen/event_screen/event_screen.dart';
@@ -145,7 +146,7 @@ Widget eventCardItem({
                           eventId: GetMyEvents.eventId(index),
                           eventName: GetMyEvents.eventName(index),
                         );
-                        cubit.getMyEvents();
+                        cubit.getMyEvents(token);
                       },
                       icon: const Icon(
                         Icons.clear,

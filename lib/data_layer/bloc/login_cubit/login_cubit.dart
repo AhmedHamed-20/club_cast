@@ -27,8 +27,8 @@ class LoginCubit extends Cubit<LoginStates> {
   static LoginCubit get(context) => BlocProvider.of(context);
   ////////////variable//////////////
 
-  bool loginObSecure = false;
-  bool signUpObSecure = false;
+  bool loginObSecure = true;
+  bool signUpObSecure = true;
   bool isLoadProfile = false;
   Widget suffix = const Icon(
     Icons.visibility_off,
@@ -42,10 +42,10 @@ class LoginCubit extends Cubit<LoginStates> {
     loginObSecure = !loginObSecure;
     suffix = loginObSecure
         ? const Icon(
-            Icons.visibility_off,
+            Icons.visibility,
           )
         : const Icon(
-            Icons.visibility,
+            Icons.visibility_off,
           );
     emit(ChangeLoginEyeSecureState());
   }
@@ -126,12 +126,14 @@ class LoginCubit extends Cubit<LoginStates> {
       token = UserLoginModel.token;
       getUserData(token: token).then(
         (value) {
-          GeneralAppCubit.get(context).getMyEvents();
-          GeneralAppCubit.get(context).getMyFollowingEvents();
+          GeneralAppCubit.get(context).getMyEvents(token);
+          GeneralAppCubit.get(context).getMyFollowingEvents(token);
           GeneralAppCubit.get(context).getAllRoomsData();
           getMyFollowingPodcast(token).then((value) {
+            //  GeneralAppCubit.get(context).getMyFollowingEvents(token);
             navigatePushANDRemoveRout(
                 context: context, navigateTo: LayoutScreen());
+
             print(token);
             emit(UserLoginSuccessState(userLoginModel!));
           });
@@ -217,9 +219,9 @@ class LoginCubit extends Cubit<LoginStates> {
       token = UserLoginModel.token;
 
       getUserData(token: token).then((value) {
-        GeneralAppCubit.get(context).getMyEvents();
+        GeneralAppCubit.get(context).getMyEvents(token);
         GeneralAppCubit.get(context).getAllRoomsData();
-        GeneralAppCubit.get(context).getMyFollowingEvents();
+        GeneralAppCubit.get(context).getMyFollowingEvents(token);
         getMyFollowingPodcast(token).then((value) {
           navigatePushANDRemoveRout(
               context: context, navigateTo: SetUpAvatarScreen());

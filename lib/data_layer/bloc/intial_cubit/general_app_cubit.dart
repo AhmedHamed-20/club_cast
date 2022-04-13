@@ -813,7 +813,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
         'Authorization': 'Bearer ${token}',
       },
     ).then((value) {
-      getMyFollowingEvents();
+      getMyFollowingEvents(token);
       emit(FollowUserSuccessState());
     }).catchError((error) {
       print(error);
@@ -832,7 +832,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
         'Authorization': 'Bearer ${token}',
       },
     ).then((value) {
-      getMyFollowingEvents();
+      getMyFollowingEvents(token);
       emit(UnFollowUserSuccessState());
     }).catchError((error) {
       print(error);
@@ -1013,7 +1013,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       CreateEventModel.data = Map<String, dynamic>.from(value.data);
       print("create events : ${CreateEventModel.data}");
       print(GetUserModel.getUserID());
-      getMyEvents();
+      getMyEvents(token);
       showToast(
           message: 'Your Event Created Successfully',
           toastState: ToastState.SUCCESS);
@@ -1029,7 +1029,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     });
   }
 
-  void getMyFollowingEvents() {
+  void getMyFollowingEvents(String token) {
     emit(GetMyFollowingEventsLoadingState());
 
     DioHelper.getData(
@@ -1049,7 +1049,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     });
   }
 
-  void getMyEvents() {
+  void getMyEvents(String token) {
     emit(GetMyEventsLoadingState());
 
     DioHelper.getData(
@@ -1082,7 +1082,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       showToast(
           message: 'Event $eventName deleted Successfully',
           toastState: ToastState.SUCCESS);
-      getMyEvents();
+      getMyEvents(token);
 
       emit(DeleteEventSuccessState());
     }).onError((DioError error, f) {

@@ -1,6 +1,7 @@
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
+import 'package:club_cast/presentation_layer/components/constant/constant.dart';
 import 'package:club_cast/presentation_layer/models/getMyFollowingEvents.dart';
 import 'package:club_cast/presentation_layer/models/get_my_events.dart';
 import 'package:club_cast/presentation_layer/widgets/event_card_item.dart';
@@ -203,7 +204,7 @@ class EventScreen extends StatelessWidget {
                                         clearCrime(context: context);
                                         isUpdate = false;
                                       });
-                                      cubit.getMyEvents();
+                                      cubit.getMyEvents(token);
                                     }
                                   }
                                 },
@@ -246,7 +247,7 @@ class EventScreen extends StatelessWidget {
                                             .then((value) {
                                           clearCrime(context: context);
                                         });
-                                        cubit.getMyEvents();
+                                        cubit.getMyEvents(token);
 
                                         print(dateController.text +
                                             timeController.text);
