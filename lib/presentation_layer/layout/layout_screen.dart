@@ -292,7 +292,7 @@ class LayoutScreen extends StatelessWidget {
                 ),
                 InkWell(
                   onTap: () {
-                    cubit.getMyPodCast(token);
+                    cubit.getMyPodCast(token, context);
                     cubit.getUserData(token: token);
                     navigatePushTo(
                         context: context,

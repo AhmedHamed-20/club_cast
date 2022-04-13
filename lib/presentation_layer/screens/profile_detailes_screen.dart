@@ -118,6 +118,7 @@ class ProfileDetailsScreen extends StatelessWidget {
                                           .copyWith(
                                             color: Colors.grey,
                                           ),
+                                      textAlign: TextAlign.center,
                                     ),
                             ],
                           ),
@@ -185,9 +186,11 @@ class ProfileDetailsScreen extends StatelessWidget {
                                         .unFollowUser(
                                             userProfileId:
                                                 '${cubit.userId?.data?.id}',
-                                            token: token)
+                                            token: token,
+                                            context: context)
                                         .then((value) {
-                                      cubit.getMyFollowingPodcast(token);
+                                      cubit.getMyFollowingPodcast(
+                                          token, context);
                                       cubit
                                           .getUserById(
                                               profileId:
@@ -220,9 +223,11 @@ class ProfileDetailsScreen extends StatelessWidget {
                                         .followUser(
                                             userProfileId:
                                                 '${cubit.userId?.data?.id}',
-                                            token: token)
+                                            token: token,
+                                            context: context)
                                         .then((value) {
-                                      cubit.getMyFollowingPodcast(token);
+                                      cubit.getMyFollowingPodcast(
+                                          token, context);
                                       cubit
                                           .getUserById(
                                               profileId:

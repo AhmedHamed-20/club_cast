@@ -61,13 +61,13 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
             create: (context) => GeneralAppCubit()
-              ..getAllRoomsData()
-              ..getMyFollowingPodcast(token)
+              ..getAllRoomsData(context)
+              ..getMyFollowingPodcast(token, context)
               ..getUserData(token: token)
               ..getAllCategory()
               ..getDark(isDark!)
-              ..getMyEvents(token)
-              ..getMyFollowingEvents(token)),
+              ..getMyEvents()
+              ..getMyFollowingEvents(context)),
       ],
       child: BlocConsumer<GeneralAppCubit, GeneralAppStates>(
         builder: (context, state) {

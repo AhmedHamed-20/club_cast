@@ -171,7 +171,8 @@ class UploadPodCastScreen extends StatelessWidget {
                                             token,
                                             nameController.text,
                                             cubit.selectedCategoryItem,
-                                            cubit.podcastFile!.path);
+                                            cubit.podcastFile!.path,
+                                            context);
                                       },
                                       context: context,
                                       text: 'Upload')

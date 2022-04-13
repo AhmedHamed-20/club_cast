@@ -133,7 +133,7 @@ class SocketFunc {
               isAdminLeft = false,
               iamSpeaker = true,
               // print(data),
-              GeneralAppCubit.get(context).getAllRoomsData(),
+              GeneralAppCubit.get(context).getAllRoomsData(context),
               ActiveRoomAdminModel.activeRoomAdminData = data[0],
               ActiveRoomAdminModel.activeRoomData = data[1],
               currentUserRoleinRoom = true,

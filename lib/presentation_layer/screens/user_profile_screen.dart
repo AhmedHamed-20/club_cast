@@ -39,7 +39,7 @@ class UserProfileScreen extends StatelessWidget {
         String token = CachHelper.getData(key: 'token');
         refresh() {
           cubit.getUserData(token: token);
-          return cubit.getMyPodCast(token);
+          return cubit.getMyPodCast(token, context);
         }
 
         currentId = cubit.activePodCastId;
@@ -77,6 +77,7 @@ class UserProfileScreen extends StatelessWidget {
                                         navigateTo: LoginScreen());
                                   }
                                 }).then((value) {
+                                  token = '';
                                   cubit.isPlaying = false;
                                   cubit.isPausedInHome = false;
                                   GeneralAppCubit.get(context).search = null;
@@ -396,7 +397,8 @@ class UserProfileScreen extends StatelessWidget {
                                                                     GetMyPodCastModel
                                                                         .getPodcastID(
                                                                             index),
-                                                                    token)
+                                                                    token,
+                                                                    context)
                                                                 .then((value) {
                                                               Navigator.of(
                                                                       context)

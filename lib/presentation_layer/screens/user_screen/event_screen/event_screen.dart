@@ -204,7 +204,7 @@ class EventScreen extends StatelessWidget {
                                         clearCrime(context: context);
                                         isUpdate = false;
                                       });
-                                      cubit.getMyEvents(token);
+                                      cubit.getMyEvents();
                                     }
                                   }
                                 },
@@ -247,7 +247,7 @@ class EventScreen extends StatelessWidget {
                                             .then((value) {
                                           clearCrime(context: context);
                                         });
-                                        cubit.getMyEvents(token);
+                                        cubit.getMyEvents();
 
                                         print(dateController.text +
                                             timeController.text);

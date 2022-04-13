@@ -176,9 +176,7 @@ class ExploreScreen extends StatelessWidget {
                                                   .getPodcastUserPublishInform(
                                                       index)[0]['_id'],
                                               token: token);
-                                          cubit.getMyPodCast(
-                                            token,
-                                          );
+                                          cubit.getMyPodCast(token, context);
                                           navigatePushTo(
                                               context: context,
                                               navigateTo: UserProfileScreen());

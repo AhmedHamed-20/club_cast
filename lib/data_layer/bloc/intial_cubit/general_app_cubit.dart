@@ -18,6 +18,7 @@ import 'package:club_cast/presentation_layer/models/user_model.dart';
 import 'package:club_cast/presentation_layer/screens/podcastLikesScreen.dart';
 import 'package:club_cast/presentation_layer/screens/podcast_screen.dart';
 import 'package:club_cast/presentation_layer/screens/public_rooms_screen.dart';
+import 'package:club_cast/presentation_layer/screens/user_screen/login_screen/login_screen.dart';
 import 'package:club_cast/presentation_layer/widgets/modelsheetcreate_room.dart';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
@@ -135,6 +136,9 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   }
 
   void getAllCategory() {
+    if (token == '') {
+      return;
+    }
     emit(GetAllCategoryLoadingState());
     DioHelper.getData(
       url: AllCategory,
@@ -410,7 +414,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     });
   }
 
-  Future getMyPodCast(String token) async {
+  Future getMyPodCast(String token, context) async {
     return await DioHelper.getData(
         url: getMyPodCasts,
         token: {'Authorization': 'Bearer ${token}'}).then((value) {
@@ -424,8 +428,12 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     });
   }
 
-  Future getMyFollowingPodcast(String token) {
-    return DioHelper.getData(
+  Future getMyFollowingPodcast(String token, context) async {
+    if (token == '') {
+      print('nodataToke');
+      return await 'dad';
+    }
+    return await DioHelper.getData(
             token: {'Authorization': 'Bearer ${token}'},
             url: getMyFollowingPodcasts)
         .then((value) {
@@ -435,9 +443,24 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       pagemyfollowingPodcast = 2;
       noDataMyfollowingPodcast = false;
       emit(GetMyFollowingSuccessState());
-    }).catchError((onError) {
-      emit(GetMyFollowinErrorState());
-      print(onError);
+    }).onError((DioError error, s) {
+      (DioError error, s) {
+        if (error.response?.statusCode == 401) {
+          navigatePushANDRemoveRout(
+              context: context, navigateTo: LoginScreen());
+          token = '';
+          isPlaying = false;
+          isPausedInHome = false;
+          GeneralAppCubit.get(context).search = null;
+          currentOlayingDurathion = null;
+          activePodCastId = null;
+          currentPostionDurationInsec = 0;
+          showToast(
+              message: 'please login again', toastState: ToastState.ERROR);
+        }
+        emit(GetMyFollowinErrorState());
+        print(onError);
+      };
     });
   }
 
@@ -492,7 +515,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   bool isUploading = false;
   double? uploadProgress;
   void uploadPodCast(String token, String podCastName, String category,
-      String filePath) async {
+      String filePath, context) async {
     isLoadPodCast = true;
     emit(PodcastUploadedLoading());
     await DioHelper.dio!
@@ -550,7 +573,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
               'audio': {'public_id': value.data['public_id']}
             }).then((value) {
           print('yessss');
-          getMyPodCast(token);
+          getMyPodCast(token, context);
           isLoadPodCast = false;
           showToast(
               message: 'PodCast Uploaded Success',
@@ -587,11 +610,11 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     });
   }
 
-  Future removePodCast(String podCastId, String token) async {
+  Future removePodCast(String podCastId, String token, context) async {
     return await DioHelper.deleteData(
         url: removePodCastById + '${podCastId}',
         token: {'Authorization': 'Bearer ${token}'}).then((value) {
-      getMyPodCast(token);
+      getMyPodCast(token, context);
       emit(PodCastDeletedSuccess());
     }).catchError((onError) {
       print(onError);
@@ -658,6 +681,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     required String token,
   }) {
     if (token == '') {
+      return;
     } else {
       isLoadProfile = true;
       emit(UserDataLoadingState());
@@ -802,10 +826,10 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     });
   }
 
-  Future followUser({
-    required String userProfileId,
-    required String token,
-  }) async {
+  Future followUser(
+      {required String userProfileId,
+      required String token,
+      required context}) async {
     emit(FollowUserLoadingState());
     return await DioHelper.postData(
       url: 'v1/users/$userProfileId/following',
@@ -813,7 +837,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
         'Authorization': 'Bearer ${token}',
       },
     ).then((value) {
-      getMyFollowingEvents(token);
+      getMyFollowingEvents(context);
       emit(FollowUserSuccessState());
     }).catchError((error) {
       print(error);
@@ -821,10 +845,10 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     });
   }
 
-  Future unFollowUser({
-    required String userProfileId,
-    required String token,
-  }) async {
+  Future unFollowUser(
+      {required String userProfileId,
+      required String token,
+      required context}) async {
     emit(UnFollowUserLoadingState());
     return await DioHelper.deleteData(
       url: 'v1/users/$userProfileId/following',
@@ -832,7 +856,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
         'Authorization': 'Bearer ${token}',
       },
     ).then((value) {
-      getMyFollowingEvents(token);
+      getMyFollowingEvents(context);
       emit(UnFollowUserSuccessState());
     }).catchError((error) {
       print(error);
@@ -1013,7 +1037,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       CreateEventModel.data = Map<String, dynamic>.from(value.data);
       print("create events : ${CreateEventModel.data}");
       print(GetUserModel.getUserID());
-      getMyEvents(token);
+      getMyEvents();
       showToast(
           message: 'Your Event Created Successfully',
           toastState: ToastState.SUCCESS);
@@ -1029,7 +1053,11 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     });
   }
 
-  void getMyFollowingEvents(String token) {
+  void getMyFollowingEvents(context) {
+    if (token == '') {
+      print('noToken');
+      return;
+    }
     emit(GetMyFollowingEventsLoadingState());
 
     DioHelper.getData(
@@ -1043,13 +1071,28 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       pageEvent = 2;
       noDataEvent = false;
       emit(GetMyFollowingEventsSuccessState());
-    }).catchError((error) {
+    }).onError((DioError error, s) {
+      if (error.response?.statusCode == 401) {
+        navigatePushANDRemoveRout(context: context, navigateTo: LoginScreen());
+        token = '';
+        isPlaying = false;
+        isPausedInHome = false;
+        GeneralAppCubit.get(context).search = null;
+        currentOlayingDurathion = null;
+        activePodCastId = null;
+        currentPostionDurationInsec = 0;
+        showToast(message: 'please login again', toastState: ToastState.ERROR);
+      }
+
       print("error when get my following events:${error.toString()}");
       emit(GetMyFollowingEventsErrorState());
     });
   }
 
-  void getMyEvents(String token) {
+  void getMyEvents() {
+    if (token == '') {
+      return;
+    }
     emit(GetMyEventsLoadingState());
 
     DioHelper.getData(
@@ -1082,7 +1125,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       showToast(
           message: 'Event $eventName deleted Successfully',
           toastState: ToastState.SUCCESS);
-      getMyEvents(token);
+      getMyEvents();
 
       emit(DeleteEventSuccessState());
     }).onError((DioError error, f) {
@@ -1126,8 +1169,11 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     });
   }
 
-  Future getAllRoomsData() async {
-    CachHelper.getData(key: 'token');
+  Future getAllRoomsData(context) async {
+    if (token == '') {
+      return;
+    }
+
     return await DioHelper.getData(
       url: getAllRooms,
       token: {'Authorization': 'Bearer $token'},
@@ -1138,8 +1184,21 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
         noDateRooms = false;
         emit(GetAllRoomDataGetSuccess());
       },
-    ).catchError(
-      (onError) {
+    ).onError(
+      (DioError error, s) {
+        if (error.response?.statusCode == 401) {
+          navigatePushANDRemoveRout(
+              context: context, navigateTo: LoginScreen());
+          token = '';
+          isPlaying = false;
+          isPausedInHome = false;
+          GeneralAppCubit.get(context).search = null;
+          currentOlayingDurathion = null;
+          activePodCastId = null;
+          currentPostionDurationInsec = 0;
+          showToast(
+              message: 'please login again', toastState: ToastState.ERROR);
+        }
         emit(GetAllRoomDataGetError());
       },
     );

@@ -75,7 +75,7 @@ class PodCastScreen extends StatelessWidget {
               : RefreshIndicator(
                   backgroundColor: Theme.of(context).backgroundColor,
                   color: Theme.of(context).primaryColor,
-                  onRefresh: () => cubit.getMyFollowingPodcast(token),
+                  onRefresh: () => cubit.getMyFollowingPodcast(token, context),
                   child: SingleChildScrollView(
                     physics: const BouncingScrollPhysics(),
                     child: Column(

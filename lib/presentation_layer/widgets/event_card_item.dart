@@ -146,7 +146,7 @@ Widget eventCardItem({
                           eventId: GetMyEvents.eventId(index),
                           eventName: GetMyEvents.eventName(index),
                         );
-                        cubit.getMyEvents(token);
+                        cubit.getMyEvents();
                       },
                       icon: const Icon(
                         Icons.clear,

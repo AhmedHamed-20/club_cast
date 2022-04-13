@@ -126,9 +126,9 @@ class LoginCubit extends Cubit<LoginStates> {
       token = UserLoginModel.token;
       getUserData(token: token).then(
         (value) {
-          GeneralAppCubit.get(context).getMyEvents(token);
-          GeneralAppCubit.get(context).getMyFollowingEvents(token);
-          GeneralAppCubit.get(context).getAllRoomsData();
+          GeneralAppCubit.get(context).getMyEvents();
+          GeneralAppCubit.get(context).getMyFollowingEvents(context);
+          GeneralAppCubit.get(context).getAllRoomsData(context);
           getMyFollowingPodcast(token).then((value) {
             //  GeneralAppCubit.get(context).getMyFollowingEvents(token);
             navigatePushANDRemoveRout(
@@ -217,17 +217,22 @@ class LoginCubit extends Cubit<LoginStates> {
 
       userLoginModel = UserLoginModel.fromJson(value.data);
       token = UserLoginModel.token;
+      CachHelper.setData(key: 'token', value: UserLoginModel.token)
+          .then((value) {
+        getUserData(token: token).then((value) {
+          GeneralAppCubit.get(context).getMyEvents();
+          GeneralAppCubit.get(context).getAllRoomsData(context);
 
-      getUserData(token: token).then((value) {
-        GeneralAppCubit.get(context).getMyEvents(token);
-        GeneralAppCubit.get(context).getAllRoomsData();
-        GeneralAppCubit.get(context).getMyFollowingEvents(token);
-        getMyFollowingPodcast(token).then((value) {
-          navigatePushANDRemoveRout(
-              context: context, navigateTo: SetUpAvatarScreen());
+          getMyFollowingPodcast(token).then((value) {
+            GeneralAppCubit.get(context).getMyFollowingEvents(context);
+            navigatePushANDRemoveRout(
+                context: context, navigateTo: SetUpAvatarScreen());
+          });
         });
+        emit(UserSignUpSuccessState(userLoginModel!));
+      }).catchError((error) {
+        print('error when save token:${error.toString()}');
       });
-      emit(UserSignUpSuccessState(userLoginModel!));
     }).onError((DioError error, f) {
       if (error.response!.statusCode == 400) {
         if (password!.length < 8) {

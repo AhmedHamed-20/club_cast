@@ -72,7 +72,7 @@ class ActivePodCastScreen extends StatelessWidget {
                       onTap: () {
                         if (GetUserModel.getUserID() == userId) {
                           cubit.getUserData(token: token);
-                          cubit.getMyPodCast(token);
+                          cubit.getMyPodCast(token, context);
                           navigatePushTo(
                               context: context,
                               navigateTo: ProfileDetailsScreen(userId));

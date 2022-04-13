@@ -33,13 +33,13 @@ class PlayingCardWidget {
                         // bool isMyprofileScreen = false;
                         print(cubit.isMyfollowingScreen);
                         if (cubit.isMyprofileScreen) {
-                          cubit.getMyPodCast(token);
+                          cubit.getMyPodCast(token, context);
                         } else if (cubit.isProfilePage) {
                           cubit.getUserPodcast(token, userId);
                         } else if (cubit.isExplore) {
                           cubit.getExplorePodcast(token: token);
                         } else {
-                          cubit.getMyFollowingPodcast(token);
+                          cubit.getMyFollowingPodcast(token, context);
                         }
                         //isProfilePage
                         //getUserPodcast
@@ -54,13 +54,13 @@ class PlayingCardWidget {
                       (val) {
                         print(cubit.isExplore);
                         if (cubit.isMyprofileScreen) {
-                          cubit.getMyPodCast(token);
+                          cubit.getMyPodCast(token, context);
                         } else if (cubit.isProfilePage) {
                           cubit.getUserPodcast(token, userId);
                         } else if (cubit.isExplore) {
                           cubit.getExplorePodcast(token: token);
                         } else {
-                          cubit.getMyFollowingPodcast(token);
+                          cubit.getMyFollowingPodcast(token, context);
                         }
                       },
                     );
