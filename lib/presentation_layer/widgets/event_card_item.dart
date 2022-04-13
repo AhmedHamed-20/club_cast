@@ -20,7 +20,7 @@ Widget eventCardItem({
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: SizedBox(
-      width: MediaQuery.of(context).size.width * 0.95,
+      width: MediaQuery.of(context).size.width,
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(25),
