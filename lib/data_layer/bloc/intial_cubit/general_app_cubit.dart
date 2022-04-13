@@ -1042,7 +1042,8 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     ).then((value) {
       GetMyFollowingEvents.data = Map<String, dynamic>.from(value.data);
       print(" getMyFollowingEvents : ${GetMyFollowingEvents.data}");
-
+      pageEvent = 2;
+      noDataEvent = false;
       emit(GetMyFollowingEventsSuccessState());
     }).catchError((error) {
       print("error when get my following events:${error.toString()}");
@@ -1237,6 +1238,35 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
         emit(SearchRoomsError());
       },
     );
+  }
+
+  void paginationEvent(
+    String token,
+  ) {
+    loadEvent = true;
+    emit(PaginationFollowingLoadingState());
+    DioHelper.getData(
+        url: getMyFollowingEvent + '&page=${pageEvent}',
+        token: {'Authorization': 'Bearer $token'}).then((value) {
+      if (value.data['results'] == 0) {
+        pageEvent = pageEvent;
+        noDataEvent = true;
+        emit(PaginationEventSuccessState());
+        showToast(message: 'End Of Data(:', toastState: ToastState.SUCCESS);
+        loadEvent = false;
+      } else {
+        pageEvent++;
+        print(value.data['data']);
+        GetMyFollowingEvents.data!
+            .addAll(Map<String, dynamic>.from(value.data));
+        loadEvent = false;
+        emit(PaginationEventSuccessState());
+      }
+    }).onError((error, stackTrace) {
+      print(error);
+      loadEvent = false;
+      emit(PaginationEventErrorState());
+    });
   }
 
   void paginationRooms(

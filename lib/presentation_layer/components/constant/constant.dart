@@ -35,7 +35,7 @@ const String generateSignature = baseUrl + 'v1/podcasts/generateSignature';
 const String createPodCast = baseUrl + 'v1/podcasts';
 
 const String createEvent = "v1/events/me";
-const String getMyFollowingEvent = "v1/events?sort=date";
+const String getMyFollowingEvent = "v1/events/?sort=date";
 const String getMyEvent = "v1/events/me";
 const String deleteEvent = "v1/events/";
 const String updateEventData = "v1/events/";

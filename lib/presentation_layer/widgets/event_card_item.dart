@@ -124,16 +124,14 @@ Widget eventCardItem({
                       ),
                     ),
                     const Spacer(),
-                    Expanded(
-                      child: Text(
-                        //DateFormat.yMMMd().format(DateTime.parse(eventDate))
-                        formatDateToPrinto(date: eventDate),
+                    Text(
+                      //DateFormat.yMMMd().format(DateTime.parse(eventDate))
+                      formatDateToPrinto(date: eventDate),
 
-                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                              fontSize: 14,
-                              color: Theme.of(context).primaryColor,
-                            ),
-                      ),
+                      style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                            fontSize: 14,
+                            color: Theme.of(context).primaryColor,
+                          ),
                     ),
                   ],
                 ),

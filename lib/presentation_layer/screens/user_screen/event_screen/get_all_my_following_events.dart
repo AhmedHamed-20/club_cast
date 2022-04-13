@@ -6,6 +6,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../components/constant/constant.dart';
+
 class GetAllMyFollowingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -74,6 +76,36 @@ class GetAllMyFollowingScreen extends StatelessWidget {
                             ),
                             itemCount: GetMyFollowingEvents.allEvent().length,
                           ),
+                          cubit.noDataEvent
+                              ? const SizedBox()
+                              : InkWell(
+                                  borderRadius: BorderRadius.circular(40),
+                                  onTap: () {
+                                    cubit.paginationEvent(
+                                      token,
+                                    );
+                                  },
+                                  child: Center(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: CircleAvatar(
+                                        backgroundColor:
+                                            Theme.of(context).backgroundColor,
+                                        radius: 30,
+                                        child: cubit.loadEvent
+                                            ? CircularProgressIndicator(
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                              )
+                                            : Icon(
+                                                Icons.arrow_downward,
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                              ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
                         ],
                       ),
                     ),

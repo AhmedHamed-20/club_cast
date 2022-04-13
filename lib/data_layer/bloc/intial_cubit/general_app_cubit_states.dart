@@ -227,3 +227,7 @@ class SearchRoomsError extends GeneralAppStates {}
 class PaginationRoomsSuccessState extends GeneralAppStates {}
 
 class PaginationRoomsErrorState extends GeneralAppStates {}
+
+class PaginationEventSuccessState extends GeneralAppStates {}
+
+class PaginationEventErrorState extends GeneralAppStates {}
