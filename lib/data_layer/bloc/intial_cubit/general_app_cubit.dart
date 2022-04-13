@@ -973,11 +973,10 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   void setAvatar(BuildContext context) async {
     emit(UserUpdateAvatarLoadingState());
     isUploadPhoto = true;
-
     print(CachHelper.getData(key: 'token'));
     print(profileAvatar!.path);
     await DioHelper.uploadImage(
-            url: updateProfile,
+            url: updateAvatar,
             image: profileAvatar,
             token: CachHelper.getData(key: 'token'))
         .then((value) {
@@ -989,7 +988,6 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       emit(UserUpdateAvatarSuccessState());
     }).catchError((error) {
       print(profileAvatar);
-      print('ffffffffffffffff');
       print("error when set user avatar :${error.toString()}");
       emit(UserUpdateAvatarErrorState());
       isUploadPhoto = false;
