@@ -114,7 +114,7 @@ class SocketFunc {
       }
       currentUserRoleinRoom = false;
 
-      generalAppCubit.getAllRoomsData();
+      generalAppCubit.getAllRoomsData(context);
     });
     socket?.on('fromServer', (_) => print(_));
   }
