@@ -50,8 +50,7 @@ class EventScreen extends StatelessWidget {
                     GetMyEvents.allEvent().isNotEmpty
                         ? Column(
                             children: [
-                              SizedBox(
-                                width: double.infinity,
+                              Container(
                                 height:
                                     MediaQuery.of(context).size.height * 0.32,
                                 child: ListView.builder(
@@ -77,7 +76,9 @@ class EventScreen extends StatelessWidget {
                                   itemCount: GetMyEvents.allEvent().length,
                                 ),
                               ),
-                              const Divider(),
+                              const Divider(
+                                color: Colors.grey,
+                              ),
                             ],
                           )
                         : SizedBox(

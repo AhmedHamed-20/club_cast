@@ -128,8 +128,7 @@ Widget eventCardItem({
                       child: Text(
                         //DateFormat.yMMMd().format(DateTime.parse(eventDate))
                         formatDateToPrinto(date: eventDate),
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
+
                         style: Theme.of(context).textTheme.bodyText1!.copyWith(
                               fontSize: 14,
                               color: Theme.of(context).primaryColor,
