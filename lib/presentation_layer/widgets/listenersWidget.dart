@@ -95,7 +95,8 @@ Widget listenersWiget({
                                     onPressed: () {
                                       GeneralAppCubit.get(context).getUserById(
                                           profileId: cubit.listener[index]
-                                              ['_id'],token: token);
+                                              ['_id'],
+                                          token: token);
 
                                       GeneralAppCubit.get(context)
                                           .getUserPodcast(token,

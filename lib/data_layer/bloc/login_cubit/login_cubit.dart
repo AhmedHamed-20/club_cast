@@ -140,7 +140,7 @@ class LoginCubit extends Cubit<LoginStates> {
         },
       );
     }).onError((DioError error, stackTrace) {
-      if (error.response!.statusCode == 401) {
+      if (error.response?.statusCode == 401) {
         showToast(
           message: 'Incorrect Email or Password!',
           toastState: ToastState.ERROR,

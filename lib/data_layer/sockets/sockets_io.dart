@@ -1,4 +1,5 @@
 import 'package:agora_rtc_engine/rtc_engine.dart';
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:club_cast/data_layer/agora/rtc_engine.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
@@ -54,7 +55,7 @@ class SocketFunc {
               generalAppCubit);
           userchangedToBrodCaster(context, roomCubit, generalAppCubit);
           adminLeft(context, roomCubit, generalAppCubit);
-          generalAppCubit.getAllRoomsData();
+          generalAppCubit.getAllRoomsData(context);
         }
       }
       socket?.emit('msg', 'test');
@@ -137,6 +138,8 @@ class SocketFunc {
               ActiveRoomAdminModel.activeRoomAdminData = data[0],
               ActiveRoomAdminModel.activeRoomData = data[1],
               currentUserRoleinRoom = true,
+              generalAppCubit.assetsAudioPlayer
+                  .open(Audio('assets/audio/userEnter.wav')),
               ActiveRoomAdminModel.adminToken = data[2],
               RoomCubit.get(context).speakers = [data[0]],
               RoomCubit?.get(context).speakers.forEach((e) {
@@ -266,7 +269,8 @@ class SocketFunc {
 
               //print(RoomCubit.get(context).speakers),
               // print(RoomCubit.get(context).listener),
-
+              generalAppCubit.assetsAudioPlayer
+                  .open(Audio('assets/audio/userEnter.wav')),
               AgoraRtc.joinChannelagora(
                 appId: data[1]['APP_ID'],
                 channelName: data[0]['roomName'],
@@ -287,7 +291,7 @@ class SocketFunc {
                 activeRoomName,
                 'sadsad',
               ),
-              isAdminLeftSocket(),
+              isAdminLeftSocket(generalAppCubit),
               userJoined(
                   context,
                   generalAppCubit.isPublicRoom
@@ -307,6 +311,7 @@ class SocketFunc {
               userchangedToAudienc(context, cubit, generalAppCubit),
               brodcasterToken(),
               audienceToken(),
+              askToTalk(),
               adminLeft(context, cubit, generalAppCubit),
               isConnected = true,
               generalAppCubit.changeState(),
@@ -327,6 +332,8 @@ class SocketFunc {
     socket?.on(
         'userJoined',
         (data) => {
+              generalAppCubit.assetsAudioPlayer
+                  .open(Audio('assets/audio/userEnter.wav')),
               // print(data),
               //   ActiveRoomAdminModel.audienc?.add(data),
               roomCubit.listener.add(data),
@@ -344,12 +351,14 @@ class SocketFunc {
             });
   }
 
-  static isAdminLeftSocket() {
+  static isAdminLeftSocket(generalAppCubit) {
     /////lw le net 2t3
     socket?.on(
         'adminLeft',
         (data) => {
               print('adminLeft'),
+              generalAppCubit.assetsAudioPlayer
+                  .open(Audio('assets/audio/adminLeft.wav')),
               showToast(
                   message:
                       'Admin has no internet the room will be closed after 1 min if admin not reconnected',
@@ -437,8 +446,9 @@ class SocketFunc {
       AgoraRtc.leave().then((value) {
         leaveRoom(context, roomCubit, generalAppCubit);
       });
-
-      generalAppCubit.getAllRoomsData();
+      generalAppCubit.assetsAudioPlayer
+          .open(Audio('assets/audio/adminLeft.wav'));
+      generalAppCubit.getAllRoomsData(context);
       showToast(message: 'Admin left the room', toastState: ToastState.WARNING);
       if (isAdminLeft == false) {
         roomCubit.listener = [];
@@ -479,6 +489,8 @@ class SocketFunc {
   static userLeft(
       String roomId, BuildContext context, roomCubit, generalAppCubit) {
     socket?.on('userLeft', (data) {
+      generalAppCubit.assetsAudioPlayer
+          .open(Audio('assets/audio/userLeft.wav'));
       print('userLeft');
       bool isFound = false;
       for (int i = 0; i < roomCubit.listener.length; i++) {
@@ -577,6 +589,8 @@ class SocketFunc {
   static userchangedToBrodCaster(BuildContext context, cubit, generalAppCubit) {
     socket?.on('userChangedToBrodcaster', (data) {
       for (int i = 0; i < cubit.listener.length; i++) {
+        generalAppCubit.assetsAudioPlayer
+            .open(Audio('assets/audio/userBecomeSpeaker.wav'));
         if (data['_id'] == cubit.listener[i]['_id']) {
           cubit.speakers.add(cubit.listener[i]);
           cubit.listener.removeAt(i);
@@ -628,6 +642,8 @@ class SocketFunc {
 
   static userchangedToAudienc(BuildContext context, cubit, generalCubit) {
     socket?.on('userChangedToAudience', (data) {
+      generalCubit.assetsAudioPlayer
+          .open(Audio('assets/audio/userBecomeAudienc.wav'));
       for (int i = 0; i < cubit.speakers.length; i++) {
         if (data['_id'] == cubit.speakers[i]['_id']) {
           cubit.listener.add(cubit.speakers[i]);

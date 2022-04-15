@@ -362,7 +362,7 @@ class LayoutScreen extends StatelessWidget {
                         roomCubit,
                         cubit,
                       );
-                      SocketFunc.isAdminLeftSocket();
+                      SocketFunc.isAdminLeftSocket(cubit);
                     });
                     return;
                   }
