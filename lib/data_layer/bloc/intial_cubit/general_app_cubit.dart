@@ -464,12 +464,15 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     });
   }
 
+  Future<int>? pickedPodCastLength;
   pickPocCastFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
 
     if (result != null) {
       podcastFile = File(result.files.single.path!);
-      print(podcastFile?.path);
+      print(podcastFile?.length());
+      pickedPodCastLength = podcastFile!.length();
+      print(pickedPodCastLength);
       emit(FilePickedSuccess());
     } else {
       emit(FilePickedError());
@@ -516,6 +519,15 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   double? uploadProgress;
   void uploadPodCast(String token, String podCastName, String category,
       String filePath, context) async {
+    var size = podcastFile!.readAsBytesSync().lengthInBytes;
+
+    if (size >= 100000000) {
+      showToast(
+          message: "You can't upload podcast more than 100 mb",
+          toastState: ToastState.WARNING);
+      return;
+    }
+
     isLoadPodCast = true;
     emit(PodcastUploadedLoading());
     await DioHelper.dio!

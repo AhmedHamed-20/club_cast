@@ -32,6 +32,7 @@ class SocketFunc {
         'transports': ['websocket'],
       },
     );
+
     socket?.connect();
     socket?.on(
         'error',
@@ -42,7 +43,7 @@ class SocketFunc {
             });
     socket?.on('connect', (_) {
       print('connect');
-      isConnected = true;
+      //  isConnected = true;
       if (isAdminLeft == false && showReconnectButton == true) {
         if (socket!.connected) {
           adminReturnBack(context, roomCubit, generalAppCubit);

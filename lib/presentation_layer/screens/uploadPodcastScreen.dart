@@ -96,6 +96,7 @@ class UploadPodCastScreen extends StatelessWidget {
                       ),
                       defaultButton(
                           onPressed: () {
+                            cubit.pausePreview();
                             cubit.pickPocCastFile();
                           },
                           context: context,

@@ -131,7 +131,7 @@ Widget buildSheet(BuildContext context, VoidCallback createClick) {
                                           MediaQuery.of(context).size.width *
                                               0.03,
                                     ),
-                                    Text('Only people have link can enter',
+                                    Text('Only people have room id can enter',
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodyText1!
