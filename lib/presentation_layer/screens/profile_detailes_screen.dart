@@ -5,7 +5,7 @@ import 'package:club_cast/presentation_layer/screens/active_podcast_screen.dart'
 import 'package:club_cast/presentation_layer/screens/followers_screen.dart';
 import 'package:club_cast/presentation_layer/screens/following_screen.dart';
 import 'package:club_cast/presentation_layer/widgets/playingCardWidget.dart';
-import 'package:club_cast/presentation_layer/widgets/pos_cast_card_item.dart';
+import 'package:club_cast/presentation_layer/widgets/pod_cast_card_item.dart';
 
 import '../../data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';

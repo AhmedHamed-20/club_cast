@@ -114,7 +114,10 @@ class RoomUserViewScreen extends StatelessWidget {
                             child: Center(
                               child: Text(
                                 'Speakers',
-                                style: Theme.of(context).textTheme.bodyText1,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1
+                                    ?.copyWith(color: Colors.grey),
                               ),
                             ),
                           ),
@@ -130,7 +133,10 @@ class RoomUserViewScreen extends StatelessWidget {
                         child: Center(
                           child: Text(
                             'Listeners',
-                            style: Theme.of(context).textTheme.bodyText1,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyText1
+                                ?.copyWith(color: Colors.grey),
                           ),
                         ),
                       ),

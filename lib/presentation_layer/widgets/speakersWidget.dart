@@ -118,15 +118,6 @@ Widget speakersWiget({
                   Center(
                     child: Column(
                       children: [
-                        // Expanded(
-                        //   flex: 5,
-                        //   child: CircleAvatar(
-                        //     radius: 35,
-                        //     backgroundImage:
-                        //         NetworkImage(cubit.speakers[index]['photo']),
-                        //   ),
-                        // ),
-
                         Expanded(
                           flex: 3,
                           child: Container(

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:club_cast/data_layer/cash/cash.dart';
@@ -234,16 +235,17 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
           activePodCastId = activePodCastIdnow;
 
           assetsAudioPlayer.currentPosition.listen((event) {
-            currentPostionDurationInsec = event.inSeconds.toDouble();
-            currentOlayingDurathion = event.toString().substring(0, 7);
-
             if (event.inSeconds == 00.000000) {
               isPlaying = false;
               pressedPause = false;
 
               emit(ChangePlayingState());
-            } else {
+            } else if (event.inSeconds.toDouble() >
+                currentPostionDurationInsec) {
+              currentPostionDurationInsec = event.inSeconds.toDouble();
+              currentOlayingDurathion = event.toString().substring(0, 7);
               isPlaying = true;
+              print(currentPostionDurationInsec);
               emit(ChangePlayingState());
             }
           });

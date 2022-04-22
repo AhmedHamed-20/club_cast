@@ -3,13 +3,12 @@ import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.
 import 'package:club_cast/data_layer/cash/cash.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
 import 'package:club_cast/presentation_layer/models/explore_podcasts_model.dart';
-import 'package:club_cast/presentation_layer/models/get_all_podcst.dart';
 import 'package:club_cast/presentation_layer/models/user_model.dart';
 import 'package:club_cast/presentation_layer/screens/active_podcast_screen.dart';
 import 'package:club_cast/presentation_layer/screens/profile_detailes_screen.dart';
 import 'package:club_cast/presentation_layer/screens/user_profile_screen.dart';
 import 'package:club_cast/presentation_layer/widgets/playingCardWidget.dart';
-import 'package:club_cast/presentation_layer/widgets/pos_cast_card_item.dart';
+import 'package:club_cast/presentation_layer/widgets/pod_cast_card_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -68,17 +67,12 @@ class ExploreScreen extends StatelessWidget {
                         backgroundColor: Theme.of(context).backgroundColor,
                         color: Theme.of(context).primaryColor,
                         onRefresh: refresh,
-                        child: SingleChildScrollView(
+                        child: CustomScrollView(
                           //     physics: const AlwaysScrollableScrollPhysics(),
-                          child: Column(
-                            children: [
-                              ListView.builder(
-                                addAutomaticKeepAlives: false,
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemCount: GetExplorePodCastModel
-                                    .getExplorePodCast?['data'].length,
-                                itemBuilder: (context, index) {
+                          slivers: [
+                            SliverList(
+                              delegate: SliverChildBuilderDelegate(
+                                (context, index) {
                                   return InkWell(
                                     onTap: () {
                                       navigatePushTo(
@@ -220,37 +214,46 @@ class ExploreScreen extends StatelessWidget {
                                     ),
                                   );
                                 },
+                                childCount: GetExplorePodCastModel
+                                    .getExplorePodCast?['data'].length,
                               ),
-                              const SizedBox(
-                                height: 10,
+                            ),
+                            SliverToBoxAdapter(
+                              child: Column(
+                                children: [
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  cubit.noDataExplore
+                                      ? const SizedBox()
+                                      : InkWell(
+                                          borderRadius:
+                                              BorderRadius.circular(40),
+                                          onTap: () {
+                                            cubit.pageinathionExplore(
+                                              token,
+                                            );
+                                          },
+                                          child: CircleAvatar(
+                                            backgroundColor: Theme.of(context)
+                                                .backgroundColor,
+                                            radius: 30,
+                                            child: cubit.loadExplore
+                                                ? CircularProgressIndicator(
+                                                    color: Theme.of(context)
+                                                        .primaryColor,
+                                                  )
+                                                : Icon(
+                                                    Icons.arrow_downward,
+                                                    color: Theme.of(context)
+                                                        .primaryColor,
+                                                  ),
+                                          ),
+                                        ),
+                                ],
                               ),
-                              cubit.noDataExplore
-                                  ? const SizedBox()
-                                  : InkWell(
-                                      borderRadius: BorderRadius.circular(40),
-                                      onTap: () {
-                                        cubit.pageinathionExplore(
-                                          token,
-                                        );
-                                      },
-                                      child: CircleAvatar(
-                                        backgroundColor:
-                                            Theme.of(context).backgroundColor,
-                                        radius: 30,
-                                        child: cubit.loadExplore
-                                            ? CircularProgressIndicator(
-                                                color: Theme.of(context)
-                                                    .primaryColor,
-                                              )
-                                            : Icon(
-                                                Icons.arrow_downward,
-                                                color: Theme.of(context)
-                                                    .primaryColor,
-                                              ),
-                                      ),
-                                    ),
-                            ],
-                          ),
+                            )
+                          ],
                         ),
                       ),
                     ),

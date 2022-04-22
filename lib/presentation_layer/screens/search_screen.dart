@@ -177,6 +177,9 @@ class SearchScreen extends StatelessWidget {
                                   );
                                 },
                               ),
+                        const SizedBox(
+                          height: 10,
+                        ),
                         defaultButton(
                           onPressed: () {
                             cubit.getExplorePodcast(token: token);

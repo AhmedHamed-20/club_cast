@@ -15,12 +15,12 @@ import 'package:club_cast/presentation_layer/screens/user_screen/event_screen/ev
 import 'package:club_cast/presentation_layer/screens/user_screen/login_screen/login_screen.dart';
 import 'package:club_cast/presentation_layer/widgets/alertDialog.dart';
 import 'package:club_cast/presentation_layer/widgets/playingCardWidget.dart';
-import 'package:club_cast/presentation_layer/widgets/pos_cast_card_item.dart';
+import 'package:club_cast/presentation_layer/widgets/pod_cast_card_item.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-
+import 'package:club_cast/presentation_layer/screens/podcastLikesScreen.dart';
 import '../components/constant/constant.dart';
 
 class UserProfileScreen extends StatelessWidget {

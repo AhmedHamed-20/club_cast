@@ -7,7 +7,7 @@ import 'package:club_cast/presentation_layer/models/get_all_podcst.dart';
 import 'package:club_cast/presentation_layer/screens/active_podcast_screen.dart';
 import 'package:club_cast/presentation_layer/screens/explore_screen.dart';
 import 'package:club_cast/presentation_layer/screens/profile_detailes_screen.dart';
-import 'package:club_cast/presentation_layer/widgets/pos_cast_card_item.dart';
+import 'package:club_cast/presentation_layer/widgets/pod_cast_card_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -76,15 +76,12 @@ class PodCastScreen extends StatelessWidget {
                   backgroundColor: Theme.of(context).backgroundColor,
                   color: Theme.of(context).primaryColor,
                   onRefresh: () => cubit.getMyFollowingPodcast(token, context),
-                  child: SingleChildScrollView(
+                  child: CustomScrollView(
                     physics: const BouncingScrollPhysics(),
-                    child: Column(
-                      //  crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        ListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemBuilder: (context, index) => InkWell(
+                    slivers: [
+                      SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                          (context, index) => InkWell(
                             onTap: () {
                               //  print(GetAllPodCastModel.getPodcastUserPublishInform(index));
                               navigatePushTo(
@@ -201,37 +198,45 @@ class PodCastScreen extends StatelessWidget {
                                       : null,
                             ),
                           ),
-                          itemCount: GetMyFollowingPodCastsModel
+                          childCount: GetMyFollowingPodCastsModel
                               .getMyFollowingPodcasts?['data'].length,
                         ),
-                        const SizedBox(
-                          height: 10,
+                      ),
+                      SliverToBoxAdapter(
+                        child: Column(
+                          children: [
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            cubit.noDataMyfollowingPodcast
+                                ? const SizedBox()
+                                : InkWell(
+                                    borderRadius: BorderRadius.circular(40),
+                                    onTap: () {
+                                      cubit.pageinathionMyFollowingPodcast(
+                                        token,
+                                      );
+                                    },
+                                    child: CircleAvatar(
+                                      backgroundColor:
+                                          Theme.of(context).backgroundColor,
+                                      radius: 30,
+                                      child: cubit.loadMyFollowinPodcast
+                                          ? CircularProgressIndicator(
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                            )
+                                          : Icon(
+                                              Icons.arrow_downward,
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                            ),
+                                    ),
+                                  ),
+                          ],
                         ),
-                        cubit.noDataMyfollowingPodcast
-                            ? const SizedBox()
-                            : InkWell(
-                                borderRadius: BorderRadius.circular(40),
-                                onTap: () {
-                                  cubit.pageinathionMyFollowingPodcast(
-                                    token,
-                                  );
-                                },
-                                child: CircleAvatar(
-                                  backgroundColor:
-                                      Theme.of(context).backgroundColor,
-                                  radius: 30,
-                                  child: cubit.loadMyFollowinPodcast
-                                      ? CircularProgressIndicator(
-                                          color: Theme.of(context).primaryColor,
-                                        )
-                                      : Icon(
-                                          Icons.arrow_downward,
-                                          color: Theme.of(context).primaryColor,
-                                        ),
-                                ),
-                              ),
-                      ],
-                    ),
+                      )
+                    ],
                   ),
                 ),
         );
