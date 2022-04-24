@@ -10,8 +10,8 @@ import 'package:club_cast/presentation_layer/components/constant/constant.dart';
 import 'package:club_cast/presentation_layer/models/activeRoomModelAdmin.dart';
 import 'package:club_cast/presentation_layer/models/activeRoomModelUser.dart';
 import 'package:club_cast/presentation_layer/models/getAllRoomsModel.dart';
-import 'package:club_cast/presentation_layer/screens/room_user_view_admin.dart';
-import 'package:club_cast/presentation_layer/screens/room_user_view_screen.dart';
+import 'package:club_cast/presentation_layer/screens/room_screens/room_user_view_admin.dart';
+import 'package:club_cast/presentation_layer/screens/room_screens/room_user_view_screen.dart';
 import 'package:club_cast/presentation_layer/widgets/event_card_item.dart';
 import 'package:club_cast/presentation_layer/widgets/public_room_card_item.dart';
 import 'package:flutter/cupertino.dart';
@@ -21,8 +21,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import '../models/getMyFollowingEvents.dart';
-import '../widgets/multi_use_dialog.dart';
+import '../../models/getMyFollowingEvents.dart';
+import '../../widgets/multi_use_dialog.dart';
 
 class PublicRoomScreen extends StatelessWidget {
   const PublicRoomScreen({Key? key}) : super(key: key);

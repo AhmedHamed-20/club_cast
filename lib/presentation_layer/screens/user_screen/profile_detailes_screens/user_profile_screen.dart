@@ -6,11 +6,11 @@ import 'package:club_cast/presentation_layer/models/getMyPodCastModel.dart';
 import 'package:club_cast/presentation_layer/models/get_all_podcst.dart';
 import 'package:club_cast/presentation_layer/models/get_my_events.dart';
 import 'package:club_cast/presentation_layer/models/user_model.dart';
-import 'package:club_cast/presentation_layer/screens/active_podcast_screen.dart';
-import 'package:club_cast/presentation_layer/screens/edit_user_profile.dart';
-import 'package:club_cast/presentation_layer/screens/followers_screen.dart';
-import 'package:club_cast/presentation_layer/screens/following_screen.dart';
-import 'package:club_cast/presentation_layer/screens/uploadPodcastScreen.dart';
+import 'package:club_cast/presentation_layer/screens/podcast_screens/active_podcast_screen.dart';
+import 'package:club_cast/presentation_layer/screens/user_screen/profile_detailes_screens/edit_user_profile.dart';
+import 'package:club_cast/presentation_layer/screens/user_screen/other_users_screens/followers_screen.dart';
+import 'package:club_cast/presentation_layer/screens/user_screen/other_users_screens/following_screen.dart';
+import 'package:club_cast/presentation_layer/screens/podcast_screens/uploadPodcastScreen.dart';
 import 'package:club_cast/presentation_layer/screens/user_screen/event_screen/event_screen.dart';
 import 'package:club_cast/presentation_layer/screens/user_screen/login_screen/login_screen.dart';
 import 'package:club_cast/presentation_layer/widgets/alertDialog.dart';
@@ -20,8 +20,8 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:club_cast/presentation_layer/screens/podcastLikesScreen.dart';
-import '../components/constant/constant.dart';
+import 'package:club_cast/presentation_layer/screens/podcast_screens/podcastLikesScreen.dart';
+import '../../../components/constant/constant.dart';
 
 class UserProfileScreen extends StatelessWidget {
   const UserProfileScreen({Key? key}) : super(key: key);

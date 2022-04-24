@@ -6,7 +6,7 @@ import 'package:club_cast/presentation_layer/components/constant/constant.dart';
 import 'package:club_cast/presentation_layer/components/theme/app_theme.dart';
 import 'package:club_cast/presentation_layer/layout/layout_screen.dart';
 import 'package:club_cast/presentation_layer/models/user_model.dart';
-import 'package:club_cast/presentation_layer/screens/edit_user_profile.dart';
+import 'package:club_cast/presentation_layer/screens/user_screen/profile_detailes_screens/edit_user_profile.dart';
 import 'package:club_cast/presentation_layer/screens/user_screen/login_screen/login_screen.dart';
 import 'package:club_cast/presentation_layer/screens/user_screen/login_screen/login_screen.dart';
 import 'package:flutter/material.dart';

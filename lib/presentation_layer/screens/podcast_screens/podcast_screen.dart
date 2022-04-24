@@ -4,16 +4,16 @@ import 'package:club_cast/presentation_layer/components/component/component.dart
 import 'package:club_cast/presentation_layer/components/constant/constant.dart';
 import 'package:club_cast/presentation_layer/models/getMyFollowingPodcast.dart';
 import 'package:club_cast/presentation_layer/models/get_all_podcst.dart';
-import 'package:club_cast/presentation_layer/screens/active_podcast_screen.dart';
-import 'package:club_cast/presentation_layer/screens/explore_screen.dart';
-import 'package:club_cast/presentation_layer/screens/profile_detailes_screen.dart';
+import 'package:club_cast/presentation_layer/screens/podcast_screens/active_podcast_screen.dart';
+import 'package:club_cast/presentation_layer/screens/podcast_screens/explore_screen.dart';
+import 'package:club_cast/presentation_layer/screens/user_screen/other_users_screens/profile_detailes_screen.dart';
 import 'package:club_cast/presentation_layer/widgets/pod_cast_card_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../data_layer/bloc/intial_cubit/general_app_cubit.dart';
-import '../../data_layer/cash/cash.dart';
-import '../widgets/playingCardWidget.dart';
+import '../../../data_layer/bloc/intial_cubit/general_app_cubit.dart';
+import '../../../data_layer/cash/cash.dart';
+import '../../widgets/playingCardWidget.dart';
 
 class PodCastScreen extends StatelessWidget {
   PodCastScreen({Key? key}) : super(key: key);

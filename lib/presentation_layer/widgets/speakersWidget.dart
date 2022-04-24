@@ -9,7 +9,7 @@ import '../../data_layer/bloc/room_cubit/room_cubit.dart';
 import '../components/component/component.dart';
 import '../components/constant/constant.dart';
 import '../models/user_model.dart';
-import '../screens/profile_detailes_screen.dart';
+import '../screens/user_screen/other_users_screens/profile_detailes_screen.dart';
 
 Widget speakersWiget({
   required cubit,

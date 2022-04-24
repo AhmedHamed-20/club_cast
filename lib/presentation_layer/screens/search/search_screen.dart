@@ -3,22 +3,22 @@ import 'package:club_cast/data_layer/cash/cash.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
 import 'package:club_cast/presentation_layer/models/searchRoomsModel.dart';
 import 'package:club_cast/presentation_layer/models/user_model.dart';
-import 'package:club_cast/presentation_layer/screens/profile_detailes_screen.dart';
-import 'package:club_cast/presentation_layer/screens/room_user_view_admin.dart';
-import 'package:club_cast/presentation_layer/screens/room_user_view_screen.dart';
-import 'package:club_cast/presentation_layer/screens/user_profile_screen.dart';
+import 'package:club_cast/presentation_layer/screens/user_screen/other_users_screens/profile_detailes_screen.dart';
+import 'package:club_cast/presentation_layer/screens/room_screens/room_user_view_admin.dart';
+import 'package:club_cast/presentation_layer/screens/room_screens/room_user_view_screen.dart';
+import 'package:club_cast/presentation_layer/screens/user_screen/profile_detailes_screens/user_profile_screen.dart';
 import 'package:club_cast/presentation_layer/widgets/public_room_card_item.dart';
 import 'package:club_cast/presentation_layer/widgets/search_widget_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../data_layer/bloc/intial_cubit/general_app_cubit.dart';
-import '../../data_layer/bloc/room_cubit/room_cubit.dart';
-import '../../data_layer/notification/local_notification.dart';
-import '../../data_layer/sockets/sockets_io.dart';
-import '../components/constant/constant.dart';
-import '../models/getAllRoomsModel.dart';
-import 'explore_screen.dart';
+import '../../../data_layer/bloc/intial_cubit/general_app_cubit.dart';
+import '../../../data_layer/bloc/room_cubit/room_cubit.dart';
+import '../../../data_layer/notification/local_notification.dart';
+import '../../../data_layer/sockets/sockets_io.dart';
+import '../../components/constant/constant.dart';
+import '../../models/getAllRoomsModel.dart';
+import '../podcast_screens/explore_screen.dart';
 
 class SearchScreen extends StatelessWidget {
   SearchScreen({Key? key}) : super(key: key);

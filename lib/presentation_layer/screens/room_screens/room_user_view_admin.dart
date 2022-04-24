@@ -4,30 +4,32 @@ import 'package:club_cast/data_layer/bloc/room_cubit/room_cubit.dart';
 import 'package:club_cast/data_layer/bloc/room_cubit/room_states.dart';
 import 'package:club_cast/data_layer/notification/local_notification.dart';
 import 'package:club_cast/data_layer/sockets/sockets_io.dart';
-import 'package:club_cast/presentation_layer/models/activeRoomModelUser.dart';
-import 'package:club_cast/presentation_layer/models/user_model.dart';
-import 'package:club_cast/presentation_layer/widgets/listenersWidget.dart';
+import 'package:club_cast/presentation_layer/models/activeRoomModelAdmin.dart';
+import 'package:club_cast/presentation_layer/screens/podcast_screens/uploadPodcastScreen.dart';
+import 'package:club_cast/presentation_layer/widgets/alertDialog.dart';
 import 'package:club_cast/presentation_layer/widgets/model_sheet_room_contant.dart';
-import 'package:club_cast/presentation_layer/widgets/speakersWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-import '../components/component/component.dart';
-import '../components/constant/constant.dart';
-import '../layout/layout_screen.dart';
+import '../../components/component/component.dart';
+import '../../components/constant/constant.dart';
+import '../../layout/layout_screen.dart';
+import '../../widgets/listenersWidget.dart';
+import '../../widgets/speakersWidget.dart';
 
-class RoomUserViewScreen extends StatelessWidget {
-  const RoomUserViewScreen({Key? key}) : super(key: key);
+class RoomAdminViewScreen extends StatelessWidget {
+  const RoomAdminViewScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    isIamInRoomScreen = true;
-    // List speakers = ActiveRoomUserModel.getRoomsBrodCasters();
-    // List Listener = ActiveRoomUserModel.getRoomsAudienc();
     var cubit = RoomCubit.get(context);
+    isIamInRoomScreen = true;
+    // cubit.speakers = ActiveRoomAdminModel.getRoomsBrodCasters();
+    // cubit.listener = ActiveRoomAdminModel.getRoomsAudienc();
+
     return BlocConsumer<RoomCubit, RoomStates>(
       builder: (context, state) {
+        print(GeneralAppCubit.get(context).isPublicRoom);
         return WillPopScope(
           onWillPop: () async {
             isIamInRoomScreen = false;
@@ -35,6 +37,36 @@ class RoomUserViewScreen extends StatelessWidget {
             return false;
           },
           child: Scaffold(
+            floatingActionButton: CircleAvatar(
+              radius: 25,
+              backgroundColor: Theme.of(context).primaryColor,
+              child: Center(
+                child: SocketFunc.showReconnectButton
+                    ? IconButton(
+                        onPressed: () {
+                          print(
+                              'iam connect  state: ${SocketFunc.socket!.connected}');
+                          SocketFunc.connectWithSocket(
+                              context,
+                              RoomCubit.get(context),
+                              GeneralAppCubit.get(context));
+                          // SocketFunc.adminReturnBack();
+                        },
+                        icon: Icon(Icons.refresh),
+                      )
+                    : IconButton(
+                        icon: Icon(
+                          cubit.speakers[0]['isMuted']
+                              ? Icons.mic_off
+                              : Icons.mic_none,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {
+                          AgoraRtc.onToggleMute(0, context);
+                        },
+                      ),
+              ),
+            ),
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             appBar: AppBar(
               leading: MaterialButton(
@@ -49,17 +81,44 @@ class RoomUserViewScreen extends StatelessWidget {
               ),
               backgroundColor: Colors.transparent,
               elevation: 0,
+              title: GeneralAppCubit.get(context).isPublicRoom
+                  ? const SizedBox()
+                  : SelectableText(
+                      ActiveRoomAdminModel.getRoomId(),
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyText1
+                          ?.copyWith(fontSize: 13),
+                    ),
               actions: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: MaterialButton(
                     onPressed: () {
-                      SocketFunc.isConnected = false;
-                      SocketFunc.leaveRoom(context, RoomCubit.get(context),
-                          GeneralAppCubit.get(context));
-                      navigatePushANDRemoveRout(
-                          context: context, navigateTo: LayoutScreen());
-                      NotificationService.notification.cancelAll();
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return alertDialog(
+                                context: context,
+                                title: 'Are you sure',
+                                content: Text(
+                                  'if leave the room will be removed',
+                                  style: Theme.of(context).textTheme.bodyText1,
+                                ),
+                                yesFunction: () {
+                                  SocketFunc.adminEndTheRoom();
+                                  GeneralAppCubit.get(context).isRecordRoom
+                                      ? AgoraRtc.stopRecording()
+                                      : const SizedBox();
+                                  navigatePushANDRemoveRout(
+                                      context: context,
+                                      navigateTo: LayoutScreen());
+                                  NotificationService.notification.cancelAll();
+                                },
+                                noFunction: () {
+                                  Navigator.of(context).pop();
+                                });
+                          });
                     },
                     child: Container(
                       decoration: BoxDecoration(
@@ -77,12 +136,11 @@ class RoomUserViewScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                )
+                ),
               ],
             ),
             body: SingleChildScrollView(
               child: Container(
-                width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
                   color: Theme.of(context).backgroundColor,
                   borderRadius: const BorderRadius.only(
@@ -101,16 +159,16 @@ class RoomUserViewScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Padding(
-                            padding: const EdgeInsets.all(12.0),
+                            padding: const EdgeInsets.only(bottom: 12),
                             child: Text(
-                              ActiveRoomUserModel.getRoomName().toString(),
+                              ActiveRoomAdminModel.getRoomName(),
                               style: Theme.of(context).textTheme.bodyText2,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.all(12.0),
+                            padding: const EdgeInsets.only(bottom: 12.0),
                             child: Center(
                               child: Text(
                                 'Speakers',
@@ -121,7 +179,10 @@ class RoomUserViewScreen extends StatelessWidget {
                               ),
                             ),
                           ),
-                          speakersWiget(cubit: cubit, isAdmin: false),
+                          speakersWiget(
+                            cubit: cubit,
+                            isAdmin: true,
+                          ),
                         ],
                       ),
                       const Divider(
@@ -142,67 +203,12 @@ class RoomUserViewScreen extends StatelessWidget {
                       ),
                       listenersWiget(
                         cubit: cubit,
-                        isAdmin: false,
-                      ),
+                        isAdmin: true,
+                      )
                     ],
                   ),
                 ),
               ),
-            ),
-            floatingActionButton: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                CircleAvatar(
-                  radius: 25,
-                  backgroundColor: Theme.of(context).primaryColor,
-                  child: IconButton(
-                    onPressed: () {
-                      print(RoomCubit.get(context).listener);
-                      print(GetUserModel.getUserID());
-                      SocketFunc.iamSpeaker
-                          ? SocketFunc.userWantToReturnAudience(
-                              context, GeneralAppCubit.get(context))
-                          : SocketFunc.askToTalk();
-                      SocketFunc.iamSpeaker
-                          ? const SizedBox()
-                          : showToast(
-                              message:
-                                  'You asked to talk,wait until admin accept',
-                              toastState: ToastState.SUCCESS);
-                      // print('ddd');
-                    },
-                    icon: Icon(
-                      SocketFunc.iamSpeaker
-                          ? MdiIcons.arrowDown
-                          : MdiIcons.handBackLeft,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                SocketFunc.iamSpeaker
-                    ? CircleAvatar(
-                        radius: 25,
-                        backgroundColor: Theme.of(context).primaryColor,
-                        child: IconButton(
-                          onPressed: () {
-                            for (int i = 0; i < cubit.speakers.length; i++) {
-                              if (ActiveRoomUserModel.getUserId() ==
-                                  cubit.speakers[i]['_id']) {
-                                AgoraRtc.onToggleMute(i, context);
-                              }
-                            }
-                          },
-                          icon: Icon(
-                            AgoraRtc.muted ? Icons.mic_off : Icons.mic_none,
-                            color: Colors.white,
-                          ),
-                        ),
-                      )
-                    : const SizedBox(),
-              ],
             ),
           ),
         );

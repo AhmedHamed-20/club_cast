@@ -3,12 +3,12 @@ import 'package:club_cast/data_layer/bloc/room_cubit/room_cubit.dart';
 import 'package:club_cast/data_layer/sockets/sockets_io.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
 import 'package:club_cast/presentation_layer/models/user_model.dart';
-import 'package:club_cast/presentation_layer/screens/user_profile_screen.dart';
+import 'package:club_cast/presentation_layer/screens/user_screen/profile_detailes_screens/user_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 import '../components/constant/constant.dart';
-import '../screens/profile_detailes_screen.dart';
+import '../screens/user_screen/other_users_screens/profile_detailes_screen.dart';
 import 'model_sheet_room_contant.dart';
 
 Widget listenersWiget({
@@ -20,7 +20,7 @@ Widget listenersWiget({
       Expanded(
         child: GridView.builder(
           shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           itemCount: cubit.listener.length,
           itemBuilder: (context, index) {
             return InkWell(
@@ -80,7 +80,7 @@ Widget listenersWiget({
                                           ),
                                         ),
                                       )
-                                    : SizedBox(),
+                                    : const SizedBox(),
                                 Card(
                                   elevation: 3,
                                   color:
@@ -135,7 +135,8 @@ Widget listenersWiget({
                             cubit.listener[index]['photo'],
                           ),
                         ),
-                        RoomCubit.get(context).listener[index]['askedToTalk'] &&
+                        RoomCubit.get(context).listener[index]['askedToTalk'] ==
+                                    true &&
                                 isAdmin
                             ? Positioned(
                                 right: 0,

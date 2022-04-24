@@ -9,7 +9,7 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../data_layer/bloc/intial_cubit/general_app_cubit.dart';
+import '../../../../data_layer/bloc/intial_cubit/general_app_cubit.dart';
 
 TextEditingController? userNameController = TextEditingController();
 TextEditingController? emailController = TextEditingController();

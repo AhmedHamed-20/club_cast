@@ -5,8 +5,8 @@ import 'package:club_cast/presentation_layer/components/component/component.dart
 import 'package:club_cast/presentation_layer/components/constant/constant.dart';
 import 'package:club_cast/presentation_layer/models/podCastLikesUserModel.dart';
 import 'package:club_cast/presentation_layer/models/user_model.dart';
-import 'package:club_cast/presentation_layer/screens/profile_detailes_screen.dart';
-import 'package:club_cast/presentation_layer/screens/user_profile_screen.dart';
+import 'package:club_cast/presentation_layer/screens/user_screen/other_users_screens/profile_detailes_screen.dart';
+import 'package:club_cast/presentation_layer/screens/user_screen/profile_detailes_screens/user_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -52,7 +52,7 @@ class PodCastLikesScreen extends StatelessWidget {
                           cubit.getUserById(
                               profileId:
                                   GetPodCastUsersLikesModel.getUserID(index),
-                          token: token);
+                              token: token);
                           cubit.getUserPodcast(token,
                               GetPodCastUsersLikesModel.getUserID(index));
                           if (GetPodCastUsersLikesModel.getUserID(index) ==

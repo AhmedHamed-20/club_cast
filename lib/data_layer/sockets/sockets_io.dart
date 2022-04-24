@@ -7,8 +7,10 @@ import 'package:club_cast/presentation_layer/layout/layout_screen.dart';
 import 'package:club_cast/presentation_layer/models/activeRoomModelAdmin.dart';
 import 'package:club_cast/presentation_layer/models/activeRoomModelUser.dart';
 import 'package:club_cast/presentation_layer/models/user_model.dart';
-import 'package:club_cast/presentation_layer/screens/room_user_view_admin.dart';
-import 'package:club_cast/presentation_layer/screens/room_user_view_screen.dart';
+import 'package:club_cast/presentation_layer/screens/room_screens/room_user_view_admin.dart';
+import 'package:club_cast/presentation_layer/screens/room_screens/room_user_view_screen.dart';
+import 'package:club_cast/presentation_layer/widgets/multi_use_dialog.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import '../../presentation_layer/components/constant/constant.dart';
@@ -317,6 +319,33 @@ class SocketFunc {
               isConnected = true,
               generalAppCubit.changeState(),
               isPrivateRoom = false,
+              if (data[1]['isRecording'] == true)
+                {
+                  print('dialog'),
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return multiAlerDialog(
+                          context: context,
+                          title: 'Info',
+                          content: Text(
+                            'the host is recording this room',
+                            style: Theme.of(context).textTheme.bodyText1,
+                          ),
+                          actions: Center(
+                            child: MaterialButton(
+                              child: Text(
+                                'ok',
+                                style: Theme.of(context).textTheme.bodyText1,
+                              ),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ),
+                        );
+                      })
+                },
             });
     socket?.on(
         'errorMessage',
@@ -340,11 +369,14 @@ class SocketFunc {
               roomCubit.listener.add(data),
               roomCubit.listener.forEach(
                 (e) {
-                  if (e['askedToTalk'] != true) {
+                  if (e['askedToTalk'] == false || e['askedToTalk'] == true) {
+                    print('user');
+                  } else {
+                    print('join');
                     e['askedToTalk'] = false;
+                    e['isTalking'] = false;
+                    e['isMuted'] = false;
                   }
-                  e['isTalking'] = false;
-                  e['isMuted'] = false;
                 },
               ),
               print(roomCubit.listener),

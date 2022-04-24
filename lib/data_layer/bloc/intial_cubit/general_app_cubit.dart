@@ -16,9 +16,9 @@ import 'package:club_cast/presentation_layer/models/get_userId_model.dart';
 import 'package:club_cast/presentation_layer/models/login_model.dart';
 import 'package:club_cast/presentation_layer/models/podCastLikesUserModel.dart';
 import 'package:club_cast/presentation_layer/models/user_model.dart';
-import 'package:club_cast/presentation_layer/screens/podcastLikesScreen.dart';
-import 'package:club_cast/presentation_layer/screens/podcast_screen.dart';
-import 'package:club_cast/presentation_layer/screens/public_rooms_screen.dart';
+import 'package:club_cast/presentation_layer/screens/podcast_screens/podcastLikesScreen.dart';
+import 'package:club_cast/presentation_layer/screens/podcast_screens/podcast_screen.dart';
+import 'package:club_cast/presentation_layer/screens/room_screens/public_rooms_screen.dart';
 import 'package:club_cast/presentation_layer/screens/user_screen/login_screen/login_screen.dart';
 
 import 'package:dio/dio.dart';
@@ -235,15 +235,14 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
           activePodCastId = activePodCastIdnow;
 
           assetsAudioPlayer.currentPosition.listen((event) {
+            currentPostionDurationInsec = event.inSeconds.toDouble();
+            currentOlayingDurathion = event.toString().substring(0, 7);
             if (event.inSeconds == 00.000000) {
               isPlaying = false;
               pressedPause = false;
 
               emit(ChangePlayingState());
-            } else if (event.inSeconds.toDouble() >
-                currentPostionDurationInsec) {
-              currentPostionDurationInsec = event.inSeconds.toDouble();
-              currentOlayingDurathion = event.toString().substring(0, 7);
+            } else {
               isPlaying = true;
               print(currentPostionDurationInsec);
               emit(ChangePlayingState());

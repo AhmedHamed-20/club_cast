@@ -1,21 +1,19 @@
-
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
 import 'package:club_cast/presentation_layer/components/constant/constant.dart';
 import 'package:club_cast/presentation_layer/models/followers_following_model.dart';
-import 'package:club_cast/presentation_layer/models/get_userId_model.dart';
-import 'package:club_cast/presentation_layer/screens/profile_detailes_screen.dart';
-import 'package:club_cast/presentation_layer/screens/user_profile_screen.dart';
+import 'package:club_cast/presentation_layer/screens/user_screen/other_users_screens/profile_detailes_screen.dart';
+import 'package:club_cast/presentation_layer/screens/user_screen/profile_detailes_screens/user_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../data_layer/cash/cash.dart';
-import '../components/component/component.dart';
-import '../models/user_model.dart';
+import '../../../../data_layer/cash/cash.dart';
+import '../../../components/component/component.dart';
+import '../../../models/user_model.dart';
 
-class FollowersScreen extends StatelessWidget {
-  const FollowersScreen({Key? key}) : super(key: key);
+class FollowingScreen extends StatelessWidget {
+  const FollowingScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +24,7 @@ class FollowersScreen extends StatelessWidget {
           return Scaffold(
             appBar: AppBar(
               title: Text(
-                'Followers',
+                'Following',
                 style: Theme.of(context).textTheme.bodyText2,
               ),
               backgroundColor: Colors.transparent,
@@ -42,7 +40,7 @@ class FollowersScreen extends StatelessWidget {
               elevation: 0,
             ),
             backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            body: cubit.followerLoad
+            body: cubit.followingLoad
                 ? Center(
                     child: CircularProgressIndicator(
                     color: Theme.of(context).primaryColor,
@@ -53,16 +51,16 @@ class FollowersScreen extends StatelessWidget {
                         ListView.builder(
                           shrinkWrap: true,
                           physics: NeverScrollableScrollPhysics(),
-                          itemCount: Followers.followersModel!['data'].length,
+                          itemCount: Following.followingModel!['data'].length,
                           itemBuilder: (context, index) {
                             return InkWell(
                               onTap: () {
                                 cubit.getUserPodcast(
-                                    token, Followers.getUserID(index));
+                                    token, Following.getUserID(index));
                                 cubit.getUserById(
-                                    profileId: Followers.getUserID(index),
-                                token: token);
-                                if (Followers.getUserID(index) ==
+                                    profileId: Following.getUserID(index),
+                                    token: token);
+                                if (Following.getUserID(index) ==
                                     GetUserModel.getUserID()) {
                                   navigatePushTo(
                                       context: context,
@@ -71,7 +69,7 @@ class FollowersScreen extends StatelessWidget {
                                   navigatePushTo(
                                       context: context,
                                       navigateTo: ProfileDetailsScreen(
-                                          Followers.getUserID(index)));
+                                          Following.getUserID(index)));
                                 }
                               },
                               child: Padding(
@@ -79,11 +77,11 @@ class FollowersScreen extends StatelessWidget {
                                 child: ListTile(
                                   leading: CircleAvatar(
                                     backgroundImage: NetworkImage(
-                                        '${Followers.getUserPhoto(index)}'),
+                                        '${Following.getUserPhoto(index)}'),
                                     radius: 30.0,
                                   ),
                                   title: Text(
-                                    '${Followers.getUserName(index)}',
+                                    '${Following.getUserName(index)}',
                                     style:
                                         Theme.of(context).textTheme.bodyText1,
                                   ),
@@ -92,34 +90,35 @@ class FollowersScreen extends StatelessWidget {
                             );
                           },
                         ),
-                        cubit.noDataFollowers
+                        cubit.noDataFollowing
                             ? const SizedBox()
                             : InkWell(
-                          borderRadius: BorderRadius.circular(40),
-                          onTap: () {
-                            cubit.isPageUserFollowers?cubit.paginationFollowers(
-                              token,
-                              'v1/users/${cubit.userId!.data!.id}/followers',
-                            ):
-                            cubit.paginationFollowers(
-                              token,
-                              myFollowers,
-                            );
-                          },
-                          child: CircleAvatar(
-                            backgroundColor:
-                            Theme.of(context).backgroundColor,
-                            radius: 30,
-                            child: cubit.loadFollowers
-                                ? CircularProgressIndicator(
-                              color: Theme.of(context).primaryColor,
-                            )
-                                : Icon(
-                              Icons.arrow_downward,
-                              color: Theme.of(context).primaryColor,
-                            ),
-                          ),
-                        ),
+                                borderRadius: BorderRadius.circular(40),
+                                onTap: () {
+                                  cubit.isPageUserFollowing
+                                      ? cubit.paginationFollowing(
+                                          token,
+                                          'v1/users/${cubit.userId!.data!.id}/following',
+                                        )
+                                      : cubit.paginationFollowing(
+                                          token,
+                                          myFollowing,
+                                        );
+                                },
+                                child: CircleAvatar(
+                                  backgroundColor:
+                                      Theme.of(context).backgroundColor,
+                                  radius: 30,
+                                  child: cubit.loadFollowing
+                                      ? CircularProgressIndicator(
+                                          color: Theme.of(context).primaryColor,
+                                        )
+                                      : Icon(
+                                          Icons.arrow_downward,
+                                          color: Theme.of(context).primaryColor,
+                                        ),
+                                ),
+                              ),
                       ],
                     ),
                   ),

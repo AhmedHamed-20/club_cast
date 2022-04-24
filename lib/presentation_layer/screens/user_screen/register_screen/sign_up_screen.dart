@@ -4,7 +4,7 @@ import 'package:club_cast/data_layer/bloc/login_cubit/login_states.dart';
 import 'package:club_cast/data_layer/cash/cash.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
 import 'package:club_cast/presentation_layer/models/login_model.dart';
-import 'package:club_cast/presentation_layer/screens/setup_avater_screen.dart';
+import 'package:club_cast/presentation_layer/screens/user_screen/register_screen/setup_avater_screen.dart';
 import 'package:club_cast/presentation_layer/screens/user_screen/login_screen/login_screen.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';

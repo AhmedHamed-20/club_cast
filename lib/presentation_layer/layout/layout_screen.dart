@@ -5,10 +5,10 @@ import 'package:club_cast/data_layer/sockets/sockets_io.dart';
 import 'package:club_cast/presentation_layer/components/constant/constant.dart';
 import 'package:club_cast/data_layer/cash/cash.dart';
 import 'package:club_cast/presentation_layer/models/user_model.dart';
-import 'package:club_cast/presentation_layer/screens/room_user_view_admin.dart';
-import 'package:club_cast/presentation_layer/screens/room_user_view_screen.dart';
-import 'package:club_cast/presentation_layer/screens/search_screen.dart';
-import 'package:club_cast/presentation_layer/screens/user_profile_screen.dart';
+import 'package:club_cast/presentation_layer/screens/room_screens/room_user_view_admin.dart';
+import 'package:club_cast/presentation_layer/screens/room_screens/room_user_view_screen.dart';
+import 'package:club_cast/presentation_layer/screens/search/search_screen.dart';
+import 'package:club_cast/presentation_layer/screens/user_screen/profile_detailes_screens/user_profile_screen.dart';
 import 'package:club_cast/presentation_layer/screens/user_screen/event_screen/get_all_my_following_events.dart';
 import 'package:club_cast/presentation_layer/widgets/alertDialog.dart';
 import 'package:club_cast/presentation_layer/widgets/modelsheetcreate_room.dart';
@@ -186,9 +186,9 @@ class LayoutScreen extends StatelessWidget {
                                     IconButton(
                                       onPressed: () {
                                         cubit.isPlaying
-                                            ? cubit.assetsAudioPlayer
-                                                .seekBy(Duration(seconds: -10))
-                                            : SizedBox();
+                                            ? cubit.assetsAudioPlayer.seekBy(
+                                                const Duration(seconds: -10))
+                                            : const SizedBox();
                                       },
                                       icon: Icon(
                                         Icons.replay_10,
@@ -245,7 +245,7 @@ class LayoutScreen extends StatelessWidget {
                                         cubit.isPlaying
                                             ? cubit.assetsAudioPlayer
                                                 .seekBy(Duration(seconds: 10))
-                                            : SizedBox();
+                                            : const SizedBox();
                                       },
                                       icon: Icon(
                                         Icons.forward_10,
@@ -325,8 +325,9 @@ class LayoutScreen extends StatelessWidget {
                     },
                     child: Center(
                       child: GetUserModel.getUserPhoto() == null
-                          ? const CircularProgressIndicator(
+                          ? CircularProgressIndicator(
                               strokeWidth: 1,
+                              color: Theme.of(context).primaryColor,
                             )
                           : Container(
                               width: 42,
@@ -382,6 +383,7 @@ class LayoutScreen extends StatelessWidget {
                             'name': cubit.roomNameController.text,
                             'category': cubit.selectedCategoryItem,
                             'status': cubit.isPublicRoom ? 'public' : 'private',
+                            'isRecording': cubit.isRecordRoom,
                           },
                           context,
                           roomCubit,
