@@ -468,7 +468,30 @@ class UserProfileScreen extends StatelessWidget {
                                         ),
                                       );
                                     },
-                                  )
+                                  ),
+                                  cubit.noDataMyPodcasts
+                                      ? const SizedBox()
+                                      : InkWell(
+                                    borderRadius: BorderRadius.circular(40),
+                                    onTap: () {
+                                       cubit.paginationMyPodcasts(token,);
+                                    },
+                                    child: Center(
+                                      child: CircleAvatar(
+                                        backgroundColor:
+                                        Theme.of(context).backgroundColor,
+                                        radius: 30,
+                                        child: cubit.loadMyPodcasts
+                                            ? CircularProgressIndicator(
+                                          color: Theme.of(context).primaryColor,
+                                        )
+                                            : Icon(
+                                          Icons.arrow_downward,
+                                          color: Theme.of(context).primaryColor,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),

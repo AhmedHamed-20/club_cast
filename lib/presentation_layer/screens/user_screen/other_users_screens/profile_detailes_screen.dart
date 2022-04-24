@@ -403,7 +403,30 @@ class ProfileDetailsScreen extends StatelessWidget {
                                           ),
                                         );
                                       },
-                                    )
+                                    ),
+                                    cubit.noDataUserPodcasts
+                                        ? const SizedBox()
+                                        : InkWell(
+                                      borderRadius: BorderRadius.circular(40),
+                                      onTap: () {
+                                        cubit.paginationUserPodcasts(token,'${cubit.userId!.data!.id}');
+                                      },
+                                      child: Center(
+                                        child: CircleAvatar(
+                                          backgroundColor:
+                                          Theme.of(context).backgroundColor,
+                                          radius: 30,
+                                          child: cubit.loadUserPodcasts
+                                              ? CircularProgressIndicator(
+                                            color: Theme.of(context).primaryColor,
+                                          )
+                                              : Icon(
+                                            Icons.arrow_downward,
+                                            color: Theme.of(context).primaryColor,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ),

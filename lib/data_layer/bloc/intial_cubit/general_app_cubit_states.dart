@@ -231,3 +231,15 @@ class PaginationRoomsErrorState extends GeneralAppStates {}
 class PaginationEventSuccessState extends GeneralAppStates {}
 
 class PaginationEventErrorState extends GeneralAppStates {}
+
+class PaginationMyPodcastsLoadingState extends GeneralAppStates {}
+
+class PaginationMyPodcastsSuccessState extends GeneralAppStates {}
+
+class PaginationMyPodcastsErrorState extends GeneralAppStates {}
+
+class PaginationUserPodcastsLoadingState extends GeneralAppStates {}
+
+class PaginationUserPodcastsSuccessState extends GeneralAppStates {}
+
+class PaginationUserPodcastsErrorState extends GeneralAppStates {}

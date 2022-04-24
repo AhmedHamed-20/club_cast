@@ -422,6 +422,8 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       GetMyPodCastModel.getMyPodCast = Map<String, dynamic>.from(value.data);
       print(GetMyPodCastModel.getMyPodCast);
       isLoadProfile = false;
+      pageMyPodcasts = 2;
+      noDataMyPodcasts = false;
       emit(GetMyPodCastSuccessState());
     }).catchError((onError) {
       emit(GetMyPodCastErrorState());
@@ -505,7 +507,8 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
         url: getuserPodCast + '${userId}',
         token: {'Authorization': 'Bearer ${token}'}).then((value) {
       GetAllPodCastModel.getAllPodCast = Map<String, dynamic>.from(value.data);
-
+      pageUserPodcasts = 2;
+      noDataUserPodcasts = false;
       isLoadingprofile = false;
       emit(PodCastDataGetSuccess());
     }).catchError((error) {
@@ -1364,6 +1367,67 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       print(error);
       loadRooms = false;
       emit(PaginationRoomsErrorState());
+    });
+  }
+
+  bool noDataMyPodcasts = false;
+  bool loadMyPodcasts = false;
+  int pageMyPodcasts = 2;
+  void paginationMyPodcasts(
+      String token,
+      ) {
+    loadMyPodcasts = true;
+    emit(PaginationMyPodcastsLoadingState());
+    DioHelper.getData(
+        url: getMyPodCasts + '?page=${pageMyPodcasts}',
+        token: {'Authorization': 'Bearer $token'}).then((value) {
+      if (value.data['results'] == 0) {
+        pageMyPodcasts = pageMyPodcasts;
+        noDataMyPodcasts = true;
+        emit(PaginationMyPodcastsSuccessState());
+        showToast(message: 'End Of Data(:', toastState: ToastState.SUCCESS);
+        loadMyPodcasts = false;
+      } else {
+        pageMyPodcasts++;
+        GetMyPodCastModel.getMyPodCast?['data'].addAll(value.data['data']);
+        loadMyPodcasts = false;
+        emit(PaginationMyPodcastsSuccessState());
+      }
+    }).onError((error, stackTrace) {
+      print(error);
+      loadMyPodcasts = false;
+      emit(PaginationMyPodcastsErrorState());
+    });
+  }
+
+  bool noDataUserPodcasts = false;
+  bool loadUserPodcasts = false;
+  int pageUserPodcasts = 2;
+  void paginationUserPodcasts(
+      String token,
+      String userId,
+      ) {
+    loadUserPodcasts = true;
+    emit(PaginationUserPodcastsLoadingState());
+    DioHelper.getData(
+        url: getuserPodCast + '${userId}'+'&page=${pageUserPodcasts}',
+        token: {'Authorization': 'Bearer $token'}).then((value) {
+      if (value.data['results'] == 0) {
+        pageUserPodcasts = pageUserPodcasts;
+        noDataUserPodcasts = true;
+        emit(PaginationUserPodcastsSuccessState());
+        showToast(message: 'End Of Data(:', toastState: ToastState.SUCCESS);
+        loadUserPodcasts = false;
+      } else {
+        pageUserPodcasts++;
+        GetAllPodCastModel.getAllPodCast?['data'].addAll(value.data['data']);
+        loadUserPodcasts = false;
+        emit(PaginationUserPodcastsSuccessState());
+      }
+    }).onError((error, stackTrace) {
+      print(error);
+      loadUserPodcasts = false;
+      emit(PaginationUserPodcastsErrorState());
     });
   }
 }
