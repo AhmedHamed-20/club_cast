@@ -31,7 +31,7 @@ class PlayingCardWidget {
                       (val) {
                         //bool isMyfollowingScreen = false;
                         // bool isMyprofileScreen = false;
-                        print(cubit.isMyfollowingScreen);
+
                         if (cubit.isMyprofileScreen) {
                           cubit.getMyPodCast(token, context);
                         } else if (cubit.isProfilePage) {
@@ -52,7 +52,6 @@ class PlayingCardWidget {
                     )
                       .then(
                       (val) {
-                        print(cubit.isExplore);
                         if (cubit.isMyprofileScreen) {
                           cubit.getMyPodCast(token, context);
                         } else if (cubit.isProfilePage) {
@@ -103,8 +102,7 @@ class PlayingCardWidget {
     return IconButton(
       onPressed: () {
         String podCastUrl = podcastUrl;
-        print('podcastId:' + podCastId);
-        print('currentId:' + currentId);
+
         if (SocketFunc.isConnected) {
           showToast(
               message: "you can't play podcast if you in a room,leave first(:",
@@ -119,7 +117,7 @@ class PlayingCardWidget {
               : cubit.playingPodcast(
                   podCastUrl, podCastName, userPhoto, podCastId, context);
           // print(GetAllPodCastModel.getPodCastAudio(index));
-          print(currentId);
+
         }
       },
       icon: Icon(
@@ -147,7 +145,7 @@ class PlayingCardWidget {
               // color: Theme.of(context).primaryColor,
               backgroundColor: Colors.grey,
             )
-          : Icon(
+          : const Icon(
               Icons.cloud_download_outlined,
               size: 35,
             ),

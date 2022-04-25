@@ -35,7 +35,6 @@ class GetAllPodCastModel {
   static List getPodcastUserPublishInform(int index) {
     creditBy = [getAllPodCast?['data'][index]['createdBy']];
     if (creditBy?[0]['photo'] == null) {
-      print('here');
       creditBy?[0]['photo'] =
           'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3-lQXGq-2WPJR5aE_l74q-mR61wDrZXUYhA&usqp=CAU';
     }

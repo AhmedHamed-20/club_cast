@@ -12,12 +12,10 @@ class ActiveRoomAdminModel {
   static String? adminToken;
   static String? roomId;
   static List getRoomsAudienc() {
-    print(audienc);
     return audienc = [activeRoomData!['audience']];
   }
 
   static List getRoomsBrodCasters() {
-    print(brodcasters);
     return brodcasters = [activeRoomData!['brodcasters']];
   }
 

@@ -1,12 +1,7 @@
-import 'package:agora_rtc_engine/rtc_engine.dart';
-import 'package:bloc/bloc.dart';
 import 'package:club_cast/data_layer/bloc/room_cubit/room_states.dart';
 import 'package:club_cast/data_layer/dio/dio_setup.dart';
 import 'package:club_cast/presentation_layer/components/constant/constant.dart';
-import 'package:club_cast/presentation_layer/models/activeRoomModelAdmin.dart';
-import 'package:club_cast/presentation_layer/models/activeRoomModelUser.dart';
 import 'package:club_cast/presentation_layer/models/getAllRoomsModel.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../agora/rtc_engine.dart';
@@ -49,8 +44,6 @@ class RoomCubit extends Cubit<RoomStates> {
     return DioHelper.getData(
         url: getRoom + roomId,
         token: {'Authorization': 'Bearer $token'}).then((value) {
-      print(value.data);
-
       // speakers = [value.data['data']['admin']];
 
       // speakers.addAll(value.data['data']['brodcasters']);
@@ -68,7 +61,6 @@ class RoomCubit extends Cubit<RoomStates> {
       activeRoomName = value.data['data']['name'];
       emit(GetRoomDataGetSuccess());
     }).catchError((onError) {
-      print(onError);
       emit(GetRoomDataGetError());
     });
   }

@@ -23,6 +23,7 @@ Widget defaultTextFormField({
   required BuildContext context,
 }) {
   return TextFormField(
+    cursorColor: Theme.of(context).primaryColor,
     maxLines: maxLine,
     textDirection: textDirection,
     style: Theme.of(context).textTheme.bodyText1,

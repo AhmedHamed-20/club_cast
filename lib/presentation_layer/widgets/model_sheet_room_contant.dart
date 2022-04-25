@@ -7,7 +7,7 @@ class WidgetFunc {
     String avaterUrl,
     Widget Button,
   ) {
-    return Container(
+    return SizedBox(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height * 0.6,
       child: Padding(

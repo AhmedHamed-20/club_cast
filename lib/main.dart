@@ -1,13 +1,9 @@
-import 'package:bloc/bloc.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
 import 'package:club_cast/data_layer/cash/cash.dart';
 import 'package:club_cast/data_layer/dio/dio_setup.dart';
 import 'package:club_cast/presentation_layer/components/constant/constant.dart';
 import 'package:club_cast/presentation_layer/components/theme/app_theme.dart';
 import 'package:club_cast/presentation_layer/layout/layout_screen.dart';
-import 'package:club_cast/presentation_layer/models/user_model.dart';
-import 'package:club_cast/presentation_layer/screens/user_screen/profile_detailes_screens/edit_user_profile.dart';
-import 'package:club_cast/presentation_layer/screens/user_screen/login_screen/login_screen.dart';
 import 'package:club_cast/presentation_layer/screens/user_screen/login_screen/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -33,7 +29,6 @@ void main() async {
     isDark = CachHelper.getData(key: 'isDark');
   }
   Widget startApp;
-  print(token);
 
   if (await CachHelper.getData(key: 'token') != null) {
     startApp = LayoutScreen();

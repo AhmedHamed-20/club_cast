@@ -17,7 +17,7 @@ import '../../../data_layer/bloc/room_cubit/room_cubit.dart';
 import '../../../data_layer/notification/local_notification.dart';
 import '../../../data_layer/sockets/sockets_io.dart';
 import '../../components/constant/constant.dart';
-import '../../models/getAllRoomsModel.dart';
+
 import '../podcast_screens/explore_screen.dart';
 
 class SearchScreen extends StatelessWidget {
@@ -30,7 +30,7 @@ class SearchScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var cubit = GeneralAppCubit.get(context);
     searchController.addListener(() {
-      Future.delayed(Duration(seconds: 1), () {
+      Future.delayed(const Duration(seconds: 1), () {
         cubit.userSearch(
           token: token,
           value: searchController.text,
@@ -52,7 +52,7 @@ class SearchScreen extends StatelessWidget {
             child: Scaffold(
               appBar: AppBar(
                 actions: [
-                  Container(
+                  SizedBox(
                     width: MediaQuery.of(context).size.width * 0.9,
                     child: Padding(
                       padding: const EdgeInsets.only(
@@ -131,8 +131,6 @@ class SearchScreen extends StatelessWidget {
                                         cubit.search!['data'][index]['_id'],
                                       );
 
-                                      print(
-                                          cubit.search!['data'][index]['_id']);
                                       cubit.getUserById(
                                           profileId: cubit.search!['data']
                                                   [index]['_id']
@@ -143,7 +141,8 @@ class SearchScreen extends StatelessWidget {
                                           GetUserModel.getUserID()) {
                                         navigatePushTo(
                                             context: context,
-                                            navigateTo: UserProfileScreen());
+                                            navigateTo:
+                                                const UserProfileScreen());
                                       } else {
                                         navigatePushTo(
                                             context: context,
@@ -185,7 +184,7 @@ class SearchScreen extends StatelessWidget {
                             cubit.getExplorePodcast(token: token);
                             navigatePushTo(
                               context: context,
-                              navigateTo: ExploreScreen(),
+                              navigateTo: const ExploreScreen(),
                             );
                           },
                           context: context,
@@ -231,13 +230,15 @@ class SearchScreen extends StatelessWidget {
                                             activeRoomName) {
                                       navigatePushTo(
                                           context: context,
-                                          navigateTo: RoomAdminViewScreen());
+                                          navigateTo:
+                                              const RoomAdminViewScreen());
                                     } else if (SocketFunc.isConnected &&
                                         SearchRoomsModel.getRoomName() ==
                                             activeRoomName) {
                                       navigatePushTo(
                                           context: context,
-                                          navigateTo: RoomUserViewScreen());
+                                          navigateTo:
+                                              const RoomUserViewScreen());
                                     } else if (SocketFunc.isConnected) {
                                       if (currentUserRoleinRoom) {
                                         showToast(

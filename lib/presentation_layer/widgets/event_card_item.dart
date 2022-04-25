@@ -1,6 +1,5 @@
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
-import 'package:club_cast/presentation_layer/components/constant/constant.dart';
 import 'package:club_cast/presentation_layer/models/get_my_events.dart';
 import 'package:club_cast/presentation_layer/models/user_model.dart';
 import 'package:club_cast/presentation_layer/screens/user_screen/event_screen/event_screen.dart';
@@ -100,7 +99,7 @@ Widget eventCardItem({
                       height: 5,
                     ),
                     Text(
-                      'from ${userName}',
+                      'from' + userName,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context)
@@ -173,7 +172,7 @@ void appearEventDataToUpdate({
   EventScreen.dateController.text = GetMyEvents.eventDate(index).split("T")[0];
   EventScreen.timeController.text =
       DateFormat("h:mm a").format(DateTime.parse(GetMyEvents.eventDate(index)));
-  print(GetMyEvents.eventDate(index).split("T")[0]);
+
   // print(DateFormat("h:mm a")
   //     .format(DateTime.parse(GetMyEvents.eventDate(index))));
   EventScreen.eventDescriptionController.text =

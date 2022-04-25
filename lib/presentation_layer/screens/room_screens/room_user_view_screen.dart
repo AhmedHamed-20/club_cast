@@ -5,9 +5,7 @@ import 'package:club_cast/data_layer/bloc/room_cubit/room_states.dart';
 import 'package:club_cast/data_layer/notification/local_notification.dart';
 import 'package:club_cast/data_layer/sockets/sockets_io.dart';
 import 'package:club_cast/presentation_layer/models/activeRoomModelUser.dart';
-import 'package:club_cast/presentation_layer/models/user_model.dart';
 import 'package:club_cast/presentation_layer/widgets/listenersWidget.dart';
-import 'package:club_cast/presentation_layer/widgets/model_sheet_room_contant.dart';
 import 'package:club_cast/presentation_layer/widgets/speakersWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -160,8 +158,6 @@ class RoomUserViewScreen extends StatelessWidget {
                   backgroundColor: Theme.of(context).primaryColor,
                   child: IconButton(
                     onPressed: () {
-                      print(RoomCubit.get(context).listener);
-                      print(GetUserModel.getUserID());
                       SocketFunc.iamSpeaker
                           ? SocketFunc.userWantToReturnAudience(
                               context, GeneralAppCubit.get(context))

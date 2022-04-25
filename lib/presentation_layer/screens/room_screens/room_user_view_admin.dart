@@ -5,9 +5,7 @@ import 'package:club_cast/data_layer/bloc/room_cubit/room_states.dart';
 import 'package:club_cast/data_layer/notification/local_notification.dart';
 import 'package:club_cast/data_layer/sockets/sockets_io.dart';
 import 'package:club_cast/presentation_layer/models/activeRoomModelAdmin.dart';
-import 'package:club_cast/presentation_layer/screens/podcast_screens/uploadPodcastScreen.dart';
 import 'package:club_cast/presentation_layer/widgets/alertDialog.dart';
-import 'package:club_cast/presentation_layer/widgets/model_sheet_room_contant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -29,7 +27,6 @@ class RoomAdminViewScreen extends StatelessWidget {
 
     return BlocConsumer<RoomCubit, RoomStates>(
       builder: (context, state) {
-        print(GeneralAppCubit.get(context).isPublicRoom);
         return WillPopScope(
           onWillPop: () async {
             isIamInRoomScreen = false;
@@ -44,15 +41,13 @@ class RoomAdminViewScreen extends StatelessWidget {
                 child: SocketFunc.showReconnectButton
                     ? IconButton(
                         onPressed: () {
-                          print(
-                              'iam connect  state: ${SocketFunc.socket!.connected}');
                           SocketFunc.connectWithSocket(
                               context,
                               RoomCubit.get(context),
                               GeneralAppCubit.get(context));
                           // SocketFunc.adminReturnBack();
                         },
-                        icon: Icon(Icons.refresh),
+                        icon: const Icon(Icons.refresh),
                       )
                     : IconButton(
                         icon: Icon(

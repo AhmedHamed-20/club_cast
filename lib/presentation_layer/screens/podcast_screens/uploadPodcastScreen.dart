@@ -1,4 +1,3 @@
-import 'package:club_cast/data_layer/agora/rtc_engine.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
@@ -17,8 +16,6 @@ class UploadPodCastScreen extends StatelessWidget {
     TextEditingController nameController = TextEditingController();
     return BlocConsumer<GeneralAppCubit, GeneralAppStates>(
         builder: (context, state) {
-          print('iam in upload');
-
           var cubit = GeneralAppCubit.get(context);
           //   print(cubit.podcastFile!.path);
           return WillPopScope(

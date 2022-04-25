@@ -6,7 +6,6 @@ import 'package:club_cast/presentation_layer/screens/user_screen/other_users_scr
 import 'package:club_cast/presentation_layer/screens/user_screen/profile_detailes_screens/user_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../data_layer/cash/cash.dart';
 import '../../../components/component/component.dart';
@@ -50,7 +49,7 @@ class FollowingScreen extends StatelessWidget {
                       children: [
                         ListView.builder(
                           shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
+                          physics: const NeverScrollableScrollPhysics(),
                           itemCount: Following.followingModel!['data'].length,
                           itemBuilder: (context, index) {
                             return InkWell(
@@ -64,7 +63,7 @@ class FollowingScreen extends StatelessWidget {
                                     GetUserModel.getUserID()) {
                                   navigatePushTo(
                                       context: context,
-                                      navigateTo: UserProfileScreen());
+                                      navigateTo: const UserProfileScreen());
                                 } else {
                                   navigatePushTo(
                                       context: context,
@@ -77,11 +76,11 @@ class FollowingScreen extends StatelessWidget {
                                 child: ListTile(
                                   leading: CircleAvatar(
                                     backgroundImage: NetworkImage(
-                                        '${Following.getUserPhoto(index)}'),
+                                        Following.getUserPhoto(index)),
                                     radius: 30.0,
                                   ),
                                   title: Text(
-                                    '${Following.getUserName(index)}',
+                                    Following.getUserName(index),
                                     style:
                                         Theme.of(context).textTheme.bodyText1,
                                   ),

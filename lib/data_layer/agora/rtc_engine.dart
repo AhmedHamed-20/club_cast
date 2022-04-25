@@ -18,7 +18,6 @@ class AgoraRtc {
   static String? recordingPath;
   static File? recordingFile;
   static Future<void> initAgoraRtcEngine(String appID, ClientRole role) async {
-    print('initAgora role ${role}');
     engine = await RtcEngine.create('b29cc6ee03d642a6bf54c2f5906b9702');
     await engine?.disableVideo();
     await engine?.enableAudio();
@@ -37,16 +36,9 @@ class AgoraRtc {
     required uid,
     required cubit,
   }) async {
-    print('join');
-    print(role);
-    print(channelName);
-    print(token);
-
     // await _engine.enableWebSdkInteroperability(true);
     await initAgoraRtcEngine(appId, role);
-    await engine?.joinChannel(token, channelName, null, uid).then((value) {
-      print('successssssssssss');
-    });
+    await engine?.joinChannel(token, channelName, null, uid).then((value) {});
     eventsAgora(context, cubit);
   }
 
@@ -54,28 +46,21 @@ class AgoraRtc {
       {required String tokenAgora, required ClientRole role}) async {
     engine?.renewToken(tokenAgora).then((value) async {
       await engine?.setClientRole(role);
-    }).catchError((onError) {
-      print('dddddddddddddddddddddddddddd' + onError);
-    });
+    }).catchError((onError) {});
   }
 
   static void eventsAgora(BuildContext context, cubit) {
-    print('events');
     engine?.setEventHandler(
       RtcEngineEventHandler(
-        activeSpeaker: (uid) {
-          print('klam');
-        },
+        activeSpeaker: (uid) {},
         audioVolumeIndication: (list, aa) {
           //    var myBloc = RoomCubit();
-          print(list);
+
           if (isIamInRoomScreen) {
             list.forEach((elementAgora) {
               cubit.speakers.forEach(
                 (elementUser) {
                   if (elementAgora.volume > 3) {
-                    print('elementUser:' + elementUser['_id']);
-                    print('activeUser:' + GetUserModel.getUserID());
                     if (elementAgora.uid == 0 &&
                         (elementUser['_id'] == GetUserModel.getUserID())) {
                       //    print('user' + ActiveRoomUserModel.getUserId());
@@ -84,11 +69,11 @@ class AgoraRtc {
                       cubit.changeState();
                     } else if (elementAgora.uid == elementUser['uid']) {
                       elementUser['isTalking'] = true;
-                      print('sec');
+
                       cubit.changeState();
                     } else {
                       elementUser['isTalking'] = false;
-                      print('third');
+
                       cubit.changeState();
                     }
                   } else {
@@ -102,13 +87,9 @@ class AgoraRtc {
           }
         },
         userJoined: (uid, elapsed) {
-          print('adel');
-          print(uid);
-
           //  print(RoomCubit.get(context).listener);
         },
         userMuteAudio: (uid, muted) {
-          print('mutedAgora');
           for (int i = 0; i < cubit.speakers.length; i++) {
             if (cubit.speakers[i]['uid'] == uid) {
               cubit.speakers[i]['isMuted'] = muted;
@@ -117,12 +98,7 @@ class AgoraRtc {
           }
           cubit.changeState();
         },
-        joinChannelSuccess: (channelName, uId, el) {
-          print('weAreLive');
-          print(uId);
-
-          print(cubit.speakers);
-        },
+        joinChannelSuccess: (channelName, uId, el) {},
       ),
     );
   }
@@ -162,9 +138,7 @@ class AgoraRtc {
       recordingQuality: AudioRecordingQuality.Medium,
     ))
         .then((value) {
-      print('recording');
       recordingPath = file.path;
-      print(recordingPath);
     });
   }
 

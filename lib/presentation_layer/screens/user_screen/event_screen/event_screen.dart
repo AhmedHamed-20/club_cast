@@ -1,12 +1,9 @@
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
-import 'package:club_cast/presentation_layer/components/constant/constant.dart';
-import 'package:club_cast/presentation_layer/models/getMyFollowingEvents.dart';
 import 'package:club_cast/presentation_layer/models/get_my_events.dart';
 import 'package:club_cast/presentation_layer/widgets/event_card_item.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -51,7 +48,7 @@ class EventScreen extends StatelessWidget {
                     GetMyEvents.allEvent().isNotEmpty
                         ? Column(
                             children: [
-                              Container(
+                              SizedBox(
                                 height:
                                     MediaQuery.of(context).size.height * 0.32,
                                 child: ListView.builder(
@@ -248,9 +245,6 @@ class EventScreen extends StatelessWidget {
                                           clearCrime(context: context);
                                         });
                                         cubit.getMyEvents();
-
-                                        print(dateController.text +
-                                            timeController.text);
                                       } else {
                                         showToast(
                                           message:
@@ -268,7 +262,6 @@ class EventScreen extends StatelessWidget {
                                   // // print(DateFormat.Hm()
                                   // //     .format(DateTime.parse("21:20:21.000")));
                                   // print(dateController.text);
-                                  print(timeController.text);
                                 },
                                 context: context,
                                 height: 45,
@@ -301,11 +294,7 @@ class EventScreen extends StatelessWidget {
     ).then((value) {
       timeController.text = value!.format(context).toString();
       cubit.changeState();
-
-      print(timeController.text);
-    }).catchError((error) {
-      print("error when select date${error.toString()}");
-    });
+    }).catchError((error) {});
   }
 
   void datePicker({
@@ -317,16 +306,14 @@ class EventScreen extends StatelessWidget {
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime.now(),
-      lastDate: DateTime.now().add(Duration(days: 13)),
+      lastDate: DateTime.now().add(const Duration(days: 13)),
       //DateTime.parse('2050-09-20'),
     ).then((value) {
       //print(value);
-      print(DateFormat.yMMMd()
-          .format(DateTime.parse('2022-04-07T03:03:00.000Z')));
+
       // showUserDateFormate = DateFormat.yMMMd().format(value!);
       dateController.text = DateFormat("MM/dd/yyyy").format(value!);
       cubit.changeState();
-      print("hunter:${dateController.text}");
     }).catchError((error) {});
   }
 

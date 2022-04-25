@@ -1,9 +1,6 @@
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
-import 'package:club_cast/data_layer/bloc/room_cubit/room_cubit.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
-import 'package:club_cast/presentation_layer/components/constant/constant.dart';
 import 'package:club_cast/presentation_layer/models/getMyFollowingPodcast.dart';
-import 'package:club_cast/presentation_layer/models/get_all_podcst.dart';
 import 'package:club_cast/presentation_layer/screens/podcast_screens/active_podcast_screen.dart';
 import 'package:club_cast/presentation_layer/screens/podcast_screens/explore_screen.dart';
 import 'package:club_cast/presentation_layer/screens/user_screen/other_users_screens/profile_detailes_screen.dart';
@@ -61,7 +58,7 @@ class PodCastScreen extends StatelessWidget {
                           cubit.getExplorePodcast(token: token);
                           navigatePushTo(
                             context: context,
-                            navigateTo: ExploreScreen(),
+                            navigateTo: const ExploreScreen(),
                           );
                         },
                         context: context,

@@ -1,12 +1,7 @@
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
-import 'package:club_cast/data_layer/bloc/login_cubit/login_cubit.dart';
-import 'package:club_cast/data_layer/bloc/login_cubit/login_states.dart';
 import 'package:club_cast/data_layer/cash/cash.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
 import 'package:club_cast/presentation_layer/models/user_model.dart';
-import 'package:club_cast/presentation_layer/screens/user_screen/login_screen/login_screen.dart';
-import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../data_layer/bloc/intial_cubit/general_app_cubit.dart';
@@ -167,7 +162,7 @@ class EditUserProfileScreen extends StatelessWidget {
                       const SizedBox(
                         height: 20.0,
                       ),
-                      Container(
+                      SizedBox(
                         width: 322.0,
                         height: 45.0,
                         child: MaterialButton(
@@ -205,7 +200,7 @@ class EditUserProfileScreen extends StatelessWidget {
                               ? CircularProgressIndicator(
                                   color: Theme.of(context).primaryColor,
                                 )
-                              : Container(
+                              : SizedBox(
                                   width: 322.0,
                                   height: 45.0,
                                   child: MaterialButton(
@@ -266,7 +261,7 @@ class EditUserProfileScreen extends StatelessWidget {
               height: MediaQuery.of(context).size.height * 0.6,
               decoration: BoxDecoration(
                 color: Theme.of(context).backgroundColor,
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                   topRight: Radius.circular(40),
                   topLeft: Radius.circular(40),
                 ),
@@ -283,7 +278,7 @@ class EditUserProfileScreen extends StatelessWidget {
                   const SizedBox(
                     height: 28.0,
                   ),
-                  Container(
+                  SizedBox(
                     width: 322.0,
                     child: defaultTextFormField(
                         context: context,
@@ -316,7 +311,7 @@ class EditUserProfileScreen extends StatelessWidget {
                   const SizedBox(
                     height: 16.0,
                   ),
-                  Container(
+                  SizedBox(
                     width: 322.0,
                     child: defaultTextFormField(
                         context: context,
@@ -349,7 +344,7 @@ class EditUserProfileScreen extends StatelessWidget {
                   const SizedBox(
                     height: 16.0,
                   ),
-                  Container(
+                  SizedBox(
                     width: 322.0,
                     child: defaultTextFormField(
                         context: context,
@@ -382,7 +377,7 @@ class EditUserProfileScreen extends StatelessWidget {
                   const SizedBox(
                     height: 35.0,
                   ),
-                  Container(
+                  SizedBox(
                     width: 322.0,
                     height: 45.0,
                     child: MaterialButton(

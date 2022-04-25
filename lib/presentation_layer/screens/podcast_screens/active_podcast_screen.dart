@@ -1,10 +1,7 @@
-import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
 import 'package:club_cast/data_layer/sockets/sockets_io.dart';
 import 'package:club_cast/presentation_layer/components/constant/constant.dart';
-import 'package:club_cast/presentation_layer/models/getMyFollowingPodcast.dart';
-import 'package:club_cast/presentation_layer/models/get_all_podcst.dart';
 import 'package:club_cast/presentation_layer/models/user_model.dart';
 import 'package:club_cast/presentation_layer/screens/user_screen/other_users_screens/profile_detailes_screen.dart';
 import 'package:flutter/material.dart';
@@ -143,7 +140,7 @@ class ActivePodCastScreen extends StatelessWidget {
               ),
               Column(
                 children: [
-                  Container(
+                  SizedBox(
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height * 0.3,
                     child: Card(

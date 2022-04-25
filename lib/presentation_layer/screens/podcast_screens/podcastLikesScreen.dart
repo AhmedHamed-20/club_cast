@@ -2,7 +2,6 @@ import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
 import 'package:club_cast/data_layer/cash/cash.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
-import 'package:club_cast/presentation_layer/components/constant/constant.dart';
 import 'package:club_cast/presentation_layer/models/podCastLikesUserModel.dart';
 import 'package:club_cast/presentation_layer/models/user_model.dart';
 import 'package:club_cast/presentation_layer/screens/user_screen/other_users_screens/profile_detailes_screen.dart';
@@ -43,7 +42,7 @@ class PodCastLikesScreen extends StatelessWidget {
                 children: [
                   ListView.builder(
                     shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     itemCount: GetPodCastUsersLikesModel
                         .getAllPodCastLikes!['data'].length,
                     itemBuilder: (context, index) {
@@ -59,7 +58,7 @@ class PodCastLikesScreen extends StatelessWidget {
                               GetUserModel.getUserID()) {
                             navigatePushTo(
                                 context: context,
-                                navigateTo: UserProfileScreen());
+                                navigateTo: const UserProfileScreen());
                           } else {
                             navigatePushTo(
                                 context: context,

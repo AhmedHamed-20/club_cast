@@ -1,5 +1,4 @@
 import 'package:club_cast/data_layer/cash/cash.dart';
-import 'package:club_cast/presentation_layer/models/getMyPodCastModel.dart';
 import 'package:club_cast/presentation_layer/models/get_all_podcst.dart';
 import 'package:club_cast/presentation_layer/screens/podcast_screens/active_podcast_screen.dart';
 import 'package:club_cast/presentation_layer/screens/user_screen/other_users_screens/followers_screen.dart';
@@ -10,8 +9,6 @@ import 'package:club_cast/presentation_layer/widgets/pod_cast_card_item.dart';
 import '../../../../data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
-import 'package:club_cast/presentation_layer/models/get_userId_model.dart';
-import 'package:club_cast/presentation_layer/models/podCastLikesUserModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -38,7 +35,7 @@ class ProfileDetailsScreen extends StatelessWidget {
           onWillPop: () async {
             cubit.isProfilePage = false;
             Navigator.of(context).pop();
-            print(cubit.isProfilePage);
+
             return false;
           },
           child: Scaffold(
@@ -104,7 +101,7 @@ class ProfileDetailsScreen extends StatelessWidget {
                         const SizedBox(
                           height: 8.0,
                         ),
-                        Container(
+                        SizedBox(
                           width: 260.0,
                           child: Column(
                             children: [
@@ -144,7 +141,7 @@ class ProfileDetailsScreen extends StatelessWidget {
                                     token: token);
                                 navigatePushTo(
                                     context: context,
-                                    navigateTo: FollowersScreen());
+                                    navigateTo: const FollowersScreen());
                               },
                               child: statusNumberProfile(
                                 number: '${cubit.userId?.data?.followers}',
@@ -161,7 +158,7 @@ class ProfileDetailsScreen extends StatelessWidget {
                                     token: token);
                                 navigatePushTo(
                                     context: context,
-                                    navigateTo: FollowingScreen());
+                                    navigateTo: const FollowingScreen());
                               },
                               child: statusNumberProfile(
                                 number: '${cubit.userId?.data?.following}',
@@ -174,7 +171,7 @@ class ProfileDetailsScreen extends StatelessWidget {
                           height: 17.0,
                         ),
                         cubit.userId?.data?.isFollowed == true
-                            ? Container(
+                            ? SizedBox(
                                 width: 280.0,
                                 height: 45.0,
                                 child: MaterialButton(
@@ -211,7 +208,7 @@ class ProfileDetailsScreen extends StatelessWidget {
                                   color: Theme.of(context).primaryColor,
                                 ),
                               )
-                            : Container(
+                            : SizedBox(
                                 width: 280.0,
                                 height: 45.0,
                                 child: MaterialButton(
@@ -269,7 +266,7 @@ class ProfileDetailsScreen extends StatelessWidget {
                                     ),
                               ),
                             ),
-                            Container(
+                            SizedBox(
                               width: MediaQuery.of(context).size.width,
                               child: Padding(
                                 padding: const EdgeInsets.only(
@@ -288,7 +285,8 @@ class ProfileDetailsScreen extends StatelessWidget {
                                       itemCount: GetAllPodCastModel
                                           .getAllPodCast?['data'].length,
                                       shrinkWrap: true,
-                                      physics: NeverScrollableScrollPhysics(),
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
                                       itemBuilder: (context, index) {
                                         return InkWell(
                                           onTap: () {
@@ -375,7 +373,7 @@ class ProfileDetailsScreen extends StatelessWidget {
                                               GetAllPodCastModel.getPodcastName(
                                                   index),
                                             ),
-                                            removePodCast: SizedBox(),
+                                            removePodCast: const SizedBox(),
                                             photourl: GetAllPodCastModel
                                                 .getPodcastUserPublishInform(
                                                     index)[0]['photo'],
@@ -407,26 +405,32 @@ class ProfileDetailsScreen extends StatelessWidget {
                                     cubit.noDataUserPodcasts
                                         ? const SizedBox()
                                         : InkWell(
-                                      borderRadius: BorderRadius.circular(40),
-                                      onTap: () {
-                                        cubit.paginationUserPodcasts(token,'${cubit.userId!.data!.id}');
-                                      },
-                                      child: Center(
-                                        child: CircleAvatar(
-                                          backgroundColor:
-                                          Theme.of(context).backgroundColor,
-                                          radius: 30,
-                                          child: cubit.loadUserPodcasts
-                                              ? CircularProgressIndicator(
-                                            color: Theme.of(context).primaryColor,
-                                          )
-                                              : Icon(
-                                            Icons.arrow_downward,
-                                            color: Theme.of(context).primaryColor,
+                                            borderRadius:
+                                                BorderRadius.circular(40),
+                                            onTap: () {
+                                              cubit.paginationUserPodcasts(
+                                                  token,
+                                                  '${cubit.userId!.data!.id}');
+                                            },
+                                            child: Center(
+                                              child: CircleAvatar(
+                                                backgroundColor:
+                                                    Theme.of(context)
+                                                        .backgroundColor,
+                                                radius: 30,
+                                                child: cubit.loadUserPodcasts
+                                                    ? CircularProgressIndicator(
+                                                        color: Theme.of(context)
+                                                            .primaryColor,
+                                                      )
+                                                    : Icon(
+                                                        Icons.arrow_downward,
+                                                        color: Theme.of(context)
+                                                            .primaryColor,
+                                                      ),
+                                              ),
+                                            ),
                                           ),
-                                        ),
-                                      ),
-                                    ),
                                   ],
                                 ),
                               ),

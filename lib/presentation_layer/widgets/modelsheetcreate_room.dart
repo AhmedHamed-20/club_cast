@@ -1,9 +1,6 @@
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import '../components/constant/constant.dart';
 
 modalBottomSheetItem(BuildContext context, VoidCallback createClick) {
   showModalBottomSheet(
@@ -152,7 +149,6 @@ Widget buildSheet(BuildContext context, VoidCallback createClick) {
                           value: cubit.isPublicRoom,
                           onChanged: (value) {
                             setState(() => cubit.isPublicRoom = value);
-                            print("PublicRoom:${cubit.isPublicRoom}");
                           },
                         ),
                       ],
@@ -184,7 +180,6 @@ Widget buildSheet(BuildContext context, VoidCallback createClick) {
                           value: cubit.isRecordRoom,
                           onChanged: (value) {
                             setState(() => cubit.isRecordRoom = value);
-                            print("recordRoom:${cubit.isRecordRoom}");
                           },
                         ),
                       ],

@@ -3,7 +3,6 @@ import 'package:club_cast/data_layer/bloc/room_cubit/room_cubit.dart';
 import 'package:club_cast/data_layer/sockets/sockets_io.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
 import 'package:club_cast/presentation_layer/models/user_model.dart';
-import 'package:club_cast/presentation_layer/screens/user_screen/profile_detailes_screens/user_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
@@ -26,8 +25,6 @@ Widget listenersWiget({
             return InkWell(
               borderRadius: BorderRadius.circular(20),
               onTap: () {
-                print(GetUserModel.getUserID());
-                print(RoomCubit.get(context).listener[index]['_id']);
                 GetUserModel.getUserID() !=
                         RoomCubit.get(context).listener[index]['_id']
                     ? showModalBottomSheet(

@@ -137,7 +137,7 @@ class ExploreScreen extends StatelessWidget {
                                               GetExplorePodCastModel
                                                       .getPodcastLikes(index)
                                                   .toString()),
-                                      removePodCast: SizedBox(),
+                                      removePodCast: const SizedBox(),
                                       playingWidget:
                                           PlayingCardWidget.playingButton(
                                               index,
@@ -173,7 +173,8 @@ class ExploreScreen extends StatelessWidget {
                                           cubit.getMyPodCast(token, context);
                                           navigatePushTo(
                                               context: context,
-                                              navigateTo: UserProfileScreen());
+                                              navigateTo:
+                                                  const UserProfileScreen());
                                         } else {
                                           cubit.getUserById(
                                               profileId: GetExplorePodCastModel

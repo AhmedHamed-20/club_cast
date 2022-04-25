@@ -1,4 +1,3 @@
-import 'package:agora_rtc_engine/rtc_engine.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/data_layer/bloc/room_cubit/room_cubit.dart';
 import 'package:club_cast/data_layer/sockets/sockets_io.dart';
@@ -10,12 +9,9 @@ import 'package:club_cast/presentation_layer/screens/room_screens/room_user_view
 import 'package:club_cast/presentation_layer/screens/search/search_screen.dart';
 import 'package:club_cast/presentation_layer/screens/user_screen/profile_detailes_screens/user_profile_screen.dart';
 import 'package:club_cast/presentation_layer/screens/user_screen/event_screen/get_all_my_following_events.dart';
-import 'package:club_cast/presentation_layer/widgets/alertDialog.dart';
 import 'package:club_cast/presentation_layer/widgets/modelsheetcreate_room.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:marquee/marquee.dart';
 import 'package:move_to_background/move_to_background.dart';
 import '../../data_layer/agora/rtc_engine.dart';
@@ -57,11 +53,11 @@ class LayoutScreen extends StatelessWidget {
                             if (currentUserRoleinRoom) {
                               navigatePushTo(
                                   context: context,
-                                  navigateTo: RoomAdminViewScreen());
+                                  navigateTo: const RoomAdminViewScreen());
                             } else {
                               navigatePushTo(
                                   context: context,
-                                  navigateTo: RoomUserViewScreen());
+                                  navigateTo: const RoomUserViewScreen());
                             }
                           },
                           child: Container(
@@ -170,7 +166,7 @@ class LayoutScreen extends StatelessWidget {
                                 ),
                                 Expanded(
                                   flex: 2,
-                                  child: Container(
+                                  child: SizedBox(
                                     width: MediaQuery.of(context).size.width *
                                         0.28,
                                     child: Marquee(
@@ -244,8 +240,8 @@ class LayoutScreen extends StatelessWidget {
                                     IconButton(
                                       onPressed: () {
                                         cubit.isPlaying
-                                            ? cubit.assetsAudioPlayer
-                                                .seekBy(Duration(seconds: 10))
+                                            ? cubit.assetsAudioPlayer.seekBy(
+                                                const Duration(seconds: 10))
                                             : const SizedBox();
                                       },
                                       icon: Icon(
@@ -370,10 +366,6 @@ class LayoutScreen extends StatelessWidget {
                         cubit.loadRoom = true;
                         cubit.changeState();
                         cubit.micPerm();
-                        print(cubit.roomNameController.text);
-                        print(cubit.selectedCategoryItem);
-                        print("isPublicRoom :${cubit.isPublicRoom}");
-                        print("isRecordRoom: ${cubit.isRecordRoom}");
 
                         SocketFunc.isConnected
                             ? const SizedBox()

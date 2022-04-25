@@ -99,12 +99,11 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   ];
 
   List<Widget> screen = [
-    PublicRoomScreen(),
+    const PublicRoomScreen(),
     Container(),
     PodCastScreen(),
   ];
   getDark(bool isDARK) {
-    print(isDARK);
     isDark = isDARK;
     emit(ChangeTheme());
   }
@@ -116,8 +115,6 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   void toggleDark() {
     isDark = !isDark!;
     CachHelper.setData(key: 'isDark', value: isDark).then((value) {
-      print(isDark);
-      print('cachValue:${value}');
       emit(ChangeTheme());
     });
   }
@@ -144,19 +141,17 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     DioHelper.getData(
       url: AllCategory,
       token: {
-        'Authorization': 'Bearer ${token}',
+        'Authorization': 'Bearer $token',
       },
     ).then((value) {
       CategoryModel.allCategory = Map<String, dynamic>.from(value.data);
-      // print(CategoryModel.allCategory);
+      // odel.allCategory);
       for (int i = 1; i <= CategoryModel.allCategory!['results'] - 1; i++) {
         category.add(CategoryModel.allCategory!['data']['data'][i]['name']);
       }
-      print(category);
 
       emit(GetAllCategorySuccessState());
     }).catchError((error) {
-      print('error when getCategory :${error.toString()}');
       emit(GetAllCategoryErrorState());
     });
   }
@@ -199,12 +194,12 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
                 customPreviousIcon: AndroidResDrawable(name: 'ic_prev_custom'),
                 customNextAction: (assetaudio) {
                   assetaudio.seekBy(
-                    Duration(seconds: 10),
+                    const Duration(seconds: 10),
                   );
                 },
                 customPrevAction: (assetaudio) {
                   assetaudio.seekBy(
-                    Duration(seconds: -10),
+                    const Duration(seconds: -10),
                   );
                 },
                 customPlayPauseAction: (_) {
@@ -244,7 +239,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
               emit(ChangePlayingState());
             } else {
               isPlaying = true;
-              print(currentPostionDurationInsec);
+
               emit(ChangePlayingState());
             }
           });
@@ -254,7 +249,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       } catch (t) {
         showToast(message: 'Error on Playing', toastState: ToastState.ERROR);
         emit(PlayingStateError());
-        print(t);
+
         //mp3 unreachable
       }
     }
@@ -263,15 +258,14 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   pageinathionExplore(
     String token,
   ) {
-    // print(page);
-    loadExplore = true;
+    //  loadExplore = true;
     emit(LoadDataPaginattion());
     DioHelper.getData(
-        url: getAllPodCastWithoutMe + '?page=${pageExplore}',
-        token: {'Authorization': 'Bearer ${token}'}).then((value) {
-      // print(value.data['results']);
-      print('here');
-      //   print(value.data);
+        url: getAllPodCastWithoutMe + '?page=$pageExplore',
+        token: {'Authorization': 'Bearer $token'}).then((value) {
+      // a['results']);
+
+      //   a);
       if (value.data['results'] == 0) {
         pageExplore = pageExplore;
         noDataExplore = true;
@@ -280,7 +274,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
         loadExplore = false;
       } else {
         pageExplore++;
-        print(pageExplore);
+
         GetExplorePodCastModel.getExplorePodCast?['data']
             .addAll(value.data['data']);
 
@@ -288,7 +282,6 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
         emit(DataPaginattiongetSuccess());
       }
     }).onError((error, stackTrace) {
-      print(error);
       loadExplore = false;
       emit(DataPaginattiongetError());
     });
@@ -297,15 +290,14 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   pageinathionMyFollowingPodcast(
     String token,
   ) {
-    // print(page);
-    loadMyFollowinPodcast = true;
+    //  loadMyFollowinPodcast = true;
     emit(LoadDataPaginattion());
     DioHelper.getData(
-        url: getMyFollowingPodcasts + '?page=${pagemyfollowingPodcast}',
-        token: {'Authorization': 'Bearer ${token}'}).then((value) {
-      // print(value.data['results']);
-      print('here');
-      //   print(value.data);
+        url: getMyFollowingPodcasts + '?page=$pagemyfollowingPodcast',
+        token: {'Authorization': 'Bearer $token'}).then((value) {
+      // a['results']);
+
+      //   a);
       if (value.data['results'] == 0) {
         pagemyfollowingPodcast = pagemyfollowingPodcast;
         noDataMyfollowingPodcast = true;
@@ -314,7 +306,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
         loadMyFollowinPodcast = false;
       } else {
         pagemyfollowingPodcast++;
-        print(pageExplore);
+
         GetMyFollowingPodCastsModel.getMyFollowingPodcasts?['data']
             .addAll(value.data['data']);
 
@@ -322,32 +314,29 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
         emit(DataPaginattiongetSuccess());
       }
     }).onError((error, stackTrace) {
-      print(error);
       loadMyFollowinPodcast = false;
       emit(DataPaginattiongetError());
     });
   }
 
   void getAllPodcast({required String token}) {
-    print(token);
     if (token == '') {
     } else {
       DioHelper.getData(
         url: GetAllPodcasts,
         token: {
-          'Authorization': 'Bearer ${token}',
+          'Authorization': 'Bearer $token',
         },
       ).then(
         (value) {
-          //  print(value.data);
+          //  a);
           GetAllPodCastModel.getAllPodCast =
               Map<String, dynamic>.from(value.data);
           emit(PodCastDataGetSuccess());
-          //  print(GetAllPodCastModel.getPodcastName(2));
+          //  CastModel.getPodcastName(2));
         },
       ).catchError(
         (onError) {
-          print(onError);
           emit(PodCastDataGetError());
         },
       );
@@ -357,28 +346,27 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   bool loadingExplore = false;
   Future getExplorePodcast({required String token}) async {
     loadingExplore = true;
-    print(token);
+
     if (token == '') {
     } else {
       return await DioHelper.getData(
         url: getAllPodCastWithoutMe,
         token: {
-          'Authorization': 'Bearer ${token}',
+          'Authorization': 'Bearer $token',
         },
       ).then(
         (value) {
-          //  print(value.data);
+          //  a);
           GetExplorePodCastModel.getExplorePodCast =
               Map<String, dynamic>.from(value.data);
           loadingExplore = false;
           pageExplore = 2;
           noDataExplore = false;
           emit(PodCastDataGetSuccess());
-          //  print(GetAllPodCastModel.getPodcastName(2));
+          //  CastModel.getPodcastName(2));
         },
       ).catchError(
         (onError) {
-          print(onError);
           emit(PodCastDataGetError());
         },
       );
@@ -390,12 +378,11 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       required String token,
       String? userId}) async {
     return await DioHelper.postData(
-        url: sendLike + '${podCastId}',
-        token: {'Authorization': 'Bearer ${token}'}).then((value) {
+        url: sendLike + podCastId,
+        token: {'Authorization': 'Bearer $token'}).then((value) {
       //   isProfilePage ? getUserPodcast(token, userId!) : const SizedBox();
       emit(PodCastLikeAddedSuccess());
     }).catchError((onError) {
-      print(onError);
       emit(PodCastLikeAddedError());
     });
   }
@@ -405,12 +392,11 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       required String token,
       String? userId}) async {
     return await DioHelper.deleteData(
-        url: sendLike + '${podCastId}',
-        token: {'Authorization': 'Bearer ${token}'}).then((value) {
+        url: sendLike + podCastId,
+        token: {'Authorization': 'Bearer $token'}).then((value) {
       //  isProfilePage ? getUserPodcast(token, userId!) : const SizedBox();
       emit(PodCastLikeDeleatedSuccess());
     }).catchError((onError) {
-      print(onError);
       emit(PodCastLikeDeleatedError());
     });
   }
@@ -418,31 +404,29 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   Future getMyPodCast(String token, context) async {
     return await DioHelper.getData(
         url: getMyPodCasts,
-        token: {'Authorization': 'Bearer ${token}'}).then((value) {
+        token: {'Authorization': 'Bearer $token'}).then((value) {
       GetMyPodCastModel.getMyPodCast = Map<String, dynamic>.from(value.data);
-      print(GetMyPodCastModel.getMyPodCast);
+
       isLoadProfile = false;
       pageMyPodcasts = 2;
       noDataMyPodcasts = false;
       emit(GetMyPodCastSuccessState());
     }).catchError((onError) {
       emit(GetMyPodCastErrorState());
-      print(onError);
     });
   }
 
   Future getMyFollowingPodcast(String token, context) async {
     if (token == '') {
-      print('nodataToke');
-      return await 'dad';
+      return 'dad';
     }
     return await DioHelper.getData(
-            token: {'Authorization': 'Bearer ${token}'},
+            token: {'Authorization': 'Bearer $token'},
             url: getMyFollowingPodcasts)
         .then((value) {
       GetMyFollowingPodCastsModel.getMyFollowingPodcasts =
           Map<String, dynamic>.from(value.data);
-      print('data: ${GetMyFollowingPodCastsModel.getMyFollowingPodcasts}');
+
       pagemyfollowingPodcast = 2;
       noDataMyfollowingPodcast = false;
       emit(GetMyFollowingSuccessState());
@@ -462,7 +446,6 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
               message: 'please login again', toastState: ToastState.ERROR);
         }
         emit(GetMyFollowinErrorState());
-        print(onError);
       };
     });
   }
@@ -473,9 +456,9 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
 
     if (result != null) {
       podcastFile = File(result.files.single.path!);
-      print(podcastFile?.length());
+
       pickedPodCastLength = podcastFile!.length();
-      print(pickedPodCastLength);
+
       emit(FilePickedSuccess());
     } else {
       emit(FilePickedError());
@@ -489,7 +472,6 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       emit(PreviewPlaying());
     }).catchError((onError) {
       emit(PreviewPlayingError());
-      print(onError);
     });
   }
 
@@ -497,15 +479,13 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     assetsAudioPlayer.pause().then((value) {
       previewIsplaying = false;
       emit(PreviewStoped());
-    }).catchError((onError) {
-      print(onError);
-    });
+    }).catchError((onError) {});
   }
 
   Future getUserPodcast(String token, String userId) async {
     return await DioHelper.getData(
-        url: getuserPodCast + '${userId}',
-        token: {'Authorization': 'Bearer ${token}'}).then((value) {
+        url: getuserPodCast + userId,
+        token: {'Authorization': 'Bearer $token'}).then((value) {
       GetAllPodCastModel.getAllPodCast = Map<String, dynamic>.from(value.data);
       pageUserPodcasts = 2;
       noDataUserPodcasts = false;
@@ -513,7 +493,6 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       emit(PodCastDataGetSuccess());
     }).catchError((error) {
       emit(PodCastDataGetError());
-      print(error);
     });
   }
 
@@ -538,7 +517,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
         .get(
       generateSignature,
       options: Options(
-        headers: {'Authorization': 'Bearer ${token}'},
+        headers: {'Authorization': 'Bearer $token'},
       ),
     )
         .then((value) async {
@@ -552,11 +531,11 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       var timestamp = value.data['timestamp'];
       var signature = value.data['signature'];
       var apiKey = value.data['apiKey'];
-      print(podcastFile!.path);
+
       DioHelper.dio!.post(
         'https://api.cloudinary.com/v1_1/${cloudname}/video/upload?api_key=${apiKey}&timestamp=${timestamp}&signature=${signature}',
         options: Options(
-          headers: {'Authorization': 'Bearer ${token}'},
+          headers: {'Authorization': 'Bearer $token'},
         ),
         data: FormData.fromMap({
           'file': await MultipartFile.fromFile(
@@ -575,34 +554,30 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
           uploadProgress = whatsend / total;
         },
       ).then((value) {
-        print(value.data['public_id']);
         isUploading = false;
         isLoadPodCast = true;
         emit(CreatePodcastInServer());
         DioHelper.dio!.post(createPodCast,
             options: Options(
-              headers: {'Authorization': 'Bearer ${token}'},
+              headers: {'Authorization': 'Bearer $token'},
             ),
             data: {
               'name': podCastName,
               'category': category,
               'audio': {'public_id': value.data['public_id']}
             }).then((value) {
-          print('yessss');
           getMyPodCast(token, context);
           isLoadPodCast = false;
           showToast(
               message: 'PodCast Uploaded Success',
               toastState: ToastState.SUCCESS);
           emit(PodcastUploadedSuccess());
-          print(value);
         }).catchError((error) {
           isLoadPodCast = false;
           isUploading = false;
           showToast(
               message: 'PodCast Uploaded Error', toastState: ToastState.ERROR);
           emit(PodcastUploadedError());
-          print(error.message);
         });
       }).catchError((onError) {
         cancelToken.isCancelled
@@ -614,7 +589,6 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
         isLoadPodCast = false;
         isUploading = false;
         emit(PodcastUploadedError());
-        print(onError);
       });
     }).catchError((onError) {
       showToast(
@@ -622,18 +596,16 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       isLoadPodCast = false;
       isUploading = false;
       emit(PodcastUploadedError());
-      print(onError);
     });
   }
 
   Future removePodCast(String podCastId, String token, context) async {
     return await DioHelper.deleteData(
-        url: removePodCastById + '${podCastId}',
-        token: {'Authorization': 'Bearer ${token}'}).then((value) {
+        url: removePodCastById + podCastId,
+        token: {'Authorization': 'Bearer $token'}).then((value) {
       getMyPodCast(token, context);
       emit(PodCastDeletedSuccess());
     }).catchError((onError) {
-      print(onError);
       emit(PodCastDeletedError());
     });
   }
@@ -657,19 +629,17 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       emit(FileDownloading());
 
       progress = ((rec / total));
-      print(progress);
+
       counter++;
     }).then((value) {
       var fullPath = file.path;
       isDownloading = false;
       emit(FileDownloadSuccess());
       showToast(
-          message: 'FileSaveSuccessTo ${fullPath}',
+          message: 'FileSaveSuccessTo' + fullPath,
           toastState: ToastState.SUCCESS);
-      print(fullPath);
     }).catchError(
       (onError) {
-        print(onError);
         showToast(message: 'DownlaodError', toastState: ToastState.ERROR);
         emit(FileDownloadError());
       },
@@ -682,14 +652,12 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       required BuildContext context}) {
     DioHelper.getData(
         url: getPodcastLikesUsers + podCastId,
-        token: {'Authorization': 'Bearer ${token}'}).then((value) {
+        token: {'Authorization': 'Bearer $token'}).then((value) {
       GetPodCastUsersLikesModel.getAllPodCastLikes =
           Map<String, dynamic>.from(value.data);
-      navigatePushTo(context: context, navigateTo: PodCastLikesScreen());
-      //  print(GetPodCastUsersLikesModel.getPhotoUrltName(1));
-    }).catchError((onError) {
-      print(onError);
-    });
+      navigatePushTo(context: context, navigateTo: const PodCastLikesScreen());
+      //  tUsersLikesModel.getPhotoUrltName(1));
+    }).catchError((onError) {});
   }
 
   bool isLoadProfile = false;
@@ -704,15 +672,14 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       DioHelper.getData(
         url: profile,
         token: {
-          'Authorization': 'Bearer ${token}',
+          'Authorization': 'Bearer $token',
         },
       ).then((value) {
         GetUserModel.getUserModel = Map<String, dynamic>.from(value.data);
-        print(GetUserModel.getUserName());
+
         // isLoadProfile = false;
         emit(UserDataSuccessState());
       }).catchError((error) {
-        print(error);
         emit(UserDataErrorState(error.toString()));
       });
     }
@@ -734,7 +701,6 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       bio: bio1,
       token: token,
     ).then((value) {
-      print(value);
       GetUserModel.updateName(name1);
       GetUserModel.updateEmail(email1);
       GetUserModel.updateBio(bio1);
@@ -745,16 +711,14 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
         toastState: ToastState.SUCCESS,
       );
     }).onError((DioError error, stackTrace) {
-      print(error);
       if (error.response!.statusCode == 400) {
         showToast(
           message: "this user already exist",
           toastState: ToastState.ERROR,
         );
-        print(error.message);
-        print(error.message.characters);
-        // print(GetUserModel.getMessage());
-        print('/////////////////////////');
+
+        // del.getMessage());
+        /////////////////');
         isUpdateUserData = false;
         emit(UpdateUserErrorState());
       } else {
@@ -787,7 +751,6 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
         toastState: ToastState.SUCCESS,
       );
     }).catchError((error) {
-      print(error.toString());
       if (error.response!.statusCode == 400) {
         if (password_New.length < 8) {
           showToast(
@@ -829,7 +792,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     return await DioHelper.getData(
       url: userById + profileId,
       token: {
-        'Authorization': 'Bearer ${token}',
+        'Authorization': 'Bearer $token',
       },
     ).then((value) {
       // SaveDataModel.savaData=Map<String, dynamic>.from(value.data);
@@ -837,7 +800,6 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
 
       emit(GetUserByIdSuccessState());
     }).catchError((error) {
-      print(error);
       emit(GetUserByIdErrorState());
     });
   }
@@ -850,13 +812,12 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     return await DioHelper.postData(
       url: 'v1/users/$userProfileId/following',
       token: {
-        'Authorization': 'Bearer ${token}',
+        'Authorization': 'Bearer $token',
       },
     ).then((value) {
       getMyFollowingEvents(context);
       emit(FollowUserSuccessState());
     }).catchError((error) {
-      print(error);
       emit(FollowUserErrorState());
     });
   }
@@ -875,7 +836,6 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       getMyFollowingEvents(context);
       emit(UnFollowUserSuccessState());
     }).catchError((error) {
-      print(error);
       emit(UnFollowUserErrorState());
     });
   }
@@ -903,7 +863,6 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       search = Map<String, dynamic>.from(value.data);
     }).catchError((onError) {
       emit(SearchUserErrorState());
-      print(onError);
     });
   }
 
@@ -914,7 +873,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     emit(GetMyFollowersLoadingState());
     followerLoad = true;
     DioHelper.getData(url: myFollowers, token: {
-      'Authorization': 'Bearer ${token}',
+      'Authorization': 'Bearer $token',
     }).then((value) {
       Followers.followersModel = Map<String, dynamic>.from(value.data);
       noDataFollowers = false;
@@ -923,7 +882,6 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       followerLoad = false;
     }).catchError((onError) {
       emit(GetMyFollowersErrorState());
-      print(onError);
     });
   }
 
@@ -934,7 +892,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     emit(GetMyFollowingLoadingState());
     followingLoad = true;
     DioHelper.getData(url: myFollowing, token: {
-      'Authorization': 'Bearer ${token}',
+      'Authorization': 'Bearer $token',
     }).then((value) {
       Following.followingModel = Map<String, dynamic>.from(value.data);
       noDataFollowing = false;
@@ -943,7 +901,6 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       followingLoad = false;
     }).catchError((onError) {
       emit(GetMyFollowingErrorState());
-      print(onError);
     });
   }
 
@@ -956,7 +913,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     DioHelper.getData(
       url: 'v1/users/$userProfileId/followers',
       token: {
-        'Authorization': 'Bearer ${token}',
+        'Authorization': 'Bearer $token',
       },
     ).then((value) {
       Followers.followersModel = Map<String, dynamic>.from(value.data);
@@ -966,7 +923,6 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       followerLoad = false;
     }).catchError((error) {
       emit(UserFollowersErrorState());
-      print(error);
     });
   }
 
@@ -979,7 +935,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     DioHelper.getData(
       url: 'v1/users/$userProfileId/following',
       token: {
-        'Authorization': 'Bearer ${token}',
+        'Authorization': 'Bearer $token',
       },
     ).then((value) {
       Following.followingModel = Map<String, dynamic>.from(value.data);
@@ -990,7 +946,6 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       followingLoad = false;
     }).catchError((error) {
       emit(UserFollowingErrorState());
-      print(error);
     });
   }
 
@@ -1001,34 +956,27 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       final image = await ImagePicker().pickImage(source: ImageSource.gallery);
       if (image == null) return;
       profileAvatar = File(image.path);
-      print(profileAvatar);
 
       emit(UserAvatarState());
-    } on PlatformException catch (e) {
-      print('error when pick image from galary:${e.toString()}');
-    }
+    } on PlatformException catch (e) {}
   }
 
   bool isUploadPhoto = false;
   void setAvatar(BuildContext context) async {
     emit(UserUpdateAvatarLoadingState());
     isUploadPhoto = true;
-    print(CachHelper.getData(key: 'token'));
-    print(profileAvatar!.path);
+
     await DioHelper.uploadImage(
             url: updateAvatar,
             image: profileAvatar,
             token: CachHelper.getData(key: 'token'))
         .then((value) {
-      print(value.data);
       showToast(
           message: 'update avatar is succeeded',
           toastState: ToastState.SUCCESS);
       isUploadPhoto = false;
       emit(UserUpdateAvatarSuccessState());
     }).catchError((error) {
-      print(profileAvatar);
-      print("error when set user avatar :${error.toString()}");
       emit(UserUpdateAvatarErrorState());
       isUploadPhoto = false;
     });
@@ -1044,15 +992,14 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     emit(CreateEventLoadingState());
 
     DioHelper.postData(url: createEvent, token: {
-      'Authorization': 'Bearer ${token}',
+      'Authorization': 'Bearer $token',
     }, data: {
       "name": eventName,
       "description": eventDescription,
       "date": eventDate,
     }).then((value) {
       CreateEventModel.data = Map<String, dynamic>.from(value.data);
-      print("create events : ${CreateEventModel.data}");
-      print(GetUserModel.getUserID());
+
       getMyEvents();
       showToast(
           message: 'Your Event Created Successfully',
@@ -1071,7 +1018,6 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
 
   void getMyFollowingEvents(context) {
     if (token == '') {
-      print('noToken');
       return;
     }
     emit(GetMyFollowingEventsLoadingState());
@@ -1079,11 +1025,11 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     DioHelper.getData(
       url: getMyFollowingEvent,
       token: {
-        'Authorization': 'Bearer ${token}',
+        'Authorization': 'Bearer $token',
       },
     ).then((value) {
       GetMyFollowingEvents.data = Map<String, dynamic>.from(value.data);
-      print(" getMyFollowingEvents : ${GetMyFollowingEvents.data}");
+
       pageEvent = 2;
       noDataEvent = false;
       emit(GetMyFollowingEventsSuccessState());
@@ -1100,7 +1046,6 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
         showToast(message: 'please login again', toastState: ToastState.ERROR);
       }
 
-      print("error when get my following events:${error.toString()}");
       emit(GetMyFollowingEventsErrorState());
     });
   }
@@ -1114,14 +1059,13 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     DioHelper.getData(
       url: getMyEvent,
       token: {
-        'Authorization': 'Bearer ${token}',
+        'Authorization': 'Bearer $token',
       },
     ).then((value) {
       GetMyEvents.data = Map<String, dynamic>.from(value.data);
 
       emit(GetMyEventsSuccessState());
     }).catchError((error) {
-      print("error when get my events:${error.toString()}");
       emit(GetMyEventsErrorState());
     });
   }
@@ -1135,7 +1079,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     DioHelper.deleteData(
       url: deleteEvent + eventId,
       token: {
-        'Authorization': 'Bearer ${token}',
+        'Authorization': 'Bearer $token',
       },
     ).then((value) {
       showToast(
@@ -1146,7 +1090,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       emit(DeleteEventSuccessState());
     }).onError((DioError error, f) {
       showToast(message: error.message, toastState: ToastState.SUCCESS);
-      print("error when delete event:${error.toString()}");
+
       emit(DeleteEventErrorState());
     });
   }
@@ -1180,7 +1124,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       showToast(
           message: error.response!.statusMessage.toString(),
           toastState: ToastState.ERROR);
-      print("error when updated event:${error.toString()}");
+
       emit(UpdateEventErrorState());
     });
   }
@@ -1237,7 +1181,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     loadFollowers = true;
     emit(PaginationFollowersLoadingState());
     DioHelper.getData(
-        url: urlType + '?page=${pageFollowers}',
+        url: urlType + '?page=$pageFollowers',
         token: {'Authorization': 'Bearer ${token}'}).then((value) {
       if (value.data['results'] == 0) {
         pageFollowers = pageFollowers;
@@ -1253,7 +1197,6 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
         emit(PaginationFollowersSuccessState());
       }
     }).onError((error, stackTrace) {
-      print(error);
       loadFollowers = false;
       emit(PaginationFollowersErrorState());
     });
@@ -1271,7 +1214,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     loadFollowing = true;
     emit(PaginationFollowingLoadingState());
     DioHelper.getData(
-        url: urlType + '?page=${pageFollowing}',
+        url: urlType + '?page=$pageFollowing',
         token: {'Authorization': 'Bearer $token'}).then((value) {
       if (value.data['results'] == 0) {
         pageFollowing = pageFollowing;
@@ -1286,7 +1229,6 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
         emit(PaginationFollowingSuccessState());
       }
     }).onError((error, stackTrace) {
-      print(error);
       loadFollowing = false;
       emit(PaginationFollowingErrorState());
     });
@@ -1295,10 +1237,9 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   Future searchRooms(String roomName, String token) {
     return DioHelper.getData(
       url: searchAboutRoom + roomName,
-      token: {'Authorization': 'Bearer ${token}'},
+      token: {'Authorization': 'Bearer $token'},
     ).then((value) {
       if (value.data['data'].isNotEmpty) {
-        print('searchValue${value.data["data"]}');
         SearchRoomsModel.searchRoomsModel =
             Map<String, dynamic>.from(value.data);
         emit(SearchRoomsSuccess());
@@ -1307,7 +1248,6 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       }
     }).catchError(
       (onError) {
-        print(onError);
         emit(SearchRoomsError());
       },
     );
@@ -1319,7 +1259,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     loadEvent = true;
     emit(PaginationFollowingLoadingState());
     DioHelper.getData(
-        url: getMyFollowingEvent + '&page=${pageEvent}',
+        url: getMyFollowingEvent + '&page=$pageEvent',
         token: {'Authorization': 'Bearer $token'}).then((value) {
       if (value.data['results'] == 0) {
         pageEvent = pageEvent;
@@ -1329,14 +1269,13 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
         loadEvent = false;
       } else {
         pageEvent++;
-        print(value.data['data']);
+
         GetMyFollowingEvents.data!
             .addAll(Map<String, dynamic>.from(value.data));
         loadEvent = false;
         emit(PaginationEventSuccessState());
       }
     }).onError((error, stackTrace) {
-      print(error);
       loadEvent = false;
       emit(PaginationEventErrorState());
     });
@@ -1348,7 +1287,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     loadRooms = true;
     emit(PaginationFollowingLoadingState());
     DioHelper.getData(
-        url: getAllRooms + '?page=${pageRooms}',
+        url: getAllRooms + '?page=$pageRooms',
         token: {'Authorization': 'Bearer $token'}).then((value) {
       if (value.data['results'] == 0) {
         pageRooms = pageRooms;
@@ -1364,7 +1303,6 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
         emit(PaginationRoomsSuccessState());
       }
     }).onError((error, stackTrace) {
-      print(error);
       loadRooms = false;
       emit(PaginationRoomsErrorState());
     });
@@ -1379,7 +1317,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     loadMyPodcasts = true;
     emit(PaginationMyPodcastsLoadingState());
     DioHelper.getData(
-        url: getMyPodCasts + '?page=${pageMyPodcasts}',
+        url: getMyPodCasts + '?page=$pageMyPodcasts',
         token: {'Authorization': 'Bearer $token'}).then((value) {
       if (value.data['results'] == 0) {
         pageMyPodcasts = pageMyPodcasts;
@@ -1394,7 +1332,6 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
         emit(PaginationMyPodcastsSuccessState());
       }
     }).onError((error, stackTrace) {
-      print(error);
       loadMyPodcasts = false;
       emit(PaginationMyPodcastsErrorState());
     });
@@ -1410,7 +1347,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     loadUserPodcasts = true;
     emit(PaginationUserPodcastsLoadingState());
     DioHelper.getData(
-        url: getuserPodCast + '${userId}' + '&page=${pageUserPodcasts}',
+        url: getuserPodCast + userId + '&page=$pageUserPodcasts',
         token: {'Authorization': 'Bearer $token'}).then((value) {
       if (value.data['results'] == 0) {
         pageUserPodcasts = pageUserPodcasts;
@@ -1425,7 +1362,6 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
         emit(PaginationUserPodcastsSuccessState());
       }
     }).onError((error, stackTrace) {
-      print(error);
       loadUserPodcasts = false;
       emit(PaginationUserPodcastsErrorState());
     });

@@ -11,7 +11,6 @@ import 'package:club_cast/presentation_layer/screens/room_screens/room_user_view
 import 'package:club_cast/presentation_layer/screens/room_screens/room_user_view_screen.dart';
 import 'package:club_cast/presentation_layer/widgets/multi_use_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import '../../presentation_layer/components/constant/constant.dart';
 import '../bloc/room_cubit/room_cubit.dart';
@@ -25,8 +24,6 @@ class SocketFunc {
   static bool showReconnectButton = false;
   static void connectWithSocket(
       BuildContext context, roomCubit, generalAppCubit) {
-    print(token);
-
     socket = io(
       'https://audiocomms-podcast-platform.herokuapp.com/',
       <String, dynamic>{
@@ -39,12 +36,10 @@ class SocketFunc {
     socket?.on(
         'error',
         (data) => {
-              print(data),
               showToast(
                   message: data.toString(), toastState: ToastState.WARNING),
             });
     socket?.on('connect', (_) {
-      print('connect');
       //  isConnected = true;
       if (isAdminLeft == false && showReconnectButton == true) {
         if (socket!.connected) {
@@ -64,20 +59,12 @@ class SocketFunc {
       socket?.emit('msg', 'test');
     });
     socket?.on('event', (data) => print(data));
-    socket?.on('reconnect', (data) {
-      print('reconnect');
-    });
-    socket?.on('reconnecting', (data) {
-      print('reconnecting');
-    });
+    socket?.on('reconnect', (data) {});
+    socket?.on('reconnecting', (data) {});
 
-    socket?.on(' reconnect_attempt', (data) {
-      print(' reconnect_attempt');
-    });
+    socket?.on(' reconnect_attempt', (data) {});
 
     socket?.on('disconnect', (data) {
-      print('disconnect');
-      print(data);
       if (isAdminLeft == false && currentUserRoleinRoom == true) {
         showToast(
             message:
@@ -103,9 +90,6 @@ class SocketFunc {
       ActiveRoomUserModel.activeRoomData = {};
       if (isConnected &&
           (pressedJoinRoom == false && currentUserRoleinRoom == false)) {
-        print(isConnected);
-        print(pressedJoinRoom);
-        print('role${currentUserRoleinRoom}');
         showToast(message: "No internet found", toastState: ToastState.ERROR);
 
         socket?.disconnect();
@@ -125,7 +109,6 @@ class SocketFunc {
 
   static createRoom(
       Map<String, dynamic> roomData, context, cubit, generalAppCubit) {
-    print('createRoom');
     socket?.emit('createRoom', roomData);
     socket?.on(
         'createRoomSuccess',
@@ -153,8 +136,7 @@ class SocketFunc {
                 e['isTalking'] = false;
               }),
               activeRoomName = ActiveRoomAdminModel.getRoomName(),
-              print('name' +
-                  GeneralAppCubit.get(context).roomNameController.text),
+
               AgoraRtc.joinChannelagora(
                 appId: data[1]['APP_ID'],
                 channelName:
@@ -165,17 +147,13 @@ class SocketFunc {
                 uid: data[0]['uid'],
                 cubit: cubit,
               ),
-              print('toekn' + data[2]),
+
               AgoraRtc.eventsAgora(context, cubit),
-              print(GeneralAppCubit.get(context).roomNameController.text),
-              print('audienceList:${ActiveRoomAdminModel.getRoomsAudienc()}'),
-              print(
-                  'BrodacsterList:${ActiveRoomAdminModel.getRoomsBrodCasters()}'),
-              print(data),
+
               Navigator.pop(context),
               navigatePushTo(
                 context: context,
-                navigateTo: RoomAdminViewScreen(),
+                navigateTo: const RoomAdminViewScreen(),
               ),
               GeneralAppCubit.get(context).roomNameController.clear(),
               NotificationService.showNotification(
@@ -198,7 +176,6 @@ class SocketFunc {
     socket?.on(
         'errorMessage',
         (data) => {
-              print(data),
               generalAppCubit.loadRoom = false,
               generalAppCubit.changeState(),
               showToast(
@@ -219,20 +196,15 @@ class SocketFunc {
     socket?.disconnect();
     isConnected = false;
 
-    socket?.onDisconnect((data) => {
-          print(data),
-        });
+    socket?.onDisconnect((data) => {});
   }
 
   static joinRoom(
       String roomName, BuildContext context, cubit, generalAppCubit) {
-    print('here');
-
     socket?.emit('joinRoom', roomName);
     socket?.on(
         'joinRoomSuccess',
         (data) => {
-              print(data),
               if (isPrivateRoom == true)
                 {
                   Navigator.of(context).pop(),
@@ -273,7 +245,6 @@ class SocketFunc {
               ActiveRoomUserModel.userToken = data[2],
               //  print('userPhoto:' + ActiveRoomUserModel.getUserPhoto()),
               activeRoomName = ActiveRoomUserModel.getRoomName().toString(),
-              print(cubit.listener),
 
               //print(RoomCubit.get(context).speakers),
               // print(RoomCubit.get(context).listener),
@@ -292,7 +263,7 @@ class SocketFunc {
               privateRoomController.clear(),
               navigatePushTo(
                 context: context,
-                navigateTo: RoomUserViewScreen(),
+                navigateTo: const RoomUserViewScreen(),
               ),
               NotificationService.showNotification(
                 'Active room',
@@ -326,7 +297,6 @@ class SocketFunc {
               showRecordingGif = data[1]['isRecording'],
               if (data[1]['isRecording'] == true)
                 {
-                  print('dialog'),
                   showDialog(
                       context: context,
                       builder: (context) {
@@ -355,7 +325,6 @@ class SocketFunc {
     socket?.on(
         'errorMessage',
         (data) => {
-              print(data),
               showToast(
                   message: data.toString(), toastState: ToastState.WARNING)
             });
@@ -366,7 +335,6 @@ class SocketFunc {
     socket?.on(
         'userJoined',
         (data) => {
-              print('userJoined'),
               generalAppCubit.assetsAudioPlayer
                   .open(Audio('assets/audio/userEnter.wav')),
               // print(data),
@@ -375,16 +343,14 @@ class SocketFunc {
               roomCubit.listener.forEach(
                 (e) {
                   if (e['askedToTalk'] == false || e['askedToTalk'] == true) {
-                    print('user');
                   } else {
-                    print('join');
                     e['askedToTalk'] = false;
                     e['isTalking'] = false;
                     e['isMuted'] = false;
                   }
                 },
               ),
-              print(roomCubit.listener),
+
               roomCubit.changeState(),
             });
   }
@@ -394,7 +360,6 @@ class SocketFunc {
     socket?.on(
         'adminLeft',
         (data) => {
-              print('adminLeft'),
               generalAppCubit.assetsAudioPlayer
                   .open(Audio('assets/audio/adminLeft.wav')),
               showToast(
@@ -402,15 +367,10 @@ class SocketFunc {
                       'Admin has no internet the room will be closed after 1 min if admin not reconnected',
                   toastState: ToastState.WARNING),
             });
-    socket?.on(
-        'errorMessage',
-        (data) => {
-              print(data),
-            });
+    socket?.on('errorMessage', (data) => {});
   }
 
   static adminReturnBack(BuildContext context, roomCubit, generalAppCubit) {
-    print('sending');
     socket?.emit('adminReJoinRoom');
     socket?.on('errorMessage', (data) {
       activeRoomName = '';
@@ -420,15 +380,11 @@ class SocketFunc {
       isConnected = false;
       currentUserRoleinRoom = false;
       showToast(message: data, toastState: ToastState.ERROR);
-
-      print('error');
-      print(data);
     });
   }
 
   static adminReturnSuccess(BuildContext context, cubit, generalAppCubit) {
     socket?.on('adminReJoinedRoomSuccess', (data) {
-      print(data);
       AgoraRtc.joinChannelagora(
         appId: data[1]['APP_ID'],
         channelName: data[0]['roomName'],
@@ -438,8 +394,7 @@ class SocketFunc {
         uid: data[0]['uid'],
         cubit: cubit,
       );
-      print('reconnect');
-      print(data);
+
       AgoraRtc.recording(ActiveRoomAdminModel.getRoomName() + '2');
       NotificationService.showNotification(
           'Active room', data[0]['roomName'], 'asda');
@@ -464,14 +419,13 @@ class SocketFunc {
         },
       );
       showReconnectButton = false;
-      print(cubit.listener);
+
       cubit.changeState();
     });
   }
 
   static adminLeft(BuildContext context, roomCubit, generalAppCubit) {
     socket?.on('roomEnded', (data) {
-      print('roomEnded');
       activeRoomName = '';
       roomCubit.listener = [];
       roomCubit.speakers = [];
@@ -479,7 +433,6 @@ class SocketFunc {
 
       iamSpeaker = false;
       isAdminLeft = true;
-      print('adminleft');
 
       AgoraRtc.leave().then((value) {
         leaveRoom(context, roomCubit, generalAppCubit);
@@ -502,26 +455,16 @@ class SocketFunc {
         showToast(message: 'Room time ended', toastState: ToastState.WARNING);
       }
     });
-    socket?.on(
-        'errorMessage',
-        (data) => {
-              print(data),
-            });
+    socket?.on('errorMessage', (data) => {});
   }
 
   static adminEndTheRoom() {
-    print('letfTheRoom');
     socket?.emit(
       'endRoom',
     );
 
     isAdminLeft = true;
-    socket?.on(
-        'errorMessage',
-        (data) => {
-              print('error'),
-              print(data),
-            });
+    socket?.on('errorMessage', (data) => {});
   }
 
   static userLeft(
@@ -529,13 +472,13 @@ class SocketFunc {
     socket?.on('userLeft', (data) {
       generalAppCubit.assetsAudioPlayer
           .open(Audio('assets/audio/userLeft.wav'));
-      print('userLeft');
+
       bool isFound = false;
       for (int i = 0; i < roomCubit.listener.length; i++) {
         //    print(data['id']);
         if (data['_id'] == roomCubit.listener[i]['_id']) {
           roomCubit.listener.removeAt(i);
-          print(roomCubit.listener);
+
           roomCubit.changeState();
           isFound = true;
           break;
@@ -553,34 +496,24 @@ class SocketFunc {
         }
       }
     });
-    socket?.on(
-        'errorMessage',
-        (data) => {
-              print(data),
-            });
+    socket?.on('errorMessage', (data) => {});
   }
 
   static askToTalk() {
-    print('object');
     socket?.emit(
       'askForPerms',
     );
-    socket?.on('errorMessage', (data) {
-      print(data);
-    });
+    socket?.on('errorMessage', (data) {});
   }
 
   static listenOnUsersAskedForTalk(
       BuildContext context, roomCubit, generalAppCubit) {
     socket?.on('userAskedForPerms', (data) {
-      print(data);
-      print('asked');
       //   RoomCubit.get(context).askedToTalk.add(data),
       for (int i = 0; i < roomCubit.listener.length; i++) {
         if (data['_id'] == roomCubit.listener[i]['_id']) {
           roomCubit.listener[i]['askedToTalk'] =
               !roomCubit.listener[i]['askedToTalk'];
-          print(roomCubit.listener);
 
           roomCubit.changeState();
 
@@ -589,23 +522,13 @@ class SocketFunc {
       }
       generalAppCubit.changeState();
       roomCubit.changeState();
-      print(roomCubit.askedToTalk);
     });
-    socket?.on(
-        'errorMessage',
-        (data) => {
-              print(data),
-            });
+    socket?.on('errorMessage', (data) => {});
   }
 
   static adminGivePermissionForUserToTalk(Map<String, dynamic> userMap) {
-    print(userMap);
     socket?.emit('givePermsTo', userMap);
-    socket?.on(
-        'errorMessage',
-        (data) => {
-              print(data),
-            });
+    socket?.on('errorMessage', (data) => {});
   }
 
   static brodcasterToken() {
@@ -617,11 +540,7 @@ class SocketFunc {
                   tokenAgora: data, role: ClientRole.Broadcaster),
             });
 
-    socket?.on(
-        'errorMessage',
-        (data) => {
-              print(data),
-            });
+    socket?.on('errorMessage', (data) => {});
   }
 
   static userchangedToBrodCaster(BuildContext context, cubit, generalAppCubit) {
@@ -638,7 +557,7 @@ class SocketFunc {
                   GetUserModel.getUserID()
               ? iamSpeaker = true
               : const SizedBox();
-          print(cubit.speakers);
+
           generalAppCubit.changeState();
           cubit.changeState();
 
@@ -646,36 +565,23 @@ class SocketFunc {
         }
       }
     });
-    socket?.on(
-        'errorMessage',
-        (data) => {
-              print(data),
-            });
+    socket?.on('errorMessage', (data) => {});
   }
 
   static userWantToReturnAudience(context, generalAppCubit) {
     socket?.emit('weHaveToGoBack');
     generalAppCubit.changeState();
-    socket?.on(
-        'errorMessage',
-        (data) => {
-              print(data),
-            });
+    socket?.on('errorMessage', (data) => {});
   }
 
   static audienceToken() {
     socket?.on(
         'audienceToken',
         (data) => {
-              print(data),
               AgoraRtc.toChangeRole(
                   tokenAgora: data, role: ClientRole.Audience),
             });
-    socket?.on(
-        'errorMessage',
-        (data) => {
-              print(data),
-            });
+    socket?.on('errorMessage', (data) => {});
   }
 
   static userchangedToAudienc(BuildContext context, cubit, generalCubit) {
@@ -699,19 +605,11 @@ class SocketFunc {
         }
       }
     });
-    socket?.on(
-        'errorMessage',
-        (data) => {
-              print(data),
-            });
+    socket?.on('errorMessage', (data) => {});
   }
 
   static adminReturnUserBackToAudienc(Map<String, dynamic> user) {
     socket?.emit('takeAwayPermsFrom', user);
-    socket?.on(
-        'errorMessage',
-        (data) => {
-              print(data),
-            });
+    socket?.on('errorMessage', (data) => {});
   }
 }

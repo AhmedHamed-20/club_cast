@@ -1,9 +1,7 @@
-import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/data_layer/bloc/login_cubit/login_cubit.dart';
 import 'package:club_cast/data_layer/bloc/login_cubit/login_states.dart';
 import 'package:club_cast/data_layer/cash/cash.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
-import 'package:club_cast/presentation_layer/layout/layout_screen.dart';
 import 'package:club_cast/presentation_layer/models/login_model.dart';
 import 'package:club_cast/presentation_layer/screens/user_screen/forget_password_screen/forget_password_screen.dart';
 import 'package:club_cast/presentation_layer/screens/user_screen/register_screen/sign_up_screen.dart';
@@ -29,9 +27,7 @@ class LoginScreen extends StatelessWidget {
 
           CachHelper.setData(key: 'token', value: UserLoginModel.token)
               .then((value) {})
-              .catchError((error) {
-            print('error when save token:${error.toString()}');
-          });
+              .catchError((error) {});
         }
       },
       builder: (BuildContext context, Object? state) {
@@ -103,8 +99,6 @@ class LoginScreen extends StatelessWidget {
                           onChanged: (value) {},
                           onSubmit: (value) {
                             if (value.isEmpty) {
-                              print(emailController.text);
-                              print(passwordController.text);
                               cubit.userLogin(
                                   email: emailController.text,
                                   password: passwordController.text,
@@ -143,8 +137,6 @@ class LoginScreen extends StatelessWidget {
                           context: context,
                           onPressed: () {
                             if (formKey.currentState!.validate()) {
-                              print(emailController.text);
-                              print(passwordController.text);
                               cubit.userLogin(
                                 email: emailController.text,
                                 password: passwordController.text,

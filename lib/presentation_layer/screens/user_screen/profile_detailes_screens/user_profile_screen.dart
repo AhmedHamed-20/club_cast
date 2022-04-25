@@ -3,8 +3,6 @@ import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.
 import 'package:club_cast/data_layer/cash/cash.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
 import 'package:club_cast/presentation_layer/models/getMyPodCastModel.dart';
-import 'package:club_cast/presentation_layer/models/get_all_podcst.dart';
-import 'package:club_cast/presentation_layer/models/get_my_events.dart';
 import 'package:club_cast/presentation_layer/models/user_model.dart';
 import 'package:club_cast/presentation_layer/screens/podcast_screens/active_podcast_screen.dart';
 import 'package:club_cast/presentation_layer/screens/user_screen/profile_detailes_screens/edit_user_profile.dart';
@@ -16,12 +14,8 @@ import 'package:club_cast/presentation_layer/screens/user_screen/login_screen/lo
 import 'package:club_cast/presentation_layer/widgets/alertDialog.dart';
 import 'package:club_cast/presentation_layer/widgets/playingCardWidget.dart';
 import 'package:club_cast/presentation_layer/widgets/pod_cast_card_item.dart';
-import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
-import 'package:club_cast/presentation_layer/screens/podcast_screens/podcastLikesScreen.dart';
-import '../../../components/constant/constant.dart';
 
 class UserProfileScreen extends StatelessWidget {
   const UserProfileScreen({Key? key}) : super(key: key);
@@ -32,7 +26,7 @@ class UserProfileScreen extends StatelessWidget {
     String? currentId;
     cubit.isMyfollowingScreen = false;
     cubit.isMyprofileScreen = true;
-    print(cubit.isMyfollowingScreen);
+
     return BlocConsumer<GeneralAppCubit, GeneralAppStates>(
       listener: (context, index) {},
       builder: (context, index) {
@@ -47,7 +41,7 @@ class UserProfileScreen extends StatelessWidget {
           onWillPop: () async {
             cubit.isMyprofileScreen = false;
             Navigator.of(context).pop();
-            print(cubit.isMyprofileScreen);
+
             return false;
           },
           child: Scaffold(
@@ -162,7 +156,7 @@ class UserProfileScreen extends StatelessWidget {
                           const SizedBox(
                             height: 4.0,
                           ),
-                          Container(
+                          SizedBox(
                             width: 260.0,
                             child: Column(
                               children: [
@@ -198,7 +192,7 @@ class UserProfileScreen extends StatelessWidget {
                                   cubit.getMyFollowers(token: token);
                                   navigatePushTo(
                                     context: context,
-                                    navigateTo: FollowersScreen(),
+                                    navigateTo: const FollowersScreen(),
                                   );
                                 },
                                 child: statusNumberProfile(
@@ -214,7 +208,7 @@ class UserProfileScreen extends StatelessWidget {
                                   cubit.getMyFollowing(token: token);
                                   navigatePushTo(
                                     context: context,
-                                    navigateTo: FollowingScreen(),
+                                    navigateTo: const FollowingScreen(),
                                   );
                                 },
                                 child: statusNumberProfile(
@@ -246,7 +240,7 @@ class UserProfileScreen extends StatelessWidget {
                             onPressed: () {
                               navigatePushTo(
                                   context: context,
-                                  navigateTo: UploadPodCastScreen());
+                                  navigateTo: const UploadPodCastScreen());
                             },
                             context: context,
                             height: 45,
@@ -286,7 +280,7 @@ class UserProfileScreen extends StatelessWidget {
                                   ),
                             ),
                           ),
-                          Container(
+                          SizedBox(
                             width: MediaQuery.of(context).size.width,
                             child: Padding(
                               padding: const EdgeInsets.only(
@@ -472,26 +466,31 @@ class UserProfileScreen extends StatelessWidget {
                                   cubit.noDataMyPodcasts
                                       ? const SizedBox()
                                       : InkWell(
-                                    borderRadius: BorderRadius.circular(40),
-                                    onTap: () {
-                                       cubit.paginationMyPodcasts(token,);
-                                    },
-                                    child: Center(
-                                      child: CircleAvatar(
-                                        backgroundColor:
-                                        Theme.of(context).backgroundColor,
-                                        radius: 30,
-                                        child: cubit.loadMyPodcasts
-                                            ? CircularProgressIndicator(
-                                          color: Theme.of(context).primaryColor,
-                                        )
-                                            : Icon(
-                                          Icons.arrow_downward,
-                                          color: Theme.of(context).primaryColor,
+                                          borderRadius:
+                                              BorderRadius.circular(40),
+                                          onTap: () {
+                                            cubit.paginationMyPodcasts(
+                                              token,
+                                            );
+                                          },
+                                          child: Center(
+                                            child: CircleAvatar(
+                                              backgroundColor: Theme.of(context)
+                                                  .backgroundColor,
+                                              radius: 30,
+                                              child: cubit.loadMyPodcasts
+                                                  ? CircularProgressIndicator(
+                                                      color: Theme.of(context)
+                                                          .primaryColor,
+                                                    )
+                                                  : Icon(
+                                                      Icons.arrow_downward,
+                                                      color: Theme.of(context)
+                                                          .primaryColor,
+                                                    ),
+                                            ),
+                                          ),
                                         ),
-                                      ),
-                                    ),
-                                  ),
                                 ],
                               ),
                             ),

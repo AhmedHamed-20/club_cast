@@ -2,12 +2,10 @@ import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
 import 'package:club_cast/presentation_layer/components/constant/constant.dart';
 import 'package:club_cast/presentation_layer/models/followers_following_model.dart';
-import 'package:club_cast/presentation_layer/models/get_userId_model.dart';
 import 'package:club_cast/presentation_layer/screens/user_screen/other_users_screens/profile_detailes_screen.dart';
 import 'package:club_cast/presentation_layer/screens/user_screen/profile_detailes_screens/user_profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../../../../data_layer/cash/cash.dart';
 import '../../../components/component/component.dart';
@@ -51,7 +49,7 @@ class FollowersScreen extends StatelessWidget {
                       children: [
                         ListView.builder(
                           shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
+                          physics: const NeverScrollableScrollPhysics(),
                           itemCount: Followers.followersModel!['data'].length,
                           itemBuilder: (context, index) {
                             return InkWell(
@@ -65,7 +63,7 @@ class FollowersScreen extends StatelessWidget {
                                     GetUserModel.getUserID()) {
                                   navigatePushTo(
                                       context: context,
-                                      navigateTo: UserProfileScreen());
+                                      navigateTo: const UserProfileScreen());
                                 } else {
                                   navigatePushTo(
                                       context: context,
@@ -78,11 +76,11 @@ class FollowersScreen extends StatelessWidget {
                                 child: ListTile(
                                   leading: CircleAvatar(
                                     backgroundImage: NetworkImage(
-                                        '${Followers.getUserPhoto(index)}'),
+                                        Followers.getUserPhoto(index)),
                                     radius: 30.0,
                                   ),
                                   title: Text(
-                                    '${Followers.getUserName(index)}',
+                                    Followers.getUserName(index),
                                     style:
                                         Theme.of(context).textTheme.bodyText1,
                                   ),
