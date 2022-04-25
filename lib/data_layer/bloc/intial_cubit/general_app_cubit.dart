@@ -258,7 +258,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   pageinathionExplore(
     String token,
   ) {
-    //  loadExplore = true;
+    loadExplore = true;
     emit(LoadDataPaginattion());
     DioHelper.getData(
         url: getAllPodCastWithoutMe + '?page=$pageExplore',
@@ -290,7 +290,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   pageinathionMyFollowingPodcast(
     String token,
   ) {
-    //  loadMyFollowinPodcast = true;
+    loadMyFollowinPodcast = true;
     emit(LoadDataPaginattion());
     DioHelper.getData(
         url: getMyFollowingPodcasts + '?page=$pagemyfollowingPodcast',
