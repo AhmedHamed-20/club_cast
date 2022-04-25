@@ -34,6 +34,7 @@ class LayoutScreen extends StatelessWidget {
         builder: (context, state) {
           var roomCubit = RoomCubit.get(context);
           var cubit = GeneralAppCubit.get(context);
+
           String token = CachHelper.getData(key: 'token');
           return WillPopScope(
             onWillPop: () async {
@@ -366,6 +367,8 @@ class LayoutScreen extends StatelessWidget {
                       return;
                     } else {
                       modalBottomSheetItem(context, () {
+                        cubit.loadRoom = true;
+                        cubit.changeState();
                         cubit.micPerm();
                         print(cubit.roomNameController.text);
                         print(cubit.selectedCategoryItem);

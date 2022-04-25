@@ -130,6 +130,9 @@ class SocketFunc {
     socket?.on(
         'createRoomSuccess',
         (data) => {
+              generalAppCubit.loadRoom = false,
+
+              showRecordingGif = GeneralAppCubit.get(context).isRecordRoom,
               GeneralAppCubit.get(context).isRecordRoom
                   ? AgoraRtc.recording(data[0]['roomName'])
                   : const SizedBox(),
@@ -196,6 +199,8 @@ class SocketFunc {
         'errorMessage',
         (data) => {
               print(data),
+              generalAppCubit.loadRoom = false,
+              generalAppCubit.changeState(),
               showToast(
                   message: data.toString(), toastState: ToastState.WARNING)
             });
@@ -314,11 +319,11 @@ class SocketFunc {
               userchangedToAudienc(context, cubit, generalAppCubit),
               brodcasterToken(),
               audienceToken(),
-              askToTalk(),
               adminLeft(context, cubit, generalAppCubit),
               isConnected = true,
               generalAppCubit.changeState(),
               isPrivateRoom = false,
+              showRecordingGif = data[1]['isRecording'],
               if (data[1]['isRecording'] == true)
                 {
                   print('dialog'),
@@ -358,10 +363,10 @@ class SocketFunc {
 
   static userJoined(
       BuildContext context, String roomId, roomCubit, generalAppCubit) {
-    print('userJoined');
     socket?.on(
         'userJoined',
         (data) => {
+              print('userJoined'),
               generalAppCubit.assetsAudioPlayer
                   .open(Audio('assets/audio/userEnter.wav')),
               // print(data),
@@ -569,7 +574,7 @@ class SocketFunc {
       BuildContext context, roomCubit, generalAppCubit) {
     socket?.on('userAskedForPerms', (data) {
       print(data);
-
+      print('asked');
       //   RoomCubit.get(context).askedToTalk.add(data),
       for (int i = 0; i < roomCubit.listener.length; i++) {
         if (data['_id'] == roomCubit.listener[i]['_id']) {

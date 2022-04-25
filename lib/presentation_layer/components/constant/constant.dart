@@ -6,6 +6,7 @@ var token;
 String activeRoomName = '';
 TextEditingController privateRoomController = TextEditingController();
 bool currentUserRoleinRoom = false;
+bool showRecordingGif = false;
 bool pressedJoinRoom = false;
 bool isPrivateRoom = false;
 bool isIamInRoomScreen = true;

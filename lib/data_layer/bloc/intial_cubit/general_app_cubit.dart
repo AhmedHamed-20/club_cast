@@ -44,7 +44,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
 
   //////////// variable ///////////////////
   int bottomNavIndex = 0;
-
+  bool loadRoom = false;
   var roomNameController = TextEditingController();
   bool isPublicRoom = true;
   bool isRecordRoom = false;
@@ -1374,8 +1374,8 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   bool loadMyPodcasts = false;
   int pageMyPodcasts = 2;
   void paginationMyPodcasts(
-      String token,
-      ) {
+    String token,
+  ) {
     loadMyPodcasts = true;
     emit(PaginationMyPodcastsLoadingState());
     DioHelper.getData(
@@ -1404,13 +1404,13 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   bool loadUserPodcasts = false;
   int pageUserPodcasts = 2;
   void paginationUserPodcasts(
-      String token,
-      String userId,
-      ) {
+    String token,
+    String userId,
+  ) {
     loadUserPodcasts = true;
     emit(PaginationUserPodcastsLoadingState());
     DioHelper.getData(
-        url: getuserPodCast + '${userId}'+'&page=${pageUserPodcasts}',
+        url: getuserPodCast + '${userId}' + '&page=${pageUserPodcasts}',
         token: {'Authorization': 'Bearer $token'}).then((value) {
       if (value.data['results'] == 0) {
         pageUserPodcasts = pageUserPodcasts;

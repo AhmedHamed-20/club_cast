@@ -199,11 +199,16 @@ Widget buildSheet(BuildContext context, VoidCallback createClick) {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.08,
                 ),
-                defaultButton(
-                  onPressed: createClick,
-                  context: context,
-                  text: 'Create',
-                )
+                GeneralAppCubit.get(context).loadRoom
+                    ? Center(
+                        child: CircularProgressIndicator(
+                            color: Theme.of(context).primaryColor),
+                      )
+                    : defaultButton(
+                        onPressed: createClick,
+                        context: context,
+                        text: 'Create',
+                      )
               ],
             ),
           ),

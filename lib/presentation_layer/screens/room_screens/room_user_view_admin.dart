@@ -91,6 +91,9 @@ class RoomAdminViewScreen extends StatelessWidget {
                           ?.copyWith(fontSize: 13),
                     ),
               actions: [
+                showRecordingGif
+                    ? Image.asset('assets/images/recording.gif')
+                    : const SizedBox(),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: MaterialButton(

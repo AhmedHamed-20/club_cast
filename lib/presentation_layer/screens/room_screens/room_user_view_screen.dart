@@ -50,6 +50,9 @@ class RoomUserViewScreen extends StatelessWidget {
               backgroundColor: Colors.transparent,
               elevation: 0,
               actions: [
+                showRecordingGif
+                    ? Image.asset('assets/images/recording.gif')
+                    : const SizedBox(),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: MaterialButton(
