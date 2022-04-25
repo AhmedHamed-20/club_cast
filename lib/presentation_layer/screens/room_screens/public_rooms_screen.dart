@@ -1,5 +1,3 @@
-import 'package:agora_rtc_engine/rtc_engine.dart';
-import 'package:club_cast/data_layer/agora/rtc_engine.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
 import 'package:club_cast/data_layer/bloc/room_cubit/room_cubit.dart';
@@ -7,19 +5,15 @@ import 'package:club_cast/data_layer/notification/local_notification.dart';
 import 'package:club_cast/data_layer/sockets/sockets_io.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
 import 'package:club_cast/presentation_layer/components/constant/constant.dart';
-import 'package:club_cast/presentation_layer/models/activeRoomModelAdmin.dart';
-import 'package:club_cast/presentation_layer/models/activeRoomModelUser.dart';
 import 'package:club_cast/presentation_layer/models/getAllRoomsModel.dart';
 import 'package:club_cast/presentation_layer/screens/room_screens/room_user_view_admin.dart';
 import 'package:club_cast/presentation_layer/screens/room_screens/room_user_view_screen.dart';
 import 'package:club_cast/presentation_layer/widgets/event_card_item.dart';
 import 'package:club_cast/presentation_layer/widgets/public_room_card_item.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 import '../../models/getMyFollowingEvents.dart';
 import '../../widgets/multi_use_dialog.dart';
@@ -125,8 +119,8 @@ class PublicRoomScreen extends StatelessWidget {
                                               RoomCubit.get(context)
                                                   .getRoomData(
                                                       token,
-                                                      privateRoomController
-                                                          .text)
+                                                      privateRoomController.text
+                                                          .trim())
                                                   .then((value) {
                                                 SocketFunc.connectWithSocket(
                                                     context,
@@ -200,13 +194,14 @@ class PublicRoomScreen extends StatelessWidget {
                                           activeRoomName) {
                                     navigatePushTo(
                                         context: context,
-                                        navigateTo: RoomAdminViewScreen());
+                                        navigateTo:
+                                            const RoomAdminViewScreen());
                                   } else if (SocketFunc.isConnected &&
                                       GetAllRoomsModel?.getRoomName(index) ==
                                           activeRoomName) {
                                     navigatePushTo(
                                         context: context,
-                                        navigateTo: RoomUserViewScreen());
+                                        navigateTo: const RoomUserViewScreen());
                                   } else if (SocketFunc.isConnected) {
                                     if (currentUserRoleinRoom) {
                                       showToast(
