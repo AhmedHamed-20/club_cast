@@ -25,6 +25,7 @@ class AgoraRtc {
 
     await engine?.setClientRole(role);
     engine?.enableAudioVolumeIndication(250, 3, true);
+    engine?.setParameters('{"che.audio.opensl":true}');
   }
 
   static Future<void> joinChannelagora({
@@ -130,7 +131,7 @@ class AgoraRtc {
   static recording(String roomName) async {
     final dirList = await getDownload();
     final path = dirList![0].path;
-    final file = File('/storage/emulated/0/Download/$roomName');
+    final file = File('$path$roomName');
     recordingFile = file;
     engine
         ?.startAudioRecordingWithConfig(AudioRecordingConfiguration(

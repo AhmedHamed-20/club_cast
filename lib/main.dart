@@ -6,6 +6,7 @@ import 'package:club_cast/presentation_layer/components/theme/app_theme.dart';
 import 'package:club_cast/presentation_layer/layout/layout_screen.dart';
 import 'package:club_cast/presentation_layer/screens/user_screen/login_screen/login_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_background/flutter_background.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'data_layer/bloc/bloc_observer/bloc_observer.dart';
@@ -17,6 +18,10 @@ import 'data_layer/notification/local_notification.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   NotificationService().init();
+  bool success =
+      await FlutterBackground.initialize(androidConfig: androidConfig);
+
+  print(success);
   DioHelper.init();
   await CachHelper.init();
   Bloc.observer = MyBlocObserver();

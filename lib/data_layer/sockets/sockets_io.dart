@@ -11,6 +11,7 @@ import 'package:club_cast/presentation_layer/screens/room_screens/room_user_view
 import 'package:club_cast/presentation_layer/screens/room_screens/room_user_view_screen.dart';
 import 'package:club_cast/presentation_layer/widgets/multi_use_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_background/flutter_background.dart';
 import 'package:socket_io_client/socket_io_client.dart';
 import '../../presentation_layer/components/constant/constant.dart';
 import '../bloc/room_cubit/room_cubit.dart';
@@ -110,69 +111,66 @@ class SocketFunc {
   static createRoom(
       Map<String, dynamic> roomData, context, cubit, generalAppCubit) {
     socket?.emit('createRoom', roomData);
-    socket?.on(
-        'createRoomSuccess',
-        (data) => {
-              generalAppCubit.loadRoom = false,
+    socket?.on('createRoomSuccess', (data) async {
+      generalAppCubit.loadRoom = false;
+      bool run = await FlutterBackground.enableBackgroundExecution();
+      showRecordingGif = GeneralAppCubit.get(context).isRecordRoom;
+      GeneralAppCubit.get(context).isRecordRoom
+          ? AgoraRtc.recording(data[0]['roomName'])
+          : const SizedBox();
+      isConnected = true;
+      isAdminLeft = false;
+      iamSpeaker = true;
+      // print(data);
+      GeneralAppCubit.get(context).getAllRoomsData(context);
+      ActiveRoomAdminModel.activeRoomAdminData = data[0];
+      ActiveRoomAdminModel.activeRoomData = data[1];
+      currentUserRoleinRoom = true;
+      generalAppCubit.assetsAudioPlayer
+          .open(Audio('assets/audio/userEnter.wav'));
+      ActiveRoomAdminModel.adminToken = data[2];
+      RoomCubit.get(context).speakers = [data[0]];
+      RoomCubit?.get(context).speakers.forEach((e) {
+        e['isMuted'] = false;
+        e['isTalking'] = false;
+      });
+      activeRoomName = ActiveRoomAdminModel.getRoomName();
 
-              showRecordingGif = GeneralAppCubit.get(context).isRecordRoom,
-              GeneralAppCubit.get(context).isRecordRoom
-                  ? AgoraRtc.recording(data[0]['roomName'])
-                  : const SizedBox(),
-              isConnected = true,
-              isAdminLeft = false,
-              iamSpeaker = true,
-              // print(data),
-              GeneralAppCubit.get(context).getAllRoomsData(context),
-              ActiveRoomAdminModel.activeRoomAdminData = data[0],
-              ActiveRoomAdminModel.activeRoomData = data[1],
-              currentUserRoleinRoom = true,
-              generalAppCubit.assetsAudioPlayer
-                  .open(Audio('assets/audio/userEnter.wav')),
-              ActiveRoomAdminModel.adminToken = data[2],
-              RoomCubit.get(context).speakers = [data[0]],
-              RoomCubit?.get(context).speakers.forEach((e) {
-                e['isMuted'] = false;
-                e['isTalking'] = false;
-              }),
-              activeRoomName = ActiveRoomAdminModel.getRoomName(),
+      AgoraRtc.joinChannelagora(
+        appId: data[1]['APP_ID'],
+        channelName: GeneralAppCubit.get(context).roomNameController.text,
+        role: ClientRole.Broadcaster,
+        token: data[2],
+        context: context,
+        uid: data[0]['uid'],
+        cubit: cubit,
+      );
 
-              AgoraRtc.joinChannelagora(
-                appId: data[1]['APP_ID'],
-                channelName:
-                    GeneralAppCubit.get(context).roomNameController.text,
-                role: ClientRole.Broadcaster,
-                token: data[2],
-                context: context,
-                uid: data[0]['uid'],
-                cubit: cubit,
-              ),
+      AgoraRtc.eventsAgora(context, cubit);
 
-              AgoraRtc.eventsAgora(context, cubit),
+      Navigator.pop(context);
+      navigatePushTo(
+        context: context,
+        navigateTo: const RoomAdminViewScreen(),
+      );
+      GeneralAppCubit.get(context).roomNameController.clear();
+      NotificationService.showNotification(
+          'Active room', activeRoomName, 'asd');
 
-              Navigator.pop(context),
-              navigatePushTo(
-                context: context,
-                navigateTo: const RoomAdminViewScreen(),
-              ),
-              GeneralAppCubit.get(context).roomNameController.clear(),
-              NotificationService.showNotification(
-                  'Active room', activeRoomName, 'asd'),
+      userJoined(
+          context, ActiveRoomAdminModel.getRoomId(), cubit, generalAppCubit);
 
-              userJoined(context, ActiveRoomAdminModel.getRoomId(), cubit,
-                  generalAppCubit),
-
-              userchangedToAudienc(context, cubit, generalAppCubit),
-              listenOnUsersAskedForTalk(context, cubit, generalAppCubit),
-              userLeft(ActiveRoomAdminModel.getRoomId(), context, cubit,
-                  generalAppCubit),
-              adminLeft(context, cubit, generalAppCubit),
-              userchangedToBrodCaster(context, cubit, generalAppCubit),
-              adminReturnSuccess(context, cubit, generalAppCubit),
-              GeneralAppCubit.get(context).selectedCategoryItem = 'ai',
-              // GeneralAppCubit.get(context).isPublicRoom = true,
-              GeneralAppCubit.get(context).isRecordRoom = false,
-            });
+      userchangedToAudienc(context, cubit, generalAppCubit);
+      listenOnUsersAskedForTalk(context, cubit, generalAppCubit);
+      userLeft(
+          ActiveRoomAdminModel.getRoomId(), context, cubit, generalAppCubit);
+      adminLeft(context, cubit, generalAppCubit);
+      userchangedToBrodCaster(context, cubit, generalAppCubit);
+      adminReturnSuccess(context, cubit, generalAppCubit);
+      GeneralAppCubit.get(context).selectedCategoryItem = 'ai';
+      // GeneralAppCubit.get(context).isPublicRoom = true;
+      GeneralAppCubit.get(context).isRecordRoom = false;
+    });
     socket?.on(
         'errorMessage',
         (data) => {
@@ -202,126 +200,120 @@ class SocketFunc {
   static joinRoom(
       String roomName, BuildContext context, cubit, generalAppCubit) {
     socket?.emit('joinRoom', roomName);
-    socket?.on(
-        'joinRoomSuccess',
-        (data) => {
-              if (isPrivateRoom == true)
-                {
-                  Navigator.of(context).pop(),
-                },
-              if (currentUserRoleinRoom)
-                {
-                  isAdminLeft = true,
-                }
-              else
-                {
-                  isAdminLeft = false,
-                },
-              pressedJoinRoom = false,
-              currentUserRoleinRoom = false,
+    socket?.on('joinRoomSuccess', (data) async {
+      if (isPrivateRoom == true) {
+        Navigator.of(context).pop();
+      }
+      ;
+      if (currentUserRoleinRoom) {
+        isAdminLeft = true;
+      } else {
+        isAdminLeft = false;
+      }
+      pressedJoinRoom = false;
+      currentUserRoleinRoom = false;
+      bool run = await FlutterBackground.enableBackgroundExecution();
+      cubit.speakers.add(data[1]['admin']);
 
-              cubit.speakers.add(data[1]['admin']),
+      cubit.speakers.addAll(data[1]['brodcasters']);
+      cubit.speakers.forEach((e) {
+        e['isMuted'] = false;
+        e['isTalking'] = false;
+      });
+      cubit.listener.addAll(data[1]['audience']);
+      cubit.listener.forEach(
+        (e) {
+          if (e['askedToTalk'] != true) {
+            e['askedToTalk'] = false;
+            e['isSpeaker'] = false;
+            e['isMuted'] = false;
+            e['isTalking'] = false;
+          }
+        },
+      );
+      // print(data),
+      ActiveRoomUserModel.activeRoomUserData = data[0];
+      ActiveRoomUserModel.activeRoomData = data[1];
 
-              cubit.speakers.addAll(data[1]['brodcasters']),
-              cubit.speakers.forEach((e) {
-                e['isMuted'] = false;
-                e['isTalking'] = false;
-              }),
-              cubit.listener.addAll(data[1]['audience']),
-              cubit.listener.forEach(
-                (e) {
-                  if (e['askedToTalk'] != true) {
-                    e['askedToTalk'] = false;
-                    e['isSpeaker'] = false;
-                    e['isMuted'] = false;
-                    e['isTalking'] = false;
-                  }
-                },
-              ),
-              // print(data),
-              ActiveRoomUserModel.activeRoomUserData = data[0],
-              ActiveRoomUserModel.activeRoomData = data[1],
+      ActiveRoomUserModel.userToken = data[2];
+      //  print('userPhoto:' + ActiveRoomUserModel.getUserPhoto()),
+      activeRoomName = ActiveRoomUserModel.getRoomName().toString();
 
-              ActiveRoomUserModel.userToken = data[2],
-              //  print('userPhoto:' + ActiveRoomUserModel.getUserPhoto()),
-              activeRoomName = ActiveRoomUserModel.getRoomName().toString(),
-
-              //print(RoomCubit.get(context).speakers),
-              // print(RoomCubit.get(context).listener),
-              generalAppCubit.assetsAudioPlayer
-                  .open(Audio('assets/audio/userEnter.wav')),
-              AgoraRtc.joinChannelagora(
-                appId: data[1]['APP_ID'],
-                channelName: data[0]['roomName'],
-                role: ClientRole.Audience,
-                token: data[2],
+      //print(RoomCubit.get(context).speakers),
+      // print(RoomCubit.get(context).listener),
+      generalAppCubit.assetsAudioPlayer
+          .open(Audio('assets/audio/userEnter.wav'));
+      AgoraRtc.joinChannelagora(
+        appId: data[1]['APP_ID'],
+        channelName: data[0]['roomName'],
+        role: ClientRole.Audience,
+        token: data[2],
+        context: context,
+        uid: data[0]['uid'],
+        cubit: cubit,
+      );
+      AgoraRtc.eventsAgora(context, cubit);
+      privateRoomController.clear();
+      navigatePushTo(
+        context: context,
+        navigateTo: const RoomUserViewScreen(),
+      );
+      NotificationService.showNotification(
+        'Active room',
+        activeRoomName,
+        'sadsad',
+      );
+      isAdminLeftSocket(generalAppCubit);
+      userJoined(
+          context,
+          generalAppCubit.isPublicRoom
+              ? ActiveRoomUserModel.getRoomId()
+              : privateRoomController.text,
+          cubit,
+          generalAppCubit);
+      userLeft(
+          generalAppCubit.isPublicRoom
+              ? ActiveRoomUserModel.getRoomId()
+              : privateRoomController.text,
+          context,
+          cubit,
+          generalAppCubit);
+      listenOnUsersAskedForTalk(context, cubit, generalAppCubit);
+      userchangedToBrodCaster(context, cubit, generalAppCubit);
+      userchangedToAudienc(context, cubit, generalAppCubit);
+      brodcasterToken();
+      audienceToken();
+      adminLeft(context, cubit, generalAppCubit);
+      isConnected = true;
+      generalAppCubit.changeState();
+      isPrivateRoom = false;
+      showRecordingGif = data[1]['isRecording'];
+      if (data[1]['isRecording'] == true) {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return multiAlerDialog(
                 context: context,
-                uid: data[0]['uid'],
-                cubit: cubit,
-              ),
-              AgoraRtc.eventsAgora(context, cubit),
-              privateRoomController.clear(),
-              navigatePushTo(
-                context: context,
-                navigateTo: const RoomUserViewScreen(),
-              ),
-              NotificationService.showNotification(
-                'Active room',
-                activeRoomName,
-                'sadsad',
-              ),
-              isAdminLeftSocket(generalAppCubit),
-              userJoined(
-                  context,
-                  generalAppCubit.isPublicRoom
-                      ? ActiveRoomUserModel.getRoomId()
-                      : privateRoomController.text,
-                  cubit,
-                  generalAppCubit),
-              userLeft(
-                  generalAppCubit.isPublicRoom
-                      ? ActiveRoomUserModel.getRoomId()
-                      : privateRoomController.text,
-                  context,
-                  cubit,
-                  generalAppCubit),
-              listenOnUsersAskedForTalk(context, cubit, generalAppCubit),
-              userchangedToBrodCaster(context, cubit, generalAppCubit),
-              userchangedToAudienc(context, cubit, generalAppCubit),
-              brodcasterToken(),
-              audienceToken(),
-              adminLeft(context, cubit, generalAppCubit),
-              isConnected = true,
-              generalAppCubit.changeState(),
-              isPrivateRoom = false,
-              showRecordingGif = data[1]['isRecording'],
-              if (data[1]['isRecording'] == true)
-                {
-                  showDialog(
-                      context: context,
-                      builder: (context) {
-                        return multiAlerDialog(
-                          context: context,
-                          title: 'Info',
-                          content: Text(
-                            'the host is recording this room',
-                            style: Theme.of(context).textTheme.bodyText1,
-                          ),
-                          actions: Center(
-                            child: MaterialButton(
-                              child: Text(
-                                'ok',
-                                style: Theme.of(context).textTheme.bodyText1,
-                              ),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                          ),
-                        );
-                      })
-                },
+                title: 'Info',
+                content: Text(
+                  'the host is recording this room',
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
+                actions: Center(
+                  child: MaterialButton(
+                    child: Text(
+                      'ok',
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ),
+              );
             });
+      }
+    });
     socket?.on(
         'errorMessage',
         (data) => {

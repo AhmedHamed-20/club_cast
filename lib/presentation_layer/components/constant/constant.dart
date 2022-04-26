@@ -1,5 +1,6 @@
 import 'package:club_cast/presentation_layer/models/login_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_background/flutter_background.dart';
 
 /////// end Points ////////////
 var token;
@@ -12,6 +13,16 @@ bool isPrivateRoom = false;
 bool isIamInRoomScreen = true;
 String? privateRoomId;
 UserLoginModel? ahmedModel;
+final androidConfig = FlutterBackgroundAndroidConfig(
+  notificationTitle: "flutter_background example app",
+  notificationText:
+      "Background notification for keeping the example app running in the background",
+  notificationImportance: AndroidNotificationImportance.Default,
+  notificationIcon: AndroidResource(
+      name: 'background_icon',
+      defType:
+          '@mipmap/ic_launcher'), // Default is ic_launcher from folder mipmap
+);
 const String baseUrl = "https://audiocomms-podcast-platform.herokuapp.com/api/";
 const String login = "v1/users/login";
 const String signup = "v1/users/signup";

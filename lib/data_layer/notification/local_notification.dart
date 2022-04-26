@@ -41,6 +41,7 @@ class NotificationService {
         colorized: true,
         playSound: false,
         ongoing: true,
+        enableVibration: false,
       ),
       iOS: IOSNotificationDetails(),
     );
