@@ -587,6 +587,7 @@ class SocketFunc {
           cubit.listener.add(cubit.speakers[i]);
           cubit.speakers.removeAt(i);
           cubit.listener[cubit.listener.length - 1]['askedToTalk'] = false;
+          cubit.listener[cubit.listener.length - 1]['isMuted'] = false;
           cubit.listener[cubit.listener.length - 1]['isSpeaker'] = false;
           cubit.listener[cubit.listener.length - 1]['_id'] ==
                   GetUserModel.getUserID()

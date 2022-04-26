@@ -76,7 +76,7 @@ class MyApp extends StatelessWidget {
           //isDark == null ? isDark = false : SizedBox();
           return MaterialApp(
             debugShowCheckedModeBanner: false,
-            title: 'PodLand',
+            title: 'club_cast',
             theme: cubit.isDark! ? darkMode : lightMode,
             home: startApp,
           );
