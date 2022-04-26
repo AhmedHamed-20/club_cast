@@ -65,7 +65,7 @@ class SocketFunc {
 
     socket?.on(' reconnect_attempt', (data) {});
 
-    socket?.on('disconnect', (data) {
+    socket?.on('disconnect', (data) async {
       if (isAdminLeft == false && currentUserRoleinRoom == true) {
         showToast(
             message:
@@ -75,6 +75,7 @@ class SocketFunc {
         socket?.disconnect();
         AgoraRtc.stopRecording();
         AgoraRtc.leave();
+        await FlutterBackground.disableBackgroundExecution();
         NotificationService.notification.cancelAll();
         RoomCubit.get(context).changeState();
         return;
@@ -86,7 +87,7 @@ class SocketFunc {
       ActiveRoomAdminModel.activeRoomAdminData = {};
       ActiveRoomAdminModel.activeRoomData = {};
       activeRoomName = '';
-
+      await FlutterBackground.disableBackgroundExecution();
       ActiveRoomUserModel.activeRoomUserData = {};
       ActiveRoomUserModel.activeRoomData = {};
       if (isConnected &&
@@ -376,7 +377,7 @@ class SocketFunc {
   }
 
   static adminReturnSuccess(BuildContext context, cubit, generalAppCubit) {
-    socket?.on('adminReJoinedRoomSuccess', (data) {
+    socket?.on('adminReJoinedRoomSuccess', (data) async {
       AgoraRtc.joinChannelagora(
         appId: data[1]['APP_ID'],
         channelName: data[0]['roomName'],
@@ -396,6 +397,7 @@ class SocketFunc {
       cubit.listener = [];
 
       cubit.speakers = [data[0]];
+      bool run = await FlutterBackground.enableBackgroundExecution();
       cubit.speakers.addAll(data[1]['brodcasters']);
       cubit.listener.addAll(data[1]['audience']);
       cubit.speakers.forEach((e) {
