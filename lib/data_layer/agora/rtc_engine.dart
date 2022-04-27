@@ -18,7 +18,7 @@ class AgoraRtc {
   static String? recordingPath;
   static File? recordingFile;
   static Future<void> initAgoraRtcEngine(String appID, ClientRole role) async {
-    engine = await RtcEngine.create('b29cc6ee03d642a6bf54c2f5906b9702');
+    engine = await RtcEngine.create(appID);
     await engine?.disableVideo();
     await engine?.enableAudio();
     await engine?.setChannelProfile(ChannelProfile.LiveBroadcasting);

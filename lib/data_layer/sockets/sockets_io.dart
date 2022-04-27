@@ -589,6 +589,7 @@ class SocketFunc {
           cubit.listener[cubit.listener.length - 1]['askedToTalk'] = false;
           cubit.listener[cubit.listener.length - 1]['isMuted'] = false;
           cubit.listener[cubit.listener.length - 1]['isSpeaker'] = false;
+          AgoraRtc.muted = false;
           cubit.listener[cubit.listener.length - 1]['_id'] ==
                   GetUserModel.getUserID()
               ? iamSpeaker = false
