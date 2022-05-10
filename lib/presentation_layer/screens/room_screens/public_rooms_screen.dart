@@ -12,6 +12,7 @@ import 'package:club_cast/presentation_layer/widgets/event_card_item.dart';
 import 'package:club_cast/presentation_layer/widgets/public_room_card_item.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_background/flutter_background.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -178,43 +179,56 @@ class PublicRoomScreen extends StatelessWidget {
                               adminData:
                                   GetAllRoomsModel.getRoomsUserPublishInform(
                                       index),
-                              click: () {
-                                //   RoomCubit.get(context).changeState();
+                              click: () async {
                                 if (cubit.isPlaying) {
                                   showToast(
                                       message:
                                           "you can't enter room if you playing a podcast,leave first(:",
                                       toastState: ToastState.WARNING);
                                 } else {
-                                  pressedJoinRoom = true;
-                                  cubit.micPerm();
-                                  if ((SocketFunc.isConnected &&
-                                          currentUserRoleinRoom) &&
-                                      GetAllRoomsModel?.getRoomName(index) ==
-                                          activeRoomName) {
-                                    navigatePushTo(
-                                        context: context,
-                                        navigateTo:
-                                            const RoomAdminViewScreen());
-                                  } else if (SocketFunc.isConnected &&
-                                      GetAllRoomsModel?.getRoomName(index) ==
-                                          activeRoomName) {
-                                    navigatePushTo(
-                                        context: context,
-                                        navigateTo: const RoomUserViewScreen());
-                                  } else if (SocketFunc.isConnected) {
-                                    if (currentUserRoleinRoom) {
-                                      showToast(
-                                          message:
-                                              "You can't join room if you are admin of a room,leave first ):",
-                                          toastState: ToastState.ERROR);
+                                  if (await FlutterBackground.hasPermissions ==
+                                      true) {
+                                    pressedJoinRoom = true;
+                                    cubit.micPerm();
+                                    if ((SocketFunc.isConnected &&
+                                            currentUserRoleinRoom) &&
+                                        GetAllRoomsModel?.getRoomName(index) ==
+                                            activeRoomName) {
+                                      navigatePushTo(
+                                          context: context,
+                                          navigateTo:
+                                              const RoomAdminViewScreen());
+                                    } else if (SocketFunc.isConnected &&
+                                        GetAllRoomsModel?.getRoomName(index) ==
+                                            activeRoomName) {
+                                      navigatePushTo(
+                                          context: context,
+                                          navigateTo:
+                                              const RoomUserViewScreen());
+                                    } else if (SocketFunc.isConnected) {
+                                      if (currentUserRoleinRoom) {
+                                        showToast(
+                                            message:
+                                                "You can't join room if you are admin of a room,leave first ):",
+                                            toastState: ToastState.ERROR);
+                                      } else {
+                                        NotificationService.notification
+                                            .cancelAll();
+                                        SocketFunc.leaveRoom(
+                                            context,
+                                            RoomCubit.get(context),
+                                            GeneralAppCubit.get(context));
+                                        SocketFunc.connectWithSocket(
+                                            context,
+                                            RoomCubit.get(context),
+                                            GeneralAppCubit.get(context));
+                                        SocketFunc.joinRoom(
+                                            GetAllRoomsModel.getRoomName(index),
+                                            context,
+                                            roomCubit,
+                                            cubit);
+                                      }
                                     } else {
-                                      NotificationService.notification
-                                          .cancelAll();
-                                      SocketFunc.leaveRoom(
-                                          context,
-                                          RoomCubit.get(context),
-                                          GeneralAppCubit.get(context));
                                       SocketFunc.connectWithSocket(
                                           context,
                                           RoomCubit.get(context),
@@ -226,15 +240,37 @@ class PublicRoomScreen extends StatelessWidget {
                                           cubit);
                                     }
                                   } else {
-                                    SocketFunc.connectWithSocket(
-                                        context,
-                                        RoomCubit.get(context),
-                                        GeneralAppCubit.get(context));
-                                    SocketFunc.joinRoom(
-                                        GetAllRoomsModel.getRoomName(index),
-                                        context,
-                                        roomCubit,
-                                        cubit);
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) => multiAlerDialog(
+                                        context: context,
+                                        title: 'Alert',
+                                        content: Text(
+                                          'Please allow to disable battery optimization and set it to no restriction.\t(disable battery optimization let you listen to your favourite rooms even if you sent app to background (:\n don\'t worry we will disable it after you leave the room) ',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyText1,
+                                        ),
+                                        actions: Center(
+                                          child: MaterialButton(
+                                            onPressed: () async {
+                                              bool success =
+                                                  await FlutterBackground
+                                                      .initialize(
+                                                          androidConfig:
+                                                              androidConfig);
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: Text(
+                                              'Allow',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyText1,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    );
                                   }
                                 }
                               },

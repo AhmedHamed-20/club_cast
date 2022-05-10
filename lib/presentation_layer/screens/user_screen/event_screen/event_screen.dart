@@ -46,42 +46,33 @@ class EventScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     GetMyEvents.allEvent().isNotEmpty
-                        ? Column(
-                            children: [
-                              SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.32,
-                                child: ListView.builder(
-                                  physics: const BouncingScrollPhysics(),
-                                  shrinkWrap: true,
-                                  scrollDirection: Axis.horizontal,
-                                  itemBuilder: (context, index) =>
-                                      eventCardItem(
-                                    context: context,
-                                    index: index,
-                                    userWhoCreateEventId:
-                                        GetMyEvents.userWhoCreateEvent(
-                                            index)["_id"],
-                                    userName: GetMyEvents.userWhoCreateEvent(
-                                        index)["name"],
-                                    userUrl: GetMyEvents.userWhoCreateEvent(
-                                        index)['photo'],
-                                    eventName: GetMyEvents.eventName(index),
-                                    eventDescription:
-                                        GetMyEvents.eventDescription(index),
-                                    eventDate: GetMyEvents.eventDate(index),
-                                  ),
-                                  itemCount: GetMyEvents.allEvent().length,
-                                ),
+                        ? SizedBox(
+                        
+                            height: MediaQuery.of(context).size.height * 0.3,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (context, index) => eventCardItem(
+                                context: context,
+                                index: index,
+                                userWhoCreateEventId:
+                                    GetMyEvents.userWhoCreateEvent(
+                                        index)["_id"],
+                                userName: GetMyEvents.userWhoCreateEvent(
+                                    index)["name"],
+                                userUrl: GetMyEvents.userWhoCreateEvent(
+                                    index)['photo'],
+                                eventName: GetMyEvents.eventName(index),
+                                eventDescription:
+                                    GetMyEvents.eventDescription(index),
+                                eventDate: GetMyEvents.eventDate(index),
                               ),
-                              const Divider(
-                                color: Colors.grey,
-                              ),
-                            ],
+                              itemCount: GetMyEvents.allEvent().length,
+                            ),
                           )
-                        : SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.18,
-                          ),
+                        : const SizedBox(),
+                    Divider(
+                      color: Theme.of(context).backgroundColor,
+                    ),
                     Padding(
                       padding: const EdgeInsets.all(20.0),
                       child: Column(

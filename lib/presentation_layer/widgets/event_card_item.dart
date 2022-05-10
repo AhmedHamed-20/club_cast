@@ -114,7 +114,7 @@ Widget eventCardItem({
                       flex: 2,
                       child: Text(
                         eventDescription,
-                        maxLines: 4,
+                        maxLines: 3,
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.bodyText1!.copyWith(
                               fontSize: 16,

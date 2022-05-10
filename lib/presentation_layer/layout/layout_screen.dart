@@ -11,6 +11,7 @@ import 'package:club_cast/presentation_layer/screens/user_screen/profile_detaile
 import 'package:club_cast/presentation_layer/screens/user_screen/event_screen/get_all_my_following_events.dart';
 import 'package:club_cast/presentation_layer/widgets/modelsheetcreate_room.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_background/flutter_background.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:marquee/marquee.dart';
 import 'package:move_to_background/move_to_background.dart';
@@ -19,6 +20,7 @@ import '../../data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
 import '../components/component/component.dart';
 import '../models/activeRoomModelUser.dart';
 import '../screens/user_screen/login_screen/login_screen.dart';
+import '../widgets/multi_use_dialog.dart';
 
 class LayoutScreen extends StatelessWidget {
   LayoutScreen({Key? key}) : super(key: key);
@@ -362,29 +364,59 @@ class LayoutScreen extends StatelessWidget {
                           toastState: ToastState.WARNING);
                       return;
                     } else {
-                      modalBottomSheetItem(context, () {
-                        cubit.loadRoom = true;
-                        cubit.changeState();
-                        cubit.micPerm();
+                      modalBottomSheetItem(context, () async {
+                        if (await FlutterBackground.hasPermissions == true) {
+                          cubit.loadRoom = true;
+                          cubit.changeState();
+                          cubit.micPerm();
 
-                        SocketFunc.isConnected
-                            ? const SizedBox()
-                            : SocketFunc.connectWithSocket(
-                                context,
-                                RoomCubit.get(context),
-                                GeneralAppCubit.get(context));
-                        SocketFunc.createRoom(
-                          {
-                            'name': cubit.roomNameController.text,
-                            'category': cubit.selectedCategoryItem,
-                            'status': cubit.isPublicRoom ? 'public' : 'private',
-                            'isRecording': cubit.isRecordRoom,
-                          },
-                          context,
-                          roomCubit,
-                          cubit,
-                        );
-                        SocketFunc.isAdminLeftSocket(cubit);
+                          SocketFunc.isConnected
+                              ? const SizedBox()
+                              : SocketFunc.connectWithSocket(
+                                  context,
+                                  RoomCubit.get(context),
+                                  GeneralAppCubit.get(context));
+                          SocketFunc.createRoom(
+                            {
+                              'name': cubit.roomNameController.text,
+                              'category': cubit.selectedCategoryItem,
+                              'status':
+                                  cubit.isPublicRoom ? 'public' : 'private',
+                              'isRecording': cubit.isRecordRoom,
+                            },
+                            context,
+                            roomCubit,
+                            cubit,
+                          );
+                          SocketFunc.isAdminLeftSocket(cubit);
+                        } else {
+                          showDialog(
+                            context: context,
+                            builder: (context) => multiAlerDialog(
+                              context: context,
+                              title: 'Alert',
+                              content: Text(
+                                'Please allow to disable battery optimization and set it to no restriction.\t(disable battery optimization let you listen to your favourite rooms even if you sent app to background (:\n don\'t worry we will disable it after you leave the room) ',
+                                style: Theme.of(context).textTheme.bodyText1,
+                              ),
+                              actions: Center(
+                                child: MaterialButton(
+                                  onPressed: () async {
+                                    bool success =
+                                        await FlutterBackground.initialize(
+                                            androidConfig: androidConfig);
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text(
+                                    'Allow',
+                                    style:
+                                        Theme.of(context).textTheme.bodyText1,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        }
                       });
                       return;
                     }

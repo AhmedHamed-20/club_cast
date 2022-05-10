@@ -18,10 +18,7 @@ import 'data_layer/notification/local_notification.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   NotificationService().init();
-  bool success =
-      await FlutterBackground.initialize(androidConfig: androidConfig);
 
-  print(success);
   DioHelper.init();
   await CachHelper.init();
   Bloc.observer = MyBlocObserver();
