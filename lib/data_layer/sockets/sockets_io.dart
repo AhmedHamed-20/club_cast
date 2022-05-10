@@ -114,6 +114,7 @@ class SocketFunc {
     socket?.emit('createRoom', roomData);
     socket?.on('createRoomSuccess', (data) async {
       generalAppCubit.loadRoom = false;
+      await FlutterBackground.initialize();
       bool run = await FlutterBackground.enableBackgroundExecution();
       showRecordingGif = GeneralAppCubit.get(context).isRecordRoom;
       GeneralAppCubit.get(context).isRecordRoom
@@ -205,7 +206,7 @@ class SocketFunc {
       if (isPrivateRoom == true) {
         Navigator.of(context).pop();
       }
-      ;
+
       if (currentUserRoleinRoom) {
         isAdminLeft = true;
       } else {
@@ -213,6 +214,7 @@ class SocketFunc {
       }
       pressedJoinRoom = false;
       currentUserRoleinRoom = false;
+      await FlutterBackground.initialize();
       bool run = await FlutterBackground.enableBackgroundExecution();
       cubit.speakers.add(data[1]['admin']);
 
@@ -220,6 +222,7 @@ class SocketFunc {
       cubit.speakers.forEach((e) {
         e['isMuted'] = false;
         e['isTalking'] = false;
+        e['iMuteHim'] = false;
       });
       cubit.listener.addAll(data[1]['audience']);
       cubit.listener.forEach(
@@ -229,6 +232,7 @@ class SocketFunc {
             e['isSpeaker'] = false;
             e['isMuted'] = false;
             e['isTalking'] = false;
+            e['iMuteHim'] = false;
           }
         },
       );
@@ -340,6 +344,7 @@ class SocketFunc {
                     e['askedToTalk'] = false;
                     e['isTalking'] = false;
                     e['isMuted'] = false;
+                    e['iMuteHim'] = false;
                   }
                 },
               ),
@@ -397,6 +402,7 @@ class SocketFunc {
       cubit.listener = [];
 
       cubit.speakers = [data[0]];
+      await FlutterBackground.initialize();
       bool run = await FlutterBackground.enableBackgroundExecution();
       cubit.speakers.addAll(data[1]['brodcasters']);
       cubit.listener.addAll(data[1]['audience']);
@@ -410,6 +416,7 @@ class SocketFunc {
           e['isSpeaker'] = false;
           e['isMuted'] = false;
           e['isTalking'] = false;
+          e['iMuteHim'] = false;
         },
       );
       showReconnectButton = false;
@@ -589,6 +596,7 @@ class SocketFunc {
           cubit.listener[cubit.listener.length - 1]['askedToTalk'] = false;
           cubit.listener[cubit.listener.length - 1]['isMuted'] = false;
           cubit.listener[cubit.listener.length - 1]['isSpeaker'] = false;
+
           AgoraRtc.muted = false;
           cubit.listener[cubit.listener.length - 1]['_id'] ==
                   GetUserModel.getUserID()

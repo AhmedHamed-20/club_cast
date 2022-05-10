@@ -143,6 +143,10 @@ class AgoraRtc {
     });
   }
 
+  static Future muteSomeone(int uid, bool muted) async {
+    return await engine?.muteRemoteAudioStream(uid, muted);
+  }
+
   static stopRecording() {
     engine?.stopAudioRecording();
   }

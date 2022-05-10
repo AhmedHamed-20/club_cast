@@ -1,3 +1,4 @@
+import 'package:club_cast/data_layer/agora/rtc_engine.dart';
 import 'package:club_cast/data_layer/sockets/sockets_io.dart';
 import 'package:club_cast/presentation_layer/widgets/model_sheet_room_contant.dart';
 
@@ -100,6 +101,44 @@ Widget speakersWiget({
                                     },
                                     child: Text(
                                       'View profile',
+                                      style:
+                                          Theme.of(context).textTheme.bodyText2,
+                                    ),
+                                  ),
+                                ),
+                                Card(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  elevation: 3,
+                                  color:
+                                      Theme.of(context).scaffoldBackgroundColor,
+                                  child: MaterialButton(
+                                    onPressed: () {
+                                      cubit.speakers[index]['iMuteHim']
+                                          ? AgoraRtc.muteSomeone(
+                                                  cubit.speakers[index]['uid'],
+                                                  false)
+                                              .then((value) {
+                                              cubit.speakers[index]
+                                                  ['iMuteHim'] = false;
+                                              Navigator.of(context).pop();
+                                            })
+                                          : AgoraRtc.muteSomeone(
+                                                  cubit.speakers[index]['uid'],
+                                                  true)
+                                              .then((value) {
+                                              cubit.speakers[index]
+                                                  ['iMuteHim'] = true;
+                                              Navigator.of(context).pop();
+                                            });
+
+                                      cubit.changeState();
+                                    },
+                                    child: Text(
+                                      cubit.speakers[index]['iMuteHim']
+                                          ? 'unMute'
+                                          : 'Mute',
                                       style:
                                           Theme.of(context).textTheme.bodyText2,
                                     ),
