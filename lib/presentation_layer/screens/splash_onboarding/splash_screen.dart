@@ -1,9 +1,7 @@
 import 'dart:async';
-
 import 'package:club_cast/presentation_layer/components/component/component.dart';
 import 'package:club_cast/presentation_layer/screens/splash_onboarding/onboarding_screen.dart';
 import 'package:flutter/material.dart';
-
 import '../../../data_layer/cash/cash.dart';
 import '../../components/constant/constant.dart';
 import '../../layout/layout_screen.dart';
