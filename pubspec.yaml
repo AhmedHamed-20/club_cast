@@ -55,7 +55,7 @@ dependencies:
   flutter_staggered_grid_view: ^0.4.0
   move_to_background: ^1.0.2
   flutter_background: ^1.1.0
-#  syncfusion_flutter_datepicker: ^19.4.56
+  smooth_page_indicator: ^1.0.0+2
   intl: ^0.17.0
 
 dev_dependencies:

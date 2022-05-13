@@ -4,6 +4,7 @@ import 'package:club_cast/data_layer/dio/dio_setup.dart';
 import 'package:club_cast/presentation_layer/components/constant/constant.dart';
 import 'package:club_cast/presentation_layer/components/theme/app_theme.dart';
 import 'package:club_cast/presentation_layer/layout/layout_screen.dart';
+import 'package:club_cast/presentation_layer/screens/splash_onboarding/onboarding_screen.dart';
 import 'package:club_cast/presentation_layer/screens/user_screen/login_screen/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_background/flutter_background.dart';
@@ -14,6 +15,7 @@ import 'data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'data_layer/bloc/login_cubit/login_cubit.dart';
 import 'data_layer/bloc/room_cubit/room_cubit.dart';
 import 'data_layer/notification/local_notification.dart';
+import 'presentation_layer/screens/splash_onboarding/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -75,7 +77,7 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             title: 'club_cast',
             theme: cubit.isDark! ? darkMode : lightMode,
-            home: startApp,
+            home: SplashScreen(),
           );
         },
         listener: (context, state) {},
