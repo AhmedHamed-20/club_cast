@@ -45,6 +45,7 @@ void main() async {
 class MyApp extends StatelessWidget {
   final Widget startApp;
   bool? isDark;
+
   MyApp(this.startApp, this.isDark);
   // This widget is the root of your application.
   @override
@@ -58,14 +59,15 @@ class MyApp extends StatelessWidget {
           create: (context) => LoginCubit(),
         ),
         BlocProvider(
-            create: (context) => GeneralAppCubit()
-              ..getAllRoomsData(context)
-              ..getMyFollowingPodcast(token, context)
-              ..getUserData(token: token)
-              ..getAllCategory()
-              ..getDark(isDark!)
-              ..getMyEvents()
-              ..getMyFollowingEvents(context)),
+          create: (context) => GeneralAppCubit()
+            ..getAllRoomsData(context)
+            ..getMyFollowingPodcast(token, context)
+            ..getUserData(token: token)
+            ..getAllCategory()
+            ..getDark(isDark!)
+            ..getMyEvents()
+            ..getMyFollowingEvents(context),
+        ),
       ],
       child: BlocConsumer<GeneralAppCubit, GeneralAppStates>(
         builder: (context, state) {
