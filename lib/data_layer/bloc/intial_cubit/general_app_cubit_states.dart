@@ -243,3 +243,5 @@ class PaginationUserPodcastsLoadingState extends GeneralAppStates {}
 class PaginationUserPodcastsSuccessState extends GeneralAppStates {}
 
 class PaginationUserPodcastsErrorState extends GeneralAppStates {}
+
+class CheckInternetConnectionState extends GeneralAppStates {}

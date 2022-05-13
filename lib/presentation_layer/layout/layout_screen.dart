@@ -13,6 +13,7 @@ import 'package:club_cast/presentation_layer/widgets/modelsheetcreate_room.dart'
 import 'package:flutter/material.dart';
 import 'package:flutter_background/flutter_background.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:marquee/marquee.dart';
 import 'package:move_to_background/move_to_background.dart';
 import '../../data_layer/agora/rtc_engine.dart';
@@ -32,7 +33,7 @@ class LayoutScreen extends StatelessWidget {
         builder: (context, state) {
           var roomCubit = RoomCubit.get(context);
           var cubit = GeneralAppCubit.get(context);
-
+          cubit.checkInternetConnection(context);
           String token = CachHelper.getData(key: 'token');
           return WillPopScope(
             onWillPop: () async {
@@ -424,7 +425,30 @@ class LayoutScreen extends StatelessWidget {
                   cubit.changeBottomNAvIndex(index);
                 },
               ),
-              body: cubit.screen[cubit.bottomNavIndex],
+              body: cubit.internetConnection
+                  ? cubit.screen[cubit.bottomNavIndex]
+                  : Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: double.infinity,
+                          height: MediaQuery.of(context).size.height * 0.4,
+                          child: Image(
+                            image: AssetImage('assets/images/noInterNet.png'),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        defaultButton(
+                          onPressed: () {
+                            cubit.checkInternetConnection(context);
+                          },
+                          context: context,
+                          text: 'Retry',
+                          radius: 15,
+                          width: 100,
+                        ),
+                      ],
+                    ),
             ),
           );
         });

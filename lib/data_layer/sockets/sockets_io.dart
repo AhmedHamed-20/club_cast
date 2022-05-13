@@ -117,9 +117,18 @@ class SocketFunc {
       await FlutterBackground.initialize();
       bool run = await FlutterBackground.enableBackgroundExecution();
       showRecordingGif = GeneralAppCubit.get(context).isRecordRoom;
-      GeneralAppCubit.get(context).isRecordRoom
-          ? AgoraRtc.recording(data[0]['roomName'])
-          : const SizedBox();
+
+      if (GeneralAppCubit.get(context).isRecordRoom) {
+        AgoraRtc.recording(data[0]['roomName']);
+
+        showToast(
+            message:
+                'The Room will record and save in (storage/android/data/com.example.club cast/files/documents/${data[0]['roomName']}.aac )',
+            toastState: ToastState.SUCCESS);
+      } else {
+        return const SizedBox();
+      }
+
       isConnected = true;
       isAdminLeft = false;
       iamSpeaker = true;

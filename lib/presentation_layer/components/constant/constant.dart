@@ -11,6 +11,7 @@ bool showRecordingGif = false;
 bool pressedJoinRoom = false;
 bool isPrivateRoom = false;
 bool isIamInRoomScreen = true;
+
 String? privateRoomId;
 UserLoginModel? ahmedModel;
 final androidConfig = FlutterBackgroundAndroidConfig(
@@ -57,6 +58,4 @@ const String getRoom = baseUrl + 'v1/rooms/';
 const String searchAboutRoom = baseUrl + 'v1/rooms/search?s=';
 const String updateAvatar = "v1/users/updateMyPhoto";
 //////////////////modelData/////////////////
-///
-
 GlobalKey formKeyBottomSheat = GlobalKey<FormState>();
