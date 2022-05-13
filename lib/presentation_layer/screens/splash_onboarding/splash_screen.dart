@@ -19,7 +19,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    Timer(const Duration(seconds: 500000000), () async {
+    Timer(const Duration(seconds: 2), () async {
       Widget startApp;
 
       if (await CachHelper.getData(key: 'token') != null) {
@@ -41,7 +41,19 @@ class _SplashScreenState extends State<SplashScreen> {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Center(
         child: Container(
-          decoration: BoxDecoration(),
+          width: 200,
+          height: 200,
+          padding: const EdgeInsets.all(30),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(100),
+            color: Theme.of(context).backgroundColor,
+          ),
+          child: Center(
+            child: Image.asset(
+              'assets/images/logo.png',
+              fit: BoxFit.contain,
+            ),
+          ),
         ),
       ),
     );
