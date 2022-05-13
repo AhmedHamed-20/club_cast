@@ -136,9 +136,11 @@ class SearchScreen extends StatelessWidget {
                                                   [index]['_id']
                                               .toString(),
                                           token: token);
+
                                       if (cubit.search!['data'][index]['_id']
                                               .toString() ==
                                           GetUserModel.getUserID()) {
+                                        cubit.getMyPodCast(token, context);
                                         navigatePushTo(
                                             context: context,
                                             navigateTo:

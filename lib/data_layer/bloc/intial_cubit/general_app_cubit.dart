@@ -27,7 +27,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:internet_connection_checker/internet_connection_checker.dart';
+
 import 'package:path_provider/path_provider.dart' as path;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -109,29 +109,6 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   getDark(bool isDARK) {
     isDark = isDARK;
     emit(ChangeTheme());
-  }
-
-  int interNetCounter = 0;
-
-  Future<bool> checkInternetConnection(BuildContext context) async {
-    internetConnection = await InternetConnectionChecker().hasConnection;
-    if (internetConnection == false && interNetCounter < 1) {
-      showToast(
-          message: 'No Internet Connection found',
-          toastState: ToastState.ERROR);
-      interNetCounter = 1;
-    } else if (internetConnection == true) {
-      getAllPodcast(token: token);
-      getMyFollowingEvents(context);
-      getAllRoomsData(context);
-      getMyFollowingPodcast(token, context);
-      getUserData(token: token);
-      getAllCategory();
-      getMyEvents();
-      interNetCounter = 0;
-    }
-    emit(CheckInternetConnectionState());
-    return internetConnection;
   }
 
   static List<String> category = ['ai'];
