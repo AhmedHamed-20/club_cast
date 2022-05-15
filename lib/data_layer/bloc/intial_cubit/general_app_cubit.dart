@@ -1150,6 +1150,8 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     ).onError(
       (DioError error, s) {
         if (error.response?.statusCode == 401) {
+          showToast(
+              message: 'please login again', toastState: ToastState.ERROR);
           navigatePushANDRemoveRout(
               context: context, navigateTo: LoginScreen());
           token = '';
@@ -1159,8 +1161,6 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
           currentOlayingDurathion = null;
           activePodCastId = null;
           currentPostionDurationInsec = 0;
-          showToast(
-              message: 'please login again', toastState: ToastState.ERROR);
         }
         emit(GetAllRoomDataGetError());
       },
