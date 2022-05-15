@@ -125,8 +125,6 @@ class SocketFunc {
             message:
                 'The Room will record and save in (storage/android/data/com.example.club cast/files/documents/${data[0]['roomName']}.aac )',
             toastState: ToastState.SUCCESS);
-      } else {
-        return const SizedBox();
       }
 
       isConnected = true;
