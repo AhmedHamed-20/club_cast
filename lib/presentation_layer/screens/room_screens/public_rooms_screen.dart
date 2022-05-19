@@ -299,27 +299,32 @@ class PublicRoomScreen extends StatelessWidget {
                                     token,
                                   );
                                 },
-                                child: Center(
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                      left: 8.0,
-                                      right: 8,
-                                      top: 8,
-                                    ),
-                                    child: CircleAvatar(
-                                      backgroundColor:
-                                          Theme.of(context).backgroundColor,
-                                      radius: 30,
-                                      child: cubit.loadRooms
-                                          ? CircularProgressIndicator(
-                                              color: Theme.of(context)
-                                                  .primaryColor,
-                                            )
-                                          : Icon(
-                                              Icons.arrow_downward,
-                                              color: Theme.of(context)
-                                                  .primaryColor,
-                                            ),
+                                child: Padding(
+                                  padding: SocketFunc.isConnected
+                                      ? const EdgeInsets.only(bottom: 100)
+                                      : const EdgeInsets.only(bottom: 5),
+                                  child: Center(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                        left: 8.0,
+                                        right: 8,
+                                        top: 8,
+                                      ),
+                                      child: CircleAvatar(
+                                        backgroundColor:
+                                            Theme.of(context).backgroundColor,
+                                        radius: 30,
+                                        child: cubit.loadRooms
+                                            ? CircularProgressIndicator(
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                              )
+                                            : Icon(
+                                                Icons.arrow_downward,
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                              ),
+                                      ),
                                     ),
                                   ),
                                 ),
