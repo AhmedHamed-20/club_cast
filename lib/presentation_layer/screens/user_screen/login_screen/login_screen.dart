@@ -21,13 +21,7 @@ class LoginScreen extends StatelessWidget {
     return BlocConsumer<LoginCubit, LoginStates>(
       listener: (BuildContext context, state) {
         if (state is UserLoginSuccessState) {
-          // print(state.userLoginModel.data!.user!.name);
-          // print(state.userLoginModel.data!.user!.email);
-          // print(state.userLoginModel.token);
-
-          CachHelper.setData(key: 'token', value: UserLoginModel.token)
-              .then((value) {})
-              .catchError((error) {});
+          CachHelper.setData(key: 'token', value: UserLoginModel.token);
         }
       },
       builder: (BuildContext context, Object? state) {
@@ -36,7 +30,8 @@ class LoginScreen extends StatelessWidget {
         return Scaffold(
           body: SafeArea(
             child: Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 5),
               child: Form(
                 key: formKey,
                 child: SingleChildScrollView(
@@ -69,8 +64,6 @@ class LoginScreen extends StatelessWidget {
                         keyboardType: TextInputType.emailAddress,
                         labelText: "Email",
                         labelStyle: Theme.of(context).textTheme.bodyText1,
-                        onChanged: (value) {},
-                        onSubmit: (value) {},
                         validator: (value) {
                           if (value!.isEmpty) {
                             return 'Email Address must not be empty ';
@@ -96,9 +89,8 @@ class LoginScreen extends StatelessWidget {
                           obscureText: cubit.loginObSecure,
                           labelStyle: Theme.of(context).textTheme.bodyText1,
                           radius: 10,
-                          onChanged: (value) {},
                           onSubmit: (value) {
-                            if (value.isEmpty) {
+                            if (formKey.currentState!.validate()) {
                               cubit.userLogin(
                                   email: emailController.text,
                                   password: passwordController.text,

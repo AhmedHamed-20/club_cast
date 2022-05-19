@@ -86,7 +86,7 @@ ThemeData lightMode = ThemeData(
       size: 28,
     ),
     unselectedIconTheme: IconThemeData(
-      size: 30,
+      size: 25,
     ),
   ),
   //  backgroundColor: Color(0xffF6F9F4),

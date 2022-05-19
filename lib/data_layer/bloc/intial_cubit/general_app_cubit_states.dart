@@ -8,11 +8,7 @@ class ChangeBottomNavIndex extends GeneralAppStates {}
 
 class UserDataLoadingState extends GeneralAppStates {}
 
-class UserDataSuccessState extends GeneralAppStates {
-  // late final UserLoginModel? userModel;
-  //
-  // UserDataSuccessState(this.userModel);
-}
+class UserDataSuccessState extends GeneralAppStates {}
 
 class UserDataErrorState extends GeneralAppStates {
   final String error;
@@ -245,3 +241,9 @@ class PaginationUserPodcastsSuccessState extends GeneralAppStates {}
 class PaginationUserPodcastsErrorState extends GeneralAppStates {}
 
 class CheckInternetConnectionState extends GeneralAppStates {}
+
+class PodCastSearchLoadingState extends GeneralAppStates {}
+
+class PodCastSearchSuccessState extends GeneralAppStates {}
+
+class PodCastSearchErrorState extends GeneralAppStates {}

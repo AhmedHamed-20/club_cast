@@ -44,7 +44,6 @@ void main() async {
 class MyApp extends StatelessWidget {
   final Widget startApp;
   bool? isDark;
-
   MyApp(this.startApp, this.isDark);
   // This widget is the root of your application.
   @override
@@ -69,6 +68,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: BlocConsumer<GeneralAppCubit, GeneralAppStates>(
+        listener: (context, state) {},
         builder: (context, state) {
           var cubit = GeneralAppCubit.get(context);
           //  cubit.isDark = isDark;
@@ -80,7 +80,6 @@ class MyApp extends StatelessWidget {
             home: SplashScreen(),
           );
         },
-        listener: (context, state) {},
       ),
     );
   }

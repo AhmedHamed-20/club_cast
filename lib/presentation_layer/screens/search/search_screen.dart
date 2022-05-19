@@ -1,12 +1,17 @@
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
 import 'package:club_cast/data_layer/cash/cash.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
+import 'package:club_cast/presentation_layer/models/getMyFollowingPodcast.dart';
+import 'package:club_cast/presentation_layer/models/get_all_podcst.dart';
+import 'package:club_cast/presentation_layer/models/pod_cast_search_model.dart';
 import 'package:club_cast/presentation_layer/models/searchRoomsModel.dart';
 import 'package:club_cast/presentation_layer/models/user_model.dart';
 import 'package:club_cast/presentation_layer/screens/user_screen/other_users_screens/profile_detailes_screen.dart';
 import 'package:club_cast/presentation_layer/screens/room_screens/room_user_view_admin.dart';
 import 'package:club_cast/presentation_layer/screens/room_screens/room_user_view_screen.dart';
 import 'package:club_cast/presentation_layer/screens/user_screen/profile_detailes_screens/user_profile_screen.dart';
+import 'package:club_cast/presentation_layer/widgets/playingCardWidget.dart';
+import 'package:club_cast/presentation_layer/widgets/pod_cast_card_item.dart';
 import 'package:club_cast/presentation_layer/widgets/public_room_card_item.dart';
 import 'package:club_cast/presentation_layer/widgets/search_widget_card.dart';
 import 'package:flutter/material.dart';
@@ -31,10 +36,7 @@ class SearchScreen extends StatelessWidget {
     var cubit = GeneralAppCubit.get(context);
     searchController.addListener(() {
       Future.delayed(const Duration(seconds: 1), () {
-        cubit.userSearch(
-          token: token,
-          value: searchController.text,
-        );
+        cubit.userSearch(token: token, value: searchController.text);
         cubit.searchRooms(searchController.text, token);
       });
     });
@@ -48,9 +50,20 @@ class SearchScreen extends StatelessWidget {
             return false;
           },
           child: DefaultTabController(
-            length: 2,
+            length: 3,
             child: Scaffold(
               appBar: AppBar(
+                backgroundColor: Colors.transparent,
+                leading: IconButton(
+                  onPressed: () {
+                    cubit.isProfilePage = false;
+                    Navigator.pop(context);
+                  },
+                  icon: Icon(
+                    Icons.arrow_back_ios,
+                    color: Theme.of(context).iconTheme.color,
+                  ),
+                ),
                 actions: [
                   SizedBox(
                     width: MediaQuery.of(context).size.width * 0.9,
@@ -74,8 +87,12 @@ class SearchScreen extends StatelessWidget {
                           //   token: token,
                           //   value: value,
                           // );
+                          cubit.podCastSearch(token: token, value: value);
                         },
-                        onSubmit: (value) {},
+                        onSubmit: (value) {
+                          cubit.isSearch = false;
+                          cubit.changeState();
+                        },
                       ),
                     ),
                   ),
@@ -90,20 +107,11 @@ class SearchScreen extends StatelessWidget {
                     Tab(
                       text: 'rooms',
                     ),
+                    Tab(
+                      text: 'podCasts',
+                    ),
                   ],
                 ),
-                elevation: 0.0,
-                leading: IconButton(
-                  onPressed: () {
-                    cubit.isProfilePage = false;
-                    Navigator.pop(context);
-                  },
-                  icon: Icon(
-                    Icons.arrow_back_ios,
-                    color: Theme.of(context).iconTheme.color,
-                  ),
-                ),
-                backgroundColor: Colors.transparent,
               ),
               body: TabBarView(
                 children: [
@@ -126,10 +134,8 @@ class SearchScreen extends StatelessWidget {
                                 itemBuilder: (context, index) {
                                   return InkWell(
                                     onTap: () {
-                                      cubit.getUserPodcast(
-                                        token,
-                                        cubit.search!['data'][index]['_id'],
-                                      );
+                                      cubit.getUserPodcast(token,
+                                          cubit.search!['data'][index]['_id']);
 
                                       cubit.getUserById(
                                           profileId: cubit.search!['data']
@@ -280,6 +286,130 @@ class SearchScreen extends StatelessWidget {
                                 adminData: SearchRoomsModel
                                     .getRoomsUserPublishInform())
                       ],
+                    ),
+                  ),
+                  SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    child: searchWidgetCard(
+                      context,
+                      cubit,
+                      Column(
+                        children: [
+                          PodCastSearchModel.getMyPodCast['data'] == null
+                              ? Center(
+                                  child: Text(
+                                    'Waiting to search',
+                                    style:
+                                        Theme.of(context).textTheme.bodyText1,
+                                  ),
+                                )
+                              : ListView.separated(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemBuilder: (context, index) => podACastItem(
+                                    context,
+                                    index: index,
+                                    downloadButton:
+                                        PlayingCardWidget.downloadingWidget(
+                                      cubit.activePodCastId.toString(),
+                                      index,
+                                      PodCastSearchModel.getPodcastID(index),
+                                      cubit,
+                                      context,
+                                      PodCastSearchModel.getPodCastAudio(
+                                          index)['url'],
+                                      PodCastSearchModel.getPodcastName(index),
+                                    ),
+                                    likeWidget: PlayingCardWidget.likeState(
+                                      context,
+                                      true,
+                                      PodCastSearchModel.getPodcastID(index),
+                                      token,
+                                      '',
+                                    ),
+                                    podCastLikes:
+                                        PlayingCardWidget.podCastLikes(
+                                            context,
+                                            cubit,
+                                            token,
+                                            index,
+                                            PodCastSearchModel.getPodcastID(
+                                                index),
+                                            PodCastSearchModel.getPodcastLikes(
+                                                    index)
+                                                .toString()), //todo
+                                    removePodCast: const SizedBox(),
+                                    playingWidget:
+                                        PlayingCardWidget.playingButton(
+                                            index,
+                                            cubit,
+                                            PodCastSearchModel.getPodCastAudio(
+                                                index)['url'],
+                                            cubit.activePodCastId.toString(),
+                                            PodCastSearchModel.getPodcastID(
+                                                index),
+                                            PodCastSearchModel.getPodcastName(
+                                                index),
+                                            PodCastSearchModel
+                                                .getPodcastUserPublishInform(
+                                                    index)['photo'],
+                                            context),
+                                    gettime: PodCastSearchModel.getPodCastAudio(
+                                        index)['duration'],
+                                    photourl: PodCastSearchModel
+                                        .getPodcastUserPublishInform(
+                                            index)['photo'],
+                                    ontapOnCircleAvater: () {
+                                      cubit.getUserById(
+                                          profileId: PodCastSearchModel
+                                              .getPodcastUserPublishInform(
+                                                  index)['_id'],
+                                          token: token);
+                                      cubit.getUserPodcast(
+                                          token,
+                                          PodCastSearchModel
+                                              .getPodcastUserPublishInform(
+                                                  index)['_id']);
+                                      navigatePushTo(
+                                          context: context,
+                                          navigateTo: ProfileDetailsScreen(
+                                              PodCastSearchModel
+                                                  .getPodcastUserPublishInform(
+                                                      index)['_id']));
+                                    },
+                                    podcastName:
+                                        PodCastSearchModel.getPodcastName(
+                                            index),
+                                    userName: PodCastSearchModel
+                                        .getPodcastUserPublishInform(
+                                            index)['name'],
+                                    text: cubit.isPlaying &&
+                                            PodCastSearchModel.getPodcastID(
+                                                    index) ==
+                                                cubit.activePodCastId
+                                        ? cubit.currentOlayingDurathion
+                                        : cubit.pressedPause &&
+                                                PodCastSearchModel.getPodcastID(
+                                                        index) ==
+                                                    cubit.activePodCastId
+                                            ? cubit.currentOlayingDurathion
+                                            : null,
+                                  ),
+                                  separatorBuilder:
+                                      (BuildContext context, int index) =>
+                                          const SizedBox(
+                                    height: 10,
+                                  ),
+                                  itemCount: PodCastSearchModel
+                                      .getMyPodCast['data'].length,
+                                ),
+                          // Container(
+                          //   width: double.infinity,
+                          //   height: 50,
+                          //   color: Colors.redAccent,
+                          // ),
+                        ],
+                      ),
                     ),
                   ),
                 ],

@@ -15,6 +15,7 @@ import 'package:club_cast/presentation_layer/models/get_my_events.dart';
 import 'package:club_cast/presentation_layer/models/get_userId_model.dart';
 import 'package:club_cast/presentation_layer/models/login_model.dart';
 import 'package:club_cast/presentation_layer/models/podCastLikesUserModel.dart';
+import 'package:club_cast/presentation_layer/models/pod_cast_search_model.dart';
 import 'package:club_cast/presentation_layer/models/user_model.dart';
 import 'package:club_cast/presentation_layer/screens/podcast_screens/podcastLikesScreen.dart';
 import 'package:club_cast/presentation_layer/screens/podcast_screens/podcast_screen.dart';
@@ -851,21 +852,46 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
 
   bool isSearch = false;
   Map<String, dynamic>? search;
+
   void userSearch({
     required String token,
     required String value,
   }) {
-    isSearch = true;
+    // isSearch = true;
     emit(SearchUserLoadingState());
     DioHelper.getData(
       url: searchUser + value,
       token: {'Authorization': 'Bearer $token'},
     ).then((value) {
-      isSearch = false;
+      isSearch = true;
       emit(SearchUserSuccessState());
       search = Map<String, dynamic>.from(value.data);
     }).catchError((onError) {
       emit(SearchUserErrorState());
+    });
+  }
+
+  void podCastSearch({
+    required String token,
+    required String value,
+  }) {
+    isSearch = true;
+
+    emit(PodCastSearchLoadingState());
+    DioHelper.getData(
+      url: searchPodCast + value,
+      token: {'Authorization': 'Bearer $token'},
+    ).then((value) {
+      PodCastSearchModel.getMyPodCast = Map<String, dynamic>.from(value.data);
+
+      // print('podCast search tmam');
+      // print(PodCastSearchModel.getMyPodCast['data'].length);
+      // print(PodCastSearchModel.getPodcastName(0));
+      isSearch = false;
+
+      emit(PodCastSearchSuccessState());
+    }).catchError((error) {
+      emit(PodCastSearchErrorState());
     });
   }
 
