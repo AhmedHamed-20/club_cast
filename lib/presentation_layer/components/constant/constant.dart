@@ -38,6 +38,7 @@ const String getPodcastLikesUsers = baseUrl + 'v1/podcasts/likes/';
 const String userById = 'v1/users/';
 const String getuserPodCast = baseUrl + 'v1/podcasts?createdBy=';
 const String searchUser = 'v1/users/search?s=';
+const String searchPodCast = 'v1/podcasts/search?s=';
 const String removePodCastById = baseUrl + 'v1/podcasts/';
 const String getMyPodCasts = baseUrl + 'v1/podcasts/me';
 const String getMyFollowingPodcasts = baseUrl + 'v1/podcasts/following/me';

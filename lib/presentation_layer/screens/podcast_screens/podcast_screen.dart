@@ -37,7 +37,6 @@ class PodCastScreen extends StatelessWidget {
                   left: 10.0,
                   right: 10,
                   top: 10,
-                  //    bottom: 20,
                 ),
           child: GetMyFollowingPodCastsModel
                   .getMyFollowingPodcasts!['data'].isEmpty
