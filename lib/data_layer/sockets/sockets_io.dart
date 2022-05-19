@@ -87,13 +87,14 @@ class SocketFunc {
       ActiveRoomAdminModel.activeRoomAdminData = {};
       ActiveRoomAdminModel.activeRoomData = {};
       activeRoomName = '';
+      askedToTalk = false;
       await FlutterBackground.disableBackgroundExecution();
       ActiveRoomUserModel.activeRoomUserData = {};
       ActiveRoomUserModel.activeRoomData = {};
       if (isConnected &&
           (pressedJoinRoom == false && currentUserRoleinRoom == false)) {
         showToast(message: "No internet found", toastState: ToastState.ERROR);
-
+        askedToTalk = false;
         socket?.disconnect();
         activeRoomName = '';
         currentUserRoleinRoom = false;
@@ -114,7 +115,7 @@ class SocketFunc {
     socket?.emit('createRoom', roomData);
     socket?.on('createRoomSuccess', (data) async {
       generalAppCubit.loadRoom = false;
-      await FlutterBackground.initialize();
+      await FlutterBackground.initialize(androidConfig: androidConfig);
       bool run = await FlutterBackground.enableBackgroundExecution();
       showRecordingGif = GeneralAppCubit.get(context).isRecordRoom;
 
@@ -221,7 +222,7 @@ class SocketFunc {
       }
       pressedJoinRoom = false;
       currentUserRoleinRoom = false;
-      await FlutterBackground.initialize();
+      await FlutterBackground.initialize(androidConfig: androidConfig);
       bool run = await FlutterBackground.enableBackgroundExecution();
       cubit.speakers.add(data[1]['admin']);
 
@@ -409,7 +410,7 @@ class SocketFunc {
       cubit.listener = [];
 
       cubit.speakers = [data[0]];
-      await FlutterBackground.initialize();
+      await FlutterBackground.initialize(androidConfig: androidConfig);
       bool run = await FlutterBackground.enableBackgroundExecution();
       cubit.speakers.addAll(data[1]['brodcasters']);
       cubit.listener.addAll(data[1]['audience']);
@@ -511,6 +512,7 @@ class SocketFunc {
     socket?.emit(
       'askForPerms',
     );
+    askedToTalk = !askedToTalk;
     socket?.on('errorMessage', (data) {});
   }
 
@@ -565,7 +567,7 @@ class SocketFunc {
                   GetUserModel.getUserID()
               ? iamSpeaker = true
               : const SizedBox();
-
+          askedToTalk = false;
           generalAppCubit.changeState();
           cubit.changeState();
 

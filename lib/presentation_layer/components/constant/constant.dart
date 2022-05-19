@@ -11,7 +11,7 @@ bool showRecordingGif = false;
 bool pressedJoinRoom = false;
 bool isPrivateRoom = false;
 bool isIamInRoomScreen = true;
-
+bool askedToTalk = false;
 String? privateRoomId;
 UserLoginModel? ahmedModel;
 final androidConfig = FlutterBackgroundAndroidConfig(

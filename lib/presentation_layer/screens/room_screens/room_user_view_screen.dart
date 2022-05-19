@@ -164,10 +164,15 @@ class RoomUserViewScreen extends StatelessWidget {
                           : SocketFunc.askToTalk();
                       SocketFunc.iamSpeaker
                           ? const SizedBox()
-                          : showToast(
-                              message:
-                                  'You asked to talk,wait until admin accept',
-                              toastState: ToastState.SUCCESS);
+                          : askedToTalk
+                              ? showToast(
+                                  message:
+                                      'You asked to talk,wait until admin accept',
+                                  toastState: ToastState.SUCCESS)
+                              : showToast(
+                                  message:
+                                      'You canceled your permission to talk',
+                                  toastState: ToastState.SUCCESS);
                       // print('ddd');
                     },
                     icon: Icon(

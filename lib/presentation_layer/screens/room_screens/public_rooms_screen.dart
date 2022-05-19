@@ -16,6 +16,7 @@ import 'package:flutter_background/flutter_background.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../data_layer/cash/cash.dart';
 import '../../models/getMyFollowingEvents.dart';
 import '../../widgets/multi_use_dialog.dart';
 
@@ -186,8 +187,12 @@ class PublicRoomScreen extends StatelessWidget {
                                           "you can't enter room if you playing a podcast,leave first(:",
                                       toastState: ToastState.WARNING);
                                 } else {
+                                  var hasBckGroundPermission =
+                                      CachHelper.getData(
+                                          key: 'hasBackGroundPermission');
                                   if (await FlutterBackground.hasPermissions ==
-                                      true) {
+                                          true ||
+                                      hasBckGroundPermission != null) {
                                     pressedJoinRoom = true;
                                     cubit.micPerm();
                                     if ((SocketFunc.isConnected &&
@@ -260,6 +265,12 @@ class PublicRoomScreen extends StatelessWidget {
                                                           androidConfig:
                                                               androidConfig);
                                               Navigator.of(context).pop();
+                                              if (success) {
+                                                CachHelper.setData(
+                                                    key:
+                                                        'hasBackGroundPermission',
+                                                    value: true);
+                                              }
                                             },
                                             child: Text(
                                               'Allow',

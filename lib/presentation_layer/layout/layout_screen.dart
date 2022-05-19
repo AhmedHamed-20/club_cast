@@ -371,7 +371,10 @@ class LayoutScreen extends StatelessWidget {
                         return;
                       } else {
                         modalBottomSheetItem(context, () async {
-                          if (await FlutterBackground.hasPermissions == true) {
+                          var hasBckGroundPermission = CachHelper.getData(
+                              key: 'hasBackGroundPermission');
+                          if (await FlutterBackground.hasPermissions == true ||
+                              hasBckGroundPermission != null) {
                             cubit.loadRoom = true;
                             cubit.changeState();
                             cubit.micPerm();
@@ -412,6 +415,11 @@ class LayoutScreen extends StatelessWidget {
                                           await FlutterBackground.initialize(
                                               androidConfig: androidConfig);
                                       Navigator.of(context).pop();
+                                      if (success) {
+                                        CachHelper.setData(
+                                            key: 'hasBackGroundPermission',
+                                            value: true);
+                                      }
                                     },
                                     child: Text(
                                       'Allow',

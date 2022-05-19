@@ -99,7 +99,7 @@ Widget eventCardItem({
                       height: 5,
                     ),
                     Text(
-                      'from' + userName,
+                      'from ' + userName,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context)
