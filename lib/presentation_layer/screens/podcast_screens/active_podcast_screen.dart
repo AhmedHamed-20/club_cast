@@ -44,7 +44,7 @@ class ActivePodCastScreen extends StatelessWidget {
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           appBar: AppBar(
             title: Text(
-              podcastName,
+              userName,
               style: Theme.of(context).textTheme.bodyText2,
             ),
             backgroundColor: Colors.transparent,
@@ -161,7 +161,7 @@ class ActivePodCastScreen extends StatelessWidget {
                         child: Column(
                           children: [
                             Text(
-                              userName,
+                              podcastName,
                               style: Theme.of(context).textTheme.bodyText2,
                             ),
                             const SizedBox(

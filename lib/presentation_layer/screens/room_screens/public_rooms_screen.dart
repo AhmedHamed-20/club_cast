@@ -44,7 +44,7 @@ class PublicRoomScreen extends StatelessWidget {
                 child: SingleChildScrollView(
                   physics: const AlwaysScrollableScrollPhysics(),
                   child: Padding(
-                    padding: const EdgeInsetsDirectional.only(top: 40.0),
+                    padding: const EdgeInsets.only(top: 20.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -301,7 +301,11 @@ class PublicRoomScreen extends StatelessWidget {
                                 },
                                 child: Center(
                                   child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
+                                    padding: const EdgeInsets.only(
+                                      left: 8.0,
+                                      right: 8,
+                                      top: 8,
+                                    ),
                                     child: CircleAvatar(
                                       backgroundColor:
                                           Theme.of(context).backgroundColor,
