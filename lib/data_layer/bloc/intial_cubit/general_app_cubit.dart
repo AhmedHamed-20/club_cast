@@ -1298,8 +1298,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       } else {
         pageEvent++;
 
-        GetMyFollowingEvents.data!
-            .addAll(Map<String, dynamic>.from(value.data));
+        GetMyFollowingEvents.data!['data'].addAll(value.data['data']);
         loadEvent = false;
         emit(PaginationEventSuccessState());
       }
