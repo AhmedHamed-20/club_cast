@@ -6,6 +6,7 @@ import 'package:club_cast/data_layer/notification/local_notification.dart';
 import 'package:club_cast/data_layer/sockets/sockets_io.dart';
 import 'package:club_cast/presentation_layer/models/activeRoomModelAdmin.dart';
 import 'package:club_cast/presentation_layer/widgets/alertDialog.dart';
+import 'package:club_cast/presentation_layer/widgets/multi_use_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -75,7 +76,6 @@ class RoomAdminViewScreen extends StatelessWidget {
                 ),
               ),
               backgroundColor: Colors.transparent,
-              elevation: 0,
               title: GeneralAppCubit.get(context).isPublicRoom
                   ? const SizedBox()
                   : SelectableText(
@@ -87,7 +87,34 @@ class RoomAdminViewScreen extends StatelessWidget {
                     ),
               actions: [
                 showRecordingGif
-                    ? Image.asset('assets/images/recording.gif')
+                    ? GestureDetector(
+                        onTap: () {
+                          showDialog(
+                              context: context,
+                              builder: (context) => multiAlerDialog(
+                                    context: context,
+                                    actions: Center(
+                                      child: MaterialButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: Text(
+                                          'ok',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyText1,
+                                        ),
+                                      ),
+                                    ),
+                                    title: 'Info',
+                                    content: Text(
+                                      'The Room will record and save in (storage/android/data/com.example.club cast/files/documents/$activeRoomName.aac )',
+                                      style:
+                                          Theme.of(context).textTheme.bodyText1,
+                                    ),
+                                  ));
+                        },
+                        child: Image.asset('assets/images/recording.gif'))
                     : const SizedBox(),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
