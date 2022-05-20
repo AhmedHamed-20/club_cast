@@ -73,7 +73,16 @@ class NotificationService {
       title,
       body,
       tz.TZDateTime.from(eventTime, tz.local),
-      await notificationDetails(),
+      await const NotificationDetails(
+        android: AndroidNotificationDetails(
+          'channel Id 4',
+          'channel name',
+          onlyAlertOnce: true,
+          colorized: true,
+          enableVibration: false,
+        ),
+        iOS: IOSNotificationDetails(),
+      ),
       payload: payLoad,
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,

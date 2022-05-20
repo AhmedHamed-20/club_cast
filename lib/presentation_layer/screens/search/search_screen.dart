@@ -40,6 +40,7 @@ class SearchScreen extends StatelessWidget {
       Future.delayed(const Duration(seconds: 1), () {
         cubit.userSearch(token: token, value: searchController.text);
         cubit.searchRooms(searchController.text, token);
+        cubit.podCastSearch(token: token, value: searchController.text);
       });
     });
     return BlocConsumer<GeneralAppCubit, GeneralAppStates>(
@@ -49,7 +50,7 @@ class SearchScreen extends StatelessWidget {
           onWillPop: () async {
             cubit.isProfilePage = false;
             cubit.isSearchScreen = false;
-
+            PodCastSearchModel.getMyPodCast = {};
             Navigator.of(context).pop();
             return false;
           },
@@ -62,6 +63,7 @@ class SearchScreen extends StatelessWidget {
                   onPressed: () {
                     cubit.isProfilePage = false;
                     cubit.isSearchScreen = false;
+                    PodCastSearchModel.getMyPodCast = {};
 
                     Navigator.pop(context);
                   },
@@ -93,7 +95,6 @@ class SearchScreen extends StatelessWidget {
                           //   token: token,
                           //   value: value,
                           // );
-                          cubit.podCastSearch(token: token, value: value);
                         },
                         onSubmit: (value) {
                           cubit.isSearch = false;
