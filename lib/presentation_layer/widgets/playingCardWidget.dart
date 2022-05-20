@@ -9,8 +9,9 @@ class PlayingCardWidget {
     bool likeState,
     String podCastId,
     String token,
-    String userId,
-  ) {
+    String userId, {
+    String? searchName,
+  }) {
     var cubit = GeneralAppCubit.get(context);
     return Padding(
       padding: const EdgeInsetsDirectional.only(start: 15.0, bottom: 15),
@@ -38,9 +39,12 @@ class PlayingCardWidget {
                           cubit.getUserPodcast(token, userId);
                         } else if (cubit.isExplore) {
                           cubit.getExplorePodcast(token: token);
+                        } else if (cubit.isSearchScreen) {
+                          cubit.podCastSearch(token: token, value: searchName!);
                         } else {
                           cubit.getMyFollowingPodcast(token, context);
                         }
+
                         //isProfilePage
                         //getUserPodcast
                       },
@@ -58,6 +62,8 @@ class PlayingCardWidget {
                           cubit.getUserPodcast(token, userId);
                         } else if (cubit.isExplore) {
                           cubit.getExplorePodcast(token: token);
+                        } else if (cubit.isSearchScreen) {
+                          cubit.podCastSearch(token: token, value: searchName!);
                         } else {
                           cubit.getMyFollowingPodcast(token, context);
                         }

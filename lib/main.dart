@@ -13,6 +13,7 @@ import 'data_layer/bloc/login_cubit/login_cubit.dart';
 import 'data_layer/bloc/room_cubit/room_cubit.dart';
 import 'data_layer/notification/local_notification.dart';
 import 'presentation_layer/screens/splash_onboarding/splash_screen.dart';
+import 'package:timezone/data/latest.dart' as tz;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,6 +29,8 @@ void main() async {
   } else {
     isDark = CachHelper.getData(key: 'isDark');
   }
+  tz.initializeTimeZones();
+
   Widget startApp;
   if (await CachHelper.getData(key: 'token') != null) {
     startApp = LayoutScreen();

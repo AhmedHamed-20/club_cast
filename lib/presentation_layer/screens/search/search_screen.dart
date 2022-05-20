@@ -34,6 +34,8 @@ class SearchScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var cubit = GeneralAppCubit.get(context);
+    cubit.isSearchScreen = true;
+
     searchController.addListener(() {
       Future.delayed(const Duration(seconds: 1), () {
         cubit.userSearch(token: token, value: searchController.text);
@@ -46,6 +48,8 @@ class SearchScreen extends StatelessWidget {
         return WillPopScope(
           onWillPop: () async {
             cubit.isProfilePage = false;
+            cubit.isSearchScreen = false;
+
             Navigator.of(context).pop();
             return false;
           },
@@ -57,6 +61,8 @@ class SearchScreen extends StatelessWidget {
                 leading: IconButton(
                   onPressed: () {
                     cubit.isProfilePage = false;
+                    cubit.isSearchScreen = false;
+
                     Navigator.pop(context);
                   },
                   icon: Icon(
@@ -113,11 +119,10 @@ class SearchScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              body: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: TabBarView(
-                  children: [
-                    searchWidgetCard(
+              body: TabBarView(
+                children: [
+                  SingleChildScrollView(
+                    child: searchWidgetCard(
                       context,
                       cubit,
                       Column(
@@ -209,7 +214,9 @@ class SearchScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                    searchWidgetCard(
+                  ),
+                  SingleChildScrollView(
+                    child: searchWidgetCard(
                       context,
                       cubit,
                       Column(
@@ -296,7 +303,9 @@ class SearchScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                    searchWidgetCard(
+                  ),
+                  SingleChildScrollView(
+                    child: searchWidgetCard(
                       context,
                       cubit,
                       Column(
@@ -333,6 +342,7 @@ class SearchScreen extends StatelessWidget {
                                       PodCastSearchModel.getPodcastID(index),
                                       token,
                                       '',
+                                      searchName: searchController.text,
                                     ),
                                     podCastLikes:
                                         PlayingCardWidget.podCastLikes(
@@ -410,16 +420,11 @@ class SearchScreen extends StatelessWidget {
                                   itemCount: PodCastSearchModel
                                       .getMyPodCast['data'].length,
                                 ),
-                          // Container(
-                          //   width: double.infinity,
-                          //   height: 50,
-                          //   color: Colors.redAccent,
-                          // ),
                         ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),

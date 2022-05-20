@@ -86,7 +86,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   String? currentOlayingDurathion;
   final assetsAudioPlayer = AssetsAudioPlayer();
   bool internetConnection = true;
-
+  bool isSearchScreen = false;
   List<BottomNavigationBarItem> bottomNavBarItem = const [
     BottomNavigationBarItem(
       icon: Icon(Icons.home),
@@ -876,7 +876,6 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     required String value,
   }) {
     isSearch = true;
-
     emit(PodCastSearchLoadingState());
     DioHelper.getData(
       url: searchPodCast + value,

@@ -17,25 +17,26 @@ class ProfileDetailsScreen extends StatelessWidget {
   ProfileDetailsScreen(this.userId);
   @override
   Widget build(BuildContext context) {
+    var cubit = GeneralAppCubit.get(context);
+
+    cubit.isProfilePage = true;
+
     String? currentId;
     return BlocConsumer<GeneralAppCubit, GeneralAppStates>(
       listener: (context, index) {},
       builder: (context, index) {
         String token = CachHelper.getData(key: 'token');
-        var cubit = GeneralAppCubit.get(context);
         refresh() {
           cubit.getUserById(profileId: userId, token: token);
           return cubit.getUserPodcast(token, userId);
         }
 
         currentId = cubit.activePodCastId;
-        cubit.isProfilePage = true;
 
         return WillPopScope(
           onWillPop: () async {
             cubit.isProfilePage = false;
             Navigator.of(context).pop();
-
             return false;
           },
           child: Scaffold(
@@ -44,6 +45,7 @@ class ProfileDetailsScreen extends StatelessWidget {
               leading: IconButton(
                 onPressed: () {
                   cubit.isProfilePage = false;
+
                   Navigator.pop(context);
                 },
                 icon: Icon(
