@@ -136,6 +136,9 @@ class GetAllMyFollowingScreen extends StatelessWidget {
     required String userWhoCreateEventId,
     required String userName,
   }) {
+    String eventDated =
+        DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.parse(eventDate));
+    Duration diffrence = DateTime.parse(eventDated).difference(DateTime.now());
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
@@ -206,28 +209,32 @@ class GetAllMyFollowingScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  IconButton(
-                      onPressed: () {
-                        String eventDated = DateFormat("yyyy-MM-dd HH:mm:ss")
-                            .format(DateTime.parse(eventDate));
-                        Duration diffrence = DateTime.parse(eventDated)
-                            .difference(DateTime.now());
-                        NotificationService.scheduleNotification(
-                          eventName + "from $userName started now .",
-                          eventDescription,
-                          'hhh',
-                          eventTime: DateTime.now().add(diffrence),
-                          index: Random().nextInt(200),
-                        );
-                        showToast(
-                            message:
-                                'we will notify you at the time of this event',
-                            toastState: ToastState.SUCCESS);
-                      },
-                      icon: Icon(
-                        Icons.notifications_none,
-                        color: Theme.of(context).iconTheme.color,
-                      )),
+                  diffrence.inSeconds > 0
+                      ? IconButton(
+                          onPressed: () {
+                            String eventDated =
+                                DateFormat("yyyy-MM-dd HH:mm:ss")
+                                    .format(DateTime.parse(eventDate));
+                            Duration diffrence = DateTime.parse(eventDated)
+                                .difference(DateTime.now());
+
+                            NotificationService.scheduleNotification(
+                              eventName + "from $userName started now .",
+                              eventDescription,
+                              'hhh',
+                              eventTime: DateTime.now().add(diffrence),
+                              index: Random().nextInt(200),
+                            );
+                            showToast(
+                                message:
+                                    'we will notify you at the time of this event',
+                                toastState: ToastState.SUCCESS);
+                          },
+                          icon: Icon(
+                            Icons.notifications_none,
+                            color: Theme.of(context).iconTheme.color,
+                          ))
+                      : const SizedBox(),
                 ],
               ),
             ),
