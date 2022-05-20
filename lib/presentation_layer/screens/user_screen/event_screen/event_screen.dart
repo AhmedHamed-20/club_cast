@@ -297,10 +297,8 @@ class EventScreen extends StatelessWidget {
       initialDate: DateTime.now(),
       firstDate: DateTime.now(),
       lastDate: DateTime.now().add(const Duration(days: 13)),
-      //DateTime.parse('2050-09-20'),
     ).then((value) {
-      //print(value);
-
+      // print(value!.toIso8601String());
       // showUserDateFormate = DateFormat.yMMMd().format(value!);
       dateController.text = DateFormat("MM/dd/yyyy").format(value!);
       cubit.changeState();

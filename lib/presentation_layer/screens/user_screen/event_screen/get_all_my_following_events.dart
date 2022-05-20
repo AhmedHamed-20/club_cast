@@ -219,7 +219,6 @@ class GetAllMyFollowingScreen extends StatelessWidget {
                           eventTime: DateTime.now().add(diffrence),
                           index: Random().nextInt(200),
                         );
-
                         showToast(
                             message:
                                 'we will notify you at the time of this event',
