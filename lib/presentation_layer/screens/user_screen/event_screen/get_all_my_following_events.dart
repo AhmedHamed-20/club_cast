@@ -1,6 +1,10 @@
+import 'dart:math';
+
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
+import 'package:club_cast/data_layer/cash/cash.dart';
 import 'package:club_cast/data_layer/notification/local_notification.dart';
+import 'package:club_cast/presentation_layer/components/component/component.dart';
 import 'package:club_cast/presentation_layer/models/getMyFollowingEvents.dart';
 import 'package:club_cast/presentation_layer/widgets/event_card_item.dart';
 
@@ -209,9 +213,17 @@ class GetAllMyFollowingScreen extends StatelessWidget {
                         Duration diffrence = DateTime.parse(eventDated)
                             .difference(DateTime.now());
                         NotificationService.scheduleNotification(
-                            eventName, eventDescription, 'hhh',
-                            eventTime: DateTime.now().add(diffrence),
-                            index: index);
+                          eventName + "from $userName started now .",
+                          eventDescription,
+                          'hhh',
+                          eventTime: DateTime.now().add(diffrence),
+                          index: Random().nextInt(200),
+                        );
+
+                        showToast(
+                            message:
+                                'we will notify you at the time of this event',
+                            toastState: ToastState.SUCCESS);
                       },
                       icon: Icon(
                         Icons.notifications_none,

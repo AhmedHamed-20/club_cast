@@ -47,7 +47,6 @@ class EventScreen extends StatelessWidget {
                   children: [
                     GetMyEvents.allEvent().isNotEmpty
                         ? SizedBox(
-                        
                             height: MediaQuery.of(context).size.height * 0.3,
                             child: ListView.builder(
                               scrollDirection: Axis.horizontal,
@@ -215,7 +214,7 @@ class EventScreen extends StatelessWidget {
                               return defaultButton(
                                 onPressed: () {
                                   if (formKey.currentState!.validate()) {
-                                    if (eventNameController.text.length < 5) {
+                                    if (eventNameController.text.length < 3) {
                                       showToast(
                                         message: 'EventName is So Short',
                                         toastState: ToastState.ERROR,
