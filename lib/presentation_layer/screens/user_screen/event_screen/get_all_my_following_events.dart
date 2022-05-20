@@ -1,5 +1,6 @@
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
+import 'package:club_cast/data_layer/notification/local_notification.dart';
 import 'package:club_cast/presentation_layer/models/getMyFollowingEvents.dart';
 import 'package:club_cast/presentation_layer/widgets/event_card_item.dart';
 
@@ -139,7 +140,7 @@ class GetAllMyFollowingScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(12.0),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -200,6 +201,19 @@ class GetAllMyFollowingScreen extends StatelessWidget {
                       ],
                     ),
                   ),
+                  IconButton(
+                      onPressed: () {
+                        NotificationService.scheduleNotification(
+                          eventName,
+                          eventDescription,
+                          'hhh',
+                          eventTime: DateTime.parse(eventDate),
+                        );
+                      },
+                      icon: Icon(
+                        Icons.notifications_none,
+                        color: Theme.of(context).iconTheme.color,
+                      )),
                 ],
               ),
             ),

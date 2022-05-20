@@ -113,153 +113,172 @@ class SearchScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              body: TabBarView(
-                children: [
-                  searchWidgetCard(
-                    context,
-                    cubit,
-                    Column(
-                      children: [
-                        cubit.search == null
-                            ? Center(
-                                child: Text(
-                                  'Waiting to search',
-                                  style: Theme.of(context).textTheme.bodyText1,
+              body: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                child: TabBarView(
+                  children: [
+                    searchWidgetCard(
+                      context,
+                      cubit,
+                      Column(
+                        children: [
+                          cubit.search == null
+                              ? Center(
+                                  child: Text(
+                                    'Waiting to search',
+                                    style:
+                                        Theme.of(context).textTheme.bodyText1,
+                                  ),
+                                )
+                              : ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: cubit.search!['data'].length,
+                                  itemBuilder: (context, index) {
+                                    return InkWell(
+                                      onTap: () {
+                                        cubit.getUserPodcast(
+                                            token,
+                                            cubit.search!['data'][index]
+                                                ['_id']);
+
+                                        cubit.getUserById(
+                                            profileId: cubit.search!['data']
+                                                    [index]['_id']
+                                                .toString(),
+                                            token: token);
+
+                                        if (cubit.search!['data'][index]['_id']
+                                                .toString() ==
+                                            GetUserModel.getUserID()) {
+                                          cubit.getMyPodCast(token, context);
+                                          navigatePushTo(
+                                              context: context,
+                                              navigateTo:
+                                                  const UserProfileScreen());
+                                        } else {
+                                          navigatePushTo(
+                                              context: context,
+                                              navigateTo: ProfileDetailsScreen(
+                                                  cubit.search!['data'][index]
+                                                      ['_id']));
+                                        }
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: ListTile(
+                                          leading: CircleAvatar(
+                                            radius: 30,
+                                            backgroundImage: NetworkImage(
+                                              cubit.search!['data'][index]
+                                                          ['photo'] ==
+                                                      null
+                                                  ? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3-lQXGq-2WPJR5aE_l74q-mR61wDrZXUYhA&usqp=CAU'
+                                                  : cubit.search!['data'][index]
+                                                      ['photo'],
+                                            ),
+                                          ),
+                                          title: Text(
+                                            cubit.search!['data'][index]
+                                                ['name'],
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyText1,
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
                                 ),
-                              )
-                            : ListView.builder(
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemCount: cubit.search!['data'].length,
-                                itemBuilder: (context, index) {
-                                  return InkWell(
-                                    onTap: () {
-                                      cubit.getUserPodcast(token,
-                                          cubit.search!['data'][index]['_id']);
-
-                                      cubit.getUserById(
-                                          profileId: cubit.search!['data']
-                                                  [index]['_id']
-                                              .toString(),
-                                          token: token);
-
-                                      if (cubit.search!['data'][index]['_id']
-                                              .toString() ==
-                                          GetUserModel.getUserID()) {
-                                        cubit.getMyPodCast(token, context);
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          defaultButton(
+                            onPressed: () {
+                              cubit.getExplorePodcast(token: token);
+                              navigatePushTo(
+                                context: context,
+                                navigateTo: const ExploreScreen(),
+                              );
+                            },
+                            context: context,
+                            text: 'Explore',
+                            width: 150,
+                            radius: 25,
+                          ),
+                        ],
+                      ),
+                    ),
+                    searchWidgetCard(
+                      context,
+                      cubit,
+                      Column(
+                        children: [
+                          SearchRoomsModel.searchRoomsModel?['data'] == null
+                              ? Center(
+                                  child: Text(
+                                    'Waiting to search',
+                                    style:
+                                        Theme.of(context).textTheme.bodyText1,
+                                  ),
+                                )
+                              : publicRoomItem(
+                                  context: context,
+                                  speaker:
+                                      SearchRoomsModel.getRoomsBrodcaster() ??
+                                          [],
+                                  audience:
+                                      SearchRoomsModel.getRoomsAudienc() ?? [],
+                                  roomName: SearchRoomsModel.getRoomName(),
+                                  category: SearchRoomsModel.getRoomsGategory(),
+                                  click: () {
+                                    if (cubit.isPlaying) {
+                                      showToast(
+                                          message:
+                                              "you can't enter room if you playing a podcast,leave first(:",
+                                          toastState: ToastState.WARNING);
+                                    } else {
+                                      pressedJoinRoom = true;
+                                      cubit.micPerm();
+                                      if ((SocketFunc.isConnected &&
+                                              currentUserRoleinRoom) &&
+                                          SearchRoomsModel.getRoomName() ==
+                                              activeRoomName) {
                                         navigatePushTo(
                                             context: context,
                                             navigateTo:
-                                                const UserProfileScreen());
-                                      } else {
+                                                const RoomAdminViewScreen());
+                                      } else if (SocketFunc.isConnected &&
+                                          SearchRoomsModel.getRoomName() ==
+                                              activeRoomName) {
                                         navigatePushTo(
                                             context: context,
-                                            navigateTo: ProfileDetailsScreen(
-                                                cubit.search!['data'][index]
-                                                    ['_id']));
-                                      }
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: ListTile(
-                                        leading: CircleAvatar(
-                                          radius: 30,
-                                          backgroundImage: NetworkImage(
-                                            cubit.search!['data'][index]
-                                                        ['photo'] ==
-                                                    null
-                                                ? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3-lQXGq-2WPJR5aE_l74q-mR61wDrZXUYhA&usqp=CAU'
-                                                : cubit.search!['data'][index]
-                                                    ['photo'],
-                                          ),
-                                        ),
-                                        title: Text(
-                                          cubit.search!['data'][index]['name'],
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1,
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        defaultButton(
-                          onPressed: () {
-                            cubit.getExplorePodcast(token: token);
-                            navigatePushTo(
-                              context: context,
-                              navigateTo: const ExploreScreen(),
-                            );
-                          },
-                          context: context,
-                          text: 'Explore',
-                          width: 150,
-                          radius: 25,
-                        ),
-                      ],
-                    ),
-                  ),
-                  searchWidgetCard(
-                    context,
-                    cubit,
-                    Column(
-                      children: [
-                        SearchRoomsModel.searchRoomsModel?['data'] == null
-                            ? Center(
-                                child: Text(
-                                  'Waiting to search',
-                                  style: Theme.of(context).textTheme.bodyText1,
-                                ),
-                              )
-                            : publicRoomItem(
-                                context: context,
-                                speaker:
-                                    SearchRoomsModel.getRoomsBrodcaster() ?? [],
-                                audience:
-                                    SearchRoomsModel.getRoomsAudienc() ?? [],
-                                roomName: SearchRoomsModel.getRoomName(),
-                                category: SearchRoomsModel.getRoomsGategory(),
-                                click: () {
-                                  if (cubit.isPlaying) {
-                                    showToast(
-                                        message:
-                                            "you can't enter room if you playing a podcast,leave first(:",
-                                        toastState: ToastState.WARNING);
-                                  } else {
-                                    pressedJoinRoom = true;
-                                    cubit.micPerm();
-                                    if ((SocketFunc.isConnected &&
-                                            currentUserRoleinRoom) &&
-                                        SearchRoomsModel.getRoomName() ==
-                                            activeRoomName) {
-                                      navigatePushTo(
-                                          context: context,
-                                          navigateTo:
-                                              const RoomAdminViewScreen());
-                                    } else if (SocketFunc.isConnected &&
-                                        SearchRoomsModel.getRoomName() ==
-                                            activeRoomName) {
-                                      navigatePushTo(
-                                          context: context,
-                                          navigateTo:
-                                              const RoomUserViewScreen());
-                                    } else if (SocketFunc.isConnected) {
-                                      if (currentUserRoleinRoom) {
-                                        showToast(
-                                            message:
-                                                "You can't join room if you are admin of a room,leave first ):",
-                                            toastState: ToastState.ERROR);
+                                            navigateTo:
+                                                const RoomUserViewScreen());
+                                      } else if (SocketFunc.isConnected) {
+                                        if (currentUserRoleinRoom) {
+                                          showToast(
+                                              message:
+                                                  "You can't join room if you are admin of a room,leave first ):",
+                                              toastState: ToastState.ERROR);
+                                        } else {
+                                          NotificationService.notification
+                                              .cancelAll();
+                                          SocketFunc.leaveRoom(
+                                              context,
+                                              RoomCubit.get(context),
+                                              GeneralAppCubit.get(context));
+                                          SocketFunc.connectWithSocket(
+                                              context,
+                                              RoomCubit.get(context),
+                                              GeneralAppCubit.get(context));
+                                          SocketFunc.joinRoom(
+                                              SearchRoomsModel.getRoomName(),
+                                              context,
+                                              RoomCubit.get(context),
+                                              cubit);
+                                        }
                                       } else {
-                                        NotificationService.notification
-                                            .cancelAll();
-                                        SocketFunc.leaveRoom(
-                                            context,
-                                            RoomCubit.get(context),
-                                            GeneralAppCubit.get(context));
                                         SocketFunc.connectWithSocket(
                                             context,
                                             RoomCubit.get(context),
@@ -270,27 +289,14 @@ class SearchScreen extends StatelessWidget {
                                             RoomCubit.get(context),
                                             cubit);
                                       }
-                                    } else {
-                                      SocketFunc.connectWithSocket(
-                                          context,
-                                          RoomCubit.get(context),
-                                          GeneralAppCubit.get(context));
-                                      SocketFunc.joinRoom(
-                                          SearchRoomsModel.getRoomName(),
-                                          context,
-                                          RoomCubit.get(context),
-                                          cubit);
                                     }
-                                  }
-                                },
-                                adminData: SearchRoomsModel
-                                    .getRoomsUserPublishInform())
-                      ],
+                                  },
+                                  adminData: SearchRoomsModel
+                                      .getRoomsUserPublishInform())
+                        ],
+                      ),
                     ),
-                  ),
-                  SingleChildScrollView(
-                    physics: const BouncingScrollPhysics(),
-                    child: searchWidgetCard(
+                    searchWidgetCard(
                       context,
                       cubit,
                       Column(
@@ -322,7 +328,8 @@ class SearchScreen extends StatelessWidget {
                                     ),
                                     likeWidget: PlayingCardWidget.likeState(
                                       context,
-                                      true,
+                                      PodCastSearchModel.podcastLikeState(
+                                          index),
                                       PodCastSearchModel.getPodcastID(index),
                                       token,
                                       '',
@@ -411,8 +418,8 @@ class SearchScreen extends StatelessWidget {
                         ],
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

@@ -21,6 +21,10 @@ class PodCastSearchModel {
     return getMyPodCast['data'][index]['category'].toString();
   }
 
+  static bool podcastLikeState(int index) {
+    return getMyPodCast['data'][index]['isLiked'];
+  }
+
   static Map<String, dynamic> getPodcastUserPublishInform(int index) {
     return getMyPodCast['data'][index]['createdBy'];
   }
