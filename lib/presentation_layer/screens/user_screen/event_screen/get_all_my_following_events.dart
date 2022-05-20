@@ -6,6 +6,7 @@ import 'package:club_cast/presentation_layer/widgets/event_card_item.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 import '../../../components/constant/constant.dart';
 
@@ -203,11 +204,15 @@ class GetAllMyFollowingScreen extends StatelessWidget {
                   ),
                   IconButton(
                       onPressed: () {
+                        String eventDated = DateFormat("yyyy-MM-dd HH:mm:ss")
+                            .format(DateTime.parse(eventDate));
+                        Duration diffrence = DateTime.parse(eventDated)
+                            .difference(DateTime.now());
                         NotificationService.scheduleNotification(
                           eventName,
                           eventDescription,
                           'hhh',
-                          eventTime: DateTime.parse(eventDate),
+                          eventTime: DateTime.now().add(diffrence),
                         );
                       },
                       icon: Icon(
