@@ -209,11 +209,9 @@ class GetAllMyFollowingScreen extends StatelessWidget {
                         Duration diffrence = DateTime.parse(eventDated)
                             .difference(DateTime.now());
                         NotificationService.scheduleNotification(
-                          eventName,
-                          eventDescription,
-                          'hhh',
-                          eventTime: DateTime.now().add(diffrence),
-                        );
+                            eventName, eventDescription, 'hhh',
+                            eventTime: DateTime.now().add(diffrence),
+                            index: index);
                       },
                       icon: Icon(
                         Icons.notifications_none,

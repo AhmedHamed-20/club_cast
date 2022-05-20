@@ -66,10 +66,11 @@ class NotificationService {
     String title,
     String body,
     String payLoad, {
+    required int index,
     required DateTime eventTime,
   }) async {
     await notification.zonedSchedule(
-      0,
+      index,
       title,
       body,
       tz.TZDateTime.from(eventTime, tz.local),
@@ -80,6 +81,7 @@ class NotificationService {
           onlyAlertOnce: true,
           colorized: true,
           enableVibration: false,
+          playSound: true,
         ),
         iOS: IOSNotificationDetails(),
       ),
