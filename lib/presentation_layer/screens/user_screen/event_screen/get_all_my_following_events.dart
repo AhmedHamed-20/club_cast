@@ -222,7 +222,7 @@ class GetAllMyFollowingScreen extends StatelessWidget {
                                 .difference(DateTime.now());
 
                             NotificationService.scheduleNotification(
-                              eventName + "from $userName started now .",
+                              eventName + " from $userName started now .",
                               eventDescription,
                               'hhh',
                               eventTime: DateTime.now().add(diffrence),
