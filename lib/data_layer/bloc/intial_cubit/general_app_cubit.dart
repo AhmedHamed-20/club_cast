@@ -28,6 +28,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 
 import 'package:path_provider/path_provider.dart' as path;
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -1130,14 +1131,28 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     required String eventTime,
     required String eventDescription,
   }) async {
+    //05/21/2022
+    // 2022-05-22 11:00:00.000Z
+    //2022-05-22 12:00:00.000Z
     emit(UpdateEventLoadingState());
-
+    String updatedEventDate = eventDate.replaceAll(RegExp(r'/'), '-');
+    DateTime dateConverting = DateFormat.jm().parse(eventTime);
+    String editTime = dateConverting.toString().split(' ')[1];
+    String finalDate;
+    try {
+      DateTime dateTime =
+          DateFormat.yMd('en_US').add_jm().parse(eventDate + " " + eventTime);
+      finalDate = dateTime.toUtc().toString();
+    } catch (e) {
+      finalDate =
+          DateTime.parse(updatedEventDate + " " + editTime).toUtc().toString();
+    }
     DioHelper.patchEventData(
       url: updateEventData + eventId,
       data: {
         "name": eventName,
         "description": eventDescription,
-        "date": "$eventDate,$eventTime",
+        "date": finalDate,
       },
       token: token,
     ).then((value) {
@@ -1150,7 +1165,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       emit(UpdateEventSuccessState());
     }).onError((DioError error, stackTrace) {
       showToast(
-          message: error.response!.statusMessage.toString(),
+          message: error.response!.data.toString(),
           toastState: ToastState.ERROR);
 
       emit(UpdateEventErrorState());
