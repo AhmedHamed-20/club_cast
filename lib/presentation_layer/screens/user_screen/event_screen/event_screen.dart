@@ -63,7 +63,10 @@ class EventScreen extends StatelessWidget {
                                 eventName: GetMyEvents.eventName(index),
                                 eventDescription:
                                     GetMyEvents.eventDescription(index),
-                                eventDate: GetMyEvents.eventDate(index),
+                                eventDate:
+                                    DateTime.parse(GetMyEvents.eventDate(index))
+                                        .toLocal()
+                                        .toString(),
                               ),
                               itemCount: GetMyEvents.allEvent().length,
                             ),
@@ -222,14 +225,22 @@ class EventScreen extends StatelessWidget {
                                     } else {
                                       if (dateController.text != '' &&
                                           timeController.text != '') {
+                                        print(dateController.text);
+                                        print(timeController.text);
+                                        DateTime dateTime =
+                                            DateFormat.yMd('en_US')
+                                                .add_jm()
+                                                .parse(dateController.text +
+                                                    " " +
+                                                    timeController.text);
+                                        print(dateTime.toUtc().toString());
                                         cubit
                                             .createMyEvent(
                                           eventName: eventNameController.text,
                                           eventDescription:
                                               eventDescriptionController.text,
-                                          eventDate: dateController.text +
-                                              "," +
-                                              timeController.text,
+                                          eventDate:
+                                              dateTime.toUtc().toString(),
                                         )
                                             .then((value) {
                                           clearCrime(context: context);

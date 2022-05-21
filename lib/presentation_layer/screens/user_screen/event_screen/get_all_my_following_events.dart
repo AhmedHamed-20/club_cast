@@ -62,7 +62,10 @@ class GetAllMyFollowingScreen extends StatelessWidget {
                               eventName: GetMyFollowingEvents.eventName(index),
                               eventDescription:
                                   GetMyFollowingEvents.eventDescription(index),
-                              eventDate: GetMyFollowingEvents.eventDate(index),
+                              eventDate: DateTime.parse(
+                                      GetMyFollowingEvents.eventDate(index))
+                                  .toLocal()
+                                  .toString(),
                               userUrl: GetMyFollowingEvents.userWhoCreateEvent(
                                   index)['photo'],
                               index: index,

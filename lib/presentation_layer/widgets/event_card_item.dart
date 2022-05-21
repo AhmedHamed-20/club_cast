@@ -169,7 +169,7 @@ void appearEventDataToUpdate({
   var cubit = GeneralAppCubit.get(context);
   EventScreen.isUpdate = true;
   EventScreen.eventNameController.text = GetMyEvents.eventName(index);
-  EventScreen.dateController.text = GetMyEvents.eventDate(index).split("T")[0];
+  EventScreen.dateController.text = GetMyEvents.eventDate(index).split(" ")[0];
   EventScreen.timeController.text =
       DateFormat("h:mm a").format(DateTime.parse(GetMyEvents.eventDate(index)));
 

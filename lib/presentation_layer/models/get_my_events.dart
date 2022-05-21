@@ -14,7 +14,7 @@ class GetMyEvents {
   }
 
   static String eventDate(int index) {
-    return data!['data'][index]["date"];
+    return DateTime.parse(data!['data'][index]["date"]).toLocal().toString();
   }
 
   static String eventDescription(int index) {
