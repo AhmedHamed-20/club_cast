@@ -78,8 +78,10 @@ class PublicRoomScreen extends StatelessWidget {
                                               0),
                                       eventName:
                                           GetMyFollowingEvents.eventName(0),
-                                      eventDate:
-                                          GetMyFollowingEvents.eventDate(0),
+                                      eventDate: DateTime.parse(
+                                              GetMyFollowingEvents.eventDate(0))
+                                          .toLocal()
+                                          .toString(),
                                     ),
                                   ),
                                 ],
