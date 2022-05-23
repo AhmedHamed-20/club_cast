@@ -13,7 +13,6 @@ class EventScreen extends StatelessWidget {
   static var eventDescriptionController = TextEditingController();
   static var dateController = TextEditingController();
   static var timeController = TextEditingController();
-  // static String? showUserDateFormat;
   static bool isUpdate = false;
   static int eventIndex = 0;
   var formKey = GlobalKey<FormState>();
@@ -47,7 +46,16 @@ class EventScreen extends StatelessWidget {
                   children: [
                     GetMyEvents.allEvent().isNotEmpty
                         ? SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.3,
+                            height:
+                                (MediaQuery.of(context).size.width.toInt() <=
+                                            360 &&
+                                        MediaQuery.of(context)
+                                                .size
+                                                .height
+                                                .toInt() <=
+                                            678)
+                                    ? MediaQuery.of(context).size.height * 0.4
+                                    : MediaQuery.of(context).size.height * 0.3,
                             child: ListView.builder(
                               scrollDirection: Axis.horizontal,
                               itemBuilder: (context, index) => eventCardItem(
@@ -216,6 +224,8 @@ class EventScreen extends StatelessWidget {
                             builder: (BuildContext context) {
                               return defaultButton(
                                 onPressed: () {
+                                  print(MediaQuery.of(context).size.width);
+                                  print(MediaQuery.of(context).size.height);
                                   if (formKey.currentState!.validate()) {
                                     if (eventNameController.text.length < 3) {
                                       showToast(
@@ -276,6 +286,9 @@ class EventScreen extends StatelessWidget {
                               color: Theme.of(context).primaryColor,
                             )),
                           ),
+                    SizedBox(
+                      height: 15,
+                    ),
                   ],
                 ),
               );

@@ -62,8 +62,20 @@ class PublicRoomScreen extends StatelessWidget {
                                     ),
                                   ),
                                   SizedBox(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.27,
+                                    height: (MediaQuery.of(context)
+                                                    .size
+                                                    .width
+                                                    .toInt() <=
+                                                360 &&
+                                            MediaQuery.of(context)
+                                                    .size
+                                                    .height
+                                                    .toInt() <=
+                                                678)
+                                        ? MediaQuery.of(context).size.height *
+                                            0.35
+                                        : MediaQuery.of(context).size.height *
+                                            0.27,
                                     child: eventCardItem(
                                       context: context,
                                       index: 0,
@@ -91,77 +103,92 @@ class PublicRoomScreen extends StatelessWidget {
                           padding: const EdgeInsets.only(
                             left: 12.0,
                           ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'JOINING ROOM ~~~~~~',
-                                style: Theme.of(context).textTheme.bodyText1,
-                              ),
-                              MaterialButton(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15),
+                          child: MediaQuery(
+                            data: MediaQuery.of(context).copyWith(
+                              textScaleFactor:
+                                  MediaQuery.of(context).size.width.toInt() <=
+                                              360 &&
+                                          MediaQuery.of(context)
+                                                  .size
+                                                  .height
+                                                  .toInt() <=
+                                              678
+                                      ? 0.8
+                                      : 1,
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'JOINING ROOM ~~~~~~',
+                                  style: Theme.of(context).textTheme.bodyText1,
                                 ),
-                                onPressed: () {
-                                  showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return multiAlerDialog(
-                                          title: 'Join private room',
-                                          context: context,
-                                          content: defaultTextFormField(
+                                MaterialButton(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  onPressed: () {
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return multiAlerDialog(
+                                            title: 'Join private room',
                                             context: context,
-                                            controller: privateRoomController,
-                                            labelText: 'Enter room id',
-                                            labelStyle: Theme.of(context)
-                                                .textTheme
-                                                .bodyText1,
-                                            keyboardType: TextInputType.text,
-                                          ),
-                                          actions: MaterialButton(
-                                            onPressed: () {
-                                              RoomCubit.get(context)
-                                                  .getRoomData(
-                                                      token,
-                                                      privateRoomController.text
-                                                          .trim())
-                                                  .then((value) {
-                                                SocketFunc.connectWithSocket(
-                                                    context,
-                                                    roomCubit,
-                                                    GeneralAppCubit.get(
-                                                        context));
-                                                isPrivateRoom = true;
-                                                SocketFunc.joinRoom(
-                                                  activeRoomName,
-                                                  context,
-                                                  roomCubit,
-                                                  cubit,
-                                                );
-                                              });
-                                            },
-                                            child: Text(
-                                              'Enter',
-                                              style: Theme.of(context)
+                                            content: defaultTextFormField(
+                                              context: context,
+                                              controller: privateRoomController,
+                                              labelText: 'Enter room id',
+                                              labelStyle: Theme.of(context)
                                                   .textTheme
                                                   .bodyText1,
+                                              keyboardType: TextInputType.text,
                                             ),
-                                          ),
-                                        );
-                                      });
-                                },
-                                child: Text(
-                                  'Join private room',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1
-                                      ?.copyWith(
-                                        fontSize: 15,
-                                        color: Theme.of(context).primaryColor,
-                                      ),
+                                            actions: MaterialButton(
+                                              onPressed: () {
+                                                RoomCubit.get(context)
+                                                    .getRoomData(
+                                                        token,
+                                                        privateRoomController
+                                                            .text
+                                                            .trim())
+                                                    .then((value) {
+                                                  SocketFunc.connectWithSocket(
+                                                      context,
+                                                      roomCubit,
+                                                      GeneralAppCubit.get(
+                                                          context));
+                                                  isPrivateRoom = true;
+                                                  SocketFunc.joinRoom(
+                                                    activeRoomName,
+                                                    context,
+                                                    roomCubit,
+                                                    cubit,
+                                                  );
+                                                });
+                                              },
+                                              child: Text(
+                                                'Enter',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1,
+                                              ),
+                                            ),
+                                          );
+                                        });
+                                  },
+                                  child: Text(
+                                    'Join private room',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        ?.copyWith(
+                                          fontSize: 15,
+                                          color: Theme.of(context).primaryColor,
+                                        ),
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                         Padding(
