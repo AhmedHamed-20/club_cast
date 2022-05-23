@@ -193,22 +193,6 @@ class SearchScreen extends StatelessWidget {
                                     );
                                   },
                                 ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          defaultButton(
-                            onPressed: () {
-                              cubit.getExplorePodcast(token: token);
-                              navigatePushTo(
-                                context: context,
-                                navigateTo: const ExploreScreen(),
-                              );
-                            },
-                            context: context,
-                            text: 'Explore',
-                            width: 150,
-                            radius: 25,
-                          ),
                         ],
                       ),
                     ),
@@ -453,6 +437,22 @@ class SearchScreen extends StatelessWidget {
                                   itemCount: PodCastSearchModel
                                       .getMyPodCast['data'].length,
                                 ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          defaultButton(
+                            onPressed: () {
+                              cubit.getExplorePodcast(token: token);
+                              navigatePushTo(
+                                context: context,
+                                navigateTo: const ExploreScreen(),
+                              );
+                            },
+                            context: context,
+                            text: 'Explore',
+                            width: 150,
+                            radius: 25,
+                          ),
                         ],
                       ),
                     ),
