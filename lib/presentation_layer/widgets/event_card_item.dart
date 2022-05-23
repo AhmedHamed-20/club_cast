@@ -91,7 +91,7 @@ Widget eventCardItem({
                   children: [
                     Text(
                       eventName,
-                      maxLines: 2,
+                      maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.bodyText2,
                     ),
@@ -108,22 +108,45 @@ Widget eventCardItem({
                           ?.copyWith(fontSize: 13, color: Colors.grey),
                     ),
                     const SizedBox(
-                      height: 10,
+                      height: 5,
                     ),
-                    Expanded(
-                      flex: 2,
-                      child: Text(
-                        eventDescription,
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.grey,
+                    (MediaQuery.of(context).size.width.toInt() <= 360 &&
+                            MediaQuery.of(context).size.height.toInt() <= 678)
+                        ? MediaQuery(
+                            data: MediaQuery.of(context).copyWith(
+                              textScaleFactor: 0.8,
                             ),
-                      ),
-                    ),
-                    const Spacer(),
+                            child: Expanded(
+                              child: Text(
+                                eventDescription,
+                                maxLines: 3,
+                                overflow: TextOverflow.ellipsis,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .copyWith(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.grey,
+                                    ),
+                              ),
+                            ),
+                          )
+                        : Expanded(
+                            child: Text(
+                              eventDescription,
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText1!
+                                  .copyWith(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.grey,
+                                  ),
+                            ),
+                          ),
                     Text(
                       //DateFormat.yMMMd().format(DateTime.parse(eventDate))
                       formatDateToPrinto(date: eventDate),
