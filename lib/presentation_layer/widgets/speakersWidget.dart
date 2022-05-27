@@ -1,9 +1,7 @@
 import 'package:club_cast/data_layer/agora/rtc_engine.dart';
 import 'package:club_cast/data_layer/sockets/sockets_io.dart';
 import 'package:club_cast/presentation_layer/widgets/model_sheet_room_contant.dart';
-
 import 'package:flutter/material.dart';
-
 import '../../data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import '../../data_layer/bloc/room_cubit/room_cubit.dart';
 import '../components/component/component.dart';
@@ -66,7 +64,10 @@ Widget speakersWiget({
                                             'Make Him Listener',
                                             style: Theme.of(context)
                                                 .textTheme
-                                                .bodyText2,
+                                                .bodyText2
+                                                ?.copyWith(
+                                                    color: Theme.of(context)
+                                                        .backgroundColor),
                                           ),
                                         ),
                                       )
@@ -204,10 +205,10 @@ Widget speakersWiget({
                               child: CircleAvatar(
                                 backgroundColor: Theme.of(context).primaryColor,
                                 radius: 15,
-                                child: const Icon(
+                                child: Icon(
                                   Icons.mic_off,
                                   size: 19,
-                                  color: Colors.white,
+                                  color: Theme.of(context).backgroundColor,
                                 ),
                               ),
                             )

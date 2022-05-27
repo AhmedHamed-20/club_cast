@@ -93,7 +93,9 @@ Widget defaultButton({
       child: Text(
         isUpperCase ? text.toString().toUpperCase() : '$text',
         style: Theme.of(context).textTheme.bodyText1!.copyWith(
-            color: Colors.white, fontSize: 18, fontWeight: FontWeight.w100),
+            color: Theme.of(context).backgroundColor,
+            fontSize: 18,
+            fontWeight: FontWeight.w100),
       ),
     ),
   );

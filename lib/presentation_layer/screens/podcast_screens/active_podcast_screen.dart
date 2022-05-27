@@ -229,7 +229,7 @@ class ActivePodCastScreen extends StatelessWidget {
                                               podCastId == cubit.activePodCastId
                                           ? Icons.pause
                                           : Icons.play_arrow,
-                                      color: Colors.white,
+                                      color: Theme.of(context).backgroundColor,
                                     ),
                                   ),
                                 ),

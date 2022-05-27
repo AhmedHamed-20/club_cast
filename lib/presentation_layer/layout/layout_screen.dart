@@ -85,7 +85,10 @@ class LayoutScreen extends StatelessWidget {
                                           'Active room: ',
                                           style: Theme.of(context)
                                               .textTheme
-                                              .bodyText2,
+                                              .bodyText2
+                                              ?.copyWith(
+                                                  color: Theme.of(context)
+                                                      .backgroundColor),
                                         ),
                                         SizedBox(
                                           width: MediaQuery.of(context)
@@ -96,7 +99,10 @@ class LayoutScreen extends StatelessWidget {
                                             activeRoomName,
                                             style: Theme.of(context)
                                                 .textTheme
-                                                .bodyText1,
+                                                .bodyText1
+                                                ?.copyWith(
+                                                    color: Theme.of(context)
+                                                        .backgroundColor),
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                           ),
@@ -109,7 +115,8 @@ class LayoutScreen extends StatelessWidget {
                                               AgoraRtc.muted
                                                   ? Icons.mic_off
                                                   : Icons.mic_none,
-                                              color: Colors.white,
+                                              color: Theme.of(context)
+                                                  .backgroundColor,
                                             ),
                                             onPressed: () {
                                               currentUserRoleinRoom == false
@@ -178,7 +185,10 @@ class LayoutScreen extends StatelessWidget {
                                       child: Marquee(
                                         style: Theme.of(context)
                                             .textTheme
-                                            .bodyText1,
+                                            .bodyText1
+                                            ?.copyWith(
+                                                color: Theme.of(context)
+                                                    .backgroundColor),
                                         text:
                                             cubit.activePodcastname.toString(),
                                         scrollAxis: Axis.horizontal,
@@ -198,7 +208,7 @@ class LayoutScreen extends StatelessWidget {
                                         icon: Icon(
                                           Icons.replay_10,
                                           color:
-                                              Theme.of(context).iconTheme.color,
+                                              Theme.of(context).backgroundColor,
                                         ),
                                       ),
                                       IconButton(
@@ -226,7 +236,7 @@ class LayoutScreen extends StatelessWidget {
                                               : Icons
                                                   .play_circle_outline_outlined,
                                           color:
-                                              Theme.of(context).iconTheme.color,
+                                              Theme.of(context).backgroundColor,
                                         ),
                                       ),
                                       IconButton(
@@ -242,7 +252,7 @@ class LayoutScreen extends StatelessWidget {
                                         icon: Icon(
                                           Icons.stop_circle_outlined,
                                           color:
-                                              Theme.of(context).iconTheme.color,
+                                              Theme.of(context).backgroundColor,
                                         ),
                                       ),
                                       IconButton(
@@ -255,7 +265,7 @@ class LayoutScreen extends StatelessWidget {
                                         icon: Icon(
                                           Icons.forward_10,
                                           color:
-                                              Theme.of(context).iconTheme.color,
+                                              Theme.of(context).backgroundColor,
                                         ),
                                       ),
                                     ],

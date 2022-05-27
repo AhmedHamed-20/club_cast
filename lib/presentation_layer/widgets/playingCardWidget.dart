@@ -72,7 +72,7 @@ class PlayingCardWidget {
             },
             icon: Icon(
               likeState ? Icons.favorite : Icons.favorite_border,
-              color: Colors.red,
+              color: Theme.of(context).primaryColor,
             )),
       ),
     );
@@ -90,7 +90,10 @@ class PlayingCardWidget {
         backgroundColor: Theme.of(context).primaryColor,
         child: Text(
           podCatLikesNumber,
-          style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 15),
+          style: Theme.of(context)
+              .textTheme
+              .bodyText1!
+              .copyWith(fontSize: 15, color: Theme.of(context).backgroundColor),
         ),
       ),
     );

@@ -73,7 +73,10 @@ Widget listenersWiget({
                                             'Make Him Speaker',
                                             style: Theme.of(context)
                                                 .textTheme
-                                                .bodyText2,
+                                                .bodyText2
+                                                ?.copyWith(
+                                                    color: Theme.of(context)
+                                                        .backgroundColor),
                                           ),
                                         ),
                                       )
@@ -138,7 +141,8 @@ Widget listenersWiget({
                             ? Positioned(
                                 right: 0,
                                 child: CircleAvatar(
-                                  backgroundColor: Colors.white,
+                                  backgroundColor:
+                                      Theme.of(context).backgroundColor,
                                   radius: 15,
                                   child: Center(
                                     child: Icon(

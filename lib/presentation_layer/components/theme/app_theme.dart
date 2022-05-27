@@ -18,7 +18,7 @@ ThemeData darkMode = ThemeData(
       fontWeight: FontWeight.bold,
     ),
   ),
-  backgroundColor: Colors.grey[800],
+  backgroundColor: const Color.fromRGBO(49, 49, 52, 1),
   textTheme: TextTheme(
     bodyText1: GoogleFonts.rubik(
       color: Colors.white,
@@ -34,9 +34,9 @@ ThemeData darkMode = ThemeData(
     color: Colors.white,
     size: 28,
   ),
-  scaffoldBackgroundColor: Colors.grey[900],
+  scaffoldBackgroundColor: const Color.fromRGBO(25, 25, 27, 1),
   primaryColor: const Color(
-    0xff6A4CFF,
+    0xfffbd38d,
   ),
 );
 

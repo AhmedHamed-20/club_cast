@@ -67,12 +67,12 @@ class RoomUserViewScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(15),
                         color: Theme.of(context).primaryColor,
                       ),
-                      child: const Padding(
-                        padding: EdgeInsets.all(12.0),
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
                         child: Text(
                           'Leave',
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Theme.of(context).backgroundColor,
                           ),
                         ),
                       ),
@@ -179,7 +179,7 @@ class RoomUserViewScreen extends StatelessWidget {
                       SocketFunc.iamSpeaker
                           ? MdiIcons.arrowDown
                           : MdiIcons.handBackLeft,
-                      color: Colors.white,
+                      color: Theme.of(context).backgroundColor,
                     ),
                   ),
                 ),
@@ -201,7 +201,7 @@ class RoomUserViewScreen extends StatelessWidget {
                           },
                           icon: Icon(
                             AgoraRtc.muted ? Icons.mic_off : Icons.mic_none,
-                            color: Colors.white,
+                            color: Theme.of(context).backgroundColor,
                           ),
                         ),
                       )

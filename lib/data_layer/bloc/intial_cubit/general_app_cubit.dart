@@ -186,7 +186,10 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
               duration: const Duration(seconds: 1),
               content: Text(
                 'Loading',
-                style: Theme.of(context).textTheme.bodyText1,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyText1
+                    ?.copyWith(color: Theme.of(context).backgroundColor),
               ),
             ),
           );

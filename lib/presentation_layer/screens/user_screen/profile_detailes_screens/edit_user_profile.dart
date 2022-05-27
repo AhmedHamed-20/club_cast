@@ -107,9 +107,9 @@ class EditUserProfileScreen extends StatelessWidget {
                                   borderRadius:
                                       BorderRadiusDirectional.circular(200),
                                 ),
-                                child: const Icon(
+                                child: Icon(
                                   Icons.camera_alt_outlined,
-                                  color: Colors.white,
+                                  color: Theme.of(context).backgroundColor,
                                   size: 25,
                                 ),
                               ),
@@ -222,10 +222,11 @@ class EditUserProfileScreen extends StatelessWidget {
                                               : null;
                                       isUpdatePhoto = false;
                                     },
-                                    child: const Text(
+                                    child: Text(
                                       'Confirm',
                                       style: TextStyle(
-                                        color: Colors.white,
+                                        color:
+                                            Theme.of(context).backgroundColor,
                                         fontSize: 20.0,
                                       ),
                                     ),
@@ -401,10 +402,10 @@ class EditUserProfileScreen extends StatelessWidget {
                           confirmPasswordController.clear();
                         });
                       },
-                      child: const Text(
+                      child: Text(
                         'Change',
                         style: TextStyle(
-                          color: Colors.white,
+                          color: Theme.of(context).backgroundColor,
                           fontSize: 20.0,
                         ),
                       ),

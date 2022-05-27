@@ -55,7 +55,7 @@ class RoomAdminViewScreen extends StatelessWidget {
                           cubit.speakers[0]['isMuted']
                               ? Icons.mic_off
                               : Icons.mic_none,
-                          color: Colors.white,
+                          color: Theme.of(context).backgroundColor,
                         ),
                         onPressed: () {
                           AgoraRtc.onToggleMute(0, context);
@@ -150,12 +150,12 @@ class RoomAdminViewScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(15),
                         color: Theme.of(context).primaryColor,
                       ),
-                      child: const Padding(
-                        padding: EdgeInsets.all(12.0),
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
                         child: Text(
                           'Leave',
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Theme.of(context).backgroundColor,
                           ),
                         ),
                       ),
