@@ -34,8 +34,8 @@ class UpdatePasswordSuccessState extends GeneralAppStates {
 }
 
 class UpdatePasswordErrorState extends GeneralAppStates {
-  final String error;
-  UpdatePasswordErrorState(this.error);
+
+  UpdatePasswordErrorState();
 }
 
 class ChangePasswordSuffixState extends GeneralAppStates {}

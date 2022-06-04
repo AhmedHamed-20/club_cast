@@ -378,7 +378,9 @@ class EditUserProfileScreen extends StatelessWidget {
                   const SizedBox(
                     height: 35.0,
                   ),
-                  SizedBox(
+                  GeneralAppCubit.get(context).isUpdatePassword?CircularProgressIndicator(
+                    color: Theme.of(context).primaryColor,
+                  ): SizedBox(
                     width: 322.0,
                     height: 45.0,
                     child: MaterialButton(
@@ -396,10 +398,17 @@ class EditUserProfileScreen extends StatelessWidget {
                           token: token,
                         )
                             .then((value) {
-                          Navigator.of(context).pop();
-                          currentPasswordController.clear();
-                          newPasswordController.clear();
-                          confirmPasswordController.clear();
+                          if(GeneralAppCubit.get(context).isUpdatePasswordDone==true)
+                          {
+                            Navigator.of(context).pop();
+                            currentPasswordController.clear();
+                            newPasswordController.clear();
+                            confirmPasswordController.clear();
+                            GeneralAppCubit.get(context).isUpdatePasswordDone=false;
+                          }
+                          else {
+                            const SizedBox();
+                          }
                         });
                       },
                       child: Text(
