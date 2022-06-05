@@ -736,6 +736,8 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     });
   }
 
+  bool isUpdatePassword=false;
+  bool isUpdatePasswordDone=false;
   Future updatePassword({
     required String password_Current,
     required String password_New,
@@ -743,6 +745,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     required String token,
   }) async {
     emit(UpdatePasswordLoadingState());
+    isUpdatePassword=true;
     return await DioHelper.patchPassword(
       url: update_Password,
       passwordCurrent: password_Current,
@@ -754,6 +757,8 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       CachHelper.setData(key: 'token', value: newToken);
       ahmedModel = UserLoginModel.fromJson(value.data);
       emit(UpdatePasswordSuccessState(ahmedModel!));
+      isUpdatePassword=false;
+      isUpdatePasswordDone=true;
       showToast(
         message: 'Update Success',
         toastState: ToastState.SUCCESS,
@@ -765,26 +770,30 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
             message: "password must have more or equal than 8 characters!",
             toastState: ToastState.ERROR,
           );
-          emit(UpdatePasswordErrorState(error));
+          emit(UpdatePasswordErrorState());
+          isUpdatePassword=false;
         } else if (password_New != password_Confirm) {
           showToast(
             message: " Passwords are not the same!",
             toastState: ToastState.ERROR,
           );
-          emit(UpdatePasswordErrorState(error));
+          emit(UpdatePasswordErrorState());
+          isUpdatePassword=false;
         } else {
           showToast(
             message: "error,check your data",
             toastState: ToastState.ERROR,
           );
-          emit(UpdatePasswordErrorState(error));
+          emit(UpdatePasswordErrorState());
+          isUpdatePassword=false;
         }
       } else if (error.response!.statusCode == 401) {
         showToast(
           message: "This isn't current password",
           toastState: ToastState.ERROR,
         );
-        emit(UpdatePasswordErrorState(error));
+        emit(UpdatePasswordErrorState());
+        isUpdatePassword=false;
       }
     });
   }
