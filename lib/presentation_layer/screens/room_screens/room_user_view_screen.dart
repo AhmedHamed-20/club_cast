@@ -72,7 +72,7 @@ class RoomUserViewScreen extends StatelessWidget {
                         child: Text(
                           'Leave',
                           style: TextStyle(
-                            color: Theme.of(context).backgroundColor,
+                            color: Theme.of(context).textTheme.bodyText1?.color,
                           ),
                         ),
                       ),
@@ -201,7 +201,7 @@ class RoomUserViewScreen extends StatelessWidget {
                           },
                           icon: Icon(
                             AgoraRtc.muted ? Icons.mic_off : Icons.mic_none,
-                            color: Theme.of(context).backgroundColor,
+                            color: Theme.of(context).iconTheme.color,
                           ),
                         ),
                       )

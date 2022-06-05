@@ -225,8 +225,10 @@ class EditUserProfileScreen extends StatelessWidget {
                                     child: Text(
                                       'Confirm',
                                       style: TextStyle(
-                                        color:
-                                            Theme.of(context).backgroundColor,
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1
+                                            ?.color,
                                         fontSize: 20.0,
                                       ),
                                     ),
@@ -378,49 +380,57 @@ class EditUserProfileScreen extends StatelessWidget {
                   const SizedBox(
                     height: 35.0,
                   ),
-                  GeneralAppCubit.get(context).isUpdatePassword?CircularProgressIndicator(
-                    color: Theme.of(context).primaryColor,
-                  ): SizedBox(
-                    width: 322.0,
-                    height: 45.0,
-                    child: MaterialButton(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
-                          5.0,
-                        ),
-                      ),
-                      onPressed: () {
-                        GeneralAppCubit.get(context)
-                            .updatePassword(
-                          password_Current: currentPasswordController.text,
-                          password_New: newPasswordController.text,
-                          password_Confirm: confirmPasswordController.text,
-                          token: token,
+                  GeneralAppCubit.get(context).isUpdatePassword
+                      ? CircularProgressIndicator(
+                          color: Theme.of(context).primaryColor,
                         )
-                            .then((value) {
-                          if(GeneralAppCubit.get(context).isUpdatePasswordDone==true)
-                          {
-                            Navigator.of(context).pop();
-                            currentPasswordController.clear();
-                            newPasswordController.clear();
-                            confirmPasswordController.clear();
-                            GeneralAppCubit.get(context).isUpdatePasswordDone=false;
-                          }
-                          else {
-                            const SizedBox();
-                          }
-                        });
-                      },
-                      child: Text(
-                        'Change',
-                        style: TextStyle(
-                          color: Theme.of(context).backgroundColor,
-                          fontSize: 20.0,
+                      : SizedBox(
+                          width: 322.0,
+                          height: 45.0,
+                          child: MaterialButton(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                5.0,
+                              ),
+                            ),
+                            onPressed: () {
+                              GeneralAppCubit.get(context)
+                                  .updatePassword(
+                                password_Current:
+                                    currentPasswordController.text,
+                                password_New: newPasswordController.text,
+                                password_Confirm:
+                                    confirmPasswordController.text,
+                                token: token,
+                              )
+                                  .then((value) {
+                                if (GeneralAppCubit.get(context)
+                                        .isUpdatePasswordDone ==
+                                    true) {
+                                  Navigator.of(context).pop();
+                                  currentPasswordController.clear();
+                                  newPasswordController.clear();
+                                  confirmPasswordController.clear();
+                                  GeneralAppCubit.get(context)
+                                      .isUpdatePasswordDone = false;
+                                } else {
+                                  const SizedBox();
+                                }
+                              });
+                            },
+                            child: Text(
+                              'Change',
+                              style: TextStyle(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1
+                                    ?.color,
+                                fontSize: 20.0,
+                              ),
+                            ),
+                            color: Theme.of(context).primaryColor,
+                          ),
                         ),
-                      ),
-                      color: Theme.of(context).primaryColor,
-                    ),
-                  ),
                 ],
               ),
             ),

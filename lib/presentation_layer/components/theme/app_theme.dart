@@ -34,9 +34,9 @@ ThemeData darkMode = ThemeData(
     color: Colors.white,
     size: 28,
   ),
-  scaffoldBackgroundColor: const Color.fromRGBO(25, 25, 27, 1),
+  scaffoldBackgroundColor: Colors.grey[900],
   primaryColor: const Color(
-    0xfffbd38d,
+    0xff6A4CFF,
   ),
 );
 
@@ -91,27 +91,3 @@ ThemeData lightMode = ThemeData(
   ),
   //  backgroundColor: Color(0xffF6F9F4),
 );
-// ThemeData(
-// appBarTheme:
-// AppBarTheme(color: Theme.of(context).scaffoldBackgroundColor),
-// backgroundColor: Colors.white,
-// textTheme: TextTheme(
-// bodyText1: GoogleFonts.rubik(
-// fontSize: 18,
-// color: Color(0xff59675B),
-// ),
-// bodyText2: GoogleFonts.rubik(
-// color: Color(0xff59675B),
-// fontSize: 18,
-// fontWeight: FontWeight.bold,
-// ),
-// ),
-//
-// iconTheme: IconThemeData(
-// color: Color(0xff59675B),
-// ),
-// scaffoldBackgroundColor: Color(0xffF6F9F4),
-// primaryColor: Color(0xff5ADAAC),
-// primarySwatch: Colors.green,
-// //  backgroundColor: Color(0xffF6F9F4),
-// ),

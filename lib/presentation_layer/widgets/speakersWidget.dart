@@ -60,15 +60,10 @@ Widget speakersWiget({
                                                         .speakers[index]);
                                             Navigator.of(context).pop();
                                           },
-                                          child: Text(
-                                            'Make Him Listener',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyText2
-                                                ?.copyWith(
-                                                    color: Theme.of(context)
-                                                        .backgroundColor),
-                                          ),
+                                          child: Text('Make Him Listener',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyText2),
                                         ),
                                       )
                                     : const SizedBox(),

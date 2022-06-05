@@ -69,15 +69,10 @@ Widget listenersWiget({
                                                         ToastState.WARNING);
                                             Navigator.of(context).pop();
                                           },
-                                          child: Text(
-                                            'Make Him Speaker',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyText2
-                                                ?.copyWith(
-                                                    color: Theme.of(context)
-                                                        .backgroundColor),
-                                          ),
+                                          child: Text('Make Him Speaker',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyText2),
                                         ),
                                       )
                                     : const SizedBox(),

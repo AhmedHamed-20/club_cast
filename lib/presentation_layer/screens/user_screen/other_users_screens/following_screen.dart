@@ -104,18 +104,23 @@ class FollowingScreen extends StatelessWidget {
                                           myFollowing,
                                         );
                                 },
-                                child: CircleAvatar(
-                                  backgroundColor:
-                                      Theme.of(context).backgroundColor,
-                                  radius: 30,
-                                  child: cubit.loadFollowing
-                                      ? CircularProgressIndicator(
-                                          color: Theme.of(context).primaryColor,
-                                        )
-                                      : Icon(
-                                          Icons.arrow_downward,
-                                          color: Theme.of(context).primaryColor,
-                                        ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(12),
+                                  child: CircleAvatar(
+                                    backgroundColor:
+                                        Theme.of(context).backgroundColor,
+                                    radius: 30,
+                                    child: cubit.loadFollowing
+                                        ? CircularProgressIndicator(
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                          )
+                                        : Icon(
+                                            Icons.arrow_downward,
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                          ),
+                                  ),
                                 ),
                               ),
                       ],
