@@ -241,22 +241,16 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
             if (event.inSeconds == 00.000000) {
               isPlaying = false;
               pressedPause = false;
-
               emit(ChangePlayingState());
             } else {
               isPlaying = true;
-
               emit(ChangePlayingState());
             }
           });
         });
-
-        //togglePlaying();
       } catch (t) {
         showToast(message: 'Error on Playing', toastState: ToastState.ERROR);
         emit(PlayingStateError());
-
-        //mp3 unreachable
       }
     }
   }
@@ -1141,9 +1135,6 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     required String eventTime,
     required String eventDescription,
   }) async {
-    //05/21/2022
-    // 2022-05-22 11:00:00.000Z
-    //2022-05-22 12:00:00.000Z
     emit(UpdateEventLoadingState());
     String updatedEventDate = eventDate.replaceAll(RegExp(r'/'), '-');
     DateTime dateConverting = DateFormat.jm().parse(eventTime);

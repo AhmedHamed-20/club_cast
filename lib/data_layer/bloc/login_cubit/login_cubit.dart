@@ -110,7 +110,6 @@ class LoginCubit extends Cubit<LoginStates> {
       'password': password,
     }).then((value) {
       userLoginModel = UserLoginModel.fromJson(value.data);
-
       token = UserLoginModel.token;
       getUserData(token: token).then(
         (value) {
@@ -119,10 +118,8 @@ class LoginCubit extends Cubit<LoginStates> {
           GeneralAppCubit.get(context).getAllRoomsData(context);
           GeneralAppCubit.get(context).getAllCategory();
           getMyFollowingPodcast(token).then((value) {
-            //  GeneralAppCubit.get(context).getMyFollowingEvents(token);
             navigatePushANDRemoveRout(
                 context: context, navigateTo: LayoutScreen());
-
             emit(UserLoginSuccessState(userLoginModel!));
           });
         },
@@ -218,7 +215,7 @@ class LoginCubit extends Cubit<LoginStates> {
       if (error.response!.statusCode == 400) {
         if (password!.length < 8) {
           showToast(
-            message: "password must have more or equal than 8 characters!",
+            message: "password must have at least 8 symbols!",
             toastState: ToastState.ERROR,
           );
           emit(UserSignUpErrorState());
@@ -228,9 +225,15 @@ class LoginCubit extends Cubit<LoginStates> {
             toastState: ToastState.ERROR,
           );
           emit(UserSignUpErrorState());
-        } else {
+        } else if (email!.length < 10) {
           showToast(
-            message: "this user already exist",
+            message: "Invalid email must have more or equal than 10 characters",
+            toastState: ToastState.ERROR,
+          );
+          emit(UserSignUpErrorState());
+        } else if (name!.length < 3) {
+          showToast(
+            message: "user name must have more or equal than 3 characters",
             toastState: ToastState.ERROR,
           );
           emit(UserSignUpErrorState());
