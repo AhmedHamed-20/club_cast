@@ -179,7 +179,7 @@ class RoomUserViewScreen extends StatelessWidget {
                       SocketFunc.iamSpeaker
                           ? MdiIcons.arrowDown
                           : MdiIcons.handBackLeft,
-                      color: Theme.of(context).backgroundColor,
+                      color: Theme.of(context).iconTheme.color,
                     ),
                   ),
                 ),
