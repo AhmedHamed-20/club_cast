@@ -149,6 +149,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
         'Authorization': 'Bearer $token',
       },
     ).then((value) {
+      category = ['ai'];
       CategoryModel.allCategory = Map<String, dynamic>.from(value.data);
       // odel.allCategory);
       for (int i = 1; i <= CategoryModel.allCategory!['results'] - 1; i++) {
