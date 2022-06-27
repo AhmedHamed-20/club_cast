@@ -1,11 +1,15 @@
+import 'dart:typed_data';
+
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
 import 'package:club_cast/presentation_layer/models/getMyFollowingPodcast.dart';
 import 'package:club_cast/presentation_layer/screens/podcast_screens/active_podcast_screen.dart';
 import 'package:club_cast/presentation_layer/screens/podcast_screens/explore_screen.dart';
 import 'package:club_cast/presentation_layer/screens/user_screen/other_users_screens/profile_detailes_screen.dart';
+import 'package:club_cast/presentation_layer/widgets/extract_color_from_image.dart';
 import 'package:club_cast/presentation_layer/widgets/pod_cast_card_item.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../data_layer/bloc/intial_cubit/general_app_cubit.dart';
@@ -78,11 +82,25 @@ class PodCastScreen extends StatelessWidget {
                       SliverList(
                         delegate: SliverChildBuilderDelegate(
                           (context, index) => InkWell(
-                            onTap: () {
+                            onTap: () async {
                               //  print(GetAllPodCastModel.getPodcastUserPublishInform(index));
+
+                              Uint8List imageBytes = (await NetworkAssetBundle(
+                                          Uri.parse(GetMyFollowingPodCastsModel
+                                              .getPodcastUserPublishInform(
+                                                  index)[0]['photo']))
+                                      .load(GetMyFollowingPodCastsModel
+                                          .getPodcastUserPublishInform(
+                                              index)[0]['photo']))
+                                  .buffer
+                                  .asUint8List();
+                              List<Color> extractedColors =
+                                  GenerateColor.extractPixelsColors(imageBytes);
+
                               navigatePushTo(
                                   context: context,
                                   navigateTo: ActivePodCastScreen(
+                                    extractedColors: extractedColors,
                                     duration: GetMyFollowingPodCastsModel
                                         .getPodCastAudio(index)[0]['duration'],
                                     podCastId: GetMyFollowingPodCastsModel

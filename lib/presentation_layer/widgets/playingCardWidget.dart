@@ -134,6 +134,7 @@ class PlayingCardWidget {
             ? Icons.pause_circle_outline_outlined
             : Icons.play_circle_outline_outlined,
         size: 35,
+        color: Theme.of(context).iconTheme.color,
       ),
     );
   }
@@ -154,9 +155,10 @@ class PlayingCardWidget {
               // color: Theme.of(context).primaryColor,
               backgroundColor: Colors.grey,
             )
-          : const Icon(
+          : Icon(
               Icons.cloud_download_outlined,
               size: 35,
+              color: Theme.of(context).iconTheme.color,
             ),
     );
   }

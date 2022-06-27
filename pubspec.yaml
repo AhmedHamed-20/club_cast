@@ -38,7 +38,7 @@ dependencies:
   flutter_bloc: ^7.3.0
   socket_io_client: ^2.0.0-beta.4-nullsafety.0
   dio: ^4.0.4
-  agora_rtc_engine: ^4.2.1
+  agora_rtc_engine: ^5.2.0
   google_fonts: ^2.3.1
   shared_preferences: ^2.0.13
   material_design_icons_flutter: ^5.0.6595
@@ -59,6 +59,7 @@ dependencies:
   intl: ^0.17.0
   flutter_offline: ^2.1.0
   timezone: ^0.8.0
+  image: ^3.2.0
 
 dev_dependencies:
   flutter_test:

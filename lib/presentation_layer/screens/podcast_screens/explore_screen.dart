@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
 import 'package:club_cast/data_layer/cash/cash.dart';
@@ -10,9 +12,11 @@ import 'package:club_cast/presentation_layer/screens/user_screen/profile_detaile
 import 'package:club_cast/presentation_layer/widgets/playingCardWidget.dart';
 import 'package:club_cast/presentation_layer/widgets/pod_cast_card_item.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../components/constant/constant.dart';
+import '../../widgets/extract_color_from_image.dart';
 
 class ExploreScreen extends StatelessWidget {
   const ExploreScreen({Key? key}) : super(key: key);
@@ -74,10 +78,23 @@ class ExploreScreen extends StatelessWidget {
                               delegate: SliverChildBuilderDelegate(
                                 (context, index) {
                                   return InkWell(
-                                    onTap: () {
+                                    onTap: () async {
+                                      Uint8List imageBytes = (await NetworkAssetBundle(
+                                                  Uri.parse(GetExplorePodCastModel
+                                                      .getPodcastUserPublishInform(
+                                                          index)[0]['photo']))
+                                              .load(GetExplorePodCastModel
+                                                  .getPodcastUserPublishInform(
+                                                      index)[0]['photo']))
+                                          .buffer
+                                          .asUint8List();
+                                      List<Color> extractedColors =
+                                          GenerateColor.extractPixelsColors(
+                                              imageBytes);
                                       navigatePushTo(
                                           context: context,
                                           navigateTo: ActivePodCastScreen(
+                                            extractedColors: extractedColors,
                                             duration: GetExplorePodCastModel
                                                     .getPodCastAudio(index)[0]
                                                 ['duration'],

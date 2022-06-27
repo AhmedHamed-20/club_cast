@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
 import 'package:club_cast/data_layer/cash/cash.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
@@ -14,12 +16,14 @@ import 'package:club_cast/presentation_layer/widgets/pod_cast_card_item.dart';
 import 'package:club_cast/presentation_layer/widgets/public_room_card_item.dart';
 import 'package:club_cast/presentation_layer/widgets/search_widget_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import '../../../data_layer/bloc/room_cubit/room_cubit.dart';
 import '../../../data_layer/notification/local_notification.dart';
 import '../../../data_layer/sockets/sockets_io.dart';
 import '../../components/constant/constant.dart';
+import '../../widgets/extract_color_from_image.dart';
 import '../podcast_screens/explore_screen.dart';
 
 class SearchScreen extends StatelessWidget {
@@ -304,10 +308,23 @@ class SearchScreen extends StatelessWidget {
                                   shrinkWrap: true,
                                   physics: const NeverScrollableScrollPhysics(),
                                   itemBuilder: (context, index) => InkWell(
-                                    onTap: () {
+                                    onTap: () async {
+                                      Uint8List imageBytes = (await NetworkAssetBundle(
+                                                  Uri.parse(PodCastSearchModel
+                                                      .getPodcastUserPublishInform(
+                                                          index)['photo']))
+                                              .load(PodCastSearchModel
+                                                  .getPodcastUserPublishInform(
+                                                      index)['photo']))
+                                          .buffer
+                                          .asUint8List();
+                                      List<Color> extractedColors =
+                                          GenerateColor.extractPixelsColors(
+                                              imageBytes);
                                       navigatePushTo(
                                         context: context,
                                         navigateTo: ActivePodCastScreen(
+                                          extractedColors: extractedColors,
                                           duration: PodCastSearchModel
                                               .getPodCastAudio(
                                                   index)['duration'],
