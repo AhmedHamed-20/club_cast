@@ -18,6 +18,7 @@ import 'package:club_cast/presentation_layer/widgets/search_widget_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:palette_generator/palette_generator.dart';
 import '../../../data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import '../../../data_layer/bloc/room_cubit/room_cubit.dart';
 import '../../../data_layer/notification/local_notification.dart';
@@ -309,22 +310,10 @@ class SearchScreen extends StatelessWidget {
                                   physics: const NeverScrollableScrollPhysics(),
                                   itemBuilder: (context, index) => InkWell(
                                     onTap: () async {
-                                      Uint8List imageBytes = (await NetworkAssetBundle(
-                                                  Uri.parse(PodCastSearchModel
-                                                      .getPodcastUserPublishInform(
-                                                          index)['photo']))
-                                              .load(PodCastSearchModel
-                                                  .getPodcastUserPublishInform(
-                                                      index)['photo']))
-                                          .buffer
-                                          .asUint8List();
-                                      List<Color> extractedColors =
-                                          GenerateColor.extractPixelsColors(
-                                              imageBytes);
+                                      GenerateColor.colors = [];
                                       navigatePushTo(
                                         context: context,
                                         navigateTo: ActivePodCastScreen(
-                                          extractedColors: extractedColors,
                                           duration: PodCastSearchModel
                                               .getPodCastAudio(
                                                   index)['duration'],

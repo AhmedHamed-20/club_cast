@@ -19,6 +19,7 @@ import 'package:club_cast/presentation_layer/widgets/pod_cast_card_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:palette_generator/palette_generator.dart';
 
 import '../../../widgets/extract_color_from_image.dart';
 
@@ -309,23 +310,10 @@ class UserProfileScreen extends StatelessWidget {
                                     itemBuilder: (context, index) {
                                       return InkWell(
                                         onTap: () async {
-                                          Uint8List imageBytes = (await NetworkAssetBundle(
-                                                      Uri.parse(GetMyPodCastModel
-                                                              .getPodcastUserPublishInform(
-                                                                  index)[0]
-                                                          ['photo']))
-                                                  .load(GetMyPodCastModel
-                                                      .getPodcastUserPublishInform(
-                                                          index)[0]['photo']))
-                                              .buffer
-                                              .asUint8List();
-                                          List<Color> extractedColors =
-                                              GenerateColor.extractPixelsColors(
-                                                  imageBytes);
+                                          GenerateColor.colors = [];
                                           navigatePushTo(
                                             context: context,
                                             navigateTo: ActivePodCastScreen(
-                                              extractedColors: extractedColors,
                                               duration: GetMyPodCastModel
                                                       .getPodCastAudio(index)[0]
                                                   ['duration'],

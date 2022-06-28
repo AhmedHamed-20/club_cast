@@ -8,6 +8,7 @@ import 'package:club_cast/presentation_layer/screens/user_screen/other_users_scr
 import 'package:club_cast/presentation_layer/widgets/playingCardWidget.dart';
 import 'package:club_cast/presentation_layer/widgets/pod_cast_card_item.dart';
 import 'package:flutter/services.dart';
+import 'package:palette_generator/palette_generator.dart';
 
 import '../../../../data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
@@ -297,26 +298,10 @@ class ProfileDetailsScreen extends StatelessWidget {
                                       itemBuilder: (context, index) {
                                         return InkWell(
                                           onTap: () async {
-                                            Uint8List imageBytes =
-                                                (await NetworkAssetBundle(Uri.parse(
-                                                            GetAllPodCastModel
-                                                                    .getPodcastUserPublishInform(
-                                                                        index)[
-                                                                0]['photo']))
-                                                        .load(GetAllPodCastModel
-                                                            .getPodcastUserPublishInform(
-                                                                index)[0]['photo']))
-                                                    .buffer
-                                                    .asUint8List();
-                                            List<Color> extractedColors =
-                                                GenerateColor
-                                                    .extractPixelsColors(
-                                                        imageBytes);
+                                            GenerateColor.colors = [];
                                             navigatePushTo(
                                                 context: context,
                                                 navigateTo: ActivePodCastScreen(
-                                                  extractedColors:
-                                                      extractedColors,
                                                   duration: GetAllPodCastModel
                                                       .getPodCastAudio(
                                                           index)[0]['duration'],

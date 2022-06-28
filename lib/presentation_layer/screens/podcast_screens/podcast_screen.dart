@@ -11,6 +11,7 @@ import 'package:club_cast/presentation_layer/widgets/pod_cast_card_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:palette_generator/palette_generator.dart';
 
 import '../../../data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import '../../../data_layer/cash/cash.dart';
@@ -83,24 +84,10 @@ class PodCastScreen extends StatelessWidget {
                         delegate: SliverChildBuilderDelegate(
                           (context, index) => InkWell(
                             onTap: () async {
-                              //  print(GetAllPodCastModel.getPodcastUserPublishInform(index));
-
-                              Uint8List imageBytes = (await NetworkAssetBundle(
-                                          Uri.parse(GetMyFollowingPodCastsModel
-                                              .getPodcastUserPublishInform(
-                                                  index)[0]['photo']))
-                                      .load(GetMyFollowingPodCastsModel
-                                          .getPodcastUserPublishInform(
-                                              index)[0]['photo']))
-                                  .buffer
-                                  .asUint8List();
-                              List<Color> extractedColors =
-                                  GenerateColor.extractPixelsColors(imageBytes);
-
+                              GenerateColor.colors = [];
                               navigatePushTo(
                                   context: context,
                                   navigateTo: ActivePodCastScreen(
-                                    extractedColors: extractedColors,
                                     duration: GetMyFollowingPodCastsModel
                                         .getPodCastAudio(index)[0]['duration'],
                                     podCastId: GetMyFollowingPodCastsModel

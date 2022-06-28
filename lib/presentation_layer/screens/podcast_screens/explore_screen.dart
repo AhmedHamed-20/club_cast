@@ -14,6 +14,7 @@ import 'package:club_cast/presentation_layer/widgets/pod_cast_card_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:palette_generator/palette_generator.dart';
 
 import '../../components/constant/constant.dart';
 import '../../widgets/extract_color_from_image.dart';
@@ -79,22 +80,10 @@ class ExploreScreen extends StatelessWidget {
                                 (context, index) {
                                   return InkWell(
                                     onTap: () async {
-                                      Uint8List imageBytes = (await NetworkAssetBundle(
-                                                  Uri.parse(GetExplorePodCastModel
-                                                      .getPodcastUserPublishInform(
-                                                          index)[0]['photo']))
-                                              .load(GetExplorePodCastModel
-                                                  .getPodcastUserPublishInform(
-                                                      index)[0]['photo']))
-                                          .buffer
-                                          .asUint8List();
-                                      List<Color> extractedColors =
-                                          GenerateColor.extractPixelsColors(
-                                              imageBytes);
+                                      GenerateColor.colors = [];
                                       navigatePushTo(
                                           context: context,
                                           navigateTo: ActivePodCastScreen(
-                                            extractedColors: extractedColors,
                                             duration: GetExplorePodCastModel
                                                     .getPodCastAudio(index)[0]
                                                 ['duration'],
