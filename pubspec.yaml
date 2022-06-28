@@ -59,7 +59,6 @@ dependencies:
   intl: ^0.17.0
   flutter_offline: ^2.1.0
   timezone: ^0.8.0
-  image: ^3.2.0
   palette_generator: ^0.3.3+1
   cached_network_image: ^3.2.1
 
