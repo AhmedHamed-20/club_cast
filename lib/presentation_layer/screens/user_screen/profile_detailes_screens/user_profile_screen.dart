@@ -1,25 +1,27 @@
+import 'dart:typed_data';
+
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
 import 'package:club_cast/data_layer/cash/cash.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
 import 'package:club_cast/presentation_layer/models/getMyPodCastModel.dart';
-import 'package:club_cast/presentation_layer/models/get_all_podcst.dart';
-import 'package:club_cast/presentation_layer/models/get_my_events.dart';
 import 'package:club_cast/presentation_layer/models/user_model.dart';
-import 'package:club_cast/presentation_layer/screens/active_podcast_screen.dart';
-import 'package:club_cast/presentation_layer/screens/edit_user_profile.dart';
-import 'package:club_cast/presentation_layer/screens/followers_screen.dart';
-import 'package:club_cast/presentation_layer/screens/following_screen.dart';
-import 'package:club_cast/presentation_layer/screens/uploadPodcastScreen.dart';
+import 'package:club_cast/presentation_layer/screens/podcast_screens/active_podcast_screen.dart';
+import 'package:club_cast/presentation_layer/screens/user_screen/profile_detailes_screens/edit_user_profile.dart';
+import 'package:club_cast/presentation_layer/screens/user_screen/other_users_screens/followers_screen.dart';
+import 'package:club_cast/presentation_layer/screens/user_screen/other_users_screens/following_screen.dart';
+import 'package:club_cast/presentation_layer/screens/podcast_screens/uploadPodcastScreen.dart';
 import 'package:club_cast/presentation_layer/screens/user_screen/event_screen/event_screen.dart';
+import 'package:club_cast/presentation_layer/screens/user_screen/login_screen/login_screen.dart';
 import 'package:club_cast/presentation_layer/widgets/alertDialog.dart';
 import 'package:club_cast/presentation_layer/widgets/playingCardWidget.dart';
-import 'package:club_cast/presentation_layer/widgets/pos_cast_card_item.dart';
-import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:club_cast/presentation_layer/widgets/pod_cast_card_item.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:palette_generator/palette_generator.dart';
 
-import '../components/constant/constant.dart';
+import '../../../widgets/extract_color_from_image.dart';
 
 class UserProfileScreen extends StatelessWidget {
   const UserProfileScreen({Key? key}) : super(key: key);
@@ -30,14 +32,14 @@ class UserProfileScreen extends StatelessWidget {
     String? currentId;
     cubit.isMyfollowingScreen = false;
     cubit.isMyprofileScreen = true;
-    print(cubit.isMyfollowingScreen);
+
     return BlocConsumer<GeneralAppCubit, GeneralAppStates>(
       listener: (context, index) {},
       builder: (context, index) {
-        // String token = CachHelper.getData(key: 'token');
+        String token = CachHelper.getData(key: 'token');
         refresh() {
           cubit.getUserData(token: token);
-          return cubit.getMyPodCast(token);
+          return cubit.getMyPodCast(token, context);
         }
 
         currentId = cubit.activePodCastId;
@@ -45,11 +47,57 @@ class UserProfileScreen extends StatelessWidget {
           onWillPop: () async {
             cubit.isMyprofileScreen = false;
             Navigator.of(context).pop();
-            print(cubit.isMyprofileScreen);
+
             return false;
           },
           child: Scaffold(
             appBar: AppBar(
+              actions: [
+                IconButton(
+                  splashRadius: 30,
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return alertDialog(
+                              context: context,
+                              title: 'Are You Sure',
+                              content: Text(
+                                'Logout?',
+                                style: Theme.of(context).textTheme.bodyText1,
+                              ),
+                              yesFunction: () {
+                                CachHelper.deleteData(
+                                  'token',
+                                ).then((value) {
+                                  if (value) {
+                                    cubit.assetsAudioPlayer.stop();
+                                    navigatePushANDRemoveRout(
+                                        context: context,
+                                        navigateTo: LoginScreen());
+                                  }
+                                }).then((value) {
+                                  token = '';
+                                  cubit.isPlaying = false;
+                                  cubit.isPausedInHome = false;
+                                  GeneralAppCubit.get(context).search = null;
+                                  cubit.currentOlayingDurathion = null;
+                                  cubit.activePodCastId = null;
+                                  cubit.currentPostionDurationInsec = 0;
+                                });
+                              },
+                              noFunction: () {
+                                Navigator.of(context).pop();
+                              });
+                        });
+                  },
+                  icon: Icon(
+                    Icons.logout,
+                    size: 30,
+                    color: Theme.of(context).iconTheme.color,
+                  ),
+                ),
+              ],
               elevation: 0.0,
               leading: IconButton(
                 onPressed: () {
@@ -114,7 +162,7 @@ class UserProfileScreen extends StatelessWidget {
                           const SizedBox(
                             height: 4.0,
                           ),
-                          Container(
+                          SizedBox(
                             width: 260.0,
                             child: Column(
                               children: [
@@ -126,6 +174,7 @@ class UserProfileScreen extends StatelessWidget {
                                             .textTheme
                                             .bodyText1!
                                             .copyWith(color: Colors.grey),
+                                        textAlign: TextAlign.center,
                                       ),
                               ],
                             ),
@@ -149,7 +198,7 @@ class UserProfileScreen extends StatelessWidget {
                                   cubit.getMyFollowers(token: token);
                                   navigatePushTo(
                                     context: context,
-                                    navigateTo: FollowersScreen(),
+                                    navigateTo: const FollowersScreen(),
                                   );
                                 },
                                 child: statusNumberProfile(
@@ -165,7 +214,7 @@ class UserProfileScreen extends StatelessWidget {
                                   cubit.getMyFollowing(token: token);
                                   navigatePushTo(
                                     context: context,
-                                    navigateTo: FollowingScreen(),
+                                    navigateTo: const FollowingScreen(),
                                   );
                                 },
                                 child: statusNumberProfile(
@@ -197,7 +246,7 @@ class UserProfileScreen extends StatelessWidget {
                             onPressed: () {
                               navigatePushTo(
                                   context: context,
-                                  navigateTo: UploadPodCastScreen());
+                                  navigateTo: const UploadPodCastScreen());
                             },
                             context: context,
                             height: 45,
@@ -237,7 +286,7 @@ class UserProfileScreen extends StatelessWidget {
                                   ),
                             ),
                           ),
-                          Container(
+                          SizedBox(
                             width: MediaQuery.of(context).size.width,
                             child: Padding(
                               padding: const EdgeInsets.only(
@@ -260,7 +309,8 @@ class UserProfileScreen extends StatelessWidget {
                                         const NeverScrollableScrollPhysics(),
                                     itemBuilder: (context, index) {
                                       return InkWell(
-                                        onTap: () {
+                                        onTap: () async {
+                                          GenerateColor.colors = [];
                                           navigatePushTo(
                                             context: context,
                                             navigateTo: ActivePodCastScreen(
@@ -281,6 +331,9 @@ class UserProfileScreen extends StatelessWidget {
                                                   .getPodcastUserPublishInform(
                                                       index)[0]['photo'],
                                               index: index,
+                                              userId: GetMyPodCastModel
+                                                  .getPodcastUserPublishInform(
+                                                      index)[0]['_id'],
                                             ),
                                           );
                                         },
@@ -345,7 +398,8 @@ class UserProfileScreen extends StatelessWidget {
                                                                     GetMyPodCastModel
                                                                         .getPodcastID(
                                                                             index),
-                                                                    token)
+                                                                    token,
+                                                                    context)
                                                                 .then((value) {
                                                               Navigator.of(
                                                                       context)
@@ -415,7 +469,35 @@ class UserProfileScreen extends StatelessWidget {
                                         ),
                                       );
                                     },
-                                  )
+                                  ),
+                                  cubit.noDataMyPodcasts
+                                      ? const SizedBox()
+                                      : InkWell(
+                                          borderRadius:
+                                              BorderRadius.circular(40),
+                                          onTap: () {
+                                            cubit.paginationMyPodcasts(
+                                              token,
+                                            );
+                                          },
+                                          child: Center(
+                                            child: CircleAvatar(
+                                              backgroundColor: Theme.of(context)
+                                                  .backgroundColor,
+                                              radius: 30,
+                                              child: cubit.loadMyPodcasts
+                                                  ? CircularProgressIndicator(
+                                                      color: Theme.of(context)
+                                                          .primaryColor,
+                                                    )
+                                                  : Icon(
+                                                      Icons.arrow_downward,
+                                                      color: Theme.of(context)
+                                                          .primaryColor,
+                                                    ),
+                                            ),
+                                          ),
+                                        ),
                                 ],
                               ),
                             ),

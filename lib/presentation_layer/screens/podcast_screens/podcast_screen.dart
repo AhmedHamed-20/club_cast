@@ -1,32 +1,39 @@
+import 'dart:typed_data';
+
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
-import 'package:club_cast/presentation_layer/components/constant/constant.dart';
 import 'package:club_cast/presentation_layer/models/getMyFollowingPodcast.dart';
-import 'package:club_cast/presentation_layer/models/get_all_podcst.dart';
-import 'package:club_cast/presentation_layer/screens/active_podcast_screen.dart';
-import 'package:club_cast/presentation_layer/screens/explore_screen.dart';
-import 'package:club_cast/presentation_layer/screens/profile_detailes_screen.dart';
-import 'package:club_cast/presentation_layer/widgets/pos_cast_card_item.dart';
+import 'package:club_cast/presentation_layer/screens/podcast_screens/active_podcast_screen.dart';
+import 'package:club_cast/presentation_layer/screens/podcast_screens/explore_screen.dart';
+import 'package:club_cast/presentation_layer/screens/user_screen/other_users_screens/profile_detailes_screen.dart';
+import 'package:club_cast/presentation_layer/widgets/extract_color_from_image.dart';
+import 'package:club_cast/presentation_layer/widgets/pod_cast_card_item.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:palette_generator/palette_generator.dart';
 
-import '../../data_layer/bloc/intial_cubit/general_app_cubit.dart';
-import '../../data_layer/cash/cash.dart';
-import '../widgets/playingCardWidget.dart';
+import '../../../data_layer/bloc/intial_cubit/general_app_cubit.dart';
+import '../../../data_layer/cash/cash.dart';
+import '../../widgets/playingCardWidget.dart';
 
 class PodCastScreen extends StatelessWidget {
-  const PodCastScreen({Key? key}) : super(key: key);
+  PodCastScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var cubit = GeneralAppCubit?.get(context);
+    var cubit = GeneralAppCubit.get(context);
     String token = CachHelper.getData(key: 'token');
     String? currentId;
+
+    //print(currentId);
     return BlocConsumer<GeneralAppCubit, GeneralAppStates>(
-      listener: (BuildContext context, state) {},
-      builder: (BuildContext context, Object? state) {
+      listener: (context, state) {},
+      builder: (context, state) {
+        // print('podcast');
+        // print(RoomCubit.get(context).speakers);
         currentId = cubit.activePodCastId;
-        print(currentId);
+        //     print(currentId);
         return Padding(
           padding: cubit.isPlaying || cubit.isPausedInHome
               ? const EdgeInsets.only(
@@ -35,7 +42,6 @@ class PodCastScreen extends StatelessWidget {
                   left: 10.0,
                   right: 10,
                   top: 10,
-                  //    bottom: 20,
                 ),
           child: GetMyFollowingPodCastsModel
                   .getMyFollowingPodcasts!['data'].isEmpty
@@ -56,7 +62,7 @@ class PodCastScreen extends StatelessWidget {
                           cubit.getExplorePodcast(token: token);
                           navigatePushTo(
                             context: context,
-                            navigateTo: ExploreScreen(),
+                            navigateTo: const ExploreScreen(),
                           );
                         },
                         context: context,
@@ -70,18 +76,15 @@ class PodCastScreen extends StatelessWidget {
               : RefreshIndicator(
                   backgroundColor: Theme.of(context).backgroundColor,
                   color: Theme.of(context).primaryColor,
-                  onRefresh: () => cubit.getMyFollowingPodcast(token),
-                  child: SingleChildScrollView(
+                  onRefresh: () => cubit.getMyFollowingPodcast(token, context),
+                  child: CustomScrollView(
                     physics: const BouncingScrollPhysics(),
-                    child: Column(
-                      //  crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        ListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemBuilder: (context, index) => InkWell(
-                            onTap: () {
-                              //  print(GetAllPodCastModel.getPodcastUserPublishInform(index));
+                    slivers: [
+                      SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                          (context, index) => InkWell(
+                            onTap: () async {
+                              GenerateColor.colors = [];
                               navigatePushTo(
                                   context: context,
                                   navigateTo: ActivePodCastScreen(
@@ -100,6 +103,9 @@ class PodCastScreen extends StatelessWidget {
                                         .getPodcastUserPublishInform(
                                             index)[0]['photo'],
                                     index: index,
+                                    userId: GetMyFollowingPodCastsModel
+                                        .getPodcastUserPublishInform(
+                                            index)[0]['_id'],
                                   ));
                             },
                             child: podACastItem(
@@ -135,7 +141,7 @@ class PodCastScreen extends StatelessWidget {
                                   GetMyFollowingPodCastsModel.getPodcastLikes(
                                           index)
                                       .toString()),
-                              removePodCast: SizedBox(),
+                              removePodCast: const SizedBox(),
                               playingWidget: PlayingCardWidget.playingButton(
                                   index,
                                   cubit,
@@ -147,8 +153,8 @@ class PodCastScreen extends StatelessWidget {
                                   GetMyFollowingPodCastsModel.getPodcastName(
                                       index),
                                   GetMyFollowingPodCastsModel
-                                          .getPodcastUserPublishInform(index)[0]
-                                      ['photo'],
+                                      ?.getPodcastUserPublishInform(
+                                          index)[0]?['photo'],
                                   context),
                               gettime:
                                   GetMyFollowingPodCastsModel.getPodCastAudio(
@@ -160,7 +166,8 @@ class PodCastScreen extends StatelessWidget {
                                 cubit.getUserById(
                                     profileId: GetMyFollowingPodCastsModel
                                         .getPodcastUserPublishInform(
-                                            index)[0]['_id']);
+                                            index)[0]['_id'],
+                                    token: token);
                                 cubit.getUserPodcast(
                                     token,
                                     GetMyFollowingPodCastsModel
@@ -192,37 +199,45 @@ class PodCastScreen extends StatelessWidget {
                                       : null,
                             ),
                           ),
-                          itemCount: GetMyFollowingPodCastsModel
+                          childCount: GetMyFollowingPodCastsModel
                               .getMyFollowingPodcasts?['data'].length,
                         ),
-                        const SizedBox(
-                          height: 10,
+                      ),
+                      SliverToBoxAdapter(
+                        child: Column(
+                          children: [
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            cubit.noDataMyfollowingPodcast
+                                ? const SizedBox()
+                                : InkWell(
+                                    borderRadius: BorderRadius.circular(40),
+                                    onTap: () {
+                                      cubit.pageinathionMyFollowingPodcast(
+                                        token,
+                                      );
+                                    },
+                                    child: CircleAvatar(
+                                      backgroundColor:
+                                          Theme.of(context).backgroundColor,
+                                      radius: 30,
+                                      child: cubit.loadMyFollowinPodcast
+                                          ? CircularProgressIndicator(
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                            )
+                                          : Icon(
+                                              Icons.arrow_downward,
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                            ),
+                                    ),
+                                  ),
+                          ],
                         ),
-                        cubit.noDataMyfollowingPodcast
-                            ? const SizedBox()
-                            : InkWell(
-                                borderRadius: BorderRadius.circular(40),
-                                onTap: () {
-                                  cubit.pageinathionMyFollowingPodcast(
-                                    token,
-                                  );
-                                },
-                                child: CircleAvatar(
-                                  backgroundColor:
-                                      Theme.of(context).backgroundColor,
-                                  radius: 30,
-                                  child: cubit.loadMyFollowinPodcast
-                                      ? CircularProgressIndicator(
-                                          color: Theme.of(context).primaryColor,
-                                        )
-                                      : Icon(
-                                          Icons.arrow_downward,
-                                          color: Theme.of(context).primaryColor,
-                                        ),
-                                ),
-                              ),
-                      ],
-                    ),
+                      )
+                    ],
                   ),
                 ),
         );

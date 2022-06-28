@@ -8,11 +8,7 @@ class ChangeBottomNavIndex extends GeneralAppStates {}
 
 class UserDataLoadingState extends GeneralAppStates {}
 
-class UserDataSuccessState extends GeneralAppStates {
-  // late final UserLoginModel? userModel;
-  //
-  // UserDataSuccessState(this.userModel);
-}
+class UserDataSuccessState extends GeneralAppStates {}
 
 class UserDataErrorState extends GeneralAppStates {
   final String error;
@@ -27,9 +23,7 @@ class UpdateUserSuccessState extends GeneralAppStates {
   UpdateUserSuccessState(this.userModel);
 }
 
-class UpdateUserErrorState extends GeneralAppStates {
-
-}
+class UpdateUserErrorState extends GeneralAppStates {}
 
 class UpdatePasswordLoadingState extends GeneralAppStates {}
 
@@ -40,8 +34,8 @@ class UpdatePasswordSuccessState extends GeneralAppStates {
 }
 
 class UpdatePasswordErrorState extends GeneralAppStates {
-  final String error;
-  UpdatePasswordErrorState(this.error);
+
+  UpdatePasswordErrorState();
 }
 
 class ChangePasswordSuffixState extends GeneralAppStates {}
@@ -203,3 +197,53 @@ class UpdateEventLoadingState extends GeneralAppStates {}
 class UpdateEventSuccessState extends GeneralAppStates {}
 
 class UpdateEventErrorState extends GeneralAppStates {}
+
+class GetAllRoomDataGetSuccess extends GeneralAppStates {}
+
+class GetAllRoomDataGetError extends GeneralAppStates {}
+
+class PaginationFollowersLoadingState extends GeneralAppStates {}
+
+class PaginationFollowersSuccessState extends GeneralAppStates {}
+
+class PaginationFollowersErrorState extends GeneralAppStates {}
+
+class PaginationFollowingLoadingState extends GeneralAppStates {}
+
+class PaginationFollowingSuccessState extends GeneralAppStates {}
+
+class PaginationFollowingErrorState extends GeneralAppStates {}
+
+class ChangeState extends GeneralAppStates {}
+
+class SearchRoomsSuccess extends GeneralAppStates {}
+
+class SearchRoomsError extends GeneralAppStates {}
+
+class PaginationRoomsSuccessState extends GeneralAppStates {}
+
+class PaginationRoomsErrorState extends GeneralAppStates {}
+
+class PaginationEventSuccessState extends GeneralAppStates {}
+
+class PaginationEventErrorState extends GeneralAppStates {}
+
+class PaginationMyPodcastsLoadingState extends GeneralAppStates {}
+
+class PaginationMyPodcastsSuccessState extends GeneralAppStates {}
+
+class PaginationMyPodcastsErrorState extends GeneralAppStates {}
+
+class PaginationUserPodcastsLoadingState extends GeneralAppStates {}
+
+class PaginationUserPodcastsSuccessState extends GeneralAppStates {}
+
+class PaginationUserPodcastsErrorState extends GeneralAppStates {}
+
+class CheckInternetConnectionState extends GeneralAppStates {}
+
+class PodCastSearchLoadingState extends GeneralAppStates {}
+
+class PodCastSearchSuccessState extends GeneralAppStates {}
+
+class PodCastSearchErrorState extends GeneralAppStates {}

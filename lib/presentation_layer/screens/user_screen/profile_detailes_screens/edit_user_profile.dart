@@ -1,15 +1,10 @@
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
-import 'package:club_cast/data_layer/bloc/login_cubit/login_cubit.dart';
-import 'package:club_cast/data_layer/bloc/login_cubit/login_states.dart';
 import 'package:club_cast/data_layer/cash/cash.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
 import 'package:club_cast/presentation_layer/models/user_model.dart';
-import 'package:club_cast/presentation_layer/screens/user_screen/login_screen/login_screen.dart';
-import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../data_layer/bloc/intial_cubit/general_app_cubit.dart';
+import '../../../../data_layer/bloc/intial_cubit/general_app_cubit.dart';
 
 TextEditingController? userNameController = TextEditingController();
 TextEditingController? emailController = TextEditingController();
@@ -31,7 +26,7 @@ class EditUserProfileScreen extends StatelessWidget {
   IconData suffix2 = Icons.visibility_outlined;
   bool isUpdatePhoto = false;
 
-  var token = CachHelper.getData(key: 'token');
+  // var token = CachHelper.getData(key: 'token');
   @override
   Widget build(BuildContext context) {
     userNameController?.text = GetUserModel.getUserName();
@@ -40,7 +35,7 @@ class EditUserProfileScreen extends StatelessWidget {
     return BlocConsumer<GeneralAppCubit, GeneralAppStates>(
       listener: (context, state) {},
       builder: (context, state) {
-        //   String token = CachHelper.getData(key: 'token');
+        String token = CachHelper.getData(key: 'token');
         var cubit = GeneralAppCubit.get(context);
         return WillPopScope(
           onWillPop: () async {
@@ -112,9 +107,9 @@ class EditUserProfileScreen extends StatelessWidget {
                                   borderRadius:
                                       BorderRadiusDirectional.circular(200),
                                 ),
-                                child: const Icon(
+                                child: Icon(
                                   Icons.camera_alt_outlined,
-                                  color: Colors.white,
+                                  color: Theme.of(context).backgroundColor,
                                   size: 25,
                                 ),
                               ),
@@ -167,7 +162,7 @@ class EditUserProfileScreen extends StatelessWidget {
                       const SizedBox(
                         height: 20.0,
                       ),
-                      Container(
+                      SizedBox(
                         width: 322.0,
                         height: 45.0,
                         child: MaterialButton(
@@ -205,7 +200,7 @@ class EditUserProfileScreen extends StatelessWidget {
                               ? CircularProgressIndicator(
                                   color: Theme.of(context).primaryColor,
                                 )
-                              : Container(
+                              : SizedBox(
                                   width: 322.0,
                                   height: 45.0,
                                   child: MaterialButton(
@@ -227,10 +222,13 @@ class EditUserProfileScreen extends StatelessWidget {
                                               : null;
                                       isUpdatePhoto = false;
                                     },
-                                    child: const Text(
+                                    child: Text(
                                       'Confirm',
                                       style: TextStyle(
-                                        color: Colors.white,
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1
+                                            ?.color,
                                         fontSize: 20.0,
                                       ),
                                     ),
@@ -239,42 +237,6 @@ class EditUserProfileScreen extends StatelessWidget {
                                 ),
                       const SizedBox(
                         height: 20.0,
-                      ),
-                      Container(
-                        width: 322.0,
-                        height: 45.0,
-                        child: MaterialButton(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5.0),
-                          ),
-                          onPressed: () {
-                            CachHelper.deleteData(
-                              'token',
-                            ).then((value) {
-                              if (value) {
-                                cubit.assetsAudioPlayer.stop();
-                                navigatePushANDRemoveRout(
-                                    context: context,
-                                    navigateTo: LoginScreen());
-                              }
-                            }).then((value) {
-                              cubit.isPlaying = false;
-                              cubit.isPausedInHome = false;
-                              GeneralAppCubit.get(context).search = null;
-                              cubit.currentOlayingDurathion = null;
-                              cubit.activePodCastId = null;
-                              cubit.currentPostionDurationInsec = 0;
-                            });
-                          },
-                          child: const Text(
-                            'LogOut',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20.0,
-                            ),
-                          ),
-                          color: Theme.of(context).primaryColor,
-                        ),
                       ),
                       const SizedBox(
                         height: 20.0,
@@ -293,6 +255,7 @@ class EditUserProfileScreen extends StatelessWidget {
   Widget modalSheet(BuildContext context) {
     return StatefulBuilder(
       builder: (BuildContext context, void Function(void Function()) setState) {
+        String token = CachHelper.getData(key: 'token');
         return SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.only(
@@ -301,7 +264,7 @@ class EditUserProfileScreen extends StatelessWidget {
               height: MediaQuery.of(context).size.height * 0.6,
               decoration: BoxDecoration(
                 color: Theme.of(context).backgroundColor,
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                   topRight: Radius.circular(40),
                   topLeft: Radius.circular(40),
                 ),
@@ -318,7 +281,7 @@ class EditUserProfileScreen extends StatelessWidget {
                   const SizedBox(
                     height: 28.0,
                   ),
-                  Container(
+                  SizedBox(
                     width: 322.0,
                     child: defaultTextFormField(
                         context: context,
@@ -351,7 +314,7 @@ class EditUserProfileScreen extends StatelessWidget {
                   const SizedBox(
                     height: 16.0,
                   ),
-                  Container(
+                  SizedBox(
                     width: 322.0,
                     child: defaultTextFormField(
                         context: context,
@@ -384,7 +347,7 @@ class EditUserProfileScreen extends StatelessWidget {
                   const SizedBox(
                     height: 16.0,
                   ),
-                  Container(
+                  SizedBox(
                     width: 322.0,
                     child: defaultTextFormField(
                         context: context,
@@ -417,33 +380,57 @@ class EditUserProfileScreen extends StatelessWidget {
                   const SizedBox(
                     height: 35.0,
                   ),
-                  Container(
-                    width: 322.0,
-                    height: 45.0,
-                    child: MaterialButton(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
-                          5.0,
+                  GeneralAppCubit.get(context).isUpdatePassword
+                      ? CircularProgressIndicator(
+                          color: Theme.of(context).primaryColor,
+                        )
+                      : SizedBox(
+                          width: 322.0,
+                          height: 45.0,
+                          child: MaterialButton(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                5.0,
+                              ),
+                            ),
+                            onPressed: () {
+                              GeneralAppCubit.get(context)
+                                  .updatePassword(
+                                password_Current:
+                                    currentPasswordController.text,
+                                password_New: newPasswordController.text,
+                                password_Confirm:
+                                    confirmPasswordController.text,
+                                token: token,
+                              )
+                                  .then((value) {
+                                if (GeneralAppCubit.get(context)
+                                        .isUpdatePasswordDone ==
+                                    true) {
+                                  Navigator.of(context).pop();
+                                  currentPasswordController.clear();
+                                  newPasswordController.clear();
+                                  confirmPasswordController.clear();
+                                  GeneralAppCubit.get(context)
+                                      .isUpdatePasswordDone = false;
+                                } else {
+                                  const SizedBox();
+                                }
+                              });
+                            },
+                            child: Text(
+                              'Change',
+                              style: TextStyle(
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1
+                                    ?.color,
+                                fontSize: 20.0,
+                              ),
+                            ),
+                            color: Theme.of(context).primaryColor,
+                          ),
                         ),
-                      ),
-                      onPressed: () {
-                        GeneralAppCubit.get(context).updatePassword(
-                          password_Current: currentPasswordController.text,
-                          password_New: newPasswordController.text,
-                          password_Confirm: confirmPasswordController.text,
-                          token: token,
-                        );
-                      },
-                      child: const Text(
-                        'Change',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20.0,
-                        ),
-                      ),
-                      color: Theme.of(context).primaryColor,
-                    ),
-                  ),
                 ],
               ),
             ),

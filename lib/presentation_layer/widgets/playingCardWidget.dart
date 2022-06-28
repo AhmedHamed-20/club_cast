@@ -1,4 +1,6 @@
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
+import 'package:club_cast/data_layer/sockets/sockets_io.dart';
+import 'package:club_cast/presentation_layer/components/component/component.dart';
 import 'package:flutter/material.dart';
 
 class PlayingCardWidget {
@@ -7,8 +9,9 @@ class PlayingCardWidget {
     bool likeState,
     String podCastId,
     String token,
-    String userId,
-  ) {
+    String userId, {
+    String? searchName,
+  }) {
     var cubit = GeneralAppCubit.get(context);
     return Padding(
       padding: const EdgeInsetsDirectional.only(start: 15.0, bottom: 15),
@@ -29,16 +32,19 @@ class PlayingCardWidget {
                       (val) {
                         //bool isMyfollowingScreen = false;
                         // bool isMyprofileScreen = false;
-                        print(cubit.isMyfollowingScreen);
+
                         if (cubit.isMyprofileScreen) {
-                          cubit.getMyPodCast(token);
+                          cubit.getMyPodCast(token, context);
                         } else if (cubit.isProfilePage) {
                           cubit.getUserPodcast(token, userId);
                         } else if (cubit.isExplore) {
                           cubit.getExplorePodcast(token: token);
+                        } else if (cubit.isSearchScreen) {
+                          cubit.podCastSearch(token: token, value: searchName!);
                         } else {
-                          cubit.getMyFollowingPodcast(token);
+                          cubit.getMyFollowingPodcast(token, context);
                         }
+
                         //isProfilePage
                         //getUserPodcast
                       },
@@ -50,22 +56,23 @@ class PlayingCardWidget {
                     )
                       .then(
                       (val) {
-                        print(cubit.isExplore);
                         if (cubit.isMyprofileScreen) {
-                          cubit.getMyPodCast(token);
+                          cubit.getMyPodCast(token, context);
                         } else if (cubit.isProfilePage) {
                           cubit.getUserPodcast(token, userId);
                         } else if (cubit.isExplore) {
                           cubit.getExplorePodcast(token: token);
+                        } else if (cubit.isSearchScreen) {
+                          cubit.podCastSearch(token: token, value: searchName!);
                         } else {
-                          cubit.getMyFollowingPodcast(token);
+                          cubit.getMyFollowingPodcast(token, context);
                         }
                       },
                     );
             },
             icon: Icon(
               likeState ? Icons.favorite : Icons.favorite_border,
-              color: Colors.red,
+              color: Theme.of(context).primaryColor,
             )),
       ),
     );
@@ -83,7 +90,10 @@ class PlayingCardWidget {
         backgroundColor: Theme.of(context).primaryColor,
         child: Text(
           podCatLikesNumber,
-          style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 15),
+          style: Theme.of(context)
+              .textTheme
+              .bodyText1!
+              .copyWith(fontSize: 15, color: Theme.of(context).backgroundColor),
         ),
       ),
     );
@@ -101,24 +111,30 @@ class PlayingCardWidget {
     return IconButton(
       onPressed: () {
         String podCastUrl = podcastUrl;
-        print('podcastId:' + podCastId);
-        print('currentId:' + currentId);
-        cubit.isPlaying && podCastId == currentId
-            ? cubit.assetsAudioPlayer.pause().then((value) {
-                cubit.isPlaying = false;
-                cubit.pressedPause = true;
-                cubit.changeState();
-              })
-            : cubit.playingPodcast(
-                podCastUrl, podCastName, userPhoto, podCastId, context);
-        // print(GetAllPodCastModel.getPodCastAudio(index));
-        print(currentId);
+
+        if (SocketFunc.isConnected) {
+          showToast(
+              message: "you can't play podcast if you in a room,leave first(:",
+              toastState: ToastState.WARNING);
+        } else {
+          cubit.isPlaying && podCastId == currentId
+              ? cubit.assetsAudioPlayer.pause().then((value) {
+                  cubit.isPlaying = false;
+                  cubit.pressedPause = true;
+                  cubit.changeState();
+                })
+              : cubit.playingPodcast(
+                  podCastUrl, podCastName, userPhoto, podCastId, context);
+          // print(GetAllPodCastModel.getPodCastAudio(index));
+
+        }
       },
       icon: Icon(
         cubit.isPlaying && podCastId == currentId
             ? Icons.pause_circle_outline_outlined
             : Icons.play_circle_outline_outlined,
         size: 35,
+        color: Theme.of(context).iconTheme.color,
       ),
     );
   }
@@ -142,6 +158,7 @@ class PlayingCardWidget {
           : Icon(
               Icons.cloud_download_outlined,
               size: 35,
+              color: Theme.of(context).iconTheme.color,
             ),
     );
   }

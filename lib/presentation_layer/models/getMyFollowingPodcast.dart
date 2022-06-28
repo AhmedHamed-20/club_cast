@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class GetMyFollowingPodCastsModel {
   static Map<String, dynamic>? getMyFollowingPodcasts;
   static List? audio;
@@ -29,7 +31,13 @@ class GetMyFollowingPodCastsModel {
   }
 
   static List getPodcastUserPublishInform(int index) {
-    return creditBy = [getMyFollowingPodcasts!['data'][index]['createdBy']];
+    creditBy = [getMyFollowingPodcasts?['data'][index]['createdBy']];
+    if (creditBy?[0]['photo'] == null) {
+      creditBy?[0]['photo'] =
+          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3-lQXGq-2WPJR5aE_l74q-mR61wDrZXUYhA&usqp=CAU';
+    }
+
+    return creditBy!;
   }
 
   static bool getPodcastlikeState(int index) {

@@ -1,11 +1,9 @@
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
-import 'package:club_cast/presentation_layer/models/getMyFollowingEvents.dart';
 import 'package:club_cast/presentation_layer/models/get_my_events.dart';
 import 'package:club_cast/presentation_layer/widgets/event_card_item.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -15,7 +13,6 @@ class EventScreen extends StatelessWidget {
   static var eventDescriptionController = TextEditingController();
   static var dateController = TextEditingController();
   static var timeController = TextEditingController();
-  // static String? showUserDateFormat;
   static bool isUpdate = false;
   static int eventIndex = 0;
   var formKey = GlobalKey<FormState>();
@@ -48,41 +45,44 @@ class EventScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     GetMyEvents.allEvent().isNotEmpty
-                        ? Column(
-                            children: [
-                              SizedBox(
-                                width: double.infinity,
-                                height:
-                                    MediaQuery.of(context).size.height * 0.32,
-                                child: ListView.builder(
-                                  physics: const BouncingScrollPhysics(),
-                                  shrinkWrap: true,
-                                  scrollDirection: Axis.horizontal,
-                                  itemBuilder: (context, index) =>
-                                      eventCardItem(
-                                    context: context,
-                                    index: index,
-                                    userWhoCreateEventId:
-                                        GetMyEvents.userWhoCreateEvent(
-                                            index)["_id"],
-                                    userName: GetMyEvents.userWhoCreateEvent(
-                                        index)["name"],
-                                    userUrl: GetMyEvents.userWhoCreateEvent(
-                                        index)['photo'],
-                                    eventName: GetMyEvents.eventName(index),
-                                    eventDescription:
-                                        GetMyEvents.eventDescription(index),
-                                    eventDate: GetMyEvents.eventDate(index),
-                                  ),
-                                  itemCount: GetMyEvents.allEvent().length,
-                                ),
+                        ? SizedBox(
+                            height:
+                                (MediaQuery.of(context).size.width.toInt() <=
+                                            360 &&
+                                        MediaQuery.of(context)
+                                                .size
+                                                .height
+                                                .toInt() <=
+                                            678)
+                                    ? MediaQuery.of(context).size.height * 0.4
+                                    : MediaQuery.of(context).size.height * 0.3,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (context, index) => eventCardItem(
+                                context: context,
+                                index: index,
+                                userWhoCreateEventId:
+                                    GetMyEvents.userWhoCreateEvent(
+                                        index)["_id"],
+                                userName: GetMyEvents.userWhoCreateEvent(
+                                    index)["name"],
+                                userUrl: GetMyEvents.userWhoCreateEvent(
+                                    index)['photo'],
+                                eventName: GetMyEvents.eventName(index),
+                                eventDescription:
+                                    GetMyEvents.eventDescription(index),
+                                eventDate:
+                                    DateTime.parse(GetMyEvents.eventDate(index))
+                                        .toLocal()
+                                        .toString(),
                               ),
-                              Divider(),
-                            ],
+                              itemCount: GetMyEvents.allEvent().length,
+                            ),
                           )
-                        : SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.18,
-                          ),
+                        : const SizedBox(),
+                    Divider(
+                      color: Theme.of(context).backgroundColor,
+                    ),
                     Padding(
                       padding: const EdgeInsets.all(20.0),
                       child: Column(
@@ -224,8 +224,10 @@ class EventScreen extends StatelessWidget {
                             builder: (BuildContext context) {
                               return defaultButton(
                                 onPressed: () {
+                                  print(MediaQuery.of(context).size.width);
+                                  print(MediaQuery.of(context).size.height);
                                   if (formKey.currentState!.validate()) {
-                                    if (eventNameController.text.length < 5) {
+                                    if (eventNameController.text.length < 3) {
                                       showToast(
                                         message: 'EventName is So Short',
                                         toastState: ToastState.ERROR,
@@ -233,22 +235,27 @@ class EventScreen extends StatelessWidget {
                                     } else {
                                       if (dateController.text != '' &&
                                           timeController.text != '') {
+                                        print(dateController.text);
+                                        print(timeController.text);
+                                        DateTime dateTime =
+                                            DateFormat.yMd('en_US')
+                                                .add_jm()
+                                                .parse(dateController.text +
+                                                    " " +
+                                                    timeController.text);
+                                        print(dateTime.toUtc().toString());
                                         cubit
                                             .createMyEvent(
                                           eventName: eventNameController.text,
                                           eventDescription:
                                               eventDescriptionController.text,
-                                          eventDate: dateController.text +
-                                              "," +
-                                              timeController.text,
+                                          eventDate:
+                                              dateTime.toUtc().toString(),
                                         )
                                             .then((value) {
                                           clearCrime(context: context);
                                         });
                                         cubit.getMyEvents();
-
-                                        print(dateController.text +
-                                            timeController.text);
                                       } else {
                                         showToast(
                                           message:
@@ -266,7 +273,6 @@ class EventScreen extends StatelessWidget {
                                   // // print(DateFormat.Hm()
                                   // //     .format(DateTime.parse("21:20:21.000")));
                                   // print(dateController.text);
-                                  print(timeController.text);
                                 },
                                 context: context,
                                 height: 45,
@@ -280,6 +286,9 @@ class EventScreen extends StatelessWidget {
                               color: Theme.of(context).primaryColor,
                             )),
                           ),
+                    SizedBox(
+                      height: 15,
+                    ),
                   ],
                 ),
               );
@@ -299,11 +308,7 @@ class EventScreen extends StatelessWidget {
     ).then((value) {
       timeController.text = value!.format(context).toString();
       cubit.changeState();
-
-      print(timeController.text);
-    }).catchError((error) {
-      print("error when select date${error.toString()}");
-    });
+    }).catchError((error) {});
   }
 
   void datePicker({
@@ -315,16 +320,12 @@ class EventScreen extends StatelessWidget {
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime.now(),
-      lastDate: DateTime.now().add(Duration(days: 13)),
-      //DateTime.parse('2050-09-20'),
+      lastDate: DateTime.now().add(const Duration(days: 13)),
     ).then((value) {
-      //print(value);
-      print(DateFormat.yMMMd()
-          .format(DateTime.parse('2022-04-07T03:03:00.000Z')));
+      // print(value!.toIso8601String());
       // showUserDateFormate = DateFormat.yMMMd().format(value!);
       dateController.text = DateFormat("MM/dd/yyyy").format(value!);
       cubit.changeState();
-      print("hunter:${dateController.text}");
     }).catchError((error) {});
   }
 

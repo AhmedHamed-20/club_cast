@@ -6,7 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../widgets/modelsheetcreate_room.dart';
+import '../../widgets/modelsheetcreate_room.dart';
 
 class UploadPodCastScreen extends StatelessWidget {
   const UploadPodCastScreen({Key? key}) : super(key: key);
@@ -17,6 +17,7 @@ class UploadPodCastScreen extends StatelessWidget {
     return BlocConsumer<GeneralAppCubit, GeneralAppStates>(
         builder: (context, state) {
           var cubit = GeneralAppCubit.get(context);
+          //   print(cubit.podcastFile!.path);
           return WillPopScope(
             onWillPop: () async {
               cubit.previewIsplaying
@@ -74,7 +75,7 @@ class UploadPodCastScreen extends StatelessWidget {
                           color: Theme.of(context).iconTheme.color,
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 25,
                       ),
                       Row(
@@ -92,6 +93,7 @@ class UploadPodCastScreen extends StatelessWidget {
                       ),
                       defaultButton(
                           onPressed: () {
+                            cubit.pausePreview();
                             cubit.pickPocCastFile();
                           },
                           context: context,
@@ -102,7 +104,7 @@ class UploadPodCastScreen extends StatelessWidget {
                         height: 25,
                       ),
                       cubit.podcastFile == null
-                          ? SizedBox()
+                          ? const SizedBox()
                           : ListTile(
                               title: Text(
                                 cubit.podcastFile!.path.split('/').last,
@@ -112,7 +114,8 @@ class UploadPodCastScreen extends StatelessWidget {
                                 onPressed: () {
                                   cubit.previewIsplaying
                                       ? cubit.pausePreview()
-                                      : cubit.playPreviewPodcast();
+                                      : cubit.playPreviewPodcast(
+                                          cubit.podcastFile!.path);
                                 },
                                 icon: Icon(
                                   cubit.previewIsplaying
@@ -165,7 +168,9 @@ class UploadPodCastScreen extends StatelessWidget {
                                         cubit.uploadPodCast(
                                             token,
                                             nameController.text,
-                                            cubit.selectedCategoryItem);
+                                            cubit.selectedCategoryItem,
+                                            cubit.podcastFile!.path,
+                                            context);
                                       },
                                       context: context,
                                       text: 'Upload')

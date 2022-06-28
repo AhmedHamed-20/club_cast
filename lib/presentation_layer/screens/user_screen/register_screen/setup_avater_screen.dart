@@ -7,7 +7,7 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../components/component/component.dart';
+import '../../../components/component/component.dart';
 
 class SetUpAvatarScreen extends StatelessWidget {
   SetUpAvatarScreen({Key? key}) : super(key: key);
@@ -36,6 +36,18 @@ class SetUpAvatarScreen extends StatelessWidget {
                 color: Theme.of(context).iconTheme.color,
               ),
             ),
+            actions: [
+              MaterialButton(
+                onPressed: () {
+                  navigatePushANDRemoveRout(
+                      context: context, navigateTo: LayoutScreen());
+                },
+                child: Text(
+                  'Skip',
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
+              )
+            ],
           ),
           body: Padding(
             padding: const EdgeInsets.all(20.0),

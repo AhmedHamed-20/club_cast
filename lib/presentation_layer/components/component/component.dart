@@ -23,6 +23,7 @@ Widget defaultTextFormField({
   required BuildContext context,
 }) {
   return TextFormField(
+    cursorColor: Theme.of(context).primaryColor,
     maxLines: maxLine,
     textDirection: textDirection,
     style: Theme.of(context).textTheme.bodyText1,
@@ -92,7 +93,9 @@ Widget defaultButton({
       child: Text(
         isUpperCase ? text.toString().toUpperCase() : '$text',
         style: Theme.of(context).textTheme.bodyText1!.copyWith(
-            color: Colors.white, fontSize: 22, fontWeight: FontWeight.w500),
+            color: Theme.of(context).textTheme.bodyText1?.color,
+            fontSize: 18,
+            fontWeight: FontWeight.w100),
       ),
     ),
   );

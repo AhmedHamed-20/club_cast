@@ -11,7 +11,6 @@ class ForgetPasswordScreen extends StatelessWidget {
   ForgetPasswordScreen({Key? key}) : super(key: key);
 
   var emailController = TextEditingController();
-
   var formKey = GlobalKey<FormState>();
 
   @override
@@ -24,7 +23,6 @@ class ForgetPasswordScreen extends StatelessWidget {
         return Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.transparent,
-            elevation: 0,
             leading: IconButton(
               onPressed: () {
                 navigatePushANDRemoveRout(
@@ -37,7 +35,7 @@ class ForgetPasswordScreen extends StatelessWidget {
             ),
           ),
           body: Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: Form(
               key: formKey,
               child: SingleChildScrollView(
@@ -62,8 +60,6 @@ class ForgetPasswordScreen extends StatelessWidget {
                       keyboardType: TextInputType.emailAddress,
                       labelText: "Email",
                       labelStyle: Theme.of(context).textTheme.bodyText1,
-                      onChanged: (value) {},
-                      onSubmit: (value) {},
                       validator: (value) {
                         if (value!.isEmpty) {
                           return 'Email Address must not be empty ';

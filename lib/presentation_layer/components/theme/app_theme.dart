@@ -18,7 +18,7 @@ ThemeData darkMode = ThemeData(
       fontWeight: FontWeight.bold,
     ),
   ),
-  backgroundColor: Colors.grey[800],
+  backgroundColor: const Color.fromRGBO(49, 49, 52, 1),
   textTheme: TextTheme(
     bodyText1: GoogleFonts.rubik(
       color: Colors.white,
@@ -86,32 +86,8 @@ ThemeData lightMode = ThemeData(
       size: 28,
     ),
     unselectedIconTheme: IconThemeData(
-      size: 30,
+      size: 25,
     ),
   ),
   //  backgroundColor: Color(0xffF6F9F4),
 );
-// ThemeData(
-// appBarTheme:
-// AppBarTheme(color: Theme.of(context).scaffoldBackgroundColor),
-// backgroundColor: Colors.white,
-// textTheme: TextTheme(
-// bodyText1: GoogleFonts.rubik(
-// fontSize: 18,
-// color: Color(0xff59675B),
-// ),
-// bodyText2: GoogleFonts.rubik(
-// color: Color(0xff59675B),
-// fontSize: 18,
-// fontWeight: FontWeight.bold,
-// ),
-// ),
-//
-// iconTheme: IconThemeData(
-// color: Color(0xff59675B),
-// ),
-// scaffoldBackgroundColor: Color(0xffF6F9F4),
-// primaryColor: Color(0xff5ADAAC),
-// primarySwatch: Colors.green,
-// //  backgroundColor: Color(0xffF6F9F4),
-// ),

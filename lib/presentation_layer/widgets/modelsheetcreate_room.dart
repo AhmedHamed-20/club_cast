@@ -1,11 +1,8 @@
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-var formKey = GlobalKey<FormState>();
-
-modalBottomSheetItem(BuildContext context) {
+modalBottomSheetItem(BuildContext context, VoidCallback createClick) {
   showModalBottomSheet(
     backgroundColor: Theme.of(context).backgroundColor,
     context: context,
@@ -15,11 +12,11 @@ modalBottomSheetItem(BuildContext context) {
         top: Radius.circular(30),
       ),
     ),
-    builder: (context) => buildSheet(context),
+    builder: (context) => buildSheet(context, createClick),
   );
 }
 
-Widget buildSheet(BuildContext context) {
+Widget buildSheet(BuildContext context, VoidCallback createClick) {
   var cubit = GeneralAppCubit.get(context);
   return StatefulBuilder(
     builder: (BuildContext context, void Function(void Function()) setState) {
@@ -32,7 +29,6 @@ Widget buildSheet(BuildContext context) {
             horizontal: 20,
           ),
           child: Form(
-            key: formKey,
             child: Column(
               children: [
                 Text(
@@ -132,7 +128,7 @@ Widget buildSheet(BuildContext context) {
                                           MediaQuery.of(context).size.width *
                                               0.03,
                                     ),
-                                    Text('Only people have link can enter',
+                                    Text('Only people have room id can enter',
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodyText1!
@@ -153,7 +149,6 @@ Widget buildSheet(BuildContext context) {
                           value: cubit.isPublicRoom,
                           onChanged: (value) {
                             setState(() => cubit.isPublicRoom = value);
-                            print("PublicRoom:${cubit.isPublicRoom}");
                           },
                         ),
                       ],
@@ -185,7 +180,6 @@ Widget buildSheet(BuildContext context) {
                           value: cubit.isRecordRoom,
                           onChanged: (value) {
                             setState(() => cubit.isRecordRoom = value);
-                            print("recordRoom:${cubit.isRecordRoom}");
                           },
                         ),
                       ],
@@ -200,18 +194,16 @@ Widget buildSheet(BuildContext context) {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.08,
                 ),
-                defaultButton(
-                  onPressed: () {
-                    if (formKey.currentState!.validate()) {
-                      print(cubit.roomNameController.text);
-                      print(cubit.selectedCategoryItem);
-                      print("isPublicRoom :${cubit.isPublicRoom}");
-                      print("isRecordRoom: ${cubit.isRecordRoom}");
-                    }
-                  },
-                  context: context,
-                  text: 'Create',
-                )
+                GeneralAppCubit.get(context).loadRoom
+                    ? Center(
+                        child: CircularProgressIndicator(
+                            color: Theme.of(context).primaryColor),
+                      )
+                    : defaultButton(
+                        onPressed: createClick,
+                        context: context,
+                        text: 'Create',
+                      )
               ],
             ),
           ),

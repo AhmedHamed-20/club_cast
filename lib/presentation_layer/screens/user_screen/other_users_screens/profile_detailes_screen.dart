@@ -1,44 +1,48 @@
-import 'package:club_cast/data_layer/cash/cash.dart';
-import 'package:club_cast/presentation_layer/models/getMyPodCastModel.dart';
-import 'package:club_cast/presentation_layer/models/get_all_podcst.dart';
-import 'package:club_cast/presentation_layer/screens/active_podcast_screen.dart';
-import 'package:club_cast/presentation_layer/screens/followers_screen.dart';
-import 'package:club_cast/presentation_layer/screens/following_screen.dart';
-import 'package:club_cast/presentation_layer/widgets/playingCardWidget.dart';
-import 'package:club_cast/presentation_layer/widgets/pos_cast_card_item.dart';
+import 'dart:typed_data';
 
-import '../../data_layer/bloc/intial_cubit/general_app_cubit.dart';
+import 'package:club_cast/data_layer/cash/cash.dart';
+import 'package:club_cast/presentation_layer/models/get_all_podcst.dart';
+import 'package:club_cast/presentation_layer/screens/podcast_screens/active_podcast_screen.dart';
+import 'package:club_cast/presentation_layer/screens/user_screen/other_users_screens/followers_screen.dart';
+import 'package:club_cast/presentation_layer/screens/user_screen/other_users_screens/following_screen.dart';
+import 'package:club_cast/presentation_layer/widgets/playingCardWidget.dart';
+import 'package:club_cast/presentation_layer/widgets/pod_cast_card_item.dart';
+import 'package:flutter/services.dart';
+import 'package:palette_generator/palette_generator.dart';
+
+import '../../../../data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
-import 'package:club_cast/presentation_layer/models/get_userId_model.dart';
-import 'package:club_cast/presentation_layer/models/podCastLikesUserModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../widgets/extract_color_from_image.dart';
 
 class ProfileDetailsScreen extends StatelessWidget {
   String userId;
   ProfileDetailsScreen(this.userId);
   @override
   Widget build(BuildContext context) {
+    var cubit = GeneralAppCubit.get(context);
+
+    cubit.isProfilePage = true;
+
     String? currentId;
     return BlocConsumer<GeneralAppCubit, GeneralAppStates>(
       listener: (context, index) {},
       builder: (context, index) {
         String token = CachHelper.getData(key: 'token');
-        var cubit = GeneralAppCubit.get(context);
         refresh() {
-          cubit.getUserById(profileId: userId);
+          cubit.getUserById(profileId: userId, token: token);
           return cubit.getUserPodcast(token, userId);
         }
 
         currentId = cubit.activePodCastId;
-        cubit.isProfilePage = true;
 
         return WillPopScope(
           onWillPop: () async {
             cubit.isProfilePage = false;
             Navigator.of(context).pop();
-            print(cubit.isProfilePage);
             return false;
           },
           child: Scaffold(
@@ -47,6 +51,7 @@ class ProfileDetailsScreen extends StatelessWidget {
               leading: IconButton(
                 onPressed: () {
                   cubit.isProfilePage = false;
+
                   Navigator.pop(context);
                 },
                 icon: Icon(
@@ -104,7 +109,7 @@ class ProfileDetailsScreen extends StatelessWidget {
                         const SizedBox(
                           height: 8.0,
                         ),
-                        Container(
+                        SizedBox(
                           width: 260.0,
                           child: Column(
                             children: [
@@ -118,6 +123,7 @@ class ProfileDetailsScreen extends StatelessWidget {
                                           .copyWith(
                                             color: Colors.grey,
                                           ),
+                                      textAlign: TextAlign.center,
                                     ),
                             ],
                           ),
@@ -139,10 +145,11 @@ class ProfileDetailsScreen extends StatelessWidget {
                             InkWell(
                               onTap: () {
                                 cubit.userFollowers(
-                                    userProfileId: '${cubit.userId?.data?.id}');
+                                    userProfileId: '${cubit.userId?.data?.id}',
+                                    token: token);
                                 navigatePushTo(
                                     context: context,
-                                    navigateTo: FollowersScreen());
+                                    navigateTo: const FollowersScreen());
                               },
                               child: statusNumberProfile(
                                 number: '${cubit.userId?.data?.followers}',
@@ -155,10 +162,11 @@ class ProfileDetailsScreen extends StatelessWidget {
                             InkWell(
                               onTap: () {
                                 cubit.userFollowing(
-                                    userProfileId: '${cubit.userId?.data?.id}');
+                                    userProfileId: '${cubit.userId?.data?.id}',
+                                    token: token);
                                 navigatePushTo(
                                     context: context,
-                                    navigateTo: FollowingScreen());
+                                    navigateTo: const FollowingScreen());
                               },
                               child: statusNumberProfile(
                                 number: '${cubit.userId?.data?.following}',
@@ -171,7 +179,7 @@ class ProfileDetailsScreen extends StatelessWidget {
                           height: 17.0,
                         ),
                         cubit.userId?.data?.isFollowed == true
-                            ? Container(
+                            ? SizedBox(
                                 width: 280.0,
                                 height: 45.0,
                                 child: MaterialButton(
@@ -182,13 +190,17 @@ class ProfileDetailsScreen extends StatelessWidget {
                                     cubit
                                         .unFollowUser(
                                             userProfileId:
-                                                '${cubit.userId?.data?.id}')
+                                                '${cubit.userId?.data?.id}',
+                                            token: token,
+                                            context: context)
                                         .then((value) {
-                                      cubit.getMyFollowingPodcast(token);
+                                      cubit.getMyFollowingPodcast(
+                                          token, context);
                                       cubit
                                           .getUserById(
                                               profileId:
-                                                  '${cubit.userId?.data?.id}')
+                                                  '${cubit.userId?.data?.id}',
+                                              token: token)
                                           .then((value) {
                                         cubit.isLoadingprofile = false;
                                       });
@@ -204,7 +216,7 @@ class ProfileDetailsScreen extends StatelessWidget {
                                   color: Theme.of(context).primaryColor,
                                 ),
                               )
-                            : Container(
+                            : SizedBox(
                                 width: 280.0,
                                 height: 45.0,
                                 child: MaterialButton(
@@ -215,13 +227,17 @@ class ProfileDetailsScreen extends StatelessWidget {
                                     cubit
                                         .followUser(
                                             userProfileId:
-                                                '${cubit.userId?.data?.id}')
+                                                '${cubit.userId?.data?.id}',
+                                            token: token,
+                                            context: context)
                                         .then((value) {
-                                      cubit.getMyFollowingPodcast(token);
+                                      cubit.getMyFollowingPodcast(
+                                          token, context);
                                       cubit
                                           .getUserById(
                                               profileId:
-                                                  '${cubit.userId?.data?.id}')
+                                                  '${cubit.userId?.data?.id}',
+                                              token: token)
                                           .then((value) {
                                         cubit.isLoadingprofile = false;
                                       });
@@ -258,7 +274,7 @@ class ProfileDetailsScreen extends StatelessWidget {
                                     ),
                               ),
                             ),
-                            Container(
+                            SizedBox(
                               width: MediaQuery.of(context).size.width,
                               child: Padding(
                                 padding: const EdgeInsets.only(
@@ -277,10 +293,12 @@ class ProfileDetailsScreen extends StatelessWidget {
                                       itemCount: GetAllPodCastModel
                                           .getAllPodCast?['data'].length,
                                       shrinkWrap: true,
-                                      physics: NeverScrollableScrollPhysics(),
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
                                       itemBuilder: (context, index) {
                                         return InkWell(
-                                          onTap: () {
+                                          onTap: () async {
+                                            GenerateColor.colors = [];
                                             navigatePushTo(
                                                 context: context,
                                                 navigateTo: ActivePodCastScreen(
@@ -303,6 +321,9 @@ class ProfileDetailsScreen extends StatelessWidget {
                                                       .getPodcastUserPublishInform(
                                                           index)[0]['photo'],
                                                   index: index,
+                                                  userId: GetAllPodCastModel
+                                                      .getPodcastUserPublishInform(
+                                                          index)[0]['_id'],
                                                 ));
                                           },
                                           child: podACastItem(
@@ -361,7 +382,7 @@ class ProfileDetailsScreen extends StatelessWidget {
                                               GetAllPodCastModel.getPodcastName(
                                                   index),
                                             ),
-                                            removePodCast: SizedBox(),
+                                            removePodCast: const SizedBox(),
                                             photourl: GetAllPodCastModel
                                                 .getPodcastUserPublishInform(
                                                     index)[0]['photo'],
@@ -389,7 +410,36 @@ class ProfileDetailsScreen extends StatelessWidget {
                                           ),
                                         );
                                       },
-                                    )
+                                    ),
+                                    cubit.noDataUserPodcasts
+                                        ? const SizedBox()
+                                        : InkWell(
+                                            borderRadius:
+                                                BorderRadius.circular(40),
+                                            onTap: () {
+                                              cubit.paginationUserPodcasts(
+                                                  token,
+                                                  '${cubit.userId!.data!.id}');
+                                            },
+                                            child: Center(
+                                              child: CircleAvatar(
+                                                backgroundColor:
+                                                    Theme.of(context)
+                                                        .backgroundColor,
+                                                radius: 30,
+                                                child: cubit.loadUserPodcasts
+                                                    ? CircularProgressIndicator(
+                                                        color: Theme.of(context)
+                                                            .primaryColor,
+                                                      )
+                                                    : Icon(
+                                                        Icons.arrow_downward,
+                                                        color: Theme.of(context)
+                                                            .primaryColor,
+                                                      ),
+                                              ),
+                                            ),
+                                          ),
                                   ],
                                 ),
                               ),

@@ -94,9 +94,9 @@ class DioHelper {
   }) async {
     /*"name_image": _txtNameImage.text,
       "image": UploadFileInfo(File("$_image"), "image.jpg")*/
-    print('iam Here');
+
     String fileName = image!.path.split('/').last;
-    print(fileName);
+
     FormData? formData = FormData.fromMap({
       "photo": await MultipartFile.fromFile(
         image.path,
@@ -104,9 +104,7 @@ class DioHelper {
         contentType: MediaType('image', 'png'),
       ),
     });
-    print(url);
-    print(formData.files);
-    print(fileName);
+
     return dio!.patch(
       url,
       data: FormData.fromMap({

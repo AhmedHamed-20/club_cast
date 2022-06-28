@@ -36,9 +36,9 @@ dependencies:
   cupertino_icons: ^1.0.2
   bloc: ^7.2.1
   flutter_bloc: ^7.3.0
+  socket_io_client: ^2.0.0-beta.4-nullsafety.0
   dio: ^4.0.4
-  agora_rtc_engine: ^4.2.1
-  agora_rtm: ^1.0.1
+  agora_rtc_engine: ^5.2.0
   google_fonts: ^2.3.1
   shared_preferences: ^2.0.13
   material_design_icons_flutter: ^5.0.6595
@@ -50,8 +50,18 @@ dependencies:
   http_parser: ^4.0.0
   file_picker: ^4.5.1
   marquee: ^2.2.1
-#  syncfusion_flutter_datepicker: ^19.4.56
+  flutter_local_notifications: ^9.4.0
+  permission_handler: ^9.2.0
+  flutter_staggered_grid_view: ^0.4.0
+  move_to_background: ^1.0.2
+  flutter_background: ^1.1.0
+  smooth_page_indicator: ^1.0.0+2
   intl: ^0.17.0
+  flutter_offline: ^2.1.0
+  timezone: ^0.8.0
+  image: ^3.2.0
+  palette_generator: ^0.3.3+1
+  cached_network_image: ^3.2.1
 
 dev_dependencies:
   flutter_test:
@@ -78,6 +88,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
   - assets/images/
+  - assets/audio/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
