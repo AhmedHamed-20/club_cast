@@ -5,8 +5,11 @@ import 'package:club_cast/presentation_layer/components/constant/constant.dart';
 import 'package:club_cast/presentation_layer/models/user_model.dart';
 import 'package:club_cast/presentation_layer/screens/user_screen/other_users_screens/profile_detailes_screen.dart';
 import 'package:club_cast/presentation_layer/widgets/extract_color_from_image.dart';
+import 'package:club_cast/presentation_layer/widgets/multi_use_dialog.dart';
+import 'package:club_cast/presentation_layer/widgets/driving_mode.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:palette_generator/palette_generator.dart';
 
 import '../../components/component/component.dart';
@@ -71,6 +74,62 @@ class ActivePodCastScreen extends StatelessWidget {
                     : GenerateColor.colors[0].bodyTextColor,
               ),
             ),
+            actions: [
+              IconButton(
+                onPressed: () {
+                  showDialog(
+                    barrierDismissible: false,
+                    context: context,
+                    builder: (context) {
+                      return pilotMode(
+                        context: context,
+                        podcastName: podcastName,
+                        replayCallBack: () {
+                          cubit.isPlaying && podCastId == cubit.activePodCastId
+                              ? cubit.assetsAudioPlayer
+                                  .seekBy(const Duration(seconds: -10))
+                              : const SizedBox();
+                        },
+                        forwardCallBack: () {
+                          cubit.isPlaying && podCastId == cubit.activePodCastId
+                              ? cubit.assetsAudioPlayer
+                                  .seekBy(const Duration(seconds: 10))
+                              : const SizedBox();
+                        },
+                        playCallBack: () {
+                          if (SocketFunc.isConnected) {
+                            showToast(
+                                message:
+                                    "you can't play podcast if you in a room,leave first(:",
+                                toastState: ToastState.WARNING);
+                          } else {
+                            String podCastUrl = podcastUrl;
+                            cubit.isPlaying &&
+                                    podCastId == cubit.activePodCastId
+                                ? cubit.assetsAudioPlayer.pause().then(
+                                    (value) {
+                                      cubit.isPlaying = false;
+                                      cubit.pressedPause = true;
+                                      cubit.activePodCastId = podCastId;
+                                      cubit.changeState();
+                                    },
+                                  )
+                                : cubit.playingPodcast(podCastUrl, podcastName,
+                                    userPhoto, podCastId, context);
+                          }
+                        },
+                        cubit: cubit,
+                        podCastId: podCastId,
+                      );
+                    },
+                  );
+                },
+                icon: Icon(MdiIcons.car,
+                    color: GenerateColor.colors.isEmpty
+                        ? Theme.of(context).iconTheme.color
+                        : GenerateColor.colors[0].bodyTextColor),
+              )
+            ],
           ),
           body: FutureBuilder(
             future: GenerateColor.extractColor(userPhoto, context),
