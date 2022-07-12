@@ -77,6 +77,20 @@ Widget drivingMode({
               ],
             ),
             const SizedBox(height: 10),
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Text(
+                'Keep Screen Awake',
+                style: Theme.of(context).textTheme.bodyText1,
+              ),
+              Switch.adaptive(
+                activeColor: Theme.of(context).primaryColor,
+                value: cubit.keepScreenAwake,
+                onChanged: (val) {
+                  cubit.toggleScreenAwake(val);
+                },
+              ),
+            ]),
+            const SizedBox(height: 10),
             SizedBox(
               width: 90,
               height: 50,

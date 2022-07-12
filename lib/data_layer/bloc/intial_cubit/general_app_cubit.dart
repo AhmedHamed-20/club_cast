@@ -33,6 +33,7 @@ import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart' as path;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:wakelock/wakelock.dart';
 
 import '../../../presentation_layer/models/followers_following_model.dart';
 import '../../../presentation_layer/models/getAllRoomsModel.dart';
@@ -63,7 +64,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   bool loadExplore = false;
   bool noDateRooms = false;
   bool loadRooms = false;
-
+  bool keepScreenAwake = false;
   int pageRooms = 2;
   bool noDataEvent = false;
   bool loadEvent = false;
@@ -122,6 +123,12 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     CachHelper.setData(key: 'isDark', value: isDark).then((value) {
       emit(ChangeTheme());
     });
+  }
+
+  void toggleScreenAwake(bool val) {
+    Wakelock.toggle(enable: val);
+    keepScreenAwake = val;
+    emit(ChangeScreenAwakeState());
   }
 
   void togglePlaying() {

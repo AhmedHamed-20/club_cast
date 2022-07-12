@@ -7,6 +7,7 @@ import 'package:club_cast/presentation_layer/layout/layout_screen.dart';
 import 'package:club_cast/presentation_layer/screens/user_screen/login_screen/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wakelock/wakelock.dart';
 import 'data_layer/bloc/bloc_observer/bloc_observer.dart';
 import 'data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'data_layer/bloc/login_cubit/login_cubit.dart';
@@ -18,6 +19,7 @@ import 'package:timezone/data/latest.dart' as tz;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   NotificationService().init();
+  await Wakelock.enable();
 
   DioHelper.init();
   await CachHelper.init();

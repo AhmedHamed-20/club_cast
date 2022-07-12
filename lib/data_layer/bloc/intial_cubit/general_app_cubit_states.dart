@@ -34,7 +34,6 @@ class UpdatePasswordSuccessState extends GeneralAppStates {
 }
 
 class UpdatePasswordErrorState extends GeneralAppStates {
-
   UpdatePasswordErrorState();
 }
 
@@ -247,3 +246,5 @@ class PodCastSearchLoadingState extends GeneralAppStates {}
 class PodCastSearchSuccessState extends GeneralAppStates {}
 
 class PodCastSearchErrorState extends GeneralAppStates {}
+
+class ChangeScreenAwakeState extends GeneralAppStates {}
