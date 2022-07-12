@@ -2,9 +2,7 @@ import 'package:club_cast/presentation_layer/components/component/component.dart
 import 'package:flutter/material.dart';
 import 'package:marquee/marquee.dart';
 
-import 'extract_color_from_image.dart';
-
-Widget pilotMode({
+Widget drivingMode({
   required BuildContext context,
   required String podcastName,
   required VoidCallback replayCallBack,
