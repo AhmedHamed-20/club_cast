@@ -2,10 +2,11 @@ import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
 import 'package:club_cast/presentation_layer/components/constant/constant.dart';
+import 'package:club_cast/presentation_layer/models/downloaded_podcasts_moder.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'dart:io';
 import '../../widgets/modelsheetcreate_room.dart';
 
 class UploadPodCastScreen extends StatelessWidget {
@@ -14,6 +15,8 @@ class UploadPodCastScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TextEditingController nameController = TextEditingController();
+    var cubit = GeneralAppCubit?.get(context);
+
     return BlocConsumer<GeneralAppCubit, GeneralAppStates>(
         builder: (context, state) {
           var cubit = GeneralAppCubit.get(context);

@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
 import 'package:club_cast/data_layer/cash/cash.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
@@ -16,9 +14,7 @@ import 'package:club_cast/presentation_layer/widgets/pod_cast_card_item.dart';
 import 'package:club_cast/presentation_layer/widgets/public_room_card_item.dart';
 import 'package:club_cast/presentation_layer/widgets/search_widget_card.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:palette_generator/palette_generator.dart';
 import '../../../data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import '../../../data_layer/bloc/room_cubit/room_cubit.dart';
 import '../../../data_layer/notification/local_notification.dart';

@@ -35,6 +35,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:wakelock/wakelock.dart';
 
+import '../../../presentation_layer/models/downloaded_podcasts_moder.dart';
 import '../../../presentation_layer/models/followers_following_model.dart';
 import '../../../presentation_layer/models/getAllRoomsModel.dart';
 import '../../../presentation_layer/models/getMyFollowingPodcast.dart';
@@ -1416,5 +1417,16 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       loadUserPodcasts = false;
       emit(PaginationUserPodcastsErrorState());
     });
+  }
+
+  Future<List> getLocalDownloadedPodCast() async {
+    final dirList = await getDownloadPath();
+    final path = dirList![0].path;
+    final dir = Directory(path);
+    final List<FileSystemEntity> entities = await dir.list().toList();
+    final List files = entities.whereType<File>().toList();
+    DownloadedPodCastModel.downloadedPodcastFiles = files;
+    DownloadedPodCastModel.getPodCastNames();
+    return DownloadedPodCastModel.downloadedPodcastFiles;
   }
 }

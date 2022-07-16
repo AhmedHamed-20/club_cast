@@ -66,7 +66,8 @@ class MyApp extends StatelessWidget {
             ..getAllCategory()
             ..getDark(isDark!)
             ..getMyEvents()
-            ..getMyFollowingEvents(context),
+            ..getMyFollowingEvents(context)
+            ..getLocalDownloadedPodCast(),
         ),
       ],
       child: BlocConsumer<GeneralAppCubit, GeneralAppStates>(

@@ -34,212 +34,261 @@ class PodCastScreen extends StatelessWidget {
         // print(RoomCubit.get(context).speakers);
         currentId = cubit.activePodCastId;
         //     print(currentId);
-        return Padding(
-          padding: cubit.isPlaying || cubit.isPausedInHome
-              ? const EdgeInsets.only(
-                  left: 10.0, right: 10, top: 10, bottom: 70)
-              : const EdgeInsets.only(
-                  left: 10.0,
-                  right: 10,
-                  top: 10,
-                ),
-          child: GetMyFollowingPodCastsModel
-                  .getMyFollowingPodcasts!['data'].isEmpty
-              ? Center(
+        return DefaultTabController(
+          length: 2,
+          child: Scaffold(
+            appBar: PreferredSize(
+              preferredSize: const Size.fromHeight(kToolbarHeight),
+              child: Container(
+                color: Theme.of(context).scaffoldBackgroundColor,
+                child: SafeArea(
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Follow someone to see following podcasts',
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.bodyText1,
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      defaultButton(
-                        onPressed: () {
-                          cubit.getExplorePodcast(token: token);
-                          navigatePushTo(
-                            context: context,
-                            navigateTo: const ExploreScreen(),
-                          );
-                        },
-                        context: context,
-                        text: 'Explore',
-                        width: 150,
-                        radius: 25,
+                    children: <Widget>[
+                      Expanded(child: Container()),
+                      TabBar(
+                        indicator: BoxDecoration(
+                          borderRadius: BorderRadius.circular(25),
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        tabs: const [
+                          Text("Your Podcasts "),
+                          Text("Downloaded Podcasts")
+                        ],
                       ),
                     ],
                   ),
-                )
-              : RefreshIndicator(
-                  backgroundColor: Theme.of(context).backgroundColor,
-                  color: Theme.of(context).primaryColor,
-                  onRefresh: () => cubit.getMyFollowingPodcast(token, context),
-                  child: CustomScrollView(
-                    physics: const BouncingScrollPhysics(),
-                    slivers: [
-                      SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                          (context, index) => InkWell(
-                            onTap: () async {
-                              GenerateColor.colors = [];
-                              navigatePushTo(
-                                  context: context,
-                                  navigateTo: ActivePodCastScreen(
-                                    duration: GetMyFollowingPodCastsModel
-                                        .getPodCastAudio(index)[0]['duration'],
-                                    podCastId: GetMyFollowingPodCastsModel
-                                        .getPodcastID(index),
-                                    podcastName: GetMyFollowingPodCastsModel
-                                        .getPodcastName(index),
-                                    podcastUrl: GetMyFollowingPodCastsModel
-                                        .getPodCastAudio(index)[0]['url'],
-                                    userName: GetMyFollowingPodCastsModel
-                                        .getPodcastUserPublishInform(
-                                            index)[0]['name'],
-                                    userPhoto: GetMyFollowingPodCastsModel
-                                        .getPodcastUserPublishInform(
-                                            index)[0]['photo'],
-                                    index: index,
-                                    userId: GetMyFollowingPodCastsModel
-                                        .getPodcastUserPublishInform(
-                                            index)[0]['_id'],
-                                  ));
-                            },
-                            child: podACastItem(
-                              context,
-                              index: index,
-                              downloadButton:
-                                  PlayingCardWidget.downloadingWidget(
-                                      currentId.toString(),
-                                      index,
-                                      GetMyFollowingPodCastsModel.getPodcastID(
-                                          index),
-                                      cubit,
-                                      context,
-                                      GetMyFollowingPodCastsModel
-                                          .getPodCastAudio(index)[0]['url'],
-                                      GetMyFollowingPodCastsModel
-                                          .getPodcastName(index)),
-                              likeWidget: PlayingCardWidget.likeState(
-                                context,
-                                GetMyFollowingPodCastsModel.getPodcastlikeState(
-                                    index),
-                                GetMyFollowingPodCastsModel.getPodcastID(index),
-                                token,
-                                '',
-                              ),
-                              podCastLikes: PlayingCardWidget.podCastLikes(
-                                  context,
-                                  cubit,
-                                  token,
-                                  index,
-                                  GetMyFollowingPodCastsModel.getPodcastID(
-                                      index),
-                                  GetMyFollowingPodCastsModel.getPodcastLikes(
-                                          index)
-                                      .toString()),
-                              removePodCast: const SizedBox(),
-                              playingWidget: PlayingCardWidget.playingButton(
-                                  index,
-                                  cubit,
-                                  GetMyFollowingPodCastsModel.getPodCastAudio(
-                                      index)[0]['url'],
-                                  currentId.toString(),
-                                  GetMyFollowingPodCastsModel.getPodcastID(
-                                      index),
-                                  GetMyFollowingPodCastsModel.getPodcastName(
-                                      index),
-                                  GetMyFollowingPodCastsModel
-                                      ?.getPodcastUserPublishInform(
-                                          index)[0]?['photo'],
-                                  context),
-                              gettime:
-                                  GetMyFollowingPodCastsModel.getPodCastAudio(
-                                      index)[0]['duration'],
-                              photourl: GetMyFollowingPodCastsModel
-                                      .getPodcastUserPublishInform(index)[0]
-                                  ['photo'],
-                              ontapOnCircleAvater: () {
-                                cubit.getUserById(
-                                    profileId: GetMyFollowingPodCastsModel
-                                        .getPodcastUserPublishInform(
-                                            index)[0]['_id'],
-                                    token: token);
-                                cubit.getUserPodcast(
-                                    token,
-                                    GetMyFollowingPodCastsModel
-                                        .getPodcastUserPublishInform(
-                                            index)[0]['_id']);
-                                navigatePushTo(
-                                    context: context,
-                                    navigateTo: ProfileDetailsScreen(
-                                        GetMyFollowingPodCastsModel
-                                            .getPodcastUserPublishInform(
-                                                index)[0]['_id']));
-                              },
-                              podcastName:
-                                  GetMyFollowingPodCastsModel.getPodcastName(
-                                      index),
-                              userName: GetMyFollowingPodCastsModel
-                                      .getPodcastUserPublishInform(index)[0]
-                                  ['name'],
-                              text: cubit.isPlaying &&
-                                      GetMyFollowingPodCastsModel.getPodcastID(
-                                              index) ==
-                                          currentId
-                                  ? cubit.currentOlayingDurathion
-                                  : cubit.pressedPause &&
-                                          GetMyFollowingPodCastsModel
-                                                  .getPodcastID(index) ==
-                                              currentId
-                                      ? cubit.currentOlayingDurathion
-                                      : null,
-                            ),
-                          ),
-                          childCount: GetMyFollowingPodCastsModel
-                              .getMyFollowingPodcasts?['data'].length,
+                ),
+              ),
+            ),
+            body: TabBarView(
+              children: [
+                Padding(
+                  padding: cubit.isPlaying || cubit.isPausedInHome
+                      ? const EdgeInsets.only(
+                          left: 10.0, right: 10, top: 10, bottom: 70)
+                      : const EdgeInsets.only(
+                          left: 10.0,
+                          right: 10,
+                          top: 10,
                         ),
-                      ),
-                      SliverToBoxAdapter(
-                        child: Column(
-                          children: [
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            cubit.noDataMyfollowingPodcast
-                                ? const SizedBox()
-                                : InkWell(
-                                    borderRadius: BorderRadius.circular(40),
-                                    onTap: () {
-                                      cubit.pageinathionMyFollowingPodcast(
-                                        token,
-                                      );
+                  child: GetMyFollowingPodCastsModel
+                          .getMyFollowingPodcasts!['data'].isEmpty
+                      ? Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Follow someone to see following podcasts',
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context).textTheme.bodyText1,
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              defaultButton(
+                                onPressed: () {
+                                  cubit.getExplorePodcast(token: token);
+                                  navigatePushTo(
+                                    context: context,
+                                    navigateTo: const ExploreScreen(),
+                                  );
+                                },
+                                context: context,
+                                text: 'Explore',
+                                width: 150,
+                                radius: 25,
+                              ),
+                            ],
+                          ),
+                        )
+                      : RefreshIndicator(
+                          backgroundColor: Theme.of(context).backgroundColor,
+                          color: Theme.of(context).primaryColor,
+                          onRefresh: () =>
+                              cubit.getMyFollowingPodcast(token, context),
+                          child: CustomScrollView(
+                            physics: const BouncingScrollPhysics(),
+                            slivers: [
+                              SliverList(
+                                delegate: SliverChildBuilderDelegate(
+                                  (context, index) => InkWell(
+                                    onTap: () async {
+                                      GenerateColor.colors = [];
+                                      navigatePushTo(
+                                          context: context,
+                                          navigateTo: ActivePodCastScreen(
+                                            duration:
+                                                GetMyFollowingPodCastsModel
+                                                    .getPodCastAudio(
+                                                        index)[0]['duration'],
+                                            podCastId:
+                                                GetMyFollowingPodCastsModel
+                                                    .getPodcastID(index),
+                                            podcastName:
+                                                GetMyFollowingPodCastsModel
+                                                    .getPodcastName(index),
+                                            podcastUrl:
+                                                GetMyFollowingPodCastsModel
+                                                    .getPodCastAudio(
+                                                        index)[0]['url'],
+                                            userName: GetMyFollowingPodCastsModel
+                                                .getPodcastUserPublishInform(
+                                                    index)[0]['name'],
+                                            userPhoto:
+                                                GetMyFollowingPodCastsModel
+                                                    .getPodcastUserPublishInform(
+                                                        index)[0]['photo'],
+                                            index: index,
+                                            userId: GetMyFollowingPodCastsModel
+                                                .getPodcastUserPublishInform(
+                                                    index)[0]['_id'],
+                                          ));
                                     },
-                                    child: CircleAvatar(
-                                      backgroundColor:
-                                          Theme.of(context).backgroundColor,
-                                      radius: 30,
-                                      child: cubit.loadMyFollowinPodcast
-                                          ? CircularProgressIndicator(
-                                              color: Theme.of(context)
-                                                  .primaryColor,
-                                            )
-                                          : Icon(
-                                              Icons.arrow_downward,
-                                              color: Theme.of(context)
-                                                  .primaryColor,
-                                            ),
+                                    child: podACastItem(
+                                      context,
+                                      index: index,
+                                      downloadButton:
+                                          PlayingCardWidget.downloadingWidget(
+                                              currentId.toString(),
+                                              index,
+                                              GetMyFollowingPodCastsModel
+                                                  .getPodcastID(index),
+                                              cubit,
+                                              context,
+                                              GetMyFollowingPodCastsModel
+                                                      .getPodCastAudio(index)[0]
+                                                  ['url'],
+                                              GetMyFollowingPodCastsModel
+                                                  .getPodcastName(index)),
+                                      likeWidget: PlayingCardWidget.likeState(
+                                        context,
+                                        GetMyFollowingPodCastsModel
+                                            .getPodcastlikeState(index),
+                                        GetMyFollowingPodCastsModel
+                                            .getPodcastID(index),
+                                        token,
+                                        '',
+                                      ),
+                                      podCastLikes:
+                                          PlayingCardWidget.podCastLikes(
+                                              context,
+                                              cubit,
+                                              token,
+                                              index,
+                                              GetMyFollowingPodCastsModel
+                                                  .getPodcastID(index),
+                                              GetMyFollowingPodCastsModel
+                                                      .getPodcastLikes(index)
+                                                  .toString()),
+                                      removePodCast: const SizedBox(),
+                                      playingWidget:
+                                          PlayingCardWidget.playingButton(
+                                              index,
+                                              cubit,
+                                              GetMyFollowingPodCastsModel
+                                                      .getPodCastAudio(index)[0]
+                                                  ['url'],
+                                              currentId.toString(),
+                                              GetMyFollowingPodCastsModel
+                                                  .getPodcastID(index),
+                                              GetMyFollowingPodCastsModel
+                                                  .getPodcastName(index),
+                                              GetMyFollowingPodCastsModel
+                                                  ?.getPodcastUserPublishInform(
+                                                      index)[0]?['photo'],
+                                              context),
+                                      gettime: GetMyFollowingPodCastsModel
+                                              .getPodCastAudio(index)[0]
+                                          ['duration'],
+                                      photourl: GetMyFollowingPodCastsModel
+                                          .getPodcastUserPublishInform(
+                                              index)[0]['photo'],
+                                      ontapOnCircleAvater: () {
+                                        cubit.getUserById(
+                                            profileId:
+                                                GetMyFollowingPodCastsModel
+                                                    .getPodcastUserPublishInform(
+                                                        index)[0]['_id'],
+                                            token: token);
+                                        cubit.getUserPodcast(
+                                            token,
+                                            GetMyFollowingPodCastsModel
+                                                .getPodcastUserPublishInform(
+                                                    index)[0]['_id']);
+                                        navigatePushTo(
+                                            context: context,
+                                            navigateTo: ProfileDetailsScreen(
+                                                GetMyFollowingPodCastsModel
+                                                    .getPodcastUserPublishInform(
+                                                        index)[0]['_id']));
+                                      },
+                                      podcastName: GetMyFollowingPodCastsModel
+                                          .getPodcastName(index),
+                                      userName: GetMyFollowingPodCastsModel
+                                          .getPodcastUserPublishInform(
+                                              index)[0]['name'],
+                                      text: cubit.isPlaying &&
+                                              GetMyFollowingPodCastsModel
+                                                      .getPodcastID(index) ==
+                                                  currentId
+                                          ? cubit.currentOlayingDurathion
+                                          : cubit.pressedPause &&
+                                                  GetMyFollowingPodCastsModel
+                                                          .getPodcastID(
+                                                              index) ==
+                                                      currentId
+                                              ? cubit.currentOlayingDurathion
+                                              : null,
                                     ),
                                   ),
-                          ],
+                                  childCount: GetMyFollowingPodCastsModel
+                                      .getMyFollowingPodcasts?['data'].length,
+                                ),
+                              ),
+                              SliverToBoxAdapter(
+                                child: Column(
+                                  children: [
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    cubit.noDataMyfollowingPodcast
+                                        ? const SizedBox()
+                                        : InkWell(
+                                            borderRadius:
+                                                BorderRadius.circular(40),
+                                            onTap: () {
+                                              cubit
+                                                  .pageinathionMyFollowingPodcast(
+                                                token,
+                                              );
+                                            },
+                                            child: CircleAvatar(
+                                              backgroundColor: Theme.of(context)
+                                                  .backgroundColor,
+                                              radius: 30,
+                                              child: cubit.loadMyFollowinPodcast
+                                                  ? CircularProgressIndicator(
+                                                      color: Theme.of(context)
+                                                          .primaryColor,
+                                                    )
+                                                  : Icon(
+                                                      Icons.arrow_downward,
+                                                      color: Theme.of(context)
+                                                          .primaryColor,
+                                                    ),
+                                            ),
+                                          ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
                         ),
-                      )
-                    ],
-                  ),
                 ),
+                Text('Downloaded'),
+              ],
+            ),
+          ),
         );
       },
     );
