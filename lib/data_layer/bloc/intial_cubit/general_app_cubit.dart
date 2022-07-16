@@ -90,16 +90,16 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   final assetsAudioPlayer = AssetsAudioPlayer();
   bool internetConnection = true;
   bool isSearchScreen = false;
-  List<BottomNavigationBarItem> bottomNavBarItem = const [
-    BottomNavigationBarItem(
+  List<NavigationDestination> bottomNavBarItem = const [
+    NavigationDestination(
       icon: Icon(Icons.home),
       label: 'home',
     ),
-    BottomNavigationBarItem(
+    NavigationDestination(
       icon: Icon(Icons.add),
       label: '',
     ),
-    BottomNavigationBarItem(
+    NavigationDestination(
       icon: Icon(Icons.headphones),
       label: 'podCast',
     ),
@@ -896,10 +896,6 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       token: {'Authorization': 'Bearer $token'},
     ).then((value) {
       PodCastSearchModel.getMyPodCast = Map<String, dynamic>.from(value.data);
-
-      // print('podCast search tmam');
-      // print(PodCastSearchModel.getMyPodCast['data'].length);
-      // print(PodCastSearchModel.getPodcastName(0));
       isSearch = false;
 
       emit(PodCastSearchSuccessState());

@@ -379,90 +379,104 @@ class LayoutScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                bottomNavigationBar: BottomNavigationBar(
-                  showSelectedLabels: false,
-                  showUnselectedLabels: false,
-                  items: cubit.bottomNavBarItem,
-                  backgroundColor: Theme.of(context).backgroundColor,
-                  selectedItemColor: Theme.of(context).primaryColor,
-                  unselectedItemColor: Theme.of(context).iconTheme.color,
-                  currentIndex: cubit.bottomNavIndex,
-                  onTap: (index) {
-                    if (index == 1) {
-                      if (cubit.isPlaying) {
-                        showToast(
-                            message:
-                                "you can't create room if you playing a podcast,leave first(:",
-                            toastState: ToastState.WARNING);
-                        return;
-                      } else {
-                        modalBottomSheetItem(context, () async {
-                          var hasBckGroundPermission = CachHelper.getData(
-                              key: 'hasBackGroundPermission');
-                          if (await FlutterBackground.hasPermissions == true ||
-                              hasBckGroundPermission != null) {
-                            cubit.loadRoom = true;
-                            cubit.changeState();
-                            cubit.micPerm();
+                bottomNavigationBar: NavigationBarTheme(
+                  data: NavigationBarThemeData(
+                    backgroundColor: Theme.of(context).backgroundColor,
+                    height: 65,
+                    elevation: 5,
+                    indicatorColor:
+                        Theme.of(context).primaryColor.withOpacity(0.5),
+                    iconTheme: MaterialStateProperty.all(
+                      Theme.of(context).iconTheme.copyWith(size: 20),
+                    ),
+                  ),
+                  child: NavigationBar(
+                    labelBehavior:
+                        NavigationDestinationLabelBehavior.alwaysHide,
+                    elevation: 3,
+                    destinations: cubit.bottomNavBarItem,
+                    backgroundColor: Theme.of(context).backgroundColor,
+                    selectedIndex: cubit.bottomNavIndex,
+                    onDestinationSelected: (index) {
+                      if (index == 1) {
+                        if (cubit.isPlaying) {
+                          showToast(
+                              message:
+                                  "you can't create room if you playing a podcast,leave first(:",
+                              toastState: ToastState.WARNING);
+                          return;
+                        } else {
+                          modalBottomSheetItem(context, () async {
+                            var hasBckGroundPermission = CachHelper.getData(
+                                key: 'hasBackGroundPermission');
+                            if (await FlutterBackground.hasPermissions ==
+                                    true ||
+                                hasBckGroundPermission != null) {
+                              cubit.loadRoom = true;
+                              cubit.changeState();
+                              cubit.micPerm();
 
-                            SocketFunc.isConnected
-                                ? const SizedBox()
-                                : SocketFunc.connectWithSocket(
-                                    context,
-                                    RoomCubit.get(context),
-                                    GeneralAppCubit.get(context));
-                            SocketFunc.createRoom(
-                              {
-                                'name': cubit.roomNameController.text,
-                                'category': cubit.selectedCategoryItem,
-                                'status':
-                                    cubit.isPublicRoom ? 'public' : 'private',
-                                'isRecording': cubit.isRecordRoom,
-                              },
-                              context,
-                              roomCubit,
-                              cubit,
-                            );
-                            SocketFunc.isAdminLeftSocket(cubit);
-                          } else {
-                            showDialog(
-                              context: context,
-                              builder: (context) => multiAlerDialog(
+                              SocketFunc.isConnected
+                                  ? const SizedBox()
+                                  : SocketFunc.connectWithSocket(
+                                      context,
+                                      RoomCubit.get(context),
+                                      GeneralAppCubit.get(context));
+                              SocketFunc.createRoom(
+                                {
+                                  'name': cubit.roomNameController.text,
+                                  'category': cubit.selectedCategoryItem,
+                                  'status':
+                                      cubit.isPublicRoom ? 'public' : 'private',
+                                  'isRecording': cubit.isRecordRoom,
+                                },
+                                context,
+                                roomCubit,
+                                cubit,
+                              );
+                              SocketFunc.isAdminLeftSocket(cubit);
+                            } else {
+                              showDialog(
                                 context: context,
-                                title: 'Alert',
-                                content: Text(
-                                  'Please allow to disable battery optimization and set it to no restriction.\t(disable battery optimization let you listen to your favourite rooms even if you sent app to background (:\n don\'t worry we will disable it after you leave the room) ',
-                                  style: Theme.of(context).textTheme.bodyText1,
-                                ),
-                                actions: Center(
-                                  child: MaterialButton(
-                                    onPressed: () async {
-                                      bool success =
-                                          await FlutterBackground.initialize(
-                                              androidConfig: androidConfig);
-                                      Navigator.of(context).pop();
-                                      if (success) {
-                                        CachHelper.setData(
-                                            key: 'hasBackGroundPermission',
-                                            value: true);
-                                      }
-                                    },
-                                    child: Text(
-                                      'Allow',
-                                      style:
-                                          Theme.of(context).textTheme.bodyText1,
+                                builder: (context) => multiAlerDialog(
+                                  context: context,
+                                  title: 'Alert',
+                                  content: Text(
+                                    'Please allow to disable battery optimization and set it to no restriction.\t(disable battery optimization let you listen to your favourite rooms even if you sent app to background (:\n don\'t worry we will disable it after you leave the room) ',
+                                    style:
+                                        Theme.of(context).textTheme.bodyText1,
+                                  ),
+                                  actions: Center(
+                                    child: MaterialButton(
+                                      onPressed: () async {
+                                        bool success =
+                                            await FlutterBackground.initialize(
+                                                androidConfig: androidConfig);
+                                        Navigator.of(context).pop();
+                                        if (success) {
+                                          CachHelper.setData(
+                                              key: 'hasBackGroundPermission',
+                                              value: true);
+                                        }
+                                      },
+                                      child: Text(
+                                        'Allow',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1,
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            );
-                          }
-                        });
-                        return;
+                              );
+                            }
+                          });
+                          return;
+                        }
                       }
-                    }
-                    cubit.changeBottomNAvIndex(index);
-                  },
+                      cubit.changeBottomNAvIndex(index);
+                    },
+                  ),
                 ),
                 body: OfflineBuilder(
                   child: const CircularProgressIndicator(),
