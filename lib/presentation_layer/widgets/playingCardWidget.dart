@@ -40,7 +40,11 @@ class PlayingCardWidget {
                         } else if (cubit.isExplore) {
                           cubit.getExplorePodcast(token: token);
                         } else if (cubit.isSearchScreen) {
-                          cubit.podCastSearch(token: token, value: searchName!);
+                          cubit.podCastSearch(
+                            token: token,
+                            value: searchName!,
+                            isLocalPodcast: false,
+                          );
                         } else {
                           cubit.getMyFollowingPodcast(token, context);
                         }
@@ -63,7 +67,11 @@ class PlayingCardWidget {
                         } else if (cubit.isExplore) {
                           cubit.getExplorePodcast(token: token);
                         } else if (cubit.isSearchScreen) {
-                          cubit.podCastSearch(token: token, value: searchName!);
+                          cubit.podCastSearch(
+                            token: token,
+                            value: searchName!,
+                            isLocalPodcast: false,
+                          );
                         } else {
                           cubit.getMyFollowingPodcast(token, context);
                         }
@@ -107,7 +115,8 @@ class PlayingCardWidget {
       String podCastId,
       String podCastName,
       String userPhoto,
-      BuildContext context) {
+      BuildContext context,
+      bool isLocalPodcast) {
     return IconButton(
       onPressed: () {
         String podCastUrl = podcastUrl;
@@ -123,8 +132,8 @@ class PlayingCardWidget {
                   cubit.pressedPause = true;
                   cubit.changeState();
                 })
-              : cubit.playingPodcast(
-                  podCastUrl, podCastName, userPhoto, podCastId, context);
+              : cubit.playingPodcast(podCastUrl, podCastName, userPhoto,
+                  podCastId, context, isLocalPodcast);
           // print(GetAllPodCastModel.getPodCastAudio(index));
 
         }

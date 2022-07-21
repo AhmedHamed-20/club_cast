@@ -2,10 +2,13 @@ import 'dart:typed_data';
 
 import 'package:club_cast/data_layer/bloc/intial_cubit/general_app_cubit_states.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
+import 'package:club_cast/presentation_layer/models/downloaded_podcasts_moder.dart';
 import 'package:club_cast/presentation_layer/models/getMyFollowingPodcast.dart';
 import 'package:club_cast/presentation_layer/screens/podcast_screens/active_podcast_screen.dart';
 import 'package:club_cast/presentation_layer/screens/podcast_screens/explore_screen.dart';
 import 'package:club_cast/presentation_layer/screens/user_screen/other_users_screens/profile_detailes_screen.dart';
+import 'package:club_cast/presentation_layer/screens/user_screen/profile_detailes_screens/user_profile_screen.dart';
+import 'package:club_cast/presentation_layer/widgets/downloaded_podcast_design.dart';
 import 'package:club_cast/presentation_layer/widgets/extract_color_from_image.dart';
 import 'package:club_cast/presentation_layer/widgets/pod_cast_card_item.dart';
 import 'package:flutter/material.dart';
@@ -196,7 +199,8 @@ class PodCastScreen extends StatelessWidget {
                                               GetMyFollowingPodCastsModel
                                                   ?.getPodcastUserPublishInform(
                                                       index)[0]?['photo'],
-                                              context),
+                                              context,
+                                              false),
                                       gettime: GetMyFollowingPodCastsModel
                                               .getPodCastAudio(index)[0]
                                           ['duration'],
@@ -231,13 +235,13 @@ class PodCastScreen extends StatelessWidget {
                                               GetMyFollowingPodCastsModel
                                                       .getPodcastID(index) ==
                                                   currentId
-                                          ? cubit.currentOlayingDurathion
+                                          ? cubit.currentplayingDurathion
                                           : cubit.pressedPause &&
                                                   GetMyFollowingPodCastsModel
                                                           .getPodcastID(
                                                               index) ==
                                                       currentId
-                                              ? cubit.currentOlayingDurathion
+                                              ? cubit.currentplayingDurathion
                                               : null,
                                     ),
                                   ),
@@ -285,7 +289,64 @@ class PodCastScreen extends StatelessWidget {
                           ),
                         ),
                 ),
-                Text('Downloaded'),
+                ListView.builder(
+                    itemCount:
+                        DownloadedPodCastModel.downloadedPodcastFiles.length,
+                    itemBuilder: (context, index) {
+                      return downloadedPodCasDesign(
+                        context: context,
+                        userName:
+                            DownloadedPodCastModel.getPodcastUserPublishInform(
+                                index)['name'],
+                        podcastName:
+                            DownloadedPodCastModel.getPodcastName(index),
+                        podcastPhotoUrl:
+                            DownloadedPodCastModel.getPodcastUserPublishInform(
+                                index)['photo'],
+                        ontapOnCircleAvater: () {
+                          cubit.getUserById(
+                              profileId: DownloadedPodCastModel
+                                  .getPodcastUserPublishInform(index)['_id'],
+                              token: token);
+                          cubit.getUserPodcast(
+                              token,
+                              DownloadedPodCastModel
+                                  .getPodcastUserPublishInform(index)['_id']);
+
+                          navigatePushTo(
+                              context: context,
+                              navigateTo: ProfileDetailsScreen(
+                                  DownloadedPodCastModel
+                                      .getPodcastUserPublishInform(
+                                          index)['_id']));
+                        },
+                        playingWidget: PlayingCardWidget.playingButton(
+                            index,
+                            cubit,
+                            DownloadedPodCastModel
+                                .downloadedPodcastFiles[index].path,
+                            currentId.toString(),
+                            DownloadedPodCastModel.getPodcastID(index),
+                            DownloadedPodCastModel.getPodcastName(index),
+                            DownloadedPodCastModel?.getPodcastUserPublishInform(
+                                index)['photo'],
+                            context,
+                            true),
+                        currentPodcastDuration: cubit.isPlaying &&
+                                DownloadedPodCastModel.getPodcastID(index) ==
+                                    currentId &&
+                                cubit.isLocalPodcastval
+                            ? cubit.currentplayingDurathion
+                            : cubit.pressedPause &&
+                                    DownloadedPodCastModel.getPodcastID(
+                                            index) ==
+                                        currentId
+                                ? cubit.currentplayingDurathion
+                                : null,
+                        podcasDuration: DownloadedPodCastModel.getPodCastAudio(
+                            index)['duration'],
+                      );
+                    }),
               ],
             ),
           ),

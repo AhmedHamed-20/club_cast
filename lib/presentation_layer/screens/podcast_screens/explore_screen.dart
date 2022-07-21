@@ -159,7 +159,8 @@ class ExploreScreen extends StatelessWidget {
                                               GetExplorePodCastModel
                                                   .getPodcastUserPublishInform(
                                                       index)[0]['photo'],
-                                              context),
+                                              context,
+                                              false),
                                       gettime: GetExplorePodCastModel
                                               .getPodCastAudio(index)[0]
                                           ['duration'],
@@ -210,13 +211,13 @@ class ExploreScreen extends StatelessWidget {
                                               GetExplorePodCastModel
                                                       .getPodcastID(index) ==
                                                   cubit.activePodCastId
-                                          ? cubit.currentOlayingDurathion
+                                          ? cubit.currentplayingDurathion
                                           : cubit.pressedPause &&
                                                   GetExplorePodCastModel
                                                           .getPodcastID(
                                                               index) ==
                                                       cubit.activePodCastId
-                                              ? cubit.currentOlayingDurathion
+                                              ? cubit.currentplayingDurathion
                                               : null,
                                     ),
                                   );

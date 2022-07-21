@@ -38,7 +38,11 @@ class SearchScreen extends StatelessWidget {
       Future.delayed(const Duration(seconds: 1), () {
         cubit.userSearch(token: token, value: searchController.text);
         cubit.searchRooms(searchController.text, token);
-        cubit.podCastSearch(token: token, value: searchController.text);
+        cubit.podCastSearch(
+          token: token,
+          value: searchController.text,
+          isLocalPodcast: false,
+        );
       });
     });
     return BlocConsumer<GeneralAppCubit, GeneralAppStates>(
@@ -386,7 +390,8 @@ class SearchScreen extends StatelessWidget {
                                               PodCastSearchModel
                                                   .getPodcastUserPublishInform(
                                                       index)['photo'],
-                                              context),
+                                              context,
+                                              false),
                                       gettime:
                                           PodCastSearchModel.getPodCastAudio(
                                               index)['duration'],
@@ -421,13 +426,13 @@ class SearchScreen extends StatelessWidget {
                                               PodCastSearchModel.getPodcastID(
                                                       index) ==
                                                   cubit.activePodCastId
-                                          ? cubit.currentOlayingDurathion
+                                          ? cubit.currentplayingDurathion
                                           : cubit.pressedPause &&
                                                   PodCastSearchModel
                                                           .getPodcastID(
                                                               index) ==
                                                       cubit.activePodCastId
-                                              ? cubit.currentOlayingDurathion
+                                              ? cubit.currentplayingDurathion
                                               : null,
                                     ),
                                   ),

@@ -113,7 +113,7 @@ class ActivePodCastScreen extends StatelessWidget {
                                     },
                                   )
                                 : cubit.playingPodcast(podCastUrl, podcastName,
-                                    userPhoto, podCastId, context);
+                                    userPhoto, podCastId, context, false);
                           }
                         },
                         cubit: cubit,
@@ -218,10 +218,10 @@ class ActivePodCastScreen extends StatelessWidget {
                           Text(
                             cubit.isPlaying &&
                                     podCastId == cubit.activePodCastId
-                                ? cubit.currentOlayingDurathion!
+                                ? cubit.currentplayingDurathion!
                                 : cubit.pressedPause &&
                                         podCastId == cubit.activePodCastId
-                                    ? cubit.currentOlayingDurathion!
+                                    ? cubit.currentplayingDurathion!
                                     : convertedTime,
                             style: Theme.of(context).textTheme.bodyText1,
                           ),
@@ -313,7 +313,8 @@ class ActivePodCastScreen extends StatelessWidget {
                                                       podcastName,
                                                       userPhoto,
                                                       podCastId,
-                                                      context);
+                                                      context,
+                                                      false);
                                             }
                                           },
                                           child: Icon(

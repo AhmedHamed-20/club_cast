@@ -4,9 +4,7 @@ import 'package:flutter/material.dart';
 
 Widget podACastItem(
   BuildContext context, {
-  String? roomName,
   String? speaker,
-  String? roomTime,
   int? index,
   Widget? playingWidget,
   String? text,

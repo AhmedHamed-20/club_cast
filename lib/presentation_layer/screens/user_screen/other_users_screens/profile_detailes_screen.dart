@@ -337,14 +337,14 @@ class ProfileDetailsScreen extends StatelessWidget {
                                                             .getPodcastID(
                                                                 index) ==
                                                         currentId
-                                                ? cubit.currentOlayingDurathion
+                                                ? cubit.currentplayingDurathion
                                                 : cubit.pressedPause &&
                                                         GetAllPodCastModel
                                                                 .getPodcastID(
                                                                     index) ==
                                                             currentId
                                                     ? cubit
-                                                        .currentOlayingDurathion
+                                                        .currentplayingDurathion
                                                     : null,
                                             likeWidget:
                                                 PlayingCardWidget.likeState(
@@ -406,7 +406,8 @@ class ProfileDetailsScreen extends StatelessWidget {
                                                     GetAllPodCastModel
                                                         .getPodcastUserPublishInform(
                                                             index)[0]['photo'],
-                                                    context),
+                                                    context,
+                                                    false),
                                           ),
                                         );
                                       },

@@ -382,7 +382,7 @@ class LayoutScreen extends StatelessWidget {
                 bottomNavigationBar: NavigationBarTheme(
                   data: NavigationBarThemeData(
                     backgroundColor: Theme.of(context).backgroundColor,
-                    height: 65,
+                    height: 55,
                     elevation: 5,
                     indicatorColor:
                         Theme.of(context).primaryColor.withOpacity(0.5),

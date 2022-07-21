@@ -81,7 +81,7 @@ class UserProfileScreen extends StatelessWidget {
                                   cubit.isPlaying = false;
                                   cubit.isPausedInHome = false;
                                   GeneralAppCubit.get(context).search = null;
-                                  cubit.currentOlayingDurathion = null;
+                                  cubit.currentplayingDurathion = null;
                                   cubit.activePodCastId = null;
                                   cubit.currentPostionDurationInsec = 0;
                                 });
@@ -348,14 +348,14 @@ class UserProfileScreen extends StatelessWidget {
                                                           .getPodcastID(
                                                               index) ==
                                                       currentId
-                                              ? cubit.currentOlayingDurathion
+                                              ? cubit.currentplayingDurathion
                                               : cubit.pressedPause &&
                                                       GetMyPodCastModel
                                                               ?.getPodcastID(
                                                                   index) ==
                                                           currentId
                                                   ? cubit
-                                                      .currentOlayingDurathion
+                                                      .currentplayingDurathion
                                                   : null,
                                           downloadButton: PlayingCardWidget
                                               .downloadingWidget(
@@ -389,7 +389,7 @@ class UserProfileScreen extends StatelessWidget {
                                                             cubit
                                                                 .assetsAudioPlayer
                                                                 .stop();
-                                                            cubit.currentOlayingDurathion =
+                                                            cubit.currentplayingDurathion =
                                                                 null;
                                                             cubit.activePodCastId =
                                                                 null;
@@ -465,7 +465,8 @@ class UserProfileScreen extends StatelessWidget {
                                                   GetMyPodCastModel
                                                       .getPodcastUserPublishInform(
                                                           index)[0]['photo'],
-                                                  context),
+                                                  context,
+                                                  false),
                                         ),
                                       );
                                     },

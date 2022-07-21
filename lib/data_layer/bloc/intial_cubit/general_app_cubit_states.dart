@@ -248,3 +248,7 @@ class PodCastSearchSuccessState extends GeneralAppStates {}
 class PodCastSearchErrorState extends GeneralAppStates {}
 
 class ChangeScreenAwakeState extends GeneralAppStates {}
+
+class DownloadedPOdcastInformationGetsucces extends GeneralAppStates {}
+
+class DownloadedPOdcastInformationGeterror extends GeneralAppStates {}

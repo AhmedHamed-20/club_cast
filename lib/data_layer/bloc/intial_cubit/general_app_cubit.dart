@@ -55,6 +55,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   bool isRecordRoom = false;
   bool previewIsplaying = false;
   File? podcastFile;
+  bool isLocalPodcastval = false;
   bool isProfilePage = false;
   bool isLoadingprofile = false;
   int pagemyfollowingPodcast = 2;
@@ -86,7 +87,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   int counter = 0;
   double currentPostionDurationInsec = 0;
   double? progress;
-  String? currentOlayingDurathion;
+  String? currentplayingDurathion;
   final assetsAudioPlayer = AssetsAudioPlayer();
   bool internetConnection = true;
   bool isSearchScreen = false;
@@ -171,12 +172,12 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   }
 
   void playingPodcast(
-    String url,
-    String name,
-    String iconurl,
-    String activePodCastIdnow,
-    BuildContext context,
-  ) async {
+      String url,
+      String name,
+      String iconurl,
+      String activePodCastIdnow,
+      BuildContext context,
+      bool isLocalPodcast) async {
     if (pressedPause && activePodCastId == activePodCastIdnow) {
       assetsAudioPlayer.play();
       activePodCastId = activePodCastIdnow;
@@ -200,40 +201,78 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
               ),
             ),
           );
-          await assetsAudioPlayer.open(
-            Audio.network(url),
-            showNotification: true,
-            notificationSettings: NotificationSettings(
-                stopEnabled: true,
-                customNextIcon: AndroidResDrawable(name: 'ic_next_custom'),
-                customPreviousIcon: AndroidResDrawable(name: 'ic_prev_custom'),
-                customNextAction: (assetaudio) {
-                  assetaudio.seekBy(
-                    const Duration(seconds: 10),
-                  );
-                },
-                customPrevAction: (assetaudio) {
-                  assetaudio.seekBy(
-                    const Duration(seconds: -10),
-                  );
-                },
-                customPlayPauseAction: (_) {
-                  pressedPause
-                      ? assetsAudioPlayer.play().then((value) {
-                          isPlaying = true;
+          isLocalPodcastval = isLocalPodcast;
+          if (isLocalPodcastval) {
+            await assetsAudioPlayer.open(
+              Audio.file(url),
+              showNotification: true,
+              notificationSettings: NotificationSettings(
+                  stopEnabled: true,
+                  customNextIcon: AndroidResDrawable(name: 'ic_next_custom'),
+                  customPreviousIcon:
+                      AndroidResDrawable(name: 'ic_prev_custom'),
+                  customNextAction: (assetaudio) {
+                    assetaudio.seekBy(
+                      const Duration(seconds: 10),
+                    );
+                  },
+                  customPrevAction: (assetaudio) {
+                    assetaudio.seekBy(
+                      const Duration(seconds: -10),
+                    );
+                  },
+                  customPlayPauseAction: (_) {
+                    pressedPause
+                        ? assetsAudioPlayer.play().then((value) {
+                            isPlaying = true;
 
-                          pressedPause = false;
-                          changeState();
-                        })
-                      : assetsAudioPlayer.pause().then((value) {
-                          isPlaying = false;
-                          pressedPause = true;
+                            pressedPause = false;
+                            changeState();
+                          })
+                        : assetsAudioPlayer.pause().then((value) {
+                            isPlaying = false;
+                            pressedPause = true;
 
-                          changeState();
-                        });
-                }),
-          );
+                            changeState();
+                          });
+                  }),
+            );
+          } else {
+            await assetsAudioPlayer.open(
+              Audio.network(url),
+              showNotification: true,
+              notificationSettings: NotificationSettings(
+                  stopEnabled: true,
+                  customNextIcon: AndroidResDrawable(name: 'ic_next_custom'),
+                  customPreviousIcon:
+                      AndroidResDrawable(name: 'ic_prev_custom'),
+                  customNextAction: (assetaudio) {
+                    assetaudio.seekBy(
+                      const Duration(seconds: 10),
+                    );
+                  },
+                  customPrevAction: (assetaudio) {
+                    assetaudio.seekBy(
+                      const Duration(seconds: -10),
+                    );
+                  },
+                  customPlayPauseAction: (_) {
+                    pressedPause
+                        ? assetsAudioPlayer.play().then((value) {
+                            isPlaying = true;
 
+                            pressedPause = false;
+                            changeState();
+                          })
+                        : assetsAudioPlayer.pause().then((value) {
+                            isPlaying = false;
+                            pressedPause = true;
+
+                            changeState();
+                          });
+                  }),
+            );
+          }
           activePodcastname = name;
           activepodcastPhotUrl = iconurl;
           assetsAudioPlayer.updateCurrentAudioNotification(
@@ -246,7 +285,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
 
           assetsAudioPlayer.currentPosition.listen((event) {
             currentPostionDurationInsec = event.inSeconds.toDouble();
-            currentOlayingDurathion = event.toString().substring(0, 7);
+            currentplayingDurathion = event.toString().substring(0, 7);
             if (event.inSeconds == 00.000000) {
               isPlaying = false;
               pressedPause = false;
@@ -448,7 +487,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
           isPlaying = false;
           isPausedInHome = false;
           GeneralAppCubit.get(context).search = null;
-          currentOlayingDurathion = null;
+          currentplayingDurathion = null;
           activePodCastId = null;
           currentPostionDurationInsec = 0;
           showToast(
@@ -885,23 +924,39 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     });
   }
 
-  void podCastSearch({
-    required String token,
-    required String value,
-  }) {
-    isSearch = true;
-    emit(PodCastSearchLoadingState());
-    DioHelper.getData(
-      url: searchPodCast + value,
-      token: {'Authorization': 'Bearer $token'},
-    ).then((value) {
-      PodCastSearchModel.getMyPodCast = Map<String, dynamic>.from(value.data);
-      isSearch = false;
+  void podCastSearch(
+      {required String token,
+      required String value,
+      required bool isLocalPodcast}) {
+    print(isLocalPodcast);
+    bool isLocalPodcastval = isLocalPodcast;
+    if (isLocalPodcastval) {
+      print('yes');
 
-      emit(PodCastSearchSuccessState());
-    }).catchError((error) {
-      emit(PodCastSearchErrorState());
-    });
+      DioHelper.getData(
+        url: searchPodCast + value,
+        token: {'Authorization': 'Bearer $token'},
+      ).then((value) {
+        DownloadedPodCastModel.getPodcastInformation
+            .addAll(Map<String, dynamic>.from(value.data));
+        print(DownloadedPodCastModel.getPodcastInformation);
+        emit(DownloadedPOdcastInformationGetsucces());
+      });
+    } else if (isLoadPodCast == false) {
+      isSearch = true;
+      emit(PodCastSearchLoadingState());
+      DioHelper.getData(
+        url: searchPodCast + value,
+        token: {'Authorization': 'Bearer $token'},
+      ).then((value) {
+        PodCastSearchModel.getMyPodCast = Map<String, dynamic>.from(value.data);
+        isSearch = false;
+
+        emit(PodCastSearchSuccessState());
+      }).catchError((error) {
+        emit(PodCastSearchErrorState());
+      });
+    }
   }
 
   bool followerLoad = false;
@@ -1078,7 +1133,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
         isPlaying = false;
         isPausedInHome = false;
         GeneralAppCubit.get(context).search = null;
-        currentOlayingDurathion = null;
+        currentplayingDurathion = null;
         activePodCastId = null;
         currentPostionDurationInsec = 0;
         showToast(message: 'please login again', toastState: ToastState.ERROR);
@@ -1204,7 +1259,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
           isPlaying = false;
           isPausedInHome = false;
           GeneralAppCubit.get(context).search = null;
-          currentOlayingDurathion = null;
+          currentplayingDurathion = null;
           activePodCastId = null;
           currentPostionDurationInsec = 0;
         }
@@ -1423,6 +1478,13 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     final List files = entities.whereType<File>().toList();
     DownloadedPodCastModel.downloadedPodcastFiles = files;
     DownloadedPodCastModel.getPodCastNames();
+    print(DownloadedPodCastModel.getPodCastNames());
+    DownloadedPodCastModel.podcastNames.forEach((element) {
+      print(element);
+
+      podCastSearch(token: token, value: element, isLocalPodcast: true);
+    });
+
     return DownloadedPodCastModel.downloadedPodcastFiles;
   }
 }

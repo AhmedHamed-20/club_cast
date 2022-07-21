@@ -196,7 +196,7 @@ void logOut({
     token = null;
     cubit.search?.clear();
     cubit.activePodCastId = null;
-    cubit.currentOlayingDurathion = null;
+    cubit.currentplayingDurathion = null;
     cubit.currentPostionDurationInsec = 0;
     cubit.isPlaying ? cubit.assetsAudioPlayer.stop() : const SizedBox();
     if (token == null) {
