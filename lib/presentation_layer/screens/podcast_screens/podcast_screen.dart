@@ -19,6 +19,7 @@ import 'package:palette_generator/palette_generator.dart';
 import '../../../data_layer/bloc/intial_cubit/general_app_cubit.dart';
 import '../../../data_layer/cash/cash.dart';
 import '../../widgets/playingCardWidget.dart';
+import '../../widgets/playing_card_widget_local.dart';
 
 class PodCastScreen extends StatelessWidget {
   PodCastScreen({Key? key}) : super(key: key);
@@ -291,7 +292,7 @@ class PodCastScreen extends StatelessWidget {
                 ),
                 ListView.builder(
                     itemCount:
-                        DownloadedPodCastModel.downloadedPodcastFiles.length,
+                        DownloadedPodCastModel.getPodcastInformation.length,
                     itemBuilder: (context, index) {
                       return downloadedPodCasDesign(
                         context: context,
@@ -320,7 +321,7 @@ class PodCastScreen extends StatelessWidget {
                                       .getPodcastUserPublishInform(
                                           index)['_id']));
                         },
-                        playingWidget: PlayingCardWidget.playingButton(
+                        playingWidget: PlayingCardWidgetLocal.playingButton(
                             index,
                             cubit,
                             DownloadedPodCastModel

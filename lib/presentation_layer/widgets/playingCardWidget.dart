@@ -3,6 +3,8 @@ import 'package:club_cast/data_layer/sockets/sockets_io.dart';
 import 'package:club_cast/presentation_layer/components/component/component.dart';
 import 'package:flutter/material.dart';
 
+import '../components/constant/constant.dart';
+
 class PlayingCardWidget {
   static Widget likeState(
     BuildContext context,
@@ -155,6 +157,8 @@ class PlayingCardWidget {
         var cubit = GeneralAppCubit.get(context);
         //  currentId = podcastId;
         cubit.downloadPodCast(podcastUrl, '${podcastName}.wav', podcastId);
+        // cubit.podCastSearch(
+        //     token: token, value: podcastName, isLocalPodcast: true);
       },
       icon: cubit.isDownloading && podcastId == cubit.downloadedPodCastId
           ? CircularProgressIndicator(

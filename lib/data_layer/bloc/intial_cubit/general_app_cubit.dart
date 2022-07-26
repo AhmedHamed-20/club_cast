@@ -81,6 +81,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
   bool isPausedInHome = false;
   bool? isDark = false;
   String? activePodcastname = '';
+
   String? activepodcastPhotUrl = '';
   String? activePodCastId;
   bool isExplore = false;
@@ -178,10 +179,14 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       String activePodCastIdnow,
       BuildContext context,
       bool isLocalPodcast) async {
+    isLocalPodcastval = isLocalPodcast;
+
     if (pressedPause && activePodCastId == activePodCastIdnow) {
       assetsAudioPlayer.play();
       activePodCastId = activePodCastIdnow;
+
       activePodcastname = name;
+
       activepodcastPhotUrl = iconurl;
 
       isPlaying = true;
@@ -201,7 +206,6 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
               ),
             ),
           );
-          isLocalPodcastval = isLocalPodcast;
           if (isLocalPodcastval) {
             await assetsAudioPlayer.open(
               Audio.file(url),
@@ -274,6 +278,7 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
             );
           }
           activePodcastname = name;
+
           activepodcastPhotUrl = iconurl;
           assetsAudioPlayer.updateCurrentAudioNotification(
             metas: Metas(
@@ -679,13 +684,24 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
       progress = ((rec / total));
 
       counter++;
-    }).then((value) {
+    }).then((value) async {
       var fullPath = file.path;
       isDownloading = false;
       emit(FileDownloadSuccess());
       showToast(
           message: 'FileSaveSuccessTo' + fullPath,
           toastState: ToastState.SUCCESS);
+      final dirList = await getDownloadPath();
+      final path = dirList![0].path;
+      final dir = Directory(path);
+      final List<FileSystemEntity> entities = await dir.list().toList();
+      final List files = entities.whereType<File>().toList();
+      DownloadedPodCastModel.downloadedPodcastFiles = files;
+      podCastSearch(token: token, value: fileName, isLocalPodcast: true);
+
+      DownloadedPodCastModel.getPodCastNames();
+      print(DownloadedPodCastModel.downloadedPodcastFiles);
+      print(DownloadedPodCastModel.getPodcastInformation.length);
     }).catchError(
       (onError) {
         showToast(message: 'DownlaodError', toastState: ToastState.ERROR);
@@ -938,11 +954,12 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
         token: {'Authorization': 'Bearer $token'},
       ).then((value) {
         DownloadedPodCastModel.getPodcastInformation
-            .addAll(Map<String, dynamic>.from(value.data));
-        print(DownloadedPodCastModel.getPodcastInformation);
+            .add(Map<String, dynamic>.from(value.data));
         emit(DownloadedPOdcastInformationGetsucces());
+        print(DownloadedPodCastModel.getPodcastInformation);
       });
     } else if (isLoadPodCast == false) {
+      print('no');
       isSearch = true;
       emit(PodCastSearchLoadingState());
       DioHelper.getData(
@@ -1478,12 +1495,11 @@ class GeneralAppCubit extends Cubit<GeneralAppStates> {
     final List files = entities.whereType<File>().toList();
     DownloadedPodCastModel.downloadedPodcastFiles = files;
     DownloadedPodCastModel.getPodCastNames();
-    print(DownloadedPodCastModel.getPodCastNames());
     DownloadedPodCastModel.podcastNames.forEach((element) {
       print(element);
-
       podCastSearch(token: token, value: element, isLocalPodcast: true);
     });
+    print(DownloadedPodCastModel.getPodcastInformation);
 
     return DownloadedPodCastModel.downloadedPodcastFiles;
   }
