@@ -31,13 +31,13 @@ it's a social media built on voice ✔👌
 - agora
 - socket_io
 
-# upcoming features
+# Upcoming features
 - support desktop (windows-linux-mac os)
 - add text chat support
 
-# web:
+# Web:
 https://github.com/waleedsalah4/ARCH-CLUB
 
-# backend:
+# Backend:
 https://github.com/omarbadawy/audiocomms-podcast-api
 
