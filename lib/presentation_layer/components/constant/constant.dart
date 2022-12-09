@@ -25,7 +25,7 @@ final androidConfig = FlutterBackgroundAndroidConfig(
       defType:
           '@mipmap/ic_launcher'), // Default is ic_launcher from folder mipmap
 );
-const String baseUrl = "https://audiocomms-podcast-platform.herokuapp.com/api/";
+const String baseUrl = "https://audiocomms-podcast-api.onrender.com/api/";
 const String login = "v1/users/login";
 const String signup = "v1/users/signup";
 const String forgotPassword = "v1/users/forgotPassword";

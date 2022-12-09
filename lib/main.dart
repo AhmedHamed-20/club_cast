@@ -80,7 +80,7 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             title: 'club cast',
             theme: cubit.isDark! ? darkMode : lightMode,
-            home: SplashScreen(),
+            home: const SplashScreen(),
           );
         },
       ),

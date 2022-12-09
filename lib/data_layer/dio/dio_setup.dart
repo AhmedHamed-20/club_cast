@@ -9,7 +9,7 @@ class DioHelper {
 
   static init() {
     dio = Dio(BaseOptions(
-      baseUrl: "https://audiocomms-podcast-platform.herokuapp.com/api/",
+      baseUrl: "https://audiocomms-podcast-api.onrender.com/api/",
       receiveDataWhenStatusError: true,
     ));
   }

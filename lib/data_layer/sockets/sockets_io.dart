@@ -26,7 +26,7 @@ class SocketFunc {
   static void connectWithSocket(
       BuildContext context, roomCubit, generalAppCubit) {
     socket = io(
-      'https://audiocomms-podcast-platform.herokuapp.com/',
+      'https://audiocomms-podcast-api.onrender.com/',
       <String, dynamic>{
         'auth': {'token': '$token'},
         'transports': ['websocket'],
